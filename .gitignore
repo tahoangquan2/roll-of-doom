@@ -20,3 +20,17 @@ mono_crash.*.json
 
 # Visual Studio Code ignore
 .vscode/
+
+# C# specific ignores
+bin/
+obj/
+*.exe
+*.dll
+*.pdb
+*.cache
+*.log
+*.user
+*.rsuser
+*.suo
+*.userosscache
+*.sln.docstates
