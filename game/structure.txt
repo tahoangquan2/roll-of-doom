@@ -1,0 +1,28 @@
+├── assets/                 # All game assets
+│   ├── audio/              # Background music and sound effects
+│   ├── cards/              # Card images and related assets
+│   ├── sprites/            # Sprites for towers, enemies, and players
+│   ├── tilesets/           # Tilemaps and tileset assets
+│   ├── fonts/              # Custom fonts for UI
+├── docs/                   # Documentation for the project
+│   ├── design/             # Game design documents
+│   ├── technical/          # Technical design documents
+├── gui/                    # User Interface assets
+│   ├── hud/                # Heads-up display (score, deck, etc.)
+│   ├── menus/              # Main menu, pause menu, etc.
+├── scenes/                 # Game scenes
+│   ├── main/               # Main scenes (e.g., main menu, gameplay)
+│   ├── cards/              # Card scene templates
+│   ├── enemies/            # Enemy scene templates
+│   ├── towers/             # Tower scene templates
+│   ├── gui/                # UI scenes for menus, deck builder, etc.
+│   ├── levels/             # Level-specific scenes
+│   ├── effects/            # Visual effects like explosions
+├── scripts/                # C# scripts
+│   ├── core/               # GameManager, DeckManager, utility scripts
+│   ├── cards/              # Card-related scripts
+│   ├── towers/             # Tower behavior and upgrade scripts
+│   ├── enemies/            # Enemy movement and AI scripts
+│   ├── gui/                # Scripts for handling UI interactions
+│   ├── systems/            # Other systems (e.g., wave spawning)
+│   ├── effects/            # Scripts for visual effects
