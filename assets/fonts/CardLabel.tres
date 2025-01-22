@@ -1,0 +1,6 @@
+[gd_resource type="LabelSettings" load_steps=2 format=3 uid="uid://bvmvv3e8hy0dc"]
+
+[ext_resource type="FontFile" uid="uid://ddnnmk00qnpyl" path="res://assets/fonts/MemoryPro.ttf" id="1_vcdfa"]
+
+[resource]
+font = ExtResource("1_vcdfa")

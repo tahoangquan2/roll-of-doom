@@ -1,0 +1,62 @@
+[gd_scene load_steps=7 format=3 uid="uid://darh3kkm8ew07"]
+
+[ext_resource type="Script" path="res://game/cards/CardManager.cs" id="1_jqhmt"]
+[ext_resource type="PackedScene" uid="uid://cq8hes5bcj3u1" path="res://game/cards/card.tscn" id="2_inu1s"]
+[ext_resource type="Script" path="res://game/cards/CardData.cs" id="3_otn11"]
+
+[sub_resource type="Resource" id="Resource_luwv3"]
+script = ExtResource("3_otn11")
+CardName = "fires"
+Cost = 6
+Effect = "burn"
+
+[sub_resource type="Resource" id="Resource_77gmo"]
+script = ExtResource("3_otn11")
+CardName = "Water"
+Cost = 0
+Effect = "fall"
+
+[sub_resource type="Resource" id="Resource_qidto"]
+script = ExtResource("3_otn11")
+CardName = "Ice"
+Cost = 0
+Effect = "Run"
+
+[node name="CardManager" type="Node2D"]
+script = ExtResource("1_jqhmt")
+
+[node name="Card" parent="." instance=ExtResource("2_inu1s")]
+position = Vector2(290, 341)
+CardData = SubResource("Resource_luwv3")
+
+[node name="Card2" parent="." instance=ExtResource("2_inu1s")]
+position = Vector2(480, 349)
+CardData = SubResource("Resource_77gmo")
+
+[node name="Card3" parent="." instance=ExtResource("2_inu1s")]
+position = Vector2(654, 341)
+CardData = SubResource("Resource_qidto")
+
+[node name="Card4" parent="." instance=ExtResource("2_inu1s")]
+position = Vector2(290, 341)
+CardData = SubResource("Resource_luwv3")
+
+[node name="Card5" parent="." instance=ExtResource("2_inu1s")]
+position = Vector2(480, 349)
+CardData = SubResource("Resource_77gmo")
+
+[node name="Card6" parent="." instance=ExtResource("2_inu1s")]
+position = Vector2(290, 341)
+CardData = SubResource("Resource_luwv3")
+
+[node name="Card7" parent="." instance=ExtResource("2_inu1s")]
+position = Vector2(480, 349)
+CardData = SubResource("Resource_77gmo")
+
+[node name="Card8" parent="." instance=ExtResource("2_inu1s")]
+position = Vector2(654, 341)
+CardData = SubResource("Resource_qidto")
+
+[node name="Card9" parent="." instance=ExtResource("2_inu1s")]
+position = Vector2(290, 341)
+CardData = SubResource("Resource_luwv3")

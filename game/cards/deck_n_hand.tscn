@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://cigtnjrkyv3u1"]
+
+[ext_resource type="Script" path="res://game/cards/DeckNHand.cs" id="1_b8ll3"]
+[ext_resource type="PackedScene" uid="uid://cq8hes5bcj3u1" path="res://game/cards/card.tscn" id="1_nspib"]
+
+[node name="DeckNHand" type="Node2D"]
+script = ExtResource("1_b8ll3")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Card" parent="CanvasLayer" instance=ExtResource("1_nspib")]
+position = Vector2(334, 229)
+
+[node name="Card2" parent="CanvasLayer" instance=ExtResource("1_nspib")]
+position = Vector2(462, 244)
+
+[node name="Spawn" type="Node2D" parent="CanvasLayer"]
+position = Vector2(564, 269)
