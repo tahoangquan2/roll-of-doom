@@ -5,9 +5,9 @@ using Godot;
 public partial class CardManager : Node2D
 {
 	private PackedScene cardScene;
-	private Card card_being_dragged = null;
+	public Card card_being_dragged = null;
 	private Tween tween = null;
-	private bool isProcessingHover = false;
+	public bool isProcessingHover = false;
 	private Vector2 screen_size = new Vector2(1920, 1080);
 
 	public override void _Process(double delta)
@@ -69,14 +69,14 @@ public partial class CardManager : Node2D
 
 	public void _on_card_unhovered(Card card)
 	{
-		CardHoveredEffect(card, false);
 		isProcessingHover = false;
 
 		Card newCard = RaycastCheckForCard();
 		if (newCard!=null) {
-			CardHoveredEffect(newCard);
 			isProcessingHover = true;
+			CardHoveredEffect(newCard);
 		}
+		CardHoveredEffect(card, false);
 	}
 
 	// Hovered card effect
@@ -87,17 +87,16 @@ public partial class CardManager : Node2D
 		float targetScale = isHovering ? 1.05f : 1.0f;
 		int targetZIndex = isHovering ? 2 : 1;
 
-		if (card.Scale.X != targetScale) // Only update if necessary
+		if (card.Scale.X != targetScale) 
 		{
-			card.Scale = new Vector2(targetScale, targetScale);
-			//emit signal
-			
+			card.Scale = new Vector2(targetScale, targetScale);	
+			EmitSignal(nameof(CardPushup), card,isHovering);		
 		}
-		EmitSignal(nameof(CardPushup), card,targetZIndex);
+		
 		card.ZIndex = targetZIndex;
 	}
 
-	[Signal] public delegate void CardPushupEventHandler(Card card, int targetZIndex);
+	[Signal] public delegate void CardPushupEventHandler(Card card, bool isHovered);
 
 	private void StartDrag(Card card)
 	{
@@ -114,20 +113,13 @@ public partial class CardManager : Node2D
 	private void EndDrag()
 	{
 		if (card_being_dragged == null) return;
+		GD.Print("        card dropped");
+		GD.Print(card_being_dragged.CurrentSlot);
 
-		Cardslot closestSlot = FindClosestSlot(card_being_dragged.Position);
-		if (closestSlot != null)
+		// Return to the last known slot
+		if (card_being_dragged.CurrentSlot != null)
 		{
-			card_being_dragged.CurrentSlot = closestSlot;
-			AnimateCardToPosition(card_being_dragged, closestSlot.Position);
-		}
-		else
-		{
-			// Return to the last known slot
-			if (card_being_dragged.CurrentSlot != null)
-			{
-				AnimateCardToPosition(card_being_dragged, card_being_dragged.CurrentSlot.Position);
-			}
+			AnimateCardToPosition(card_being_dragged, card_being_dragged.CurrentSlot.Position);
 		}
 		card_being_dragged = null;
 	}
@@ -140,26 +132,6 @@ public partial class CardManager : Node2D
 		}
 		tween = GetTree().CreateTween();
 		tween.TweenProperty(card, "position", targetPosition, 0.2f).SetEase(Tween.EaseType.Out);
-	}
-
-	private Cardslot FindClosestSlot(Vector2 cardPosition)
-	{
-		Cardslot closestSlot = null;
-		float closestDistance = float.MaxValue;
-
-		foreach (Node child in GetTree().GetNodesInGroup("CardSlots"))
-		{
-			if (child is Cardslot slot)
-			{
-				float distance = cardPosition.DistanceTo(slot.Position);
-				if (distance < closestDistance)
-				{
-					closestDistance = distance;
-					closestSlot = slot;
-				}
-			}
-		}
-		return closestSlot;
 	}
 
 

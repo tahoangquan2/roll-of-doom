@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://darh3kkm8ew07"]
+[gd_scene load_steps=8 format=3 uid="uid://darh3kkm8ew07"]
 
 [ext_resource type="Script" path="res://game/cards/CardManager.cs" id="1_jqhmt"]
 [ext_resource type="PackedScene" uid="uid://cq8hes5bcj3u1" path="res://game/cards/card.tscn" id="2_inu1s"]
 [ext_resource type="Script" path="res://game/cards/CardData.cs" id="3_otn11"]
+[ext_resource type="PackedScene" uid="uid://h01ox7p3vntr" path="res://game/cards/cardslot.tscn" id="4_7bnvs"]
 
 [sub_resource type="Resource" id="Resource_luwv3"]
 script = ExtResource("3_otn11")
@@ -60,3 +61,7 @@ CardData = SubResource("Resource_qidto")
 [node name="Card9" parent="." instance=ExtResource("2_inu1s")]
 position = Vector2(290, 341)
 CardData = SubResource("Resource_luwv3")
+
+[node name="Cardslot" parent="." instance=ExtResource("4_7bnvs")]
+position = Vector2(1158, 294)
+script = null

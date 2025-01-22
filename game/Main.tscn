@@ -14,5 +14,5 @@ script = ExtResource("1_3ktym")
 position = Vector2(916, 1574)
 
 [node name="Cardslot" parent="." instance=ExtResource("4_dccao")]
-position = Vector2(1158, 294)
+position = Vector2(1358, 604)
 script = null

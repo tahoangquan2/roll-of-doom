@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public partial class Hand : Node2D
+public partial class Hand : Node2D // card are in cardmanager this is the hand just for display and interaction cards are not children of hand
 {
     [Export] public int HandRadius { get; set; } = 500;
     [Export] public float CardAngle { get; set; } = -90;
@@ -33,7 +33,6 @@ public partial class Hand : Node2D
             }
         }
 
-        GD.Print("Hand Ready");
         // print hand
         foreach (var card in hand)
         {
@@ -68,8 +67,12 @@ public partial class Hand : Node2D
         float cardSpread = Math.Min(AngleLimit / hand.Count, MaxCardSpreadAngle);
         float currentAngle = -(cardSpread * (hand.Count - 1)) / 2 - 90;
 
-        foreach (var card in hand){
-            if (card != null) AnimateCardTransform(card, currentAngle);
+        foreach (var card in hand)
+        {
+            if (card != null )
+            {
+                AnimateCardTransform(card, currentAngle);
+            }
             currentAngle += cardSpread;
         }
     }
@@ -80,8 +83,8 @@ public partial class Hand : Node2D
         float targetRotation = angleInDegrees + 90;
 
         var tween = GetTree().CreateTween();
-        tween.TweenProperty(card, "position", targetPosition, 0.3f).SetEase(Tween.EaseType.Out);
-        tween.TweenProperty(card, "rotation_degrees", targetRotation, 0.3f).SetEase(Tween.EaseType.Out);
+        tween.TweenProperty(card, "position", targetPosition, 0.2f).SetEase(Tween.EaseType.Out);
+        tween.TweenProperty(card, "rotation_degrees", targetRotation, 0.2f).SetEase(Tween.EaseType.Out);
     }
 
 
@@ -100,16 +103,26 @@ public partial class Hand : Node2D
 
     public override void _Process(double delta)
     {
-        foreach (var card in hand)
-        {
-            currentSelectedCardIndex = -1;
-            card?.Unhighlight();
-        }
-
         if (collisionShape.Shape is CircleShape2D circle)
         {
             if (circle.Radius != HandRadius)
                 circle.Radius = HandRadius;
+        }
+
+        if (Input.IsActionJustPressed("Action"))
+        {
+            GD.Print("Action input detected via Process!");
+            RemoveCard(0);
+        }
+
+        if (Input.IsActionJustPressed("Action2"))
+        {
+            GD.Print("Action2 input detected via Process!");
+            if (cardManager.card_being_dragged != null)
+            {
+                RemoveCard(hand.IndexOf(cardManager.card_being_dragged));
+                
+            }
         }
     }
 
@@ -127,20 +140,45 @@ public partial class Hand : Node2D
         tween.TweenProperty(card, "position", targetPosition, 0.15f).SetEase(Tween.EaseType.Out);
     }
 
+    //input event 
+    public override void _Input(InputEvent @event)
+    {
+        // when mouse released reposotion the cards
+        if (@event is InputEventMouseButton mouseButton && mouseButton.ButtonIndex == MouseButton.Left)        {
+			if (mouseButton.IsReleased())
+            {
+                //RepositionCards();
+            }
+        }
+
+        // when action input is pressed
+
+        if (@event is InputEventAction action && action.Action == "Action" && action.Pressed)
+        {
+            Card card = RemoveCard(0);
+            if (card != null)
+            {
+                cardManager.RemoveChild(card);
+            }
+        }        
+    }
+
     //catch the signal from the cardManager[Signal] public delegate void CardPushupEventHandler(Card card, int targetZIndex);
 
-    public void _on_card_pushup(Card card, int targetZIndex)
+    public void _on_card_pushup(Card card, bool isHovered)
     {
         if (card == null) return;
-        GD.Print($"Card Pushup: {card.CardData.CardName} to ZIndex: {targetZIndex}");
 
-        if (hand.Contains(card))
+        //get the index of the card
+        int index = hand.IndexOf(card);
+
+        if (index != -1)
         {
-            int index = hand.IndexOf(card);
-            Vector2 offset = new Vector2(0, -200).Rotated(Mathf.DegToRad(card.RotationDegrees));
-            AnimateCardHover(card, targetZIndex == 2 ? offset : -offset);
+            Vector2 offset = new Vector2(0, -50).Rotated(Mathf.DegToRad(card.RotationDegrees));
+            
+            AnimateCardHover(card, isHovered ? offset : -offset);
 
-            RepositionCards();
+            RepositionCards(); 
         }
     }
 
