@@ -16,9 +16,8 @@ public partial class Card : Node2D
 
     private ShaderMaterial shaderMaterial;
 
-    private const float AngleXMax = 10.0f; // Adjust for rotation limits
-    private const float AngleYMax = 10.0f;
-
+    private readonly float AngleXMax = Mathf.DegToRad(7.0f); // Adjust for rotation limits 
+    private readonly float AngleYMax = Mathf.DegToRad(7.0f); 
 
     public Card()
     {
@@ -32,11 +31,9 @@ public partial class Card : Node2D
         descriptionLbl = GetNode<Label>("CardEffectLb");
         baseSprite = GetNode<Sprite2D>("CardMockup");
 
-        if (baseSprite.Material is ShaderMaterial mat)
-        {
-            shaderMaterial = mat; // Store shader material reference
+        if (baseSprite.Material is ShaderMaterial mat){
+            shaderMaterial = mat;
         }
-
 
         if (CardData != null)
         {
@@ -48,7 +45,6 @@ public partial class Card : Node2D
         // Connect card to CardManager
         CardManager parentManager = GetParent() as CardManager;
         parentManager?.ConnectCardSignals(this);
-        // next Sibiling of cardmanager is Hand
 
         UpdateGraphics();
     }
@@ -60,58 +56,33 @@ public partial class Card : Node2D
 		costLbl.Text = CardData.Cost.ToString();
 		nameLbl.Text = CardData.CardName;
 		descriptionLbl.Text = CardData.Effect;
-    }
-
-    public void Highlight()
-    {
-        baseSprite.Modulate = new Color(1, 0.5f, 0.1f, 1);
-    }
-
-    public void Unhighlight()
-    {
-        baseSprite.Modulate = new Color(1, 1, 1, 1);
-    }
-
-    //reset shader
-
-    
+    }  
     
     public override void _Process(double delta)
-    {   
-       
+    {         
     }
 
-    // public void Shadering(Vector2 mousePos) 
-    // {
-        
-    //     if (shaderMaterial == null) return;
+    public void Shadering(Vector2 mousePos) 
+    {
+        if (shaderMaterial == null) return;
 
-    //     Vector2 size = GetViewportRect().Size;
+        Vector2 size = baseSprite.Texture.GetSize();
 
-    //     float lerpValX = Mathf.Remap(mousePos.X, 0.0f, size.X, 0, 1);
-    //     float lerpValY = Mathf.Remap(mousePos.Y, 0.0f, size.Y, 0, 1);
+        float lerpValX = Mathf.Remap(mousePos.X, 0.0f, size.X, 0, 1)+0.5f;
+        float lerpValY = Mathf.Remap(mousePos.Y, 0.0f, size.Y, 0, 1)+0.5f;
 
-    //     float rotX = Mathf.RadToDeg(LerpAngle(-AngleXMax, AngleXMax, lerpValX));
-    //     float rotY = Mathf.RadToDeg(LerpAngle(AngleYMax, -AngleYMax, lerpValY));
+        float rotX =  Mathf.RadToDeg(Mathf.LerpAngle(-AngleXMax, AngleXMax, lerpValX));
+        float rotY =  Mathf.RadToDeg(Mathf.LerpAngle(AngleYMax, -AngleYMax, lerpValY));
 
-    //     shaderMaterial.Set("x_rot", rotY);
-    //     shaderMaterial.Set("y_rot", rotX);
+        shaderMaterial.SetShaderParameter("x_rot", rotY);
+        shaderMaterial.SetShaderParameter("y_rot", rotX);
+    }
 
-    //     GD.Print($"x_rot: {shaderMaterial.Get("x_rot")}, y_rot: {shaderMaterial.Get("y_rot")}"); // Debugging
-    // }
-
-    // public void ResetShader()
-    // {
-    //     if (shaderMaterial == null) return;
-
-    //     shaderMaterial.Set("x_rot", 0.0f);
-    //     shaderMaterial.Set("y_rot", 0.0f);
-    // }
-
-    // private float LerpAngle(float from, float to, float weight)
-    // {
-    //     return from + (to - from) * weight;
-    // }
+    public void ResetShader()
+    {   if (shaderMaterial == null) return;
+        shaderMaterial.SetShaderParameter("x_rot", 0.0f);
+        shaderMaterial.SetShaderParameter("y_rot", 0.0f);
+    }
 
     // 🟢 Emit signals correctly on mouse enter/exit
     public void _on_area_2d_mouse_entered()
