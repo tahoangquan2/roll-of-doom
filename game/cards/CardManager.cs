@@ -6,9 +6,10 @@ public partial class CardManager : Node2D
 {
 	private PackedScene cardScene;
 	public Card card_being_dragged = null;
+	public Card card_being_hovered = null;
 	private Tween tween = null;
 	public bool isProcessingHover = false;
-	private Vector2 screen_size = new Vector2(1920, 1080);
+	private AudioStreamPlayer2D audioPlayer;
 
 	public override void _Process(double delta)
 	{
@@ -16,6 +17,11 @@ public partial class CardManager : Node2D
 		{
 			Vector2 mousePos = GetGlobalMousePosition();
 			card_being_dragged.Position = card_being_dragged.Position.Lerp(mousePos, 0.2f); // Smooth dragging
+		}
+
+		if (card_being_hovered != null)
+		{
+			card_being_hovered.Shadering(GetGlobalMousePosition()-card_being_hovered.GlobalPosition);
 		}
 	}
 
@@ -48,7 +54,7 @@ public partial class CardManager : Node2D
 	{
 		cardScene = GD.Load<PackedScene>("res://game/cards/card.tscn");
 
-		screen_size = GetViewportRect().Size;
+		audioPlayer = GetNode<AudioStreamPlayer2D>("AudioPlayer");
 	}
 
 	// connect card signals
@@ -64,6 +70,7 @@ public partial class CardManager : Node2D
 		if (isProcessingHover) return;
 
 		isProcessingHover = true;
+		card_being_hovered = card;
 		CardHoveredEffect(card);
 	}
 
@@ -74,9 +81,11 @@ public partial class CardManager : Node2D
 		Card newCard = RaycastCheckForCard();
 		if (newCard!=null) {
 			isProcessingHover = true;
+			card_being_hovered = newCard;
 			CardHoveredEffect(newCard);
-		}
+		} else card_being_hovered = null;
 		CardHoveredEffect(card, false);
+		card.ResetShader();
 	}
 
 	// Hovered card effect
@@ -85,25 +94,27 @@ public partial class CardManager : Node2D
 		if (card_being_dragged != null) return;
 
 		float targetScale = isHovering ? 1.05f : 1.0f;
-		int targetZIndex = isHovering ? 2 : 1;
+		//int targetZIndex = isHovering ? 2 : 1;	
 
 		if (card.Scale.X != targetScale) 
 		{
 			card.Scale = new Vector2(targetScale, targetScale);	
-			EmitSignal(nameof(CardPushup), card,isHovering);		
+
+			EmitSignal(nameof(CardPushup), card, isHovering);	
+			audioPlayer.Play();					
 		}
 		
-		card.ZIndex = targetZIndex;
+		//card.ZIndex = targetZIndex;
 	}
 
-	[Signal] public delegate void CardPushupEventHandler(Card card, bool isHovered);
+	[Signal] public delegate void CardPushupEventHandler(Card card,bool isHovered);
 
 	private void StartDrag(Card card)
 	{
 		card_being_dragged = card;
 		card.Scale = new Vector2(1.05f, 1.05f);
+		card.Rotation = 0;
 
-		// 🟢 Cancel any existing tween before starting drag
 		if (tween != null && tween.IsRunning())
 		{
 			tween.Kill();
@@ -113,8 +124,8 @@ public partial class CardManager : Node2D
 	private void EndDrag()
 	{
 		if (card_being_dragged == null) return;
-		GD.Print("        card dropped");
-		GD.Print(card_being_dragged.CurrentSlot);
+		// GD.Print("        card dropped");
+		// GD.Print(card_being_dragged.CurrentSlot);
 
 		// Return to the last known slot
 		if (card_being_dragged.CurrentSlot != null)
@@ -134,10 +145,7 @@ public partial class CardManager : Node2D
 		tween.TweenProperty(card, "position", targetPosition, 0.2f).SetEase(Tween.EaseType.Out);
 	}
 
-
-
 	// Raycast to check for card
-
 	public Card RaycastCheckForCard()
 	{
 		var result = RaycastCheckForObjects(GetGlobalMousePosition(), 256);

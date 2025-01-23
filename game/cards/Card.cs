@@ -14,6 +14,11 @@ public partial class Card : Node2D
     private Label descriptionLbl;
     private Sprite2D baseSprite;
 
+    private ShaderMaterial shaderMaterial;
+
+    private readonly float AngleXMax = Mathf.DegToRad(7.0f); // Adjust for rotation limits 
+    private readonly float AngleYMax = Mathf.DegToRad(7.0f); 
+
     public Card()
     {
         CardData = new CardData(); // Ensure initialization
@@ -24,19 +29,22 @@ public partial class Card : Node2D
         costLbl = GetNode<Label>("CostDisplay/CostLb");
         nameLbl = GetNode<Label>("NameDisplay/NameLb");
         descriptionLbl = GetNode<Label>("CardEffectLb");
-        baseSprite = GetNode<Sprite2D>("BaseCardSprite");
+        baseSprite = GetNode<Sprite2D>("CardMockup");
+
+        if (baseSprite.Material is ShaderMaterial mat){
+            shaderMaterial = mat;
+        }
 
         if (CardData != null)
         {
-            GD.Print($"Card Name: {CardData.CardName}");
-            GD.Print($"Cost: {CardData.Cost}");
-            GD.Print($"Effect: {CardData.Effect}");
+            // GD.Print($"Card Name: {CardData.CardName}");
+            // GD.Print($"Cost: {CardData.Cost}");
+            // GD.Print($"Effect: {CardData.Effect}");
         }
 
         // Connect card to CardManager
         CardManager parentManager = GetParent() as CardManager;
         parentManager?.ConnectCardSignals(this);
-        // next Sibiling of cardmanager is Hand
 
         UpdateGraphics();
     }
@@ -48,21 +56,32 @@ public partial class Card : Node2D
 		costLbl.Text = CardData.Cost.ToString();
 		nameLbl.Text = CardData.CardName;
 		descriptionLbl.Text = CardData.Effect;
-    }
-
-    public void Highlight()
-    {
-        baseSprite.Modulate = new Color(1, 0.5f, 0.1f, 1);
-    }
-
-    public void Unhighlight()
-    {
-        baseSprite.Modulate = new Color(1, 1, 1, 1);
-    }
+    }  
     
     public override void _Process(double delta)
+    {         
+    }
+
+    public void Shadering(Vector2 mousePos) 
     {
-        //UpdateGraphics();
+        if (shaderMaterial == null) return;
+
+        Vector2 size = baseSprite.Texture.GetSize();
+
+        float lerpValX = Mathf.Remap(mousePos.X, 0.0f, size.X, 0, 1)+0.5f;
+        float lerpValY = Mathf.Remap(mousePos.Y, 0.0f, size.Y, 0, 1)+0.5f;
+
+        float rotX =  Mathf.RadToDeg(Mathf.LerpAngle(-AngleXMax, AngleXMax, lerpValX));
+        float rotY =  Mathf.RadToDeg(Mathf.LerpAngle(AngleYMax, -AngleYMax, lerpValY));
+
+        shaderMaterial.SetShaderParameter("x_rot", rotY);
+        shaderMaterial.SetShaderParameter("y_rot", rotX);
+    }
+
+    public void ResetShader()
+    {   if (shaderMaterial == null) return;
+        shaderMaterial.SetShaderParameter("x_rot", 0.0f);
+        shaderMaterial.SetShaderParameter("y_rot", 0.0f);
     }
 
     // 🟢 Emit signals correctly on mouse enter/exit
