@@ -6,9 +6,12 @@ public partial class CardManager : Node2D
 {
 	private PackedScene cardScene;
 	public Card card_being_dragged = null;
+	//public Card card_being_hovered = null;
 	private Tween tween = null;
 	public bool isProcessingHover = false;
 	private Vector2 screen_size = new Vector2(1920, 1080);
+
+	private AudioStreamPlayer2D audioPlayer;
 
 	public override void _Process(double delta)
 	{
@@ -17,6 +20,11 @@ public partial class CardManager : Node2D
 			Vector2 mousePos = GetGlobalMousePosition();
 			card_being_dragged.Position = card_being_dragged.Position.Lerp(mousePos, 0.2f); // Smooth dragging
 		}
+
+		// if (card_being_hovered != null)
+		// {
+		// 	card_being_hovered.Shadering(GetGlobalMousePosition()-card_being_hovered.GlobalPosition);
+		// }
 	}
 
 
@@ -49,6 +57,8 @@ public partial class CardManager : Node2D
 		cardScene = GD.Load<PackedScene>("res://game/cards/card.tscn");
 
 		screen_size = GetViewportRect().Size;
+
+		audioPlayer = GetNode<AudioStreamPlayer2D>("AudioPlayer");
 	}
 
 	// connect card signals
@@ -85,18 +95,33 @@ public partial class CardManager : Node2D
 		if (card_being_dragged != null) return;
 
 		float targetScale = isHovering ? 1.05f : 1.0f;
-		int targetZIndex = isHovering ? 2 : 1;
+		//int targetZIndex = isHovering ? 2 : 1;	
+
+		// if (isHovering)
+		// {
+		// 	card_being_hovered = card;
+		// }
+		// else
+		// {
+		// 	card.ResetShader();
+		// 	card_being_hovered = null;
+		// }	
 
 		if (card.Scale.X != targetScale) 
 		{
 			card.Scale = new Vector2(targetScale, targetScale);	
-			EmitSignal(nameof(CardPushup), card,isHovering);		
+
+			EmitSignal(nameof(CardPushup), card, isHovering);	
+			audioPlayer.Play();			
 		}
+
 		
-		card.ZIndex = targetZIndex;
+
+		
+		//card.ZIndex = targetZIndex;
 	}
 
-	[Signal] public delegate void CardPushupEventHandler(Card card, bool isHovered);
+	[Signal] public delegate void CardPushupEventHandler(Card card,bool isHovered);
 
 	private void StartDrag(Card card)
 	{
@@ -133,8 +158,6 @@ public partial class CardManager : Node2D
 		tween = GetTree().CreateTween();
 		tween.TweenProperty(card, "position", targetPosition, 0.2f).SetEase(Tween.EaseType.Out);
 	}
-
-
 
 	// Raycast to check for card
 

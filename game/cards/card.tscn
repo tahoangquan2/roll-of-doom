@@ -1,11 +1,20 @@
-[gd_scene load_steps=8 format=3 uid="uid://cq8hes5bcj3u1"]
+[gd_scene load_steps=10 format=3 uid="uid://cq8hes5bcj3u1"]
 
 [ext_resource type="Script" path="res://game/cards/Card.cs" id="1_6fwt5"]
 [ext_resource type="Texture2D" uid="uid://5g32480kj5iy" path="res://assets/cards/card_base.png" id="1_py4kl"]
 [ext_resource type="Texture2D" uid="uid://62t6ctia6pme" path="res://assets/cards/mana_slot.png" id="2_1dond"]
 [ext_resource type="LabelSettings" uid="uid://bvmvv3e8hy0dc" path="res://assets/fonts/CardLabel.tres" id="3_3x1qp"]
 [ext_resource type="Texture2D" uid="uid://bxbtplydk8377" path="res://assets/cards/Card_mockup.png" id="3_vxcma"]
+[ext_resource type="Shader" path="res://assets/cards/fake3d.gdshader" id="3_xb8dd"]
 [ext_resource type="Texture2D" uid="uid://q6ytepqbiy0t" path="res://assets/cards/attack_card_image.png" id="4_84syi"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3hhwc"]
+shader = ExtResource("3_xb8dd")
+shader_parameter/fov = 90.0
+shader_parameter/cull_back = true
+shader_parameter/y_rot = 0.0
+shader_parameter/x_rot = 0.0
+shader_parameter/inset = 0.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xm2h8"]
 size = Vector2(148, 210)
@@ -17,6 +26,7 @@ script = ExtResource("1_6fwt5")
 texture = ExtResource("1_py4kl")
 
 [node name="CardMockup" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_3hhwc")
 position = Vector2(0, -1)
 texture = ExtResource("3_vxcma")
 
@@ -79,7 +89,7 @@ texture = ExtResource("4_84syi")
 
 [node name="Area2D" type="Area2D" parent="."]
 collision_layer = 256
-collision_mask = 0
+collision_mask = 512
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("RectangleShape2D_xm2h8")
