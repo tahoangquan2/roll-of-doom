@@ -11,8 +11,13 @@ script = ExtResource("1_3ktym")
 [node name="CardManager" parent="." instance=ExtResource("2_nqpy4")]
 
 [node name="Hand" parent="." instance=ExtResource("3_l11hp")]
-position = Vector2(916, 1574)
+position = Vector2(916, 1500)
 
 [node name="Cardslot" parent="." instance=ExtResource("4_dccao")]
-position = Vector2(1358, 604)
-script = null
+position = Vector2(1506, 595)
+
+[node name="Cardslot2" parent="." instance=ExtResource("4_dccao")]
+position = Vector2(1694, 598)
+
+[node name="Cardslot3" parent="." instance=ExtResource("4_dccao")]
+position = Vector2(1593, 342)

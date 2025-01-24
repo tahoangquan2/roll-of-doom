@@ -10,19 +10,12 @@ public partial class CardManager : Node2D
 	private Tween tween = null;
 	public bool isProcessingHover = false;
 	private AudioStreamPlayer2D audioPlayer;
+	
+	[Signal] public delegate void CardPushupEventHandler(Card card,bool isHovered);
+	[Signal] public delegate void CardHasSlotEventHandler(Card card);
 
 	public override void _Process(double delta)
 	{
-		if (card_being_dragged != null)
-		{
-			Vector2 mousePos = GetGlobalMousePosition();
-			card_being_dragged.Position = card_being_dragged.Position.Lerp(mousePos, 0.2f); // Smooth dragging
-		}
-
-		if (card_being_hovered != null)
-		{
-			card_being_hovered.Shadering(GetGlobalMousePosition()-card_being_hovered.GlobalPosition);
-		}
 	}
 
 
@@ -32,15 +25,21 @@ public partial class CardManager : Node2D
 			if (mouseButton.Pressed)
 			{
 				Card card = RaycastCheckForCard();
-				if (card != null)
-				{
+				if (card != null){
 					StartDrag(card);
-					GD.Print("card dragged");
 				}
-			}
-			else
-			{
+			}else{
 				EndDrag();
+			}
+		}
+
+		if (@event is InputEventMouseMotion mouseMotion)
+		{
+			if (card_being_dragged != null){
+				card_being_dragged.Position += mouseMotion.Relative;
+			} else 
+			if (card_being_hovered != null){
+				card_being_hovered.Shadering(GetGlobalMousePosition()-card_being_hovered.GlobalPosition);
 			}
 		}
 
@@ -53,7 +52,6 @@ public partial class CardManager : Node2D
 	public override void _Ready()
 	{
 		cardScene = GD.Load<PackedScene>("res://game/cards/card.tscn");
-
 		audioPlayer = GetNode<AudioStreamPlayer2D>("AudioPlayer");
 	}
 
@@ -107,29 +105,24 @@ public partial class CardManager : Node2D
 		//card.ZIndex = targetZIndex;
 	}
 
-	[Signal] public delegate void CardPushupEventHandler(Card card,bool isHovered);
-
 	private void StartDrag(Card card)
 	{
 		card_being_dragged = card;
 		card.Scale = new Vector2(1.05f, 1.05f);
 		card.Rotation = 0;
+		card.ZIndex = 11;
+		card.ResetShader();
 
-		if (tween != null && tween.IsRunning())
-		{
-			tween.Kill();
-		}
+		if (tween != null && tween.IsRunning()) tween.Kill();
 	}
 
 	private void EndDrag()
 	{
 		if (card_being_dragged == null) return;
-		// GD.Print("        card dropped");
-		// GD.Print(card_being_dragged.CurrentSlot);
-
 		// Return to the last known slot
 		if (card_being_dragged.CurrentSlot != null)
 		{
+			EmitSignal(nameof(CardHasSlot), card_being_dragged);
 			AnimateCardToPosition(card_being_dragged, card_being_dragged.CurrentSlot.Position);
 		}
 		card_being_dragged = null;
@@ -137,10 +130,8 @@ public partial class CardManager : Node2D
 
 	private void AnimateCardToPosition(Card card, Vector2 targetPosition)
 	{
-		if (tween != null && tween.IsRunning())
-		{
-			tween.Kill();
-		}
+		if (tween != null && tween.IsRunning()) tween.Kill();
+		
 		tween = GetTree().CreateTween();
 		tween.TweenProperty(card, "position", targetPosition, 0.2f).SetEase(Tween.EaseType.Out);
 	}
@@ -148,27 +139,10 @@ public partial class CardManager : Node2D
 	// Raycast to check for card
 	public Card RaycastCheckForCard()
 	{
-		var result = RaycastCheckForObjects(GetGlobalMousePosition(), 256);
-
-		if (result.Count > 0){
-			return GetCardWithHighestZIndex(result);
-		}
+		var result = CardGlobal.RaycastCheckForObjects(this,GetGlobalMousePosition(), CardGlobal.cardCollisionMask);
+		if (result.Count > 0) return GetCardWithHighestZIndex(result);
 
 		return null;
-	}
-	// make a function that raycasts and return object with passed in parameters
-	public Godot.Collections.Array<Godot.Collections.Dictionary> RaycastCheckForObjects(Vector2 position, int collisionMask)
-	{
-		var spaceState = GetWorld2D().DirectSpaceState;
-
-		var parameters = new PhysicsPointQueryParameters2D
-		{
-			Position = position,
-			CollideWithAreas = true,
-			CollisionMask = (uint)collisionMask 
-		};
-
-		return spaceState.IntersectPoint(parameters);
 	}
 
 	// Get the card with the highest ZIndex from a list of collision results

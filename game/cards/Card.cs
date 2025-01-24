@@ -5,6 +5,7 @@ public partial class Card : Node2D
 {
     [Export] public CardData CardData { get; set; }
     public Cardslot CurrentSlot { get; set; }
+    public bool canBeHovered = true;
 
     [Signal] public delegate void CardHoveredEventHandler(Card card);
     [Signal] public delegate void CardUnhoveredEventHandler(Card card);
@@ -78,20 +79,21 @@ public partial class Card : Node2D
         shaderMaterial.SetShaderParameter("y_rot", rotX);
     }
 
-    public void ResetShader()
-    {   if (shaderMaterial == null) return;
-        shaderMaterial.SetShaderParameter("x_rot", 0.0f);
-        shaderMaterial.SetShaderParameter("y_rot", 0.0f);
+    public void ResetShader(){
+        if (shaderMaterial != null){
+            shaderMaterial.SetShaderParameter("x_rot", 0f);
+            shaderMaterial.SetShaderParameter("y_rot", 0f);
+        }
     }
 
     // 🟢 Emit signals correctly on mouse enter/exit
-    public void _on_area_2d_mouse_entered()
-    {        
+    public void _on_area_2d_mouse_entered(){        
+        if (!canBeHovered) return;
         EmitSignal(nameof(CardHovered), this);
     }
 
-    public void _on_area_2d_mouse_exited()
-    {
+    public void _on_area_2d_mouse_exited(){
+        if (!canBeHovered) return;
         EmitSignal(nameof(CardUnhovered), this);
     }
 }

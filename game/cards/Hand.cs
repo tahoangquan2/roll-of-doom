@@ -2,20 +2,18 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public partial class Hand : Node2D // card are in cardmanager this is the hand just for display and interaction cards are not children of hand
+public partial class Hand : Area2D // card are in cardmanager this is the hand just for display and interaction cards are not children of hand
 {
-    [Export] public int HandRadius { get; set; } = 500;
-    [Export] public float CardAngle { get; set; } = -90;
+    private int HandRadius = 750;
+    private int cardRadius ;
     [Export] public float AngleLimit { get; set; } = 65;
     [Export] public float MaxCardSpreadAngle { get; set; } = 15;
 
     private List<Card> hand = new List<Card>(); // Stores all cards
     private CardManager cardManager;
-
     private CollisionShape2D collisionShape;
-    private PackedScene packedSceneCard = ResourceLoader.Load("res://game/cards/card.tscn") as PackedScene;
-
     private int currentSelectedCardIndex = -1;
+    private Dictionary<Card, Tween> activeTweens = new Dictionary<Card, Tween>(); // Track active tweens
 
     public override void _Ready()
     {
@@ -24,6 +22,7 @@ public partial class Hand : Node2D // card are in cardmanager this is the hand j
         // Get CardManager and its child cards
         cardManager = GetParent().GetNode<CardManager>("CardManager");
         ConnectCardMagnagerSignals();
+        cardRadius = HandRadius-200;
 
         foreach (Node child in cardManager.GetChildren())
         {
@@ -37,8 +36,7 @@ public partial class Hand : Node2D // card are in cardmanager this is the hand j
         foreach (var card in hand)
         {
             GD.Print(card.CardData.CardName);
-        }
-
+        }        
     }
 
     public void AddCard(Card card)
@@ -71,15 +69,12 @@ public partial class Hand : Node2D // card are in cardmanager this is the hand j
         for (int i = 0; i < hand.Count; i++)
         {
             Card card = hand[i];
-            if (card != null)
+            if (card != null && card!=cardManager.card_being_dragged)
             {
                 AnimateCardTransform(card, currentAngle);
-                
-                // 🟢 Set Base ZIndex only if not hovered
-                card.ZIndex = i + 1; // Ensure correct stacking order
-
-                currentAngle += cardSpread;
+                card.ZIndex = i + 1; 
             }
+            currentAngle += cardSpread;
         }
     }
 
@@ -96,42 +91,37 @@ public partial class Hand : Node2D // card are in cardmanager this is the hand j
         card.ZIndex = index + 1; // Ensure correct stacking order
     }
 
-    private Dictionary<Card, Tween> activeTweens = new Dictionary<Card, Tween>(); // Track active tweens
-
     private void AnimateCardTransform(Card card, float angleInDegrees)
     {
         Vector2 targetPosition = Position + GetCardPosition(angleInDegrees);
         float targetRotation = angleInDegrees + 90;
+        float tweenDuration = 0.2f; // Duration of the tween
 
-        // 🟢 Cancel existing tween if it exists
-        if (activeTweens.ContainsKey(card) && activeTweens[card].IsRunning())
+        if (activeTweens.TryGetValue(card, out Tween existingTween) && existingTween.IsRunning())
         {
-            activeTweens[card].Kill();
+            existingTween.Kill();
         }
 
-        // 🟢 Create a new tween
         Tween tween = GetTree().CreateTween();
         activeTweens[card] = tween; // Store it in the dictionary
 
-        tween.TweenProperty(card, "position", targetPosition, 0.2f).SetEase(Tween.EaseType.Out);
-        tween.TweenProperty(card, "rotation_degrees", targetRotation, 0.2f).SetEase(Tween.EaseType.Out);
+        // Animate movement & rotation
+        tween.TweenProperty(card, "position", targetPosition, tweenDuration).SetEase(Tween.EaseType.Out);
+        tween.TweenProperty(card, "rotation_degrees", targetRotation, tweenDuration).SetEase(Tween.EaseType.Out);
     }
-
-
 
     private Vector2 GetCardPosition(float angleInDegrees)
     {
-        float x = HandRadius * Mathf.Cos(Mathf.DegToRad(angleInDegrees));
-        float y = HandRadius * Mathf.Sin(Mathf.DegToRad(angleInDegrees));
-        return new Vector2(x, y);
+        return new Vector2(0,-cardRadius).Rotated(Mathf.DegToRad(angleInDegrees+90));
     }
 
     public override void _Process(double delta)
     {
         if (collisionShape.Shape is CircleShape2D circle)
         {
-            if (circle.Radius != HandRadius)
+            if (circle.Radius != HandRadius){
                 circle.Radius = HandRadius;
+            }
         }
 
         if (Input.IsActionJustPressed("Action"))
@@ -154,13 +144,12 @@ public partial class Hand : Node2D // card are in cardmanager this is the hand j
         }
     }
 
-    private Card hoveredCard = null;  // Track the currently hovered card
-    private Card card_being_dragged = null;  // Track the card being dragged
-
-
-    private void AnimateCardHover(Card card, Vector2 offset)
+    private void AnimateCardHover(Card card)
     {
-        Vector2 targetPosition = card.Position + offset;
+        // get rotation angle // offset the card position is -50 in y axis rotated   
+        float angle = card.Rotation;
+        GD.Print(angle);
+        Vector2 targetPosition = Position + GetCardPosition(Mathf.RadToDeg(angle)-90) + new Vector2(0,-50).Rotated(angle);
 
         // 🟢 Prevent redundant animations
         if (card.Position.IsEqualApprox(targetPosition)) return;
@@ -177,7 +166,6 @@ public partial class Hand : Node2D // card are in cardmanager this is the hand j
 
         tween.TweenProperty(card, "position", targetPosition, 0.15f).SetEase(Tween.EaseType.Out);
     }
-
 
     //input event 
     public override void _Input(InputEvent @event)
@@ -214,8 +202,6 @@ public partial class Hand : Node2D // card are in cardmanager this is the hand j
         }   
     }
 
-    //catch the signal from the cardManager[Signal] public delegate void CardPushupEventHandler(Card card, int targetZIndex);
-
     private void _on_card_pushup(Card card,bool isHovered)
     {
         if (card == null) return;
@@ -225,7 +211,7 @@ public partial class Hand : Node2D // card are in cardmanager this is the hand j
         {
             if (isHovered)
             {
-                AnimateCardHover(card, new Vector2(0, -50).Rotated(Mathf.DegToRad(card.RotationDegrees)));
+                AnimateCardHover(card);
                 card.ZIndex = hand.Count + 1;
             }else{
                 RepositionCard(card, index);
@@ -233,11 +219,26 @@ public partial class Hand : Node2D // card are in cardmanager this is the hand j
         }
     }
 
-
-    //connect the signal from the cardManager [Signal] public delegate void CardPushupEventHandler(Card card, int targetZIndex);
+    private void _on_card_has_slot(Card card){
+        int index = hand.IndexOf(card);
+        if (index != -1) RemoveCard(index);
+    }
     
     public void ConnectCardMagnagerSignals()
     {   
         cardManager.CardPushup += _on_card_pushup;
+        cardManager.CardHasSlot += _on_card_has_slot;
+    }
+
+    public void _on_mouse_entered()
+    {
+        HandRadius = 900;cardRadius = HandRadius-200;
+        RepositionCards();
+    }
+
+    public void _on_mouse_exited()
+    {
+        HandRadius = 750;cardRadius = HandRadius-200;
+        RepositionCards();
     }
 }
