@@ -1,23 +1,23 @@
-[gd_scene load_steps=4 format=3 uid="uid://h01ox7p3vntr"]
+[gd_scene load_steps=4 format=3 uid="uid://du3m5tmrky0oq"]
 
-[ext_resource type="Script" path="res://game/cards/Cardslot.cs" id="1_e4b1t"]
-[ext_resource type="Texture2D" uid="uid://cd8d2tqeq0kjx" path="res://assets/cards/CardSlot.png" id="1_pjwwi"]
+[ext_resource type="Script" path="res://CardPlayZone.cs" id="1_42eik"]
+[ext_resource type="Texture2D" uid="uid://cd8d2tqeq0kjx" path="res://assets/cards/CardSlot.png" id="2_0161m"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3u7qw"]
 size = Vector2(182, 266)
 
-[node name="Cardslot" type="Area2D"]
+[node name="CardActiveZone" type="Area2D"]
 position = Vector2(-5.96046e-08, -5.96046e-08)
 scale = Vector2(0.8, 0.8)
 collision_layer = 512
 collision_mask = 256
-script = ExtResource("1_e4b1t")
+script = ExtResource("1_42eik")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_3u7qw")
 
 [node name="CardSlot" type="Sprite2D" parent="."]
-texture = ExtResource("1_pjwwi")
+texture = ExtResource("2_0161m")
 
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]
 [connection signal="area_exited" from="." to="." method="_on_area_exited"]

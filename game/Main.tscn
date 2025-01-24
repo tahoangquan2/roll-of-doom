@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://game/Main.cs" id="1_3ktym"]
 [ext_resource type="PackedScene" uid="uid://darh3kkm8ew07" path="res://game/cards/card_manager.tscn" id="2_nqpy4"]
 [ext_resource type="PackedScene" uid="uid://dytog6pc71ik4" path="res://game/cards/hand.tscn" id="3_l11hp"]
-[ext_resource type="PackedScene" uid="uid://h01ox7p3vntr" path="res://game/cards/cardslot.tscn" id="4_dccao"]
+[ext_resource type="PackedScene" uid="uid://du3m5tmrky0oq" path="res://game/cards/card_active_zone.tscn" id="5_e70is"]
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource("1_3ktym")
@@ -11,8 +11,8 @@ script = ExtResource("1_3ktym")
 [node name="CardManager" parent="." instance=ExtResource("2_nqpy4")]
 
 [node name="Hand" parent="." instance=ExtResource("3_l11hp")]
-position = Vector2(916, 1574)
+position = Vector2(916, 1500)
 
-[node name="Cardslot" parent="." instance=ExtResource("4_dccao")]
-position = Vector2(1358, 604)
-script = null
+[node name="CardActiveZone" parent="." instance=ExtResource("5_e70is")]
+position = Vector2(944, 313)
+scale = Vector2(8.28595, 2.01582)
