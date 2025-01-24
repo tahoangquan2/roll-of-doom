@@ -30,13 +30,7 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
             {
                 AddCard(card); // Add existing cards to Hand
             }
-        }
-
-        // print hand
-        foreach (var card in hand)
-        {
-            GD.Print(card.CardData.CardName);
-        }        
+        }    
     }
 
     public void AddCard(Card card)
@@ -117,50 +111,22 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
 
     public override void _Process(double delta)
     {
-        if (collisionShape.Shape is CircleShape2D circle)
-        {
+        if (collisionShape.Shape is CircleShape2D circle){
             if (circle.Radius != HandRadius){
                 circle.Radius = HandRadius;
-            }
-        }
-
-        if (Input.IsActionJustPressed("Action"))
-        {
-            GD.Print("Action input detected via Process!");
-            if (cardManager.card_being_dragged != null)
-            {
-                AddCard(cardManager.card_being_dragged);                
-            }
-        }
-
-        if (Input.IsActionJustPressed("Action2"))
-        {
-            GD.Print("Action2 input detected via Process!");
-            if (cardManager.card_being_dragged != null)
-            {
-                RemoveCard(hand.IndexOf(cardManager.card_being_dragged));
-                
             }
         }
     }
 
     private void AnimateCardHover(Card card)
     {
-        // get rotation angle // offset the card position is -50 in y axis rotated   
         float angle = card.Rotation;
-        GD.Print(angle);
         Vector2 targetPosition = Position + GetCardPosition(Mathf.RadToDeg(angle)-90) + new Vector2(0,-50).Rotated(angle);
 
-        // 🟢 Prevent redundant animations
         if (card.Position.IsEqualApprox(targetPosition)) return;
 
-        // 🟢 Cancel existing tween if needed
-        if (activeTweens.ContainsKey(card) && activeTweens[card].IsRunning())
-        {
-            activeTweens[card].Kill();
-        }
+        if (activeTweens.ContainsKey(card) && activeTweens[card].IsRunning()) activeTweens[card].Kill();
 
-        // 🟢 Create a new tween and store it
         Tween tween = GetTree().CreateTween();
         activeTweens[card] = tween;
 
@@ -170,36 +136,6 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
     //input event 
     public override void _Input(InputEvent @event)
     {
-        // when mouse released reposotion the cards
-        if (@event is InputEventMouseButton mouseButton && mouseButton.ButtonIndex == MouseButton.Left)        {
-			if (mouseButton.IsReleased())
-            {
-                //RepositionCards();
-            }
-        }
-
-        // when action input is pressed
-
-        if (@event is InputEventAction action && action.Action == "Action" && action.Pressed)
-        {
-            Card card = RemoveCard(0);
-            if (card != null)
-            {
-                cardManager.RemoveChild(card);
-            }
-        }     
-
-        // when right mouse button is pressed
-        if (@event is InputEventMouseButton mouseButton2 && mouseButton2.ButtonIndex == MouseButton.Right)        {
-        if (mouseButton2.Pressed)
-            {
-                // print all zindex
-                foreach (var card in hand)
-                {
-                    GD.Print(card.ZIndex);
-                }
-            }
-        }   
     }
 
     private void _on_card_pushup(Card card,bool isHovered)
@@ -219,7 +155,7 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
         }
     }
 
-    private void _on_card_has_slot(Card card){
+    private void _on_card_unhand(Card card){
         int index = hand.IndexOf(card);
         if (index != -1) RemoveCard(index);
     }
@@ -227,7 +163,7 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
     public void ConnectCardMagnagerSignals()
     {   
         cardManager.CardPushup += _on_card_pushup;
-        cardManager.CardHasSlot += _on_card_has_slot;
+        cardManager.CardUnhand += _on_card_unhand;
     }
 
     public void _on_mouse_entered()

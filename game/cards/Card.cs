@@ -4,7 +4,6 @@ using System;
 public partial class Card : Node2D
 {
     [Export] public CardData CardData { get; set; }
-    public Cardslot CurrentSlot { get; set; }
     public bool canBeHovered = true;
 
     [Signal] public delegate void CardHoveredEventHandler(Card card);
@@ -13,7 +12,8 @@ public partial class Card : Node2D
     private Label costLbl;
     private Label nameLbl;
     private Label descriptionLbl;
-    private Sprite2D baseSprite;
+
+    private Vector2 cardSize= new Vector2(150, 210);
 
     private ShaderMaterial shaderMaterial;
 
@@ -27,12 +27,18 @@ public partial class Card : Node2D
 
     public override void _Ready()
     {
-        costLbl = GetNode<Label>("CostDisplay/CostLb");
-        nameLbl = GetNode<Label>("NameDisplay/NameLb");
-        descriptionLbl = GetNode<Label>("CardEffectLb");
-        baseSprite = GetNode<Sprite2D>("CardMockup");
+        costLbl = GetNode<Label>("Control/SubViewport/CardMockup/CostDisplay/CostLb");
+        nameLbl = GetNode<Label>("Control/SubViewport/CardMockup/NameDisplay/NameLb");
+        descriptionLbl = GetNode<Label>("Control/SubViewport/CardMockup/CardEffectLb");
 
-        if (baseSprite.Material is ShaderMaterial mat){
+        var subViewport = GetNode<SubViewport>("Control/SubViewport");
+        var shaderDisplay = GetNode<TextureRect>("TextureRect"); // This will hold the shader
+
+        shaderDisplay.Texture = subViewport.GetTexture();
+
+        // Apply the shader material
+        if (shaderDisplay.Material is ShaderMaterial mat)
+        {
             shaderMaterial = mat;
         }
 
@@ -67,7 +73,7 @@ public partial class Card : Node2D
     {
         if (shaderMaterial == null) return;
 
-        Vector2 size = baseSprite.Texture.GetSize();
+        Vector2 size = cardSize;
 
         float lerpValX = Mathf.Remap(mousePos.X, 0.0f, size.X, 0, 1)+0.5f;
         float lerpValY = Mathf.Remap(mousePos.Y, 0.0f, size.Y, 0, 1)+0.5f;

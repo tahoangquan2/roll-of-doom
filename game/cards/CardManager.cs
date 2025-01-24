@@ -4,7 +4,6 @@ using Godot;
 
 public partial class CardManager : Node2D
 {
-	private PackedScene cardScene;
 	public Card card_being_dragged = null;
 	public Card card_being_hovered = null;
 	private Tween tween = null;
@@ -12,12 +11,7 @@ public partial class CardManager : Node2D
 	private AudioStreamPlayer2D audioPlayer;
 	
 	[Signal] public delegate void CardPushupEventHandler(Card card,bool isHovered);
-	[Signal] public delegate void CardHasSlotEventHandler(Card card);
-
-	public override void _Process(double delta)
-	{
-	}
-
+	[Signal] public delegate void CardUnhandEventHandler(Card card);
 
 	public override void _Input(InputEvent @event)
 	{
@@ -51,7 +45,6 @@ public partial class CardManager : Node2D
 
 	public override void _Ready()
 	{
-		cardScene = GD.Load<PackedScene>("res://game/cards/card.tscn");
 		audioPlayer = GetNode<AudioStreamPlayer2D>("AudioPlayer");
 	}
 
@@ -120,12 +113,16 @@ public partial class CardManager : Node2D
 	{
 		if (card_being_dragged == null) return;
 		// Return to the last known slot
-		if (card_being_dragged.CurrentSlot != null)
-		{
-			EmitSignal(nameof(CardHasSlot), card_being_dragged);
-			AnimateCardToPosition(card_being_dragged, card_being_dragged.CurrentSlot.Position);
-		}
+		Card tmpCard = card_being_dragged;
 		card_being_dragged = null;
+		
+		cardEffectZone zone = RaycastCheckForZone();
+		if (zone != null){
+			EmitSignal(nameof(CardUnhand), tmpCard);
+			card_being_hovered = null;
+			tmpCard.ResetShader();
+			zone.activeCard(tmpCard);
+		}		
 	}
 
 	private void AnimateCardToPosition(Card card, Vector2 targetPosition)
@@ -136,11 +133,20 @@ public partial class CardManager : Node2D
 		tween.TweenProperty(card, "position", targetPosition, 0.2f).SetEase(Tween.EaseType.Out);
 	}
 
-	// Raycast to check for card
 	public Card RaycastCheckForCard()
 	{
 		var result = CardGlobal.RaycastCheckForObjects(this,GetGlobalMousePosition(), CardGlobal.cardCollisionMask);
 		if (result.Count > 0) return GetCardWithHighestZIndex(result);
+
+		return null;
+	}
+
+	public cardEffectZone RaycastCheckForZone()
+	{
+		var result = CardGlobal.RaycastCheckForObjects(this,GetGlobalMousePosition(), CardGlobal.cardSlotMask);
+		if (result.Count > 0){ // get result[0]
+			return (cardEffectZone)result[0]["collider"];			
+		}
 
 		return null;
 	}
