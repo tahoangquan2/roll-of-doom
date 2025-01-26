@@ -144,7 +144,8 @@ public partial class CardManager : Node2D
 			EmitSignal(nameof(CardUnhand), tmpCard);
 			card_being_hovered = null;
 			tmpCard.ResetShader();
-			zone.activeCard(tmpCard);
+			//pass mouse position to zone
+			zone.activeCard(tmpCard,GetGlobalMousePosition()-zone.GlobalPosition);
 		}		
 	}
 	public Card RaycastCheckForCard()

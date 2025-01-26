@@ -1,5 +1,5 @@
 using Godot;
-using System;
+using System.Linq;
 
 public partial class Card : Node2D
 {
@@ -46,10 +46,10 @@ public partial class Card : Node2D
 
         if (cardData != null)
         {
-            // GD.Print($"Card Name: {CardData.CardName}");
-            // GD.Print($"Cost: {CardData.Cost}");
-            // GD.Print($"Effect: {CardData.Effect}");
-
+            GD.Print($"Card Name: {cardData.CardName}");
+            GD.Print($"Cost: {cardData.Cost}");
+            GD.Print($"Type: {cardData.CardType}");
+            GD.Print($"Effect: {cardData.Effects}");
 
         }
 
@@ -60,13 +60,25 @@ public partial class Card : Node2D
         UpdateGraphics();
     }
 
+    public void ActivateEffects(Node2D target)
+    {
+        if (cardData == null || cardData.Effects == null || cardData.Effects.Count() == 0) return;
+
+        foreach (var effect in cardData.Effects)
+        {
+            GD.Print($"Applying effect: {effect}");
+            effect.ApplyEffect(target);
+        }
+    }
+
+
     private void UpdateGraphics()
     {
         if (cardData == null) return;
 
 		costLbl.Text = cardData.Cost.ToString();
 		nameLbl.Text = cardData.CardName;
-		descriptionLbl.Text = cardData.Effect;
+		descriptionLbl.Text = cardData.Effects.ToString();
 
         // Set the card type icon
         switch (cardData.CardType)
@@ -85,10 +97,6 @@ public partial class Card : Node2D
                 break;
         }
     }  
-    
-    public override void _Process(double delta)
-    {         
-    }
 
     public void Shadering(Vector2 mousePos) 
     {

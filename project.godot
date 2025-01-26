@@ -18,11 +18,10 @@ config/icon="res://icon.svg"
 [autoload]
 
 EnumGlobal="*res://game/core/EnumGlobal.cs"
-CardGlobal="*res://game/systems/cardGlobal.cs"
 
 [display]
 
-window/size/viewport_width=1500
+window/size/viewport_width=1920
 window/size/viewport_height=1000
 
 [dotnet]

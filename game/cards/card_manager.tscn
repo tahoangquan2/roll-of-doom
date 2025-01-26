@@ -1,11 +1,12 @@
-[gd_scene load_steps=26 format=3 uid="uid://darh3kkm8ew07"]
+[gd_scene load_steps=11 format=3 uid="uid://darh3kkm8ew07"]
 
 [ext_resource type="Script" path="res://game/cards/CardManager.cs" id="1_jqhmt"]
 [ext_resource type="PackedScene" uid="uid://cq8hes5bcj3u1" path="res://game/cards/card.tscn" id="2_inu1s"]
 [ext_resource type="Script" path="res://game/cards/CardData.cs" id="3_otn11"]
 [ext_resource type="AudioStream" uid="uid://d24gsx4r5cerp" path="res://assets/audio/card-sounds.mp3" id="4_fy348"]
+[ext_resource type="Resource" uid="uid://cl3hr86rfwxnh" path="res://game/cards/CardData/Draw3.tres" id="5_7cxlf"]
 
-[sub_resource type="Shader" id="Shader_mtbty"]
+[sub_resource type="Shader" id="Shader_ogtq8"]
 resource_local_to_scene = true
 code = "// Hey this is Hei! This shader \"fakes\" a 3D-camera perspective on CanvasItems.
 // License: MIT
@@ -65,21 +66,14 @@ void fragment(){
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qjn8f"]
 resource_local_to_scene = true
-shader = SubResource("Shader_mtbty")
+shader = SubResource("Shader_ogtq8")
 shader_parameter/fov = 90.0
 shader_parameter/cull_back = true
 shader_parameter/y_rot = 0.0
 shader_parameter/x_rot = 0.0
 shader_parameter/inset = 0.0
 
-[sub_resource type="Resource" id="Resource_8821u"]
-script = ExtResource("3_otn11")
-CardName = "Archer Tower"
-Cost = 12
-CardType = 0
-Effect = ""
-
-[sub_resource type="Shader" id="Shader_4mhk4"]
+[sub_resource type="Shader" id="Shader_esida"]
 resource_local_to_scene = true
 code = "// Hey this is Hei! This shader \"fakes\" a 3D-camera perspective on CanvasItems.
 // License: MIT
@@ -137,497 +131,21 @@ void fragment(){
 	COLOR.a *= step(max(abs(uv.x), abs(uv.y)), 0.5);
 }"
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_v3r80"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_j2ayl"]
 resource_local_to_scene = true
-shader = SubResource("Shader_4mhk4")
+shader = SubResource("Shader_esida")
 shader_parameter/fov = 90.0
 shader_parameter/cull_back = true
 shader_parameter/y_rot = 0.0
 shader_parameter/x_rot = 0.0
 shader_parameter/inset = 0.0
 
-[sub_resource type="Resource" id="Resource_bidd2"]
+[sub_resource type="Resource" id="Resource_ghd6p"]
 script = ExtResource("3_otn11")
-CardName = "Wizard Tower"
-Cost = 8
-CardType = 1
-Effect = ""
-
-[sub_resource type="Shader" id="Shader_gxa44"]
-resource_local_to_scene = true
-code = "// Hey this is Hei! This shader \"fakes\" a 3D-camera perspective on CanvasItems.
-// License: MIT
-
-shader_type canvas_item;
-
-// Camera FOV
-uniform float fov : hint_range(1, 179) = 90;
-uniform bool cull_back = true;
-uniform float y_rot : hint_range(-180, 180) = 0.0;
-uniform float x_rot : hint_range(-180, 180) = 0.0;
-// At 0, the image retains its size when unrotated.
-// At 1, the image is resized so that it can do a full
-// rotation without clipping inside its rect.
-uniform float inset : hint_range(0, 1) = 0.0;
-// Consider changing this to a uniform and changing it from code
-
-varying flat vec2 o;
-varying vec3 p;
-
-// Creates rotation matrix
-void vertex(){
-	float sin_b = sin(y_rot / 180.0 * PI);
-	float cos_b = cos(y_rot / 180.0 * PI);
-	float sin_c = sin(x_rot / 180.0 * PI);
-	float cos_c = cos(x_rot / 180.0 * PI);
-	
-	mat3 inv_rot_mat;
-	inv_rot_mat[0][0] = cos_b;
-	inv_rot_mat[0][1] = 0.0;
-	inv_rot_mat[0][2] = -sin_b;
-	
-	inv_rot_mat[1][0] = sin_b * sin_c;
-	inv_rot_mat[1][1] = cos_c;
-	inv_rot_mat[1][2] = cos_b * sin_c;
-	
-	inv_rot_mat[2][0] = sin_b * cos_c;
-	inv_rot_mat[2][1] = -sin_c;
-	inv_rot_mat[2][2] = cos_b * cos_c;
-	
-	
-	float t = tan(fov / 360.0 * PI);
-	p = inv_rot_mat * vec3((UV - 0.5), 0.5 / t);
-	float v = (0.5 / t) + 0.5;
-	p.xy *= v * inv_rot_mat[2].z;
-	o = v * inv_rot_mat[2].xy;
-
-	VERTEX += (UV - 0.5) / TEXTURE_PIXEL_SIZE * t * (1.0 - inset);
-}
-
-void fragment(){
-	if (cull_back && p.z <= 0.0) discard;
-	vec2 uv = (p.xy / p.z).xy - o;
-    COLOR = texture(TEXTURE, uv + 0.5);
-	COLOR.a *= step(max(abs(uv.x), abs(uv.y)), 0.5);
-}"
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_qrd0l"]
-resource_local_to_scene = true
-shader = SubResource("Shader_gxa44")
-shader_parameter/fov = 90.0
-shader_parameter/cull_back = true
-shader_parameter/y_rot = 0.0
-shader_parameter/x_rot = 0.0
-shader_parameter/inset = 0.0
-
-[sub_resource type="Resource" id="Resource_1n06u"]
-script = ExtResource("3_otn11")
-CardName = "bomb tower"
+CardName = "Default Card"
 Cost = 0
 CardType = 0
-Effect = ""
-
-[sub_resource type="Shader" id="Shader_sjf0a"]
-resource_local_to_scene = true
-code = "// Hey this is Hei! This shader \"fakes\" a 3D-camera perspective on CanvasItems.
-// License: MIT
-
-shader_type canvas_item;
-
-// Camera FOV
-uniform float fov : hint_range(1, 179) = 90;
-uniform bool cull_back = true;
-uniform float y_rot : hint_range(-180, 180) = 0.0;
-uniform float x_rot : hint_range(-180, 180) = 0.0;
-// At 0, the image retains its size when unrotated.
-// At 1, the image is resized so that it can do a full
-// rotation without clipping inside its rect.
-uniform float inset : hint_range(0, 1) = 0.0;
-// Consider changing this to a uniform and changing it from code
-
-varying flat vec2 o;
-varying vec3 p;
-
-// Creates rotation matrix
-void vertex(){
-	float sin_b = sin(y_rot / 180.0 * PI);
-	float cos_b = cos(y_rot / 180.0 * PI);
-	float sin_c = sin(x_rot / 180.0 * PI);
-	float cos_c = cos(x_rot / 180.0 * PI);
-	
-	mat3 inv_rot_mat;
-	inv_rot_mat[0][0] = cos_b;
-	inv_rot_mat[0][1] = 0.0;
-	inv_rot_mat[0][2] = -sin_b;
-	
-	inv_rot_mat[1][0] = sin_b * sin_c;
-	inv_rot_mat[1][1] = cos_c;
-	inv_rot_mat[1][2] = cos_b * sin_c;
-	
-	inv_rot_mat[2][0] = sin_b * cos_c;
-	inv_rot_mat[2][1] = -sin_c;
-	inv_rot_mat[2][2] = cos_b * cos_c;
-	
-	
-	float t = tan(fov / 360.0 * PI);
-	p = inv_rot_mat * vec3((UV - 0.5), 0.5 / t);
-	float v = (0.5 / t) + 0.5;
-	p.xy *= v * inv_rot_mat[2].z;
-	o = v * inv_rot_mat[2].xy;
-
-	VERTEX += (UV - 0.5) / TEXTURE_PIXEL_SIZE * t * (1.0 - inset);
-}
-
-void fragment(){
-	if (cull_back && p.z <= 0.0) discard;
-	vec2 uv = (p.xy / p.z).xy - o;
-    COLOR = texture(TEXTURE, uv + 0.5);
-	COLOR.a *= step(max(abs(uv.x), abs(uv.y)), 0.5);
-}"
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_3hwjv"]
-resource_local_to_scene = true
-shader = SubResource("Shader_sjf0a")
-shader_parameter/fov = 90.0
-shader_parameter/cull_back = true
-shader_parameter/y_rot = 0.0
-shader_parameter/x_rot = 0.0
-shader_parameter/inset = 0.0
-
-[sub_resource type="Shader" id="Shader_5k11v"]
-resource_local_to_scene = true
-code = "// Hey this is Hei! This shader \"fakes\" a 3D-camera perspective on CanvasItems.
-// License: MIT
-
-shader_type canvas_item;
-
-// Camera FOV
-uniform float fov : hint_range(1, 179) = 90;
-uniform bool cull_back = true;
-uniform float y_rot : hint_range(-180, 180) = 0.0;
-uniform float x_rot : hint_range(-180, 180) = 0.0;
-// At 0, the image retains its size when unrotated.
-// At 1, the image is resized so that it can do a full
-// rotation without clipping inside its rect.
-uniform float inset : hint_range(0, 1) = 0.0;
-// Consider changing this to a uniform and changing it from code
-
-varying flat vec2 o;
-varying vec3 p;
-
-// Creates rotation matrix
-void vertex(){
-	float sin_b = sin(y_rot / 180.0 * PI);
-	float cos_b = cos(y_rot / 180.0 * PI);
-	float sin_c = sin(x_rot / 180.0 * PI);
-	float cos_c = cos(x_rot / 180.0 * PI);
-	
-	mat3 inv_rot_mat;
-	inv_rot_mat[0][0] = cos_b;
-	inv_rot_mat[0][1] = 0.0;
-	inv_rot_mat[0][2] = -sin_b;
-	
-	inv_rot_mat[1][0] = sin_b * sin_c;
-	inv_rot_mat[1][1] = cos_c;
-	inv_rot_mat[1][2] = cos_b * sin_c;
-	
-	inv_rot_mat[2][0] = sin_b * cos_c;
-	inv_rot_mat[2][1] = -sin_c;
-	inv_rot_mat[2][2] = cos_b * cos_c;
-	
-	
-	float t = tan(fov / 360.0 * PI);
-	p = inv_rot_mat * vec3((UV - 0.5), 0.5 / t);
-	float v = (0.5 / t) + 0.5;
-	p.xy *= v * inv_rot_mat[2].z;
-	o = v * inv_rot_mat[2].xy;
-
-	VERTEX += (UV - 0.5) / TEXTURE_PIXEL_SIZE * t * (1.0 - inset);
-}
-
-void fragment(){
-	if (cull_back && p.z <= 0.0) discard;
-	vec2 uv = (p.xy / p.z).xy - o;
-    COLOR = texture(TEXTURE, uv + 0.5);
-	COLOR.a *= step(max(abs(uv.x), abs(uv.y)), 0.5);
-}"
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_17m6f"]
-resource_local_to_scene = true
-shader = SubResource("Shader_5k11v")
-shader_parameter/fov = 90.0
-shader_parameter/cull_back = true
-shader_parameter/y_rot = 0.0
-shader_parameter/x_rot = 0.0
-shader_parameter/inset = 0.0
-
-[sub_resource type="Shader" id="Shader_r2f4w"]
-resource_local_to_scene = true
-code = "// Hey this is Hei! This shader \"fakes\" a 3D-camera perspective on CanvasItems.
-// License: MIT
-
-shader_type canvas_item;
-
-// Camera FOV
-uniform float fov : hint_range(1, 179) = 90;
-uniform bool cull_back = true;
-uniform float y_rot : hint_range(-180, 180) = 0.0;
-uniform float x_rot : hint_range(-180, 180) = 0.0;
-// At 0, the image retains its size when unrotated.
-// At 1, the image is resized so that it can do a full
-// rotation without clipping inside its rect.
-uniform float inset : hint_range(0, 1) = 0.0;
-// Consider changing this to a uniform and changing it from code
-
-varying flat vec2 o;
-varying vec3 p;
-
-// Creates rotation matrix
-void vertex(){
-	float sin_b = sin(y_rot / 180.0 * PI);
-	float cos_b = cos(y_rot / 180.0 * PI);
-	float sin_c = sin(x_rot / 180.0 * PI);
-	float cos_c = cos(x_rot / 180.0 * PI);
-	
-	mat3 inv_rot_mat;
-	inv_rot_mat[0][0] = cos_b;
-	inv_rot_mat[0][1] = 0.0;
-	inv_rot_mat[0][2] = -sin_b;
-	
-	inv_rot_mat[1][0] = sin_b * sin_c;
-	inv_rot_mat[1][1] = cos_c;
-	inv_rot_mat[1][2] = cos_b * sin_c;
-	
-	inv_rot_mat[2][0] = sin_b * cos_c;
-	inv_rot_mat[2][1] = -sin_c;
-	inv_rot_mat[2][2] = cos_b * cos_c;
-	
-	
-	float t = tan(fov / 360.0 * PI);
-	p = inv_rot_mat * vec3((UV - 0.5), 0.5 / t);
-	float v = (0.5 / t) + 0.5;
-	p.xy *= v * inv_rot_mat[2].z;
-	o = v * inv_rot_mat[2].xy;
-
-	VERTEX += (UV - 0.5) / TEXTURE_PIXEL_SIZE * t * (1.0 - inset);
-}
-
-void fragment(){
-	if (cull_back && p.z <= 0.0) discard;
-	vec2 uv = (p.xy / p.z).xy - o;
-    COLOR = texture(TEXTURE, uv + 0.5);
-	COLOR.a *= step(max(abs(uv.x), abs(uv.y)), 0.5);
-}"
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_dnox2"]
-resource_local_to_scene = true
-shader = SubResource("Shader_r2f4w")
-shader_parameter/fov = 90.0
-shader_parameter/cull_back = true
-shader_parameter/y_rot = 0.0
-shader_parameter/x_rot = 0.0
-shader_parameter/inset = 0.0
-
-[sub_resource type="Shader" id="Shader_fo07j"]
-resource_local_to_scene = true
-code = "// Hey this is Hei! This shader \"fakes\" a 3D-camera perspective on CanvasItems.
-// License: MIT
-
-shader_type canvas_item;
-
-// Camera FOV
-uniform float fov : hint_range(1, 179) = 90;
-uniform bool cull_back = true;
-uniform float y_rot : hint_range(-180, 180) = 0.0;
-uniform float x_rot : hint_range(-180, 180) = 0.0;
-// At 0, the image retains its size when unrotated.
-// At 1, the image is resized so that it can do a full
-// rotation without clipping inside its rect.
-uniform float inset : hint_range(0, 1) = 0.0;
-// Consider changing this to a uniform and changing it from code
-
-varying flat vec2 o;
-varying vec3 p;
-
-// Creates rotation matrix
-void vertex(){
-	float sin_b = sin(y_rot / 180.0 * PI);
-	float cos_b = cos(y_rot / 180.0 * PI);
-	float sin_c = sin(x_rot / 180.0 * PI);
-	float cos_c = cos(x_rot / 180.0 * PI);
-	
-	mat3 inv_rot_mat;
-	inv_rot_mat[0][0] = cos_b;
-	inv_rot_mat[0][1] = 0.0;
-	inv_rot_mat[0][2] = -sin_b;
-	
-	inv_rot_mat[1][0] = sin_b * sin_c;
-	inv_rot_mat[1][1] = cos_c;
-	inv_rot_mat[1][2] = cos_b * sin_c;
-	
-	inv_rot_mat[2][0] = sin_b * cos_c;
-	inv_rot_mat[2][1] = -sin_c;
-	inv_rot_mat[2][2] = cos_b * cos_c;
-	
-	
-	float t = tan(fov / 360.0 * PI);
-	p = inv_rot_mat * vec3((UV - 0.5), 0.5 / t);
-	float v = (0.5 / t) + 0.5;
-	p.xy *= v * inv_rot_mat[2].z;
-	o = v * inv_rot_mat[2].xy;
-
-	VERTEX += (UV - 0.5) / TEXTURE_PIXEL_SIZE * t * (1.0 - inset);
-}
-
-void fragment(){
-	if (cull_back && p.z <= 0.0) discard;
-	vec2 uv = (p.xy / p.z).xy - o;
-    COLOR = texture(TEXTURE, uv + 0.5);
-	COLOR.a *= step(max(abs(uv.x), abs(uv.y)), 0.5);
-}"
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_63ges"]
-resource_local_to_scene = true
-shader = SubResource("Shader_fo07j")
-shader_parameter/fov = 90.0
-shader_parameter/cull_back = true
-shader_parameter/y_rot = 0.0
-shader_parameter/x_rot = 0.0
-shader_parameter/inset = 0.0
-
-[sub_resource type="Shader" id="Shader_r73ep"]
-resource_local_to_scene = true
-code = "// Hey this is Hei! This shader \"fakes\" a 3D-camera perspective on CanvasItems.
-// License: MIT
-
-shader_type canvas_item;
-
-// Camera FOV
-uniform float fov : hint_range(1, 179) = 90;
-uniform bool cull_back = true;
-uniform float y_rot : hint_range(-180, 180) = 0.0;
-uniform float x_rot : hint_range(-180, 180) = 0.0;
-// At 0, the image retains its size when unrotated.
-// At 1, the image is resized so that it can do a full
-// rotation without clipping inside its rect.
-uniform float inset : hint_range(0, 1) = 0.0;
-// Consider changing this to a uniform and changing it from code
-
-varying flat vec2 o;
-varying vec3 p;
-
-// Creates rotation matrix
-void vertex(){
-	float sin_b = sin(y_rot / 180.0 * PI);
-	float cos_b = cos(y_rot / 180.0 * PI);
-	float sin_c = sin(x_rot / 180.0 * PI);
-	float cos_c = cos(x_rot / 180.0 * PI);
-	
-	mat3 inv_rot_mat;
-	inv_rot_mat[0][0] = cos_b;
-	inv_rot_mat[0][1] = 0.0;
-	inv_rot_mat[0][2] = -sin_b;
-	
-	inv_rot_mat[1][0] = sin_b * sin_c;
-	inv_rot_mat[1][1] = cos_c;
-	inv_rot_mat[1][2] = cos_b * sin_c;
-	
-	inv_rot_mat[2][0] = sin_b * cos_c;
-	inv_rot_mat[2][1] = -sin_c;
-	inv_rot_mat[2][2] = cos_b * cos_c;
-	
-	
-	float t = tan(fov / 360.0 * PI);
-	p = inv_rot_mat * vec3((UV - 0.5), 0.5 / t);
-	float v = (0.5 / t) + 0.5;
-	p.xy *= v * inv_rot_mat[2].z;
-	o = v * inv_rot_mat[2].xy;
-
-	VERTEX += (UV - 0.5) / TEXTURE_PIXEL_SIZE * t * (1.0 - inset);
-}
-
-void fragment(){
-	if (cull_back && p.z <= 0.0) discard;
-	vec2 uv = (p.xy / p.z).xy - o;
-    COLOR = texture(TEXTURE, uv + 0.5);
-	COLOR.a *= step(max(abs(uv.x), abs(uv.y)), 0.5);
-}"
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_lrw77"]
-resource_local_to_scene = true
-shader = SubResource("Shader_r73ep")
-shader_parameter/fov = 90.0
-shader_parameter/cull_back = true
-shader_parameter/y_rot = 0.0
-shader_parameter/x_rot = 0.0
-shader_parameter/inset = 0.0
-
-[sub_resource type="Shader" id="Shader_r3liw"]
-resource_local_to_scene = true
-code = "// Hey this is Hei! This shader \"fakes\" a 3D-camera perspective on CanvasItems.
-// License: MIT
-
-shader_type canvas_item;
-
-// Camera FOV
-uniform float fov : hint_range(1, 179) = 90;
-uniform bool cull_back = true;
-uniform float y_rot : hint_range(-180, 180) = 0.0;
-uniform float x_rot : hint_range(-180, 180) = 0.0;
-// At 0, the image retains its size when unrotated.
-// At 1, the image is resized so that it can do a full
-// rotation without clipping inside its rect.
-uniform float inset : hint_range(0, 1) = 0.0;
-// Consider changing this to a uniform and changing it from code
-
-varying flat vec2 o;
-varying vec3 p;
-
-// Creates rotation matrix
-void vertex(){
-	float sin_b = sin(y_rot / 180.0 * PI);
-	float cos_b = cos(y_rot / 180.0 * PI);
-	float sin_c = sin(x_rot / 180.0 * PI);
-	float cos_c = cos(x_rot / 180.0 * PI);
-	
-	mat3 inv_rot_mat;
-	inv_rot_mat[0][0] = cos_b;
-	inv_rot_mat[0][1] = 0.0;
-	inv_rot_mat[0][2] = -sin_b;
-	
-	inv_rot_mat[1][0] = sin_b * sin_c;
-	inv_rot_mat[1][1] = cos_c;
-	inv_rot_mat[1][2] = cos_b * sin_c;
-	
-	inv_rot_mat[2][0] = sin_b * cos_c;
-	inv_rot_mat[2][1] = -sin_c;
-	inv_rot_mat[2][2] = cos_b * cos_c;
-	
-	
-	float t = tan(fov / 360.0 * PI);
-	p = inv_rot_mat * vec3((UV - 0.5), 0.5 / t);
-	float v = (0.5 / t) + 0.5;
-	p.xy *= v * inv_rot_mat[2].z;
-	o = v * inv_rot_mat[2].xy;
-
-	VERTEX += (UV - 0.5) / TEXTURE_PIXEL_SIZE * t * (1.0 - inset);
-}
-
-void fragment(){
-	if (cull_back && p.z <= 0.0) discard;
-	vec2 uv = (p.xy / p.z).xy - o;
-    COLOR = texture(TEXTURE, uv + 0.5);
-	COLOR.a *= step(max(abs(uv.x), abs(uv.y)), 0.5);
-}"
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_r7dng"]
-resource_local_to_scene = true
-shader = SubResource("Shader_r3liw")
-shader_parameter/fov = 90.0
-shader_parameter/cull_back = true
-shader_parameter/y_rot = 0.0
-shader_parameter/x_rot = 0.0
-shader_parameter/inset = 0.0
+Effects = []
 
 [node name="CardManager" type="Node2D"]
 script = ExtResource("1_jqhmt")
@@ -635,47 +153,12 @@ script = ExtResource("1_jqhmt")
 [node name="Card" parent="." instance=ExtResource("2_inu1s")]
 material = SubResource("ShaderMaterial_qjn8f")
 position = Vector2(99, 615)
-cardData = SubResource("Resource_8821u")
+cardData = ExtResource("5_7cxlf")
 
 [node name="Card2" parent="." instance=ExtResource("2_inu1s")]
-material = SubResource("ShaderMaterial_v3r80")
-position = Vector2(290, 623)
-cardData = SubResource("Resource_bidd2")
-
-[node name="Card3" parent="." instance=ExtResource("2_inu1s")]
-material = SubResource("ShaderMaterial_qrd0l")
-position = Vector2(482, 378)
-cardData = SubResource("Resource_1n06u")
-
-[node name="Card4" parent="." instance=ExtResource("2_inu1s")]
-material = SubResource("ShaderMaterial_3hwjv")
+material = SubResource("ShaderMaterial_j2ayl")
 position = Vector2(99, 615)
-cardData = SubResource("Resource_8821u")
-
-[node name="Card5" parent="." instance=ExtResource("2_inu1s")]
-material = SubResource("ShaderMaterial_17m6f")
-position = Vector2(290, 623)
-cardData = SubResource("Resource_bidd2")
-
-[node name="Card6" parent="." instance=ExtResource("2_inu1s")]
-material = SubResource("ShaderMaterial_dnox2")
-position = Vector2(482, 378)
-cardData = SubResource("Resource_1n06u")
-
-[node name="Card7" parent="." instance=ExtResource("2_inu1s")]
-material = SubResource("ShaderMaterial_63ges")
-position = Vector2(99, 615)
-cardData = SubResource("Resource_8821u")
-
-[node name="Card8" parent="." instance=ExtResource("2_inu1s")]
-material = SubResource("ShaderMaterial_lrw77")
-position = Vector2(290, 623)
-cardData = SubResource("Resource_bidd2")
-
-[node name="Card9" parent="." instance=ExtResource("2_inu1s")]
-material = SubResource("ShaderMaterial_r7dng")
-position = Vector2(482, 378)
-cardData = SubResource("Resource_1n06u")
+cardData = SubResource("Resource_ghd6p")
 
 [node name="AudioPlayer" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("4_fy348")

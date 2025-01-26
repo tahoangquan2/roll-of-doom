@@ -140,8 +140,6 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
         int index = hand.IndexOf(card);
         if (index != -1)
         {
-            // with index and isHovered
-            GD.Print("Card index: " + index + " isHovered: " + isHovered);
             if (isHovered)
             {
                 AnimateCardHover(card);

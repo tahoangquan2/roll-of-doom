@@ -1,33 +1,29 @@
 using Godot;
+using Godot.Collections;
+
 [Tool]
 [GlobalClass]
 public partial class CardData : Resource
 {
     [Export] public string CardName { get; set; }
     [Export] public int Cost { get; set; }
-    //[Export] public CardEffect Effect { get; set; }  // Now stores a reference to an effect
-    //string for now
-    [Export] public EnumGlobal.enumCardType CardType { get; set; } // tower, spell, deck
-    [Export] public string Effect { get; set; }
-        // Default Constructor
+    [Export] public EnumGlobal.enumCardType CardType { get; set; }
+    [Export] public Array<CardEffect> Effects { get; set; } = new Array<CardEffect>();
+
+
     public CardData()
     {
         CardName = "Default Card";
         Cost = 0;
         CardType = EnumGlobal.enumCardType.Tower;
-        Effect = null;  // No effect by default
+        Effects = new Array<CardEffect>();
     }
 
     // Constructor
-    public CardData(string cardName, int cost, string effect)
+    public CardData(string cardName, int cost, CardEffect effect)
     {
         CardName = cardName;
         Cost = cost;
-        Effect = effect;
-    }
-    // Save function (optional, for creating resources in code)
-    public void Save(string path)
-    {
-        ResourceSaver.Save(this, path);
-    }
+        Effects = new Array<CardEffect> { effect };
+    }    
 }
