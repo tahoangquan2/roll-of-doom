@@ -7,12 +7,14 @@ public partial class CardData : Resource
     [Export] public int Cost { get; set; }
     //[Export] public CardEffect Effect { get; set; }  // Now stores a reference to an effect
     //string for now
+    [Export] public EnumGlobal.enumCardType CardType { get; set; } // tower, spell, deck
     [Export] public string Effect { get; set; }
         // Default Constructor
     public CardData()
     {
         CardName = "Default Card";
         Cost = 0;
+        CardType = EnumGlobal.enumCardType.Tower;
         Effect = null;  // No effect by default
     }
 

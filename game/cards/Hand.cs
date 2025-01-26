@@ -133,11 +133,6 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
         tween.TweenProperty(card, "position", targetPosition, 0.15f).SetEase(Tween.EaseType.Out);
     }
 
-    //input event 
-    public override void _Input(InputEvent @event)
-    {
-    }
-
     private void _on_card_pushup(Card card,bool isHovered)
     {
         if (card == null) return;
@@ -145,6 +140,8 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
         int index = hand.IndexOf(card);
         if (index != -1)
         {
+            // with index and isHovered
+            GD.Print("Card index: " + index + " isHovered: " + isHovered);
             if (isHovered)
             {
                 AnimateCardHover(card);
@@ -167,14 +164,14 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
     }
 
     public void _on_mouse_entered()
-    {
+    {   if (cardManager.selected_card != null) return;
         HandRadius = 900;cardRadius = HandRadius-200;
         RepositionCards();
     }
 
     public void _on_mouse_exited()
-    {
+    {   if (cardManager.selected_card != null) return;
         HandRadius = 750;cardRadius = HandRadius-200;
         RepositionCards();
-    }
+    }    
 }

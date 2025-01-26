@@ -3,7 +3,7 @@ using System;
 
 public partial class Card : Node2D
 {
-    [Export] public CardData CardData { get; set; }
+    [Export] public CardData cardData { get; set; }
     public bool canBeHovered = true;
 
     [Signal] public delegate void CardHoveredEventHandler(Card card);
@@ -12,6 +12,7 @@ public partial class Card : Node2D
     private Label costLbl;
     private Label nameLbl;
     private Label descriptionLbl;
+    private Sprite2D CardTypeIcon;
 
     private Vector2 cardSize= new Vector2(150, 210);
 
@@ -22,14 +23,15 @@ public partial class Card : Node2D
 
     public Card()
     {
-        CardData = new CardData(); // Ensure initialization
+        cardData = new CardData(); // Ensure initialization
     }
 
     public override void _Ready()
     {
         costLbl = GetNode<Label>("Control/SubViewport/CardMockup/CostDisplay/CostLb");
-        nameLbl = GetNode<Label>("Control/SubViewport/CardMockup/NameDisplay/NameLb");
+        nameLbl = GetNode<Label>("Control/SubViewport/CardMockup/CardDisplay/CardFrontBannerDown/NameDisplay/NameLb");
         descriptionLbl = GetNode<Label>("Control/SubViewport/CardMockup/CardEffectLb");
+        CardTypeIcon = GetNode<Sprite2D>("Control/SubViewport/CardMockup/CardTypeIcon");
 
         var subViewport = GetNode<SubViewport>("Control/SubViewport");
         var shaderDisplay = GetNode<TextureRect>("TextureRect"); // This will hold the shader
@@ -42,11 +44,13 @@ public partial class Card : Node2D
             shaderMaterial = mat;
         }
 
-        if (CardData != null)
+        if (cardData != null)
         {
             // GD.Print($"Card Name: {CardData.CardName}");
             // GD.Print($"Cost: {CardData.Cost}");
             // GD.Print($"Effect: {CardData.Effect}");
+
+
         }
 
         // Connect card to CardManager
@@ -58,11 +62,28 @@ public partial class Card : Node2D
 
     private void UpdateGraphics()
     {
-        if (CardData == null) return;
+        if (cardData == null) return;
 
-		costLbl.Text = CardData.Cost.ToString();
-		nameLbl.Text = CardData.CardName;
-		descriptionLbl.Text = CardData.Effect;
+		costLbl.Text = cardData.Cost.ToString();
+		nameLbl.Text = cardData.CardName;
+		descriptionLbl.Text = cardData.Effect;
+
+        // Set the card type icon
+        switch (cardData.CardType)
+        {
+            case EnumGlobal.enumCardType.Tower:
+                CardTypeIcon.Frame = 1;
+                break;
+            case EnumGlobal.enumCardType.Spell:
+                CardTypeIcon.Frame = 2;
+                break;
+            case EnumGlobal.enumCardType.Deck:
+                CardTypeIcon.Frame = 0;
+                break;
+            default:
+                CardTypeIcon.Frame = 0;
+                break;
+        }
     }  
     
     public override void _Process(double delta)
