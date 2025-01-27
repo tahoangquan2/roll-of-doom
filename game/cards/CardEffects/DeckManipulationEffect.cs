@@ -29,9 +29,19 @@ public partial class DeckManipulationEffect : CardEffect
                 GD.Print($"Duplicated {Amount} cards.");
                 break;
 
-            case EnumGlobal.enumDeckEffect.ResetDeck:
+            case EnumGlobal.enumDeckEffect.ShuffleDeck:
                 //cardManager.ShuffleDeck();
                 GD.Print("Shuffled deck.");
+                break;
+
+            case EnumGlobal.enumDeckEffect.ShuffleCard:
+                //cardManager.ShuffleCard();
+                GD.Print("Shuffled a card back into deck.");
+                break;
+
+            case EnumGlobal.enumDeckEffect.ShuffleHand:
+                //hand.ShuffleHand();
+                GD.Print("Shuffled hand back into the deck.");
                 break;
 
         }

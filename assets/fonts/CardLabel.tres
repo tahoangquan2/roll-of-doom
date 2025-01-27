@@ -3,5 +3,7 @@
 [ext_resource type="FontFile" uid="uid://ddnnmk00qnpyl" path="res://assets/fonts/MemoryPro.ttf" id="1_vcdfa"]
 
 [resource]
+line_spacing = 1.0
 font = ExtResource("1_vcdfa")
-font_size = 22
+outline_color = Color(0, 0.027451, 0, 1)
+shadow_size = 0

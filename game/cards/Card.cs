@@ -13,6 +13,7 @@ public partial class Card : Node2D
     private Label nameLbl;
     private Label descriptionLbl;
     private Sprite2D CardTypeIcon;
+    private Sprite2D CardArt;
 
     private Vector2 cardSize= new Vector2(150, 210);
 
@@ -28,10 +29,11 @@ public partial class Card : Node2D
 
     public override void _Ready()
     {
-        costLbl = GetNode<Label>("Control/SubViewport/CardMockup/CostDisplay/CostLb");
-        nameLbl = GetNode<Label>("Control/SubViewport/CardMockup/CardDisplay/CardFrontBannerDown/NameDisplay/NameLb");
-        descriptionLbl = GetNode<Label>("Control/SubViewport/CardMockup/CardEffectLb");
-        CardTypeIcon = GetNode<Sprite2D>("Control/SubViewport/CardMockup/CardTypeIcon");
+        costLbl = GetNode<Label>("Control/SubViewport/CostDisplay/CostLb");
+        nameLbl = GetNode<Label>("Control/SubViewport/CardDisplay/CardFrontBannerDown/NameDisplay/NameLb");
+        descriptionLbl = GetNode<Label>("Control/SubViewport/CardEffectLb");
+        CardTypeIcon = GetNode<Sprite2D>("Control/SubViewport/CardTypeIcon");
+        CardArt = GetNode<Sprite2D>("Control/SubViewport/CardDisplay/CardArt");
 
         var subViewport = GetNode<SubViewport>("Control/SubViewport");
         var shaderDisplay = GetNode<TextureRect>("TextureRect"); // This will hold the shader
@@ -44,13 +46,12 @@ public partial class Card : Node2D
             shaderMaterial = mat;
         }
 
-        if (cardData != null)
+        if (cardData != null)  
         {
-            GD.Print($"Card Name: {cardData.CardName}");
-            GD.Print($"Cost: {cardData.Cost}");
-            GD.Print($"Type: {cardData.CardType}");
-            GD.Print($"Effect: {cardData.Effects}");
-
+            // GD.Print($"Card Name: {cardData.CardName}");
+            // GD.Print($"Cost: {cardData.Cost}");
+            // GD.Print($"Type: {cardData.CardType}");
+            // GD.Print($"Effect: {cardData.Effects}");
         }
 
         // Connect card to CardManager
@@ -78,7 +79,10 @@ public partial class Card : Node2D
 
 		costLbl.Text = cardData.Cost.ToString();
 		nameLbl.Text = cardData.CardName;
-		descriptionLbl.Text = cardData.Effects.ToString();
+		descriptionLbl.Text = cardData.Description.ToString();
+        CardArt.Texture = cardData.CardArt;
+
+
 
         // Set the card type icon
         switch (cardData.CardType)

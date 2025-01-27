@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://d30ipmxtvmvco"]
+
+[ext_resource type="Script" path="res://game/cards/Deck.cs" id="1_yimvb"]
+[ext_resource type="Texture2D" uid="uid://cfod7vdoc2uym" path="res://assets/cards/card fantasy back.png" id="2_1tldn"]
+
+[node name="Deck" type="Node2D"]
+script = ExtResource("1_yimvb")
+
+[node name="CardFantasyBack" type="Sprite2D" parent="."]
+texture_filter = 2
+position = Vector2(3, 0)
+texture = ExtResource("2_1tldn")
+
+[node name="CardFantasyBack2" type="Sprite2D" parent="."]
+texture_filter = 2
+texture = ExtResource("2_1tldn")

@@ -1,12 +1,13 @@
-[gd_scene load_steps=11 format=3 uid="uid://darh3kkm8ew07"]
+[gd_scene load_steps=14 format=3 uid="uid://darh3kkm8ew07"]
 
 [ext_resource type="Script" path="res://game/cards/CardManager.cs" id="1_jqhmt"]
 [ext_resource type="PackedScene" uid="uid://cq8hes5bcj3u1" path="res://game/cards/card.tscn" id="2_inu1s"]
 [ext_resource type="Script" path="res://game/cards/CardData.cs" id="3_otn11"]
 [ext_resource type="AudioStream" uid="uid://d24gsx4r5cerp" path="res://assets/audio/card-sounds.mp3" id="4_fy348"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/DeckManipulationEffect.cs" id="4_viag8"]
 [ext_resource type="Resource" uid="uid://cl3hr86rfwxnh" path="res://game/cards/CardData/Draw3.tres" id="5_7cxlf"]
 
-[sub_resource type="Shader" id="Shader_ogtq8"]
+[sub_resource type="Shader" id="Shader_kty8i"]
 resource_local_to_scene = true
 code = "// Hey this is Hei! This shader \"fakes\" a 3D-camera perspective on CanvasItems.
 // License: MIT
@@ -66,14 +67,14 @@ void fragment(){
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qjn8f"]
 resource_local_to_scene = true
-shader = SubResource("Shader_ogtq8")
+shader = SubResource("Shader_kty8i")
 shader_parameter/fov = 90.0
 shader_parameter/cull_back = true
 shader_parameter/y_rot = 0.0
 shader_parameter/x_rot = 0.0
 shader_parameter/inset = 0.0
 
-[sub_resource type="Shader" id="Shader_esida"]
+[sub_resource type="Shader" id="Shader_s558p"]
 resource_local_to_scene = true
 code = "// Hey this is Hei! This shader \"fakes\" a 3D-camera perspective on CanvasItems.
 // License: MIT
@@ -133,19 +134,32 @@ void fragment(){
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_j2ayl"]
 resource_local_to_scene = true
-shader = SubResource("Shader_esida")
+shader = SubResource("Shader_s558p")
 shader_parameter/fov = 90.0
 shader_parameter/cull_back = true
 shader_parameter/y_rot = 0.0
 shader_parameter/x_rot = 0.0
 shader_parameter/inset = 0.0
 
-[sub_resource type="Resource" id="Resource_ghd6p"]
+[sub_resource type="Resource" id="Resource_qc7tr"]
+script = ExtResource("4_viag8")
+DeckEffectType = 12
+Amount = 1
+
+[sub_resource type="Resource" id="Resource_1vb0u"]
+script = ExtResource("4_viag8")
+DeckEffectType = 7
+Amount = 3
+
+[sub_resource type="Resource" id="Resource_tfprr"]
+resource_local_to_scene = true
 script = ExtResource("3_otn11")
-CardName = "Default Card"
-Cost = 0
-CardType = 0
-Effects = []
+CardName = "Parallel timeline"
+Cost = 40
+CardType = 2
+Effects = [SubResource("Resource_qc7tr"), SubResource("Resource_1vb0u")]
+Description = "This card has no description."
+ArtOffset = Vector2(0, 0)
 
 [node name="CardManager" type="Node2D"]
 script = ExtResource("1_jqhmt")
@@ -158,7 +172,7 @@ cardData = ExtResource("5_7cxlf")
 [node name="Card2" parent="." instance=ExtResource("2_inu1s")]
 material = SubResource("ShaderMaterial_j2ayl")
 position = Vector2(99, 615)
-cardData = SubResource("Resource_ghd6p")
+cardData = SubResource("Resource_tfprr")
 
 [node name="AudioPlayer" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("4_fy348")
