@@ -10,7 +10,9 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
     [Export] public float MaxCardSpreadAngle { get; set; } = 15;
 
     private List<Card> hand = new List<Card>(); // Stores all cards
-    private CardManager cardManager;
+    private CardManager cardManager; // 
+
+    private Deck deck;
     private CollisionShape2D collisionShape;
     private int currentSelectedCardIndex = -1;
     private Dictionary<Card, Tween> activeTweens = new Dictionary<Card, Tween>(); // Track active tweens
@@ -21,16 +23,9 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
 
         // Get CardManager and its child cards
         cardManager = GetParent().GetNode<CardManager>("CardManager");
+        deck = GetParent().GetNode<Deck>("Deck");
         ConnectCardMagnagerSignals();
         cardRadius = HandRadius-200;
-
-        foreach (Node child in cardManager.GetChildren())
-        {
-            if (child is Card card)
-            {
-                AddCard(card); // Add existing cards to Hand
-            }
-        }    
     }
 
     public void AddCard(Card card)
@@ -40,7 +35,6 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
 
         RepositionCards();
     }
-
     public Card RemoveCard(int index)
     {
         if (index < 0 || index >= hand.Count)
@@ -52,37 +46,26 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
         RepositionCards();
         return removingCard;
     }
-
     private void RepositionCards()
     {
         if (hand.Count == 0) return;
 
-        float cardSpread = Math.Min(AngleLimit / hand.Count, MaxCardSpreadAngle);
-        float currentAngle = -(cardSpread * (hand.Count - 1)) / 2 - 90;
-
         for (int i = 0; i < hand.Count; i++)
         {
             Card card = hand[i];
-            if (card != null && card!=cardManager.card_being_dragged)
+            if (card != null && card != cardManager.card_being_dragged)
             {
-                AnimateCardTransform(card, currentAngle);
-                card.ZIndex = i + 1; 
+                AnimateCardTransform(card, GetCardAngle(i, hand.Count));
+                card.ZIndex = i + 1;
             }
-            currentAngle += cardSpread;
         }
     }
-
-    private void RepositionCard(Card card,int index){
+    private void RepositionCard(Card card, int index)
+    {
         if (hand.Count == 0) return;
 
-        float cardSpread = Math.Min(AngleLimit / hand.Count, MaxCardSpreadAngle);
-        float currentAngle = -(cardSpread * (hand.Count - 1)) / 2 - 90;
-
-        currentAngle += cardSpread * index;
-
-        AnimateCardTransform(card, currentAngle);
-
-        card.ZIndex = index + 1; // Ensure correct stacking order
+        AnimateCardTransform(card, GetCardAngle(index, hand.Count));
+        card.ZIndex = index + 1; 
     }
 
     private void AnimateCardTransform(Card card, float angleInDegrees)
@@ -103,21 +86,6 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
         tween.TweenProperty(card, "position", targetPosition, tweenDuration).SetEase(Tween.EaseType.Out);
         tween.TweenProperty(card, "rotation_degrees", targetRotation, tweenDuration).SetEase(Tween.EaseType.Out);
     }
-
-    private Vector2 GetCardPosition(float angleInDegrees)
-    {
-        return new Vector2(0,-cardRadius).Rotated(Mathf.DegToRad(angleInDegrees+90));
-    }
-
-    public override void _Process(double delta)
-    {
-        if (collisionShape.Shape is CircleShape2D circle){
-            if (circle.Radius != HandRadius){
-                circle.Radius = HandRadius;
-            }
-        }
-    }
-
     private void AnimateCardHover(Card card)
     {
         float angle = card.Rotation;
@@ -133,6 +101,41 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
         tween.TweenProperty(card, "position", targetPosition, 0.15f).SetEase(Tween.EaseType.Out);
     }
 
+    private Vector2 GetCardPosition(float angleInDegrees){
+        return new Vector2(0,-cardRadius).Rotated(Mathf.DegToRad(angleInDegrees+90));
+    }
+    private float GetCardAngle(int index, int totalCards)
+    {
+        if (totalCards == 0) return -90;
+        float cardSpread = Math.Min(AngleLimit / totalCards, MaxCardSpreadAngle);
+        return -(cardSpread * (totalCards - 1)) / 2 - 90 + (cardSpread * index);
+    }
+
+    public async void drawFromDeck(int amount){
+        if (deck == null) return;
+        Godot.Collections.Array<Card> drawnCards = deck.DrawCards(amount);
+
+        GD.Print(drawnCards);
+        
+        // slow down beetwen each card
+        for (int i = 0; i < amount; i++) if (drawnCards[i] != null) 
+        {
+            GD.Print("Drawing card");
+            if (hand.Count >= 10) break;
+            AddCard(drawnCards[i]);
+            await ToSignal(GetTree().CreateTimer(0.5f), "timeout");
+        }
+
+    }
+
+    public override void _Process(double delta)
+    {
+        if (collisionShape.Shape is CircleShape2D circle){
+            if (circle.Radius != HandRadius){
+                circle.Radius = HandRadius;
+            }
+        }
+    }
     private void _on_card_pushup(Card card,bool isHovered)
     {
         if (card == null) return;
@@ -149,27 +152,32 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
             }
         }
     }
-
     private void _on_card_unhand(Card card){
         int index = hand.IndexOf(card);
         if (index != -1) RemoveCard(index);
     }
-    
     public void ConnectCardMagnagerSignals()
-    {   
-        cardManager.CardPushup += _on_card_pushup;
-        cardManager.CardUnhand += _on_card_unhand;
-    }
-
+    {   cardManager.CardPushup += _on_card_pushup;cardManager.CardUnhand += _on_card_unhand;}
     public void _on_mouse_entered()
     {   if (cardManager.selected_card != null) return;
-        HandRadius = 900;cardRadius = HandRadius-200;
-        RepositionCards();
+        HandRadius = 900;cardRadius = HandRadius-200;RepositionCards();
     }
-
     public void _on_mouse_exited()
     {   if (cardManager.selected_card != null) return;
-        HandRadius = 750;cardRadius = HandRadius-200;
-        RepositionCards();
+        HandRadius = 750;cardRadius = HandRadius-200;RepositionCards();
     }    
+
+    public void _input(InputEvent @event)
+    {//action "Action" from input map
+        if (@event.IsActionPressed("Action"))
+        {
+            drawFromDeck(3);
+        }
+
+        if (@event.IsActionPressed("Action2"))
+        {
+            Card card = RemoveCard(0);
+            if (card != null) card.QueueFree();
+        }
+    }
 }

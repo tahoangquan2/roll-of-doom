@@ -26,6 +26,11 @@ public partial class Card : Node2D
     {
         cardData = new CardData(); // Ensure initialization
     }
+    public void SetupCard(CardData cardData)
+    {
+        this.cardData = cardData;
+        UpdateGraphics();
+    }
 
     public override void _Ready()
     {
@@ -44,14 +49,6 @@ public partial class Card : Node2D
         if (shaderDisplay.Material is ShaderMaterial mat)
         {
             shaderMaterial = mat;
-        }
-
-        if (cardData != null)  
-        {
-            // GD.Print($"Card Name: {cardData.CardName}");
-            // GD.Print($"Cost: {cardData.Cost}");
-            // GD.Print($"Type: {cardData.CardType}");
-            // GD.Print($"Effect: {cardData.Effects}");
         }
 
         // Connect card to CardManager
