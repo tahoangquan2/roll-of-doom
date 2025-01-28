@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=5 format=3 uid="uid://lpydnjvdtqrq"]
+
+[ext_resource type="Script" path="res://game/cards/CardEffects/DeckManipulationEffect.cs" id="1_csmoq"]
+[ext_resource type="Script" path="res://game/cards/CardData.cs" id="2_b4mnn"]
+
+[sub_resource type="Resource" id="Resource_qc7tr"]
+script = ExtResource("1_csmoq")
+DeckEffectType = 12
+Amount = 1
+
+[sub_resource type="Resource" id="Resource_1vb0u"]
+script = ExtResource("1_csmoq")
+DeckEffectType = 7
+Amount = 3
+
+[resource]
+resource_local_to_scene = true
+script = ExtResource("2_b4mnn")
+CardName = "Parallel timeline"
+Cost = 40
+CardType = 2
+Effects = [SubResource("Resource_qc7tr"), SubResource("Resource_1vb0u")]

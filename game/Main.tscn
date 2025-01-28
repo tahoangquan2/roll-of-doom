@@ -15,4 +15,4 @@ position = Vector2(916, 1500)
 
 [node name="CardActiveZone" parent="." instance=ExtResource("5_e70is")]
 position = Vector2(944, 313)
-scale = Vector2(8.28595, 2.01582)
+scale = Vector2(6, 2)

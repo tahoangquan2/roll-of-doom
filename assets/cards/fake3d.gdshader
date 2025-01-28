@@ -12,7 +12,11 @@ uniform float x_rot : hint_range(-180, 180) = 0.0;
 // At 1, the image is resized so that it can do a full
 // rotation without clipping inside its rect.
 uniform float inset : hint_range(0, 1) = 0.0;
-// Consider changing this to a uniform and changing it from code
+// Consider changing this to a uniform and changing it fr
+
+// add option for super sampling (2x2, 3x3, none)
+
+uniform int super_sampling : hint_range(1, 3) = 2;
 
 varying flat vec2 o;
 varying vec3 p;
@@ -47,9 +51,48 @@ void vertex(){
 	VERTEX += (UV - 0.5) / TEXTURE_PIXEL_SIZE * t * (1.0 - inset);
 }
 
-void fragment(){
-	if (cull_back && p.z <= 0.0) discard;
-	vec2 uv = (p.xy / p.z).xy - o;
-    COLOR = texture(TEXTURE, uv + 0.5);
-	COLOR.a *= step(max(abs(uv.x), abs(uv.y)), 0.5);
+void fragment() {
+    if (cull_back && p.z <= 0.0) discard;
+    
+    vec2 uv = (p.xy / p.z).xy - o;
+
+    // Define sampling offsets 
+	vec4 color = vec4(0.0);
+	if (super_sampling == 1) {//none
+		color = texture(TEXTURE, uv + 0.5);
+	} else if (super_sampling == 2) {//2x2
+		// Define sampling offsets (a 2x2 grid)
+		vec2 offsets[4] = vec2[](
+			vec2(-0.5, -0.5), 
+			vec2( 0.5, -0.5), 
+			vec2(-0.5,  0.5), 
+			vec2( 0.5,  0.5)
+		);
+
+		float weight = 0.25; // Each sample contributes equally
+
+		for (int i = 0; i < 4; i++) {
+			vec2 sample_uv = uv + offsets[i] * TEXTURE_PIXEL_SIZE * 0.5; // Adjust spread factor
+			color += texture(TEXTURE, sample_uv + 0.5) * weight;
+		}
+	} else if (super_sampling == 3) {//3x3
+		vec2 offsets[9] = vec2[](
+			vec2(-1.0, -1.0), vec2( 0.0, -1.0), vec2( 1.0, -1.0),
+			vec2(-1.0,  0.0), vec2( 0.0,  0.0), vec2( 1.0,  0.0),
+			vec2(-1.0,  1.0), vec2( 0.0,  1.0), vec2( 1.0,  1.0)
+		);
+
+		
+		float weight = 1.0 / 9.0; // Proper weight for 9 samples
+
+		for (int i = 0; i < 9; i++) {
+			vec2 sample_uv = uv + offsets[i] * TEXTURE_PIXEL_SIZE * 0.33; // Adjust spread factor
+			color += texture(TEXTURE, sample_uv + 0.5) * weight;
+		}
+	}
+
+    COLOR = color;
+
+    // Apply smooth alpha blending to avoid hard clipping
+    COLOR.a *= step(max(abs(uv.x), abs(uv.y)), 0.5);
 }

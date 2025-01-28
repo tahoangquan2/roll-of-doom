@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://du3m5tmrky0oq"]
 
-[ext_resource type="Script" path="res://CardPlayZone.cs" id="1_42eik"]
+[ext_resource type="Script" path="res://game/cards/CardPlayZone.cs" id="1_d6sdb"]
 [ext_resource type="Texture2D" uid="uid://cd8d2tqeq0kjx" path="res://assets/cards/CardSlot.png" id="2_0161m"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3u7qw"]
@@ -11,7 +11,7 @@ position = Vector2(-5.96046e-08, -5.96046e-08)
 scale = Vector2(0.8, 0.8)
 collision_layer = 512
 collision_mask = 256
-script = ExtResource("1_42eik")
+script = ExtResource("1_d6sdb")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_3u7qw")

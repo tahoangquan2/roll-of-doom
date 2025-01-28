@@ -13,7 +13,7 @@ public partial class cardEffectZone : Area2D
 	{
 	}
 
-	public virtual void activeCard(Card card)
+	public virtual void activeCard(Card card,Vector2 actionPoint)
 	{
 		if (card != null)
 		{

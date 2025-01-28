@@ -1,9 +1,9 @@
 using Godot;
-using System;
+using System.Linq;
 
 public partial class Card : Node2D
 {
-    [Export] public CardData CardData { get; set; }
+    [Export] public CardData cardData { get; set; }
     public bool canBeHovered = true;
 
     [Signal] public delegate void CardHoveredEventHandler(Card card);
@@ -12,6 +12,8 @@ public partial class Card : Node2D
     private Label costLbl;
     private Label nameLbl;
     private Label descriptionLbl;
+    private Sprite2D CardTypeIcon;
+    private Sprite2D CardArt;
 
     private Vector2 cardSize= new Vector2(150, 210);
 
@@ -22,14 +24,16 @@ public partial class Card : Node2D
 
     public Card()
     {
-        CardData = new CardData(); // Ensure initialization
+        cardData = new CardData(); // Ensure initialization
     }
 
     public override void _Ready()
     {
-        costLbl = GetNode<Label>("Control/SubViewport/CardMockup/CostDisplay/CostLb");
-        nameLbl = GetNode<Label>("Control/SubViewport/CardMockup/NameDisplay/NameLb");
-        descriptionLbl = GetNode<Label>("Control/SubViewport/CardMockup/CardEffectLb");
+        costLbl = GetNode<Label>("Control/SubViewport/CostDisplay/CostLb");
+        nameLbl = GetNode<Label>("Control/SubViewport/CardDisplay/CardFrontBannerDown/NameDisplay/NameLb");
+        descriptionLbl = GetNode<Label>("Control/SubViewport/CardEffectLb");
+        CardTypeIcon = GetNode<Sprite2D>("Control/SubViewport/CardTypeIcon");
+        CardArt = GetNode<Sprite2D>("Control/SubViewport/CardDisplay/CardArt");
 
         var subViewport = GetNode<SubViewport>("Control/SubViewport");
         var shaderDisplay = GetNode<TextureRect>("TextureRect"); // This will hold the shader
@@ -42,11 +46,12 @@ public partial class Card : Node2D
             shaderMaterial = mat;
         }
 
-        if (CardData != null)
+        if (cardData != null)  
         {
-            // GD.Print($"Card Name: {CardData.CardName}");
-            // GD.Print($"Cost: {CardData.Cost}");
-            // GD.Print($"Effect: {CardData.Effect}");
+            // GD.Print($"Card Name: {cardData.CardName}");
+            // GD.Print($"Cost: {cardData.Cost}");
+            // GD.Print($"Type: {cardData.CardType}");
+            // GD.Print($"Effect: {cardData.Effects}");
         }
 
         // Connect card to CardManager
@@ -56,18 +61,46 @@ public partial class Card : Node2D
         UpdateGraphics();
     }
 
+    public void ActivateEffects(Node2D target)
+    {
+        if (cardData == null || cardData.Effects == null || cardData.Effects.Count() == 0) return;
+
+        foreach (var effect in cardData.Effects)
+        {
+            GD.Print($"Applying effect: {effect}");
+            effect.ApplyEffect(target);
+        }
+    }
+
+
     private void UpdateGraphics()
     {
-        if (CardData == null) return;
+        if (cardData == null) return;
 
-		costLbl.Text = CardData.Cost.ToString();
-		nameLbl.Text = CardData.CardName;
-		descriptionLbl.Text = CardData.Effect;
+		costLbl.Text = cardData.Cost.ToString();
+		nameLbl.Text = cardData.CardName;
+		descriptionLbl.Text = cardData.Description.ToString();
+        CardArt.Texture = cardData.CardArt;
+
+
+
+        // Set the card type icon
+        switch (cardData.CardType)
+        {
+            case EnumGlobal.enumCardType.Tower:
+                CardTypeIcon.Frame = 1;
+                break;
+            case EnumGlobal.enumCardType.Spell:
+                CardTypeIcon.Frame = 2;
+                break;
+            case EnumGlobal.enumCardType.Deck:
+                CardTypeIcon.Frame = 0;
+                break;
+            default:
+                CardTypeIcon.Frame = 0;
+                break;
+        }
     }  
-    
-    public override void _Process(double delta)
-    {         
-    }
 
     public void Shadering(Vector2 mousePos) 
     {
