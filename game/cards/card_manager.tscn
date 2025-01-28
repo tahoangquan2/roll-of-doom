@@ -7,7 +7,7 @@
 [ext_resource type="Script" path="res://game/cards/CardEffects/DeckManipulationEffect.cs" id="4_viag8"]
 [ext_resource type="Resource" uid="uid://cl3hr86rfwxnh" path="res://game/cards/CardData/Draw3.tres" id="5_7cxlf"]
 
-[sub_resource type="Shader" id="Shader_kty8i"]
+[sub_resource type="Shader" id="Shader_0o37o"]
 resource_local_to_scene = true
 code = "// Hey this is Hei! This shader \"fakes\" a 3D-camera perspective on CanvasItems.
 // License: MIT
@@ -67,14 +67,14 @@ void fragment(){
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qjn8f"]
 resource_local_to_scene = true
-shader = SubResource("Shader_kty8i")
+shader = SubResource("Shader_0o37o")
 shader_parameter/fov = 90.0
 shader_parameter/cull_back = true
 shader_parameter/y_rot = 0.0
 shader_parameter/x_rot = 0.0
 shader_parameter/inset = 0.0
 
-[sub_resource type="Shader" id="Shader_s558p"]
+[sub_resource type="Shader" id="Shader_2p1oh"]
 resource_local_to_scene = true
 code = "// Hey this is Hei! This shader \"fakes\" a 3D-camera perspective on CanvasItems.
 // License: MIT
@@ -134,7 +134,7 @@ void fragment(){
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_j2ayl"]
 resource_local_to_scene = true
-shader = SubResource("Shader_s558p")
+shader = SubResource("Shader_2p1oh")
 shader_parameter/fov = 90.0
 shader_parameter/cull_back = true
 shader_parameter/y_rot = 0.0
@@ -151,7 +151,7 @@ script = ExtResource("4_viag8")
 DeckEffectType = 7
 Amount = 3
 
-[sub_resource type="Resource" id="Resource_tfprr"]
+[sub_resource type="Resource" id="Resource_d7tf8"]
 resource_local_to_scene = true
 script = ExtResource("3_otn11")
 CardName = "Parallel timeline"
@@ -171,8 +171,8 @@ cardData = ExtResource("5_7cxlf")
 
 [node name="Card2" parent="." instance=ExtResource("2_inu1s")]
 material = SubResource("ShaderMaterial_j2ayl")
-position = Vector2(99, 615)
-cardData = SubResource("Resource_tfprr")
+position = Vector2(201, 325)
+cardData = SubResource("Resource_d7tf8")
 
 [node name="AudioPlayer" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("4_fy348")
