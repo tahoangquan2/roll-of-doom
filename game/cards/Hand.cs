@@ -6,8 +6,8 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
 {
     private int HandRadius = 750;
     private int cardRadius ;
-    [Export] public float AngleLimit { get; set; } = 65;
-    [Export] public float MaxCardSpreadAngle { get; set; } = 15;
+    private float AngleLimit = 65;
+    private float MaxCardSpreadAngle = 10;
 
     private List<Card> hand = new List<Card>(); // Stores all cards
     private CardManager cardManager; // 

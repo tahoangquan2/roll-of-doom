@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://cq8hes5bcj3u1"]
+[gd_scene load_steps=23 format=3 uid="uid://cq8hes5bcj3u1"]
 
 [ext_resource type="Script" path="res://game/cards/Card.cs" id="1_6fwt5"]
 [ext_resource type="Texture2D" uid="uid://62t6ctia6pme" path="res://assets/cards/mana_slot.png" id="2_1dond"]
@@ -10,6 +10,7 @@
 [ext_resource type="FontFile" uid="uid://ddnnmk00qnpyl" path="res://assets/fonts/MemoryPro.ttf" id="7_hmtpx"]
 [ext_resource type="Texture2D" uid="uid://ceit2wuxyrq5j" path="res://assets/cards/CardTypeIcon.png" id="8_i61uh"]
 [ext_resource type="FontFile" uid="uid://c1j227ygpp51v" path="res://assets/fonts/DragonHunter-9Ynxj.otf" id="9_nxcu3"]
+[ext_resource type="Shader" path="res://assets/cards/burnEdge.gdshader" id="10_4xe4p"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yjvms"]
 resource_local_to_scene = true
@@ -29,51 +30,116 @@ outline_size = 3
 outline_color = Color(0, 0, 0, 1)
 shadow_size = 0
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_6c2so"]
+seed = 347
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_3bg8t"]
+noise = SubResource("FastNoiseLite_6c2so")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wdi6d"]
+shader = ExtResource("10_4xe4p")
+shader_parameter/dissolve_value = 1.0
+shader_parameter/burn_size = 0.3
+shader_parameter/burn_color = Color(0.941176, 0.254902, 0.0196078, 1)
+shader_parameter/dissolve_texture = SubResource("NoiseTexture2D_3bg8t")
+
 [sub_resource type="ViewportTexture" id="ViewportTexture_0osnk"]
-viewport_path = NodePath("Control/SubViewport")
+viewport_path = NodePath("SubViewport")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xm2h8"]
 size = Vector2(138, 210)
+
+[sub_resource type="Animation" id="Animation_uurar"]
+resource_name = "card_burn_up"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Control/TextureRect:use_parent_material")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Control:material:shader_parameter/dissolve_value")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.0, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_aff4p"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Control/TextureRect:use_parent_material")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Control:material:shader_parameter/dissolve_value")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_1ys6h"]
+_data = {
+"RESET": SubResource("Animation_aff4p"),
+"card_burn_up": SubResource("Animation_uurar")
+}
 
 [node name="Card" type="Node2D"]
 material = SubResource("ShaderMaterial_yjvms")
 script = ExtResource("1_6fwt5")
 
-[node name="Control" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 0
-offset_left = -75.0
-offset_top = -105.0
-offset_right = 75.0
-offset_bottom = 105.0
-
-[node name="SubViewport" type="SubViewport" parent="Control"]
+[node name="SubViewport" type="SubViewport" parent="."]
 disable_3d = true
+transparent_bg = true
 handle_input_locally = false
 snap_2d_vertices_to_pixel = true
 canvas_item_default_texture_filter = 0
 size = Vector2i(138, 210)
 
-[node name="CardDisplay" type="Node2D" parent="Control/SubViewport"]
+[node name="CardDisplay" type="Node2D" parent="SubViewport"]
 position = Vector2(69, 105)
 
-[node name="CardArt" type="Sprite2D" parent="Control/SubViewport/CardDisplay"]
+[node name="CardArt" type="Sprite2D" parent="SubViewport/CardDisplay"]
 texture_filter = 2
 texture = ExtResource("3_qwmw2")
 
-[node name="CardFrontBannerDown" type="Sprite2D" parent="Control/SubViewport/CardDisplay"]
+[node name="CardFrontBannerDown" type="Sprite2D" parent="SubViewport/CardDisplay"]
 texture_filter = 2
 position = Vector2(2, 0)
 texture = ExtResource("4_381a1")
 region_rect = Rect2(0, 0, 150, 210)
 
-[node name="NameDisplay" type="Node2D" parent="Control/SubViewport/CardDisplay/CardFrontBannerDown"]
+[node name="NameDisplay" type="Node2D" parent="SubViewport/CardDisplay/CardFrontBannerDown"]
 modulate = Color(0, 0, 0, 0.941176)
 position = Vector2(0, 72)
 
-[node name="NameLb" type="Label" parent="Control/SubViewport/CardDisplay/CardFrontBannerDown/NameDisplay"]
+[node name="NameLb" type="Label" parent="SubViewport/CardDisplay/CardFrontBannerDown/NameDisplay"]
 use_parent_material = true
-anchors_preset = -1
 offset_left = -44.0
 offset_top = -57.0
 offset_right = 44.0
@@ -87,12 +153,12 @@ horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
 
-[node name="CardRarity" type="Sprite2D" parent="Control/SubViewport/CardDisplay"]
+[node name="CardRarity" type="Sprite2D" parent="SubViewport/CardDisplay"]
 texture_filter = 2
 texture = ExtResource("5_huc0s")
 hframes = 4
 
-[node name="CardEffectLb" type="Label" parent="Control/SubViewport"]
+[node name="CardEffectLb" type="Label" parent="SubViewport"]
 use_parent_material = true
 offset_left = 11.0
 offset_top = 187.0
@@ -107,22 +173,22 @@ horizontal_alignment = 1
 justification_flags = 162
 text_overrun_behavior = 4
 
-[node name="CardTypeIcon" type="Sprite2D" parent="Control/SubViewport"]
+[node name="CardTypeIcon" type="Sprite2D" parent="SubViewport"]
 position = Vector2(26, 168)
 texture = ExtResource("8_i61uh")
 hframes = 3
 frame = 1
 
-[node name="CostDisplay" type="Node2D" parent="Control/SubViewport"]
+[node name="CostDisplay" type="Node2D" parent="SubViewport"]
 position = Vector2(80, 225)
 
-[node name="ManaSlot" type="Sprite2D" parent="Control/SubViewport/CostDisplay"]
+[node name="ManaSlot" type="Sprite2D" parent="SubViewport/CostDisplay"]
 self_modulate = Color(0.52549, 1, 1, 1)
 use_parent_material = true
 position = Vector2(33, -56)
 texture = ExtResource("2_1dond")
 
-[node name="CostLb" type="Label" parent="Control/SubViewport/CostDisplay"]
+[node name="CostLb" type="Label" parent="SubViewport/CostDisplay"]
 use_parent_material = true
 anchors_preset = 8
 anchor_left = 0.5
@@ -140,8 +206,9 @@ label_settings = SubResource("LabelSettings_8dd1d")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="."]
-material = ExtResource("3_0sbrr")
+[node name="Control" type="Control" parent="."]
+material = SubResource("ShaderMaterial_wdi6d")
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -149,6 +216,18 @@ offset_left = -69.0
 offset_top = -105.0
 offset_right = 69.0
 offset_bottom = 105.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(69, 105)
+mouse_filter = 1
+mouse_default_cursor_shape = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control"]
+material = ExtResource("3_0sbrr")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("ViewportTexture_0osnk")
@@ -161,6 +240,11 @@ collision_mask = 512
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 visible = false
 shape = SubResource("RectangleShape2D_xm2h8")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_1ys6h")
+}
 
 [connection signal="mouse_entered" from="Area2D" to="." method="_on_area_2d_mouse_entered"]
 [connection signal="mouse_exited" from="Area2D" to="." method="_on_area_2d_mouse_exited"]

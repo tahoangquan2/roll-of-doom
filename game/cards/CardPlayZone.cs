@@ -19,9 +19,6 @@ public partial class CardPlayZone : cardEffectZone
 
     // Apply all effects associated with this card
     card.ActivateEffects(this);
-
-    card.GetParent().RemoveChild(card);
-    card.QueueFree();
 }
 
 }

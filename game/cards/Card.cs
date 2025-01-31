@@ -1,5 +1,6 @@
 using Godot;
 using System.Linq;
+using System.Threading.Tasks;
 
 public partial class Card : Node2D
 {
@@ -34,16 +35,16 @@ public partial class Card : Node2D
 
     public override void _Ready()
     {
-        costLbl = GetNode<Label>("Control/SubViewport/CostDisplay/CostLb");
-        nameLbl = GetNode<Label>("Control/SubViewport/CardDisplay/CardFrontBannerDown/NameDisplay/NameLb");
-        descriptionLbl = GetNode<Label>("Control/SubViewport/CardEffectLb");
-        CardTypeIcon = GetNode<Sprite2D>("Control/SubViewport/CardTypeIcon");
-        CardArt = GetNode<Sprite2D>("Control/SubViewport/CardDisplay/CardArt");
+        costLbl = GetNode<Label>("SubViewport/CostDisplay/CostLb");
+        nameLbl = GetNode<Label>("SubViewport/CardDisplay/CardFrontBannerDown/NameDisplay/NameLb");
+        descriptionLbl = GetNode<Label>("SubViewport/CardEffectLb");
+        CardTypeIcon = GetNode<Sprite2D>("SubViewport/CardTypeIcon");
+        CardArt = GetNode<Sprite2D>("SubViewport/CardDisplay/CardArt");
 
-        var subViewport = GetNode<SubViewport>("Control/SubViewport");
-        var shaderDisplay = GetNode<TextureRect>("TextureRect"); // This will hold the shader
+        var subViewport = GetNode<SubViewport>("SubViewport");
+        var shaderDisplay = GetNode<TextureRect>("Control/TextureRect"); // This will hold the shader
 
-        shaderDisplay.Texture = subViewport.GetTexture();
+        shaderDisplay.Texture = subViewport.GetTexture();shaderDisplay.UseParentMaterial = false;
 
         // Apply the shader material
         if (shaderDisplay.Material is ShaderMaterial mat)
@@ -58,15 +59,19 @@ public partial class Card : Node2D
         UpdateGraphics();
     }
 
-    public void ActivateEffects(Node2D target)
+    public async Task ActivateEffects(Node2D target)
     {
-        if (cardData == null || cardData.Effects == null || cardData.Effects.Count() == 0) return;
+        if (cardData != null && cardData.Effects != null) 
+            foreach (var effect in cardData.Effects)
+            {
+                GD.Print($"Applying effect: {effect}");
+                effect.ApplyEffect(target);
+            }
 
-        foreach (var effect in cardData.Effects)
-        {
-            GD.Print($"Applying effect: {effect}");
-            effect.ApplyEffect(target);
-        }
+        await PlayDissolveAnimation();
+
+        GetParent().RemoveChild(this);
+        QueueFree();
     }
 
 
@@ -131,5 +136,13 @@ public partial class Card : Node2D
     public void _on_area_2d_mouse_exited(){
         if (!canBeHovered) return;
         EmitSignal(nameof(CardUnhovered), this);
+    }
+
+    public async Task PlayDissolveAnimation()
+    {
+        var animPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
+
+        animPlayer.Play("card_burn_up"); // Ensure animation name matches
+        await ToSignal(animPlayer, "animation_finished"); // Wait for the animation to end
     }
 }
