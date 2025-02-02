@@ -16,8 +16,6 @@ public partial class Card : Node2D
     private Sprite2D CardTypeIcon;
     private Sprite2D CardArt;
 
-    private Vector2 cardSize= new Vector2(150, 210);
-
     private ShaderMaterial shaderMaterial;
 
     private readonly float AngleXMax = Mathf.DegToRad(7.0f); // Adjust for rotation limits 
@@ -59,20 +57,40 @@ public partial class Card : Node2D
         UpdateGraphics();
     }
 
-    public async Task ActivateEffects(Node2D target)
+    public void ActivateEffects(Node2D target)
     {
-        if (cardData != null && cardData.Effects != null) 
+        if (cardData == null) return;
+
+        if (!string.IsNullOrEmpty(cardData.ScriptFilePath))
+        {
+            // Load and execute the script if assigned
+            Script script = GD.Load<Script>(cardData.ScriptFilePath);
+            if (script != null)
+            {
+                GD.Print($"Executing script: {cardData.ScriptFilePath}");
+                var scriptInstance = new Node();
+                scriptInstance.SetScript(script);
+                AddChild(scriptInstance);
+                scriptInstance.Call("ApplyEffect", target);
+                scriptInstance.QueueFree(); // Remove script node after execution
+            }
+            else
+            {
+                GD.PrintErr($"Script at {cardData.ScriptFilePath} not found.");
+            }
+        }
+        else if (cardData.Effects != null)
+        {
             foreach (var effect in cardData.Effects)
             {
                 GD.Print($"Applying effect: {effect}");
                 effect.ApplyEffect(target);
             }
+        }
 
-        await PlayDissolveAnimation();
-
-        GetParent().RemoveChild(this);
-        QueueFree();
+        KillCard();
     }
+
 
 
     private void UpdateGraphics()
@@ -83,9 +101,6 @@ public partial class Card : Node2D
 		nameLbl.Text = cardData.CardName;
 		descriptionLbl.Text = cardData.Description.ToString();
         CardArt.Texture = cardData.CardArt;
-
-
-
         // Set the card type icon
         switch (cardData.CardType)
         {
@@ -108,10 +123,10 @@ public partial class Card : Node2D
     {
         if (shaderMaterial == null) return;
 
-        Vector2 size = cardSize;
+        Vector2 size = GlobalVariables.cardSize;
 
-        float lerpValX = Mathf.Remap(mousePos.X, 0.0f, size.X, 0, 1)+0.5f;
-        float lerpValY = Mathf.Remap(mousePos.Y, 0.0f, size.Y, 0, 1)+0.5f;
+        float lerpValX = Mathf.Remap(mousePos.X, 0.0f, size.X, 0.0f, 1.0f)+0.5f;
+        float lerpValY = Mathf.Remap(mousePos.Y, 0.0f, size.Y, 0.0f, 1.0f)+0.5f;
 
         float rotX =  Mathf.RadToDeg(Mathf.LerpAngle(-AngleXMax, AngleXMax, lerpValX));
         float rotY =  Mathf.RadToDeg(Mathf.LerpAngle(AngleYMax, -AngleYMax, lerpValY));
@@ -122,8 +137,7 @@ public partial class Card : Node2D
 
     public void ResetShader(){
         if (shaderMaterial != null){
-            shaderMaterial.SetShaderParameter("x_rot", 0f);
-            shaderMaterial.SetShaderParameter("y_rot", 0f);
+            shaderMaterial.SetShaderParameter("x_rot", 0f);shaderMaterial.SetShaderParameter("y_rot", 0f);
         }
     }
 
@@ -138,11 +152,18 @@ public partial class Card : Node2D
         EmitSignal(nameof(CardUnhovered), this);
     }
 
+    public async void KillCard()
+    {
+        await PlayDissolveAnimation();
+        GetParent().RemoveChild(this);
+        QueueFree();
+    }
+
     public async Task PlayDissolveAnimation()
     {
         var animPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
 
-        animPlayer.Play("card_burn_up"); // Ensure animation name matches
+        animPlayer.Play("card_dissolveOrBurn"); // Ensure animation name matches
         await ToSignal(animPlayer, "animation_finished"); // Wait for the animation to end
     }
 }

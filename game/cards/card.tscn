@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://cq8hes5bcj3u1"]
+[gd_scene load_steps=19 format=3 uid="uid://cq8hes5bcj3u1"]
 
 [ext_resource type="Script" path="res://game/cards/Card.cs" id="1_6fwt5"]
 [ext_resource type="Texture2D" uid="uid://62t6ctia6pme" path="res://assets/cards/mana_slot.png" id="2_1dond"]
@@ -10,10 +10,8 @@
 [ext_resource type="FontFile" uid="uid://ddnnmk00qnpyl" path="res://assets/fonts/MemoryPro.ttf" id="7_hmtpx"]
 [ext_resource type="Texture2D" uid="uid://ceit2wuxyrq5j" path="res://assets/cards/CardTypeIcon.png" id="8_i61uh"]
 [ext_resource type="FontFile" uid="uid://c1j227ygpp51v" path="res://assets/fonts/DragonHunter-9Ynxj.otf" id="9_nxcu3"]
-[ext_resource type="Shader" path="res://assets/cards/burnEdge.gdshader" id="10_4xe4p"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_yjvms"]
-resource_local_to_scene = true
+[ext_resource type="Material" uid="uid://lpjg0wubg5i7" path="res://assets/cards/cardDissolve.tres" id="10_nhgd7"]
+[ext_resource type="Animation" uid="uid://7dhkqo8rflab" path="res://assets/cards/cardDissolveOrBurnAnimation.tres" id="12_4ke4g"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_f7hch"]
 line_spacing = 0.0
@@ -30,51 +28,11 @@ outline_size = 3
 outline_color = Color(0, 0, 0, 1)
 shadow_size = 0
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_6c2so"]
-seed = 347
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_3bg8t"]
-noise = SubResource("FastNoiseLite_6c2so")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_wdi6d"]
-shader = ExtResource("10_4xe4p")
-shader_parameter/dissolve_value = 1.0
-shader_parameter/burn_size = 0.3
-shader_parameter/burn_color = Color(0.941176, 0.254902, 0.0196078, 1)
-shader_parameter/dissolve_texture = SubResource("NoiseTexture2D_3bg8t")
-
 [sub_resource type="ViewportTexture" id="ViewportTexture_0osnk"]
 viewport_path = NodePath("SubViewport")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xm2h8"]
 size = Vector2(138, 210)
-
-[sub_resource type="Animation" id="Animation_uurar"]
-resource_name = "card_burn_up"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Control/TextureRect:use_parent_material")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Control:material:shader_parameter/dissolve_value")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [1.0, 0.0]
-}
 
 [sub_resource type="Animation" id="Animation_aff4p"]
 length = 0.001
@@ -102,15 +60,38 @@ tracks/1/keys = {
 "update": 0,
 "values": [1.0]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Control:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-69, -105)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Control:material:shader_parameter/progress")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [-1.0]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1ys6h"]
 _data = {
 "RESET": SubResource("Animation_aff4p"),
-"card_burn_up": SubResource("Animation_uurar")
+"card_dissolveOrBurn": ExtResource("12_4ke4g")
 }
 
 [node name="Card" type="Node2D"]
-material = SubResource("ShaderMaterial_yjvms")
 script = ExtResource("1_6fwt5")
 
 [node name="SubViewport" type="SubViewport" parent="."]
@@ -207,7 +188,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Control" type="Control" parent="."]
-material = SubResource("ShaderMaterial_wdi6d")
+material = ExtResource("10_nhgd7")
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

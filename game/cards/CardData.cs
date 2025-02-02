@@ -10,6 +10,7 @@ public partial class CardData : Resource
     [Export] public int Cost { get; set; }
     [Export] public EnumGlobal.enumCardType CardType { get; set; }
     [Export] public Array<CardEffect> Effects { get; set; } = new Array<CardEffect>();
+    [Export] public string ScriptFilePath { get; set; } // Store path to script file
     [Export] public string Description { get; set; }
     // card art, and art offset
     [Export] public Texture2D CardArt { get; set; }
@@ -25,17 +26,19 @@ public partial class CardData : Resource
         CardType = EnumGlobal.enumCardType.Tower;
         Description = "This card has no description.";
         Effects = new Array<CardEffect>();
+        ScriptFilePath = "";
         CardArt = null;        
         ArtOffset = new Vector2(0, 0);
     }
 
     // Constructor
-    public CardData(string cardName, int cost,string description, CardEffect effect,Texture2D cardArt, Vector2 artOffset)
+    public CardData(string cardName, int cost,string description, CardEffect effect,string scriptFilePath,Texture2D cardArt, Vector2 artOffset)
     {
         CardName = cardName;
         Cost = cost;
         Description = description;
         Effects = new Array<CardEffect> { effect };
+        ScriptFilePath = scriptFilePath;
         CardArt = cardArt;
         ArtOffset = artOffset;
     }
