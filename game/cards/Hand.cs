@@ -6,8 +6,10 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
 {
     private int HandRadius = 750;
     private int cardRadius ;
-    [Export] public float AngleLimit { get; set; } = 65;
-    [Export] public float MaxCardSpreadAngle { get; set; } = 15;
+    private float AngleLimit = 65;
+    private float MaxCardSpreadAngle = 10;
+    [Export] public int MaxHandSize { get; set; }=10;
+     // max cards in hand
 
     private List<Card> hand = new List<Card>(); // Stores all cards
     private CardManager cardManager; // 
@@ -15,7 +17,7 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
     private Deck deck;
     private CollisionShape2D collisionShape;
     private int currentSelectedCardIndex = -1;
-    private Dictionary<Card, Tween> activeTweens = new Dictionary<Card, Tween>(); // Track active tweens
+    private Dictionary<Card, Tween> activeTweens = new Dictionary<Card, Tween>(); 
 
     public override void _Ready()
     {
@@ -31,6 +33,11 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
     public void AddCard(Card card)
     {
         if (card == null || hand.Contains(card)) return;
+        if (hand.Count >= MaxHandSize) 
+        {
+            card.KillCard();
+            return;
+        }
         hand.Add(card);
 
         RepositionCards();
@@ -72,7 +79,7 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
     {
         Vector2 targetPosition = Position + GetCardPosition(angleInDegrees);
         float targetRotation = angleInDegrees + 90;
-        float tweenDuration = 0.2f; // Duration of the tween
+        float tweenDuration = 0.25f; // Duration of the tween
 
         if (activeTweens.TryGetValue(card, out Tween existingTween) && existingTween.IsRunning())
         {
@@ -100,7 +107,6 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
 
         tween.TweenProperty(card, "position", targetPosition, 0.15f).SetEase(Tween.EaseType.Out);
     }
-
     private Vector2 GetCardPosition(float angleInDegrees){
         return new Vector2(0,-cardRadius).Rotated(Mathf.DegToRad(angleInDegrees+90));
     }
@@ -110,9 +116,7 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
         float cardSpread = Math.Min(AngleLimit / totalCards, MaxCardSpreadAngle);
         return -(cardSpread * (totalCards - 1)) / 2 - 90 + (cardSpread * index);
     }
-
     public async void drawFromDeck(int amount){
-        if (deck == null) return;
         Godot.Collections.Array<Card> drawnCards = deck.DrawCards(amount);
 
         GD.Print(drawnCards);
@@ -120,14 +124,10 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
         // slow down beetwen each card
         for (int i = 0; i < amount; i++) if (drawnCards[i] != null) 
         {
-            GD.Print("Drawing card");
-            if (hand.Count >= 10) break;
             AddCard(drawnCards[i]);
-            await ToSignal(GetTree().CreateTimer(0.5f), "timeout");
+            await ToSignal(GetTree().CreateTimer(0.7f), "timeout");
         }
-
     }
-
     public override void _Process(double delta)
     {
         if (collisionShape.Shape is CircleShape2D circle){
@@ -166,9 +166,8 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
     {   if (cardManager.selected_card != null) return;
         HandRadius = 750;cardRadius = HandRadius-200;RepositionCards();
     }    
-
     public void _input(InputEvent @event)
-    {//action "Action" from input map
+    {//action "Action" from input map, this is for testing
         if (@event.IsActionPressed("Action"))
         {
             drawFromDeck(3);
@@ -177,7 +176,7 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
         if (@event.IsActionPressed("Action2"))
         {
             Card card = RemoveCard(0);
-            if (card != null) card.QueueFree();
+            card.KillCard();
         }
     }
 }

@@ -4,9 +4,7 @@ public partial class Deck : Node2D
 {
     public Godot.Collections.Array<CardData> deck=new Godot.Collections.Array<CardData>();
     private int deckSize = 40;    
-    private int drawSize = 1;
     private PackedScene cardScene=null;
-
     private CardManager cardManager;
 
     [Signal] public delegate void DeckUpdatedEventHandler(int cardsRemaining);
@@ -16,7 +14,7 @@ public partial class Deck : Node2D
     { // demo
         deck = new Godot.Collections.Array<CardData>();
         cardScene = GD.Load<PackedScene>("res://game/cards/card.tscn");
-        cardManager = GetParent().GetNode<CardManager>("CardManager");
+        cardManager = GlobalAccessPoint.cardManager;
         
         for (int i = 0; i < deckSize; i++)
         {
@@ -49,10 +47,9 @@ public partial class Deck : Node2D
             }
             CardData card = deck[0];            
             deck.RemoveAt(0);
-            Card newCard = (Card)cardScene.Instantiate();
-            cardManager.AddChild(newCard);
-            newCard.SetupCard(card);
+            Card newCard = cardManager.createCard(card);
             drawnCards.Add(newCard);
+            newCard.Position = Position;
         }
         EmitSignal(nameof(DeckUpdated), deck.Count);
         return drawnCards;
@@ -81,7 +78,7 @@ public partial class Deck : Node2D
     
     public void _on_button_pressed()
     {
-        Godot.Collections.Array<Card> drawnCards = DrawCards(drawSize);
+        Godot.Collections.Array<Card> drawnCards = DrawCards(1);
         foreach (Card card in drawnCards)
         {
             

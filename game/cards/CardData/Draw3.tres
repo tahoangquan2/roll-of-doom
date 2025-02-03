@@ -15,6 +15,7 @@ CardName = "Open mind"
 Cost = 3
 CardType = 1
 Effects = [SubResource("Resource_kma80")]
+ScriptFilePath = ""
 Description = "Draw 3 cards"
 CardArt = ExtResource("1_xvu2h")
 ArtOffset = Vector2(0, 0)

@@ -1,5 +1,6 @@
 using Godot;
 using System.Linq;
+using System.Threading.Tasks;
 
 public partial class Card : Node2D
 {
@@ -14,8 +15,6 @@ public partial class Card : Node2D
     private Label descriptionLbl;
     private Sprite2D CardTypeIcon;
     private Sprite2D CardArt;
-
-    private Vector2 cardSize= new Vector2(150, 210);
 
     private ShaderMaterial shaderMaterial;
 
@@ -34,16 +33,16 @@ public partial class Card : Node2D
 
     public override void _Ready()
     {
-        costLbl = GetNode<Label>("Control/SubViewport/CostDisplay/CostLb");
-        nameLbl = GetNode<Label>("Control/SubViewport/CardDisplay/CardFrontBannerDown/NameDisplay/NameLb");
-        descriptionLbl = GetNode<Label>("Control/SubViewport/CardEffectLb");
-        CardTypeIcon = GetNode<Sprite2D>("Control/SubViewport/CardTypeIcon");
-        CardArt = GetNode<Sprite2D>("Control/SubViewport/CardDisplay/CardArt");
+        costLbl = GetNode<Label>("SubViewport/CostDisplay/CostLb");
+        nameLbl = GetNode<Label>("SubViewport/CardDisplay/CardFrontBannerDown/NameDisplay/NameLb");
+        descriptionLbl = GetNode<Label>("SubViewport/CardEffectLb");
+        CardTypeIcon = GetNode<Sprite2D>("SubViewport/CardTypeIcon");
+        CardArt = GetNode<Sprite2D>("SubViewport/CardDisplay/CardArt");
 
-        var subViewport = GetNode<SubViewport>("Control/SubViewport");
-        var shaderDisplay = GetNode<TextureRect>("TextureRect"); // This will hold the shader
+        var subViewport = GetNode<SubViewport>("SubViewport");
+        var shaderDisplay = GetNode<TextureRect>("Control/TextureRect"); // This will hold the shader
 
-        shaderDisplay.Texture = subViewport.GetTexture();
+        shaderDisplay.Texture = subViewport.GetTexture();shaderDisplay.UseParentMaterial = false;
 
         // Apply the shader material
         if (shaderDisplay.Material is ShaderMaterial mat)
@@ -60,14 +59,38 @@ public partial class Card : Node2D
 
     public void ActivateEffects(Node2D target)
     {
-        if (cardData == null || cardData.Effects == null || cardData.Effects.Count() == 0) return;
+        if (cardData == null) return;
 
-        foreach (var effect in cardData.Effects)
+        if (!string.IsNullOrEmpty(cardData.ScriptFilePath))
         {
-            GD.Print($"Applying effect: {effect}");
-            effect.ApplyEffect(target);
+            // Load and execute the script if assigned
+            Script script = GD.Load<Script>(cardData.ScriptFilePath);
+            if (script != null)
+            {
+                GD.Print($"Executing script: {cardData.ScriptFilePath}");
+                var scriptInstance = new Node();
+                scriptInstance.SetScript(script);
+                AddChild(scriptInstance);
+                scriptInstance.Call("ApplyEffect", target);
+                scriptInstance.QueueFree(); // Remove script node after execution
+            }
+            else
+            {
+                GD.PrintErr($"Script at {cardData.ScriptFilePath} not found.");
+            }
         }
+        else if (cardData.Effects != null)
+        {
+            foreach (var effect in cardData.Effects)
+            {
+                GD.Print($"Applying effect: {effect}");
+                effect.ApplyEffect(target);
+            }
+        }
+
+        KillCard();
     }
+
 
 
     private void UpdateGraphics()
@@ -78,9 +101,6 @@ public partial class Card : Node2D
 		nameLbl.Text = cardData.CardName;
 		descriptionLbl.Text = cardData.Description.ToString();
         CardArt.Texture = cardData.CardArt;
-
-
-
         // Set the card type icon
         switch (cardData.CardType)
         {
@@ -103,10 +123,10 @@ public partial class Card : Node2D
     {
         if (shaderMaterial == null) return;
 
-        Vector2 size = cardSize;
+        Vector2 size = GlobalVariables.cardSize;
 
-        float lerpValX = Mathf.Remap(mousePos.X, 0.0f, size.X, 0, 1)+0.5f;
-        float lerpValY = Mathf.Remap(mousePos.Y, 0.0f, size.Y, 0, 1)+0.5f;
+        float lerpValX = Mathf.Remap(mousePos.X, 0.0f, size.X, 0.0f, 1.0f)+0.5f;
+        float lerpValY = Mathf.Remap(mousePos.Y, 0.0f, size.Y, 0.0f, 1.0f)+0.5f;
 
         float rotX =  Mathf.RadToDeg(Mathf.LerpAngle(-AngleXMax, AngleXMax, lerpValX));
         float rotY =  Mathf.RadToDeg(Mathf.LerpAngle(AngleYMax, -AngleYMax, lerpValY));
@@ -117,8 +137,7 @@ public partial class Card : Node2D
 
     public void ResetShader(){
         if (shaderMaterial != null){
-            shaderMaterial.SetShaderParameter("x_rot", 0f);
-            shaderMaterial.SetShaderParameter("y_rot", 0f);
+            shaderMaterial.SetShaderParameter("x_rot", 0f);shaderMaterial.SetShaderParameter("y_rot", 0f);
         }
     }
 
@@ -131,5 +150,20 @@ public partial class Card : Node2D
     public void _on_area_2d_mouse_exited(){
         if (!canBeHovered) return;
         EmitSignal(nameof(CardUnhovered), this);
+    }
+
+    public async void KillCard()
+    {
+        await PlayDissolveAnimation();
+        GetParent().RemoveChild(this);
+        QueueFree();
+    }
+
+    public async Task PlayDissolveAnimation()
+    {
+        var animPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
+
+        animPlayer.Play("card_dissolveOrBurn"); // Ensure animation name matches
+        await ToSignal(animPlayer, "animation_finished"); // Wait for the animation to end
     }
 }

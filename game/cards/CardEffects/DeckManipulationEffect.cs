@@ -8,14 +8,14 @@ public partial class DeckManipulationEffect : CardEffect
 
     public override void ApplyEffect(Node2D target)
     {
-        // CardManager cardManager = target.GetNode<CardManager>("/root/CardManager");
-        //Hand hand = target.GetNode<Hand>("/root/Hand");
+        Hand hand = GlobalAccessPoint.hand;
+        GD.Print(hand);
         GD.Print(this,$" Applying deck manipulation effect: {DeckEffectType} to {target.Name}.");
         
         switch (DeckEffectType)
         {
             case EnumGlobal.enumDeckEffect.Draw:
-                //cardManager.DrawCards(Amount);
+                hand.drawFromDeck(Amount);
                 GD.Print($"Drew {Amount} cards.");
                 break;
 
