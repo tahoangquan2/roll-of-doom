@@ -45,13 +45,13 @@ public partial class EnumGlobal : Node
     }
     public enum enumDeckEffect
     {
-        Draw=enumCardEffect.Draw,
-        Discard=enumCardEffect.Discard,
-        Duplicate=enumCardEffect.Duplicate,
-        
-        ShuffleDeck=enumCardEffect.ShuffleDeck,
-        ShuffleCard=enumCardEffect.ShuffleCard,
-        ShuffleHand=enumCardEffect.ShuffleHand
+        Draw = enumCardEffect.Draw,
+        Discard = enumCardEffect.Discard,
+        Duplicate = enumCardEffect.Duplicate,
+
+        ShuffleDeck = enumCardEffect.ShuffleDeck,
+        ShuffleCard = enumCardEffect.ShuffleCard,
+        ShuffleHand = enumCardEffect.ShuffleHand
     }
 
 }
