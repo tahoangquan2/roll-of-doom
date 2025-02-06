@@ -1,0 +1,22 @@
+extends Node
+
+var hand
+
+func ApplyEffect(_target):
+	hand = GlobalAccessPoint.GetHand()
+	hand.ShuffleHand()
+
+	
+
+func _on_discard_complete(_selectedCards):
+	#hand.drawFromDeck(DrawAmount)
+	s_disconnect()
+	get_parent().KillCard()
+
+func _on_discard_cancel():
+	s_disconnect()
+	hand.AddCard(get_parent())
+
+func s_disconnect():
+	hand.disconnect("SelectionCompleted", Callable(self, "_on_discard_complete"))
+	hand.disconnect("SelectionCancelled", Callable(self, "_on_discard_cancel"))

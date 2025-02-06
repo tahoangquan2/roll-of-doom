@@ -57,41 +57,43 @@ public partial class Card : Node2D
         UpdateGraphics();
     }
 
-    public void ActivateEffects(Node2D target)
+    public virtual async void ActivateEffects(Node2D target)
     {
         if (cardData == null) return;
 
-        if (!string.IsNullOrEmpty(cardData.ScriptFilePath))
-        {
-            // Load and execute the script if assigned
-            Script script = GD.Load<Script>(cardData.ScriptFilePath);
-            if (script != null)
-            {
-                GD.Print($"Executing script: {cardData.ScriptFilePath}");
-                var scriptInstance = new Node();
-                scriptInstance.SetScript(script);
-                AddChild(scriptInstance);
-                scriptInstance.Call("ApplyEffect", target);
-                scriptInstance.QueueFree(); // Remove script node after execution
-            }
-            else
-            {
-                GD.PrintErr($"Script at {cardData.ScriptFilePath} not found.");
-            }
+        if (cardData.card_script!=null)
+        {            
+            var scriptInstance = new Node();
+            scriptInstance.SetScript(cardData.card_script);
+            AddChild(scriptInstance);
+            scriptInstance.Call("ApplyEffect", target); // Execute the effect then kill the card from the script                
         }
         else if (cardData.Effects != null)
         {
             foreach (var effect in cardData.Effects)
             {
-                GD.Print($"Applying effect: {effect}");
-                effect.ApplyEffect(target);
+                if (effect != null)
+                {
+                    bool effectFinished = await EffectExecution(effect, target);
+                    if (!effectFinished) break; // Stop if effect fails
+                }
             }
-        }
 
-        KillCard();
+            await ToSignal(GetTree(), "process_frame"); // Ensure frame update before deletion
+            KillCard();
+        }        
     }
 
-
+    private async Task<bool> EffectExecution(CardEffect effect, Node2D target)
+    {
+        if (effect == null) return false;
+        
+        GD.Print($"Executing effect: {effect}");
+        bool result = effect.ApplyEffect(target);
+        
+        await ToSignal(GetTree(), "process_frame"); // Allow processing between effects
+        return result;
+    }
 
     private void UpdateGraphics()
     {
@@ -101,7 +103,6 @@ public partial class Card : Node2D
 		nameLbl.Text = cardData.CardName;
 		descriptionLbl.Text = cardData.Description.ToString();
         CardArt.Texture = cardData.CardArt;
-        // Set the card type icon
         switch (cardData.CardType)
         {
             case EnumGlobal.enumCardType.Tower:
@@ -119,8 +120,7 @@ public partial class Card : Node2D
         }
     }  
 
-    public void Shadering(Vector2 mousePos) 
-    {
+    public void Shadering(Vector2 mousePos) {
         if (shaderMaterial == null) return;
 
         Vector2 size = GlobalVariables.cardSize;
@@ -154,16 +154,26 @@ public partial class Card : Node2D
 
     public async void KillCard()
     {
+        _on_area_2d_mouse_exited(); // Ensure the card is not hovered
         await PlayDissolveAnimation();
-        GetParent().RemoveChild(this);
-        QueueFree();
+        obliterateCard();
+    }
+    public void obliterateCard(){       
+        GlobalAccessPoint.GetCardManager().checkChange(this); 
+        GetParent().RemoveChild(this);QueueFree();}
+    public async Task PlayDissolveAnimation(){
+        var animPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
+
+        animPlayer.Play("card_dissolveOrBurn"); 
+        await ToSignal(animPlayer, "animation_finished"); // Wait for the animation to end
     }
 
-    public async Task PlayDissolveAnimation()
+    public async Task FlipCard(bool flipUp=false)
     {
         var animPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
 
-        animPlayer.Play("card_dissolveOrBurn"); // Ensure animation name matches
+        if (flipUp) animPlayer.PlayBackwards("card_flip"); 
+        else animPlayer.Play("card_flip"); 
         await ToSignal(animPlayer, "animation_finished"); // Wait for the animation to end
     }
 }

@@ -16,7 +16,7 @@ public partial class Main : Node2D
 
 	private void DeferredPrintTree()
 	{
-		PrintTree(GetTree().Root, 0);
+		//PrintTree(GetTree().Root, 0);
 	}
 
 	private void PrintTree(Node node, int depth)

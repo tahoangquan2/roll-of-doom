@@ -9,10 +9,9 @@
 [node name="Node2D" type="Node2D"]
 script = ExtResource("1_3ktym")
 
-[node name="CardManager" parent="." instance=ExtResource("2_nqpy4")]
-
 [node name="Hand" parent="." instance=ExtResource("3_l11hp")]
-position = Vector2(916, 1500)
+
+[node name="CardManager" parent="." instance=ExtResource("2_nqpy4")]
 
 [node name="CardActiveZone" parent="." instance=ExtResource("5_e70is")]
 position = Vector2(944, 313)

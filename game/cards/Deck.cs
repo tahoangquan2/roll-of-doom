@@ -14,7 +14,7 @@ public partial class Deck : Node2D
     { // demo
         deck = new Godot.Collections.Array<CardData>();
         cardScene = GD.Load<PackedScene>("res://game/cards/card.tscn");
-        cardManager = GlobalAccessPoint.cardManager;
+        cardManager = GlobalAccessPoint.GetCardManager();
         
         for (int i = 0; i < deckSize; i++)
         {
@@ -54,8 +54,6 @@ public partial class Deck : Node2D
         EmitSignal(nameof(DeckUpdated), deck.Count);
         return drawnCards;
     }
-
-
     public void ShuffleDeck()    {
         deck.Shuffle();
     }
@@ -72,6 +70,10 @@ public partial class Deck : Node2D
     public void RemoveCard()    {
         if (deck.Count == 0) return;
         deck.RemoveAt(deck.Count - 1);
+        EmitSignal(nameof(DeckUpdated), deck.Count);
+    }
+    public void ShuffleIntoDeck(CardData card)    {
+        deck.Insert(GD.RandRange(0, deck.Count), card);
         EmitSignal(nameof(DeckUpdated), deck.Count);
     }
     // on button pressed
