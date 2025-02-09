@@ -60,10 +60,12 @@ public partial class EnumGlobal : Node
 
     public enum HandSelectionPurpose
     {
-        None,      // Default (no selection)
+        None,      // Default (no selection),
+        Choose, // Selecting cards for a specific purpose
         Discard,   // Selecting cards to discard
         Duplicate, // Selecting a card to duplicate
-        Upgrade    // Selecting a card to upgrade
+        Upgrade,    // Selecting a card to upgrade
+        
     }
 
 }

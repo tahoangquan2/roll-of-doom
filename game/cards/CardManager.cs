@@ -9,14 +9,14 @@ public partial class CardManager : Node2D
 	private AudioStreamPlayer2D audioPlayer;	
     private PackedScene cardScene=null;	
 	private Hand hand=null;
+	private bool Locked =false; // if true, no card can be selected or dragged
 	[Signal] public delegate void CardPushupEventHandler(Card card,bool isHovered);
 	[Signal] public delegate void CardUnhandEventHandler(Card card);
-	public bool islocked = false;
 	public override void _Input(InputEvent @event)
-	{	
-		if (hand.isSelecting ) {
+	{	if (Locked) return;
+		if (hand is not null && hand.isSelecting) {
 			HandleSelectionInput(@event, hand);
-			return;
+			return;			
 		}		
 
 		if (@event is InputEventMouseButton mouseButton)        {
@@ -47,7 +47,7 @@ public partial class CardManager : Node2D
 
 		if (@event is InputEventMouseMotion mouseMotion)
 		{
-			if (card_being_dragged != null){
+			if (card_being_dragged != null && card_being_dragged.canBeMoved){
 				card_being_dragged.Position += mouseMotion.Relative;
 			} else 
 			if (card_being_hovered != null){
@@ -66,10 +66,13 @@ public partial class CardManager : Node2D
 			}
 		}
 	}
-
 	public override void _Ready()
 	{	cardScene = GD.Load<PackedScene>("res://game/cards/card.tscn");
 		audioPlayer = GetNode<AudioStreamPlayer2D>("AudioPlayer");
+		GlobalAccessPoint.Instance.Connect(nameof(GlobalAccessPoint.ReferencesUpdated), Callable.From(UpdateReferences));
+	}
+	public void UpdateReferences()
+	{
 		hand = GlobalAccessPoint.GetHand();
 	}
 	private void SelectCard(Card card)
@@ -122,7 +125,7 @@ public partial class CardManager : Node2D
 			card.Scale = new Vector2(targetScale, targetScale);	
 
 			EmitSignal(nameof(CardPushup), card, isHovering);	
-			audioPlayer.Play();					
+			cardSound();			
 		}
 	}
 	private void StartDrag(Card card)
@@ -191,8 +194,10 @@ public partial class CardManager : Node2D
 
 		return highestCard;
 	}
-	public void checkChange(Card card) // if the card is being hovered set to null
-	{
+	public void checkChange(Card card) {
 		if (card_being_hovered == card) card_being_hovered = null;
 	}
+	public void cardSound() {audioPlayer.Play();}
+	public void Lock() {Locked = true;}
+	public void Unlock() {Locked = false;}
 }

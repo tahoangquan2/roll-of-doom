@@ -41,6 +41,7 @@ public partial class DeckVisual : Node2D
         }
 
         currentDeckSize = newSize;
+        GD.Print("Deck size: " + currentDeckSize);
         DrawDeck();
     }
 

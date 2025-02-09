@@ -11,7 +11,7 @@
 [ext_resource type="FontFile" uid="uid://ddnnmk00qnpyl" path="res://assets/fonts/MemoryPro.ttf" id="7_hmtpx"]
 [ext_resource type="Texture2D" uid="uid://ceit2wuxyrq5j" path="res://assets/cards/CardTypeIcon.png" id="8_i61uh"]
 [ext_resource type="FontFile" uid="uid://c1j227ygpp51v" path="res://assets/fonts/DragonHunter-9Ynxj.otf" id="9_nxcu3"]
-[ext_resource type="Material" uid="uid://lpjg0wubg5i7" path="res://assets/cards/cardDissolve.tres" id="10_nhgd7"]
+[ext_resource type="Material" uid="uid://n2fe8ali0y" path="res://assets/cards/cardBurnUp_2.tres" id="11_kpgmd"]
 [ext_resource type="Animation" uid="uid://7dhkqo8rflab" path="res://assets/cards/cardDissolveOrBurnAnimation.tres" id="12_4ke4g"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_f7hch"]
@@ -141,7 +141,7 @@ tracks/1/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1ys6h"]
 _data = {
 "RESET": SubResource("Animation_aff4p"),
-"card_dissolveOrBurn": ExtResource("12_4ke4g"),
+"card_dissolve_or_burn": ExtResource("12_4ke4g"),
 "card_flip": SubResource("Animation_ra8xf")
 }
 
@@ -248,7 +248,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Control" type="Control" parent="."]
-material = ExtResource("10_nhgd7")
+material = ExtResource("11_kpgmd")
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -264,6 +264,7 @@ mouse_filter = 1
 mouse_default_cursor_shape = 2
 
 [node name="TextureRect" type="TextureRect" parent="Control"]
+texture_filter = 1
 material = ExtResource("3_0sbrr")
 layout_mode = 1
 anchors_preset = 15

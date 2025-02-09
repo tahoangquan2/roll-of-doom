@@ -1,12 +1,12 @@
 using Godot;
-using System.Linq;
 using System.Threading.Tasks;
 
 public partial class Card : Node2D
 {
     [Export] public CardData cardData { get; set; }
     public bool canBeHovered = true;
-
+    public bool canActivate = true;
+    public bool canBeMoved = true;
     [Signal] public delegate void CardHoveredEventHandler(Card card);
     [Signal] public delegate void CardUnhoveredEventHandler(Card card);
 
@@ -15,12 +15,11 @@ public partial class Card : Node2D
     private Label descriptionLbl;
     private Sprite2D CardTypeIcon;
     private Sprite2D CardArt;
-
     private ShaderMaterial shaderMaterial;
-
-    private readonly float AngleXMax = Mathf.DegToRad(7.0f); // Adjust for rotation limits 
+    private Control display;
+    private AnimationPlayer animPlayer;
+    private readonly float AngleXMax = Mathf.DegToRad(7.0f); 
     private readonly float AngleYMax = Mathf.DegToRad(7.0f); 
-
     public Card()
     {
         cardData = new CardData(); // Ensure initialization
@@ -43,6 +42,8 @@ public partial class Card : Node2D
         var shaderDisplay = GetNode<TextureRect>("Control/TextureRect"); // This will hold the shader
 
         shaderDisplay.Texture = subViewport.GetTexture();shaderDisplay.UseParentMaterial = false;
+        display = GetNode<Control>("Control");
+        animPlayer = GetNode<AnimationPlayer>("AnimationPlayer");        
 
         // Apply the shader material
         if (shaderDisplay.Material is ShaderMaterial mat)
@@ -59,7 +60,7 @@ public partial class Card : Node2D
 
     public virtual async void ActivateEffects(Node2D target)
     {
-        if (cardData == null) return;
+        if (cardData == null || !canActivate) return;
 
         if (cardData.card_script!=null)
         {            
@@ -152,28 +153,41 @@ public partial class Card : Node2D
         EmitSignal(nameof(CardUnhovered), this);
     }
 
-    public async void KillCard()
-    {
-        _on_area_2d_mouse_exited(); // Ensure the card is not hovered
-        await PlayDissolveAnimation();
-        obliterateCard();
+    public async void BurnCard() 
+    { 
+        await AnimateAndDestroy(CardGlobal.GetBurnMaterial(), "card_dissolve_or_burn");
     }
-    public void obliterateCard(){       
+
+    public async void KillCard() 
+    { 
+        await AnimateAndDestroy(CardGlobal.GetDissolveMaterial(), "card_dissolve_or_burn");
+    }
+
+    private async Task AnimateAndDestroy(ShaderMaterial material, string animationName)
+    {
+        _on_area_2d_mouse_exited();  // Ensure mouse exit state
+
+        display.Material = material; animPlayer.SpeedScale = (float)GD.RandRange(0.95f, 1.0f);
+        animPlayer.Play(animationName);
+        await ToSignal(animPlayer, "animation_finished");
+
+        obliterateCard(); 
+    }
+
+    public void obliterateCard() {       
         GlobalAccessPoint.GetCardManager().checkChange(this); 
-        GetParent().RemoveChild(this);QueueFree();}
-    public async Task PlayDissolveAnimation(){
-        var animPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
-
-        animPlayer.Play("card_dissolveOrBurn"); 
-        await ToSignal(animPlayer, "animation_finished"); // Wait for the animation to end
+        GetParent().RemoveChild(this);
+        QueueFree();
     }
 
-    public async Task FlipCard(bool flipUp=false)
-    {
-        var animPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
 
+    public async Task FlipCard(bool flipUp=false)    {
         if (flipUp) animPlayer.PlayBackwards("card_flip"); 
         else animPlayer.Play("card_flip"); 
         await ToSignal(animPlayer, "animation_finished"); // Wait for the animation to end
+    }
+
+    public CardData GetCardData()    {
+        return cardData;
     }
 }

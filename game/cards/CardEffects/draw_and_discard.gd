@@ -8,8 +8,8 @@ func ApplyEffect(_target):
 	hand = GlobalAccessPoint.GetHand()
 
 	if hand.startDiscard(DiscardAmount): # If discard selection starts successfully
-		hand.connect("SelectionCompleted", Callable(self, "_on_discard_complete"))
-		hand.connect("SelectionCancelled", Callable(self, "_on_discard_cancel"))
+		hand.connect("ActionCompleted", Callable(self, "_on_discard_complete"))
+		hand.connect("ActionCancelled", Callable(self, "_on_discard_cancel"))
 
 func _on_discard_complete(_selectedCards):
 	hand.drawFromDeck(DrawAmount)
@@ -21,5 +21,5 @@ func _on_discard_cancel():
 	hand.AddCard(get_parent())
 
 func s_disconnect():
-	hand.disconnect("SelectionCompleted", Callable(self, "_on_discard_complete"))
-	hand.disconnect("SelectionCancelled", Callable(self, "_on_discard_cancel"))
+	hand.disconnect("ActionCompleted", Callable(self, "_on_discard_complete"))
+	hand.disconnect("ActionCancelled", Callable(self, "_on_discard_cancel"))

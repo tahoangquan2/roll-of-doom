@@ -14,7 +14,7 @@ public partial class Deck : Node2D
     { // demo
         deck = new Godot.Collections.Array<CardData>();
         cardScene = GD.Load<PackedScene>("res://game/cards/card.tscn");
-        cardManager = GlobalAccessPoint.GetCardManager();
+        GlobalAccessPoint.Instance.Connect(nameof(GlobalAccessPoint.ReferencesUpdated), Callable.From(UpdateReferences));
         
         for (int i = 0; i < deckSize; i++)
         {
@@ -27,6 +27,10 @@ public partial class Deck : Node2D
             deck.Add(card);
         }
         EmitSignal(nameof(DeckUpdated), deckSize);
+    }
+
+    public void UpdateReferences(){
+        cardManager = GlobalAccessPoint.GetCardManager();
     }
 
     public void SetupDeck( Godot.Collections.Array<CardData> cards)
@@ -83,7 +87,6 @@ public partial class Deck : Node2D
         Godot.Collections.Array<Card> drawnCards = DrawCards(1);
         foreach (Card card in drawnCards)
         {
-            
         }
         EmitSignal(nameof(DeckUpdated), deck.Count);
     }
