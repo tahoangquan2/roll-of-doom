@@ -20,6 +20,8 @@ public partial class Card : Node2D
     private AnimationPlayer animPlayer;
     private readonly float AngleXMax = Mathf.DegToRad(7.0f); 
     private readonly float AngleYMax = Mathf.DegToRad(7.0f); 
+
+    public Tween cardTween=null;
     public Card()
     {
         cardData = new CardData(); // Ensure initialization
@@ -185,6 +187,25 @@ public partial class Card : Node2D
         if (flipUp) animPlayer.PlayBackwards("card_flip"); 
         else animPlayer.Play("card_flip"); 
         await ToSignal(animPlayer, "animation_finished"); // Wait for the animation to end
+    }
+
+    public void TransformCard(Vector2 targetPosition, float targetRotation, float duration){
+		if (cardTween!= null && cardTween.IsRunning())
+		{
+			cardTween.Kill();
+			cardTween = null;
+		}
+		cardTween = GetTree().CreateTween().SetLoops(1);
+
+        if (!Position.IsEqualApprox(targetPosition)) 
+            cardTween.TweenProperty(this, "position", targetPosition, duration).SetEase(Tween.EaseType.Out);
+
+        cardTween.TweenProperty(this, "rotation_degrees", targetRotation, duration).SetEase(Tween.EaseType.OutIn);
+
+        cardTween.TweenCallback(Callable.From(() => 
+        {
+            cardTween = null;
+        }));
     }
 
     public CardData GetCardData()    {

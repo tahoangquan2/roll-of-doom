@@ -30,6 +30,7 @@ CardGlobal="*res://game/core/CardGlobal.cs"
 
 window/size/viewport_width=1920
 window/size/viewport_height=1000
+window/size/initial_position_type=2
 
 [dotnet]
 

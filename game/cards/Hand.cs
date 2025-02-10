@@ -18,7 +18,6 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
     public bool isSelecting = false;
     public bool isChanging = false;
     private CollisionShape2D collisionShape;
-    private Dictionary<Card, Tween> activeTweens = new Dictionary<Card, Tween>(); 
 
     [Signal] public delegate void ActionCompletedEventHandler(Godot.Collections.Array<Card> selectedCards);
     [Signal] public delegate void ActionCancelledEventHandler();
@@ -89,14 +88,14 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
         float targetRotation = angleInDegrees + 90;
         float tweenDuration = 0.25f; // Duration of the tween
 
-        TransformCard(card, targetPosition, targetRotation, tweenDuration);
+        card.TransformCard( targetPosition, targetRotation, tweenDuration);
     }
     private void AnimateCardHover(Card card)
     {
         float angle = card.Rotation;
         Vector2 targetPosition = Position + GetCardPosition(Mathf.RadToDeg(angle)-90) + new Vector2(0,-50).Rotated(angle);
 
-        TransformCard(card, targetPosition, Mathf.RadToDeg(angle), 0.15f);
+        card.TransformCard(targetPosition, Mathf.RadToDeg(angle), 0.15f);
     }
     private Vector2 GetCardPosition(float angleInDegrees){
         return new Vector2(0,-cardRadius).Rotated(Mathf.DegToRad(angleInDegrees+90));
@@ -181,7 +180,7 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
                 Card card = hand[index];
                 card.canBeHovered = false;
                 
-                TransformCard(card, deck.Position, 0, 0.15f);                
+                card.TransformCard(deck.Position, 0, 0.15f);                
 
                 RemoveCard(index);
                 await card.FlipCard(false);
@@ -190,17 +189,7 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
         }
         isChanging = false;
     }
-    private void TransformCard(Card card, Vector2 targetPosition, float targetRotation, float duration){
-        if (activeTweens.TryGetValue(card, out Tween existingTween) && existingTween.IsRunning()) existingTween.Kill();
-
-        Tween tween = GetTree().CreateTween();
-        activeTweens[card] = tween;
-
-        if (!card.Position.IsEqualApprox(targetPosition)) 
-            tween.TweenProperty(card, "position", targetPosition, duration).SetEase(Tween.EaseType.Out);
-
-        tween.TweenProperty(card, "rotation_degrees", targetRotation, duration).SetEase(Tween.EaseType.OutIn);
-    }
+    
     public void ShuffleHandtoDeck(){ 
         if (isSelecting) return;
 
@@ -269,6 +258,7 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
     }
     int requiredSelectionCount = 0;
     public void _input(InputEvent @event){//action "Action" from input map, this is for testing
+    if (@event is InputEventMouseMotion) return;
         if (@event.IsActionPressed("Action"))
         {
             drawFromDeck(3);

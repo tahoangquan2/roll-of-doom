@@ -13,6 +13,7 @@ script = ExtResource("1_3ktym")
 [node name="Hand" parent="." instance=ExtResource("3_l11hp")]
 
 [node name="CardManager" parent="." instance=ExtResource("2_nqpy4")]
+process_mode = 0
 
 [node name="CardActiveZone" parent="." instance=ExtResource("5_e70is")]
 position = Vector2(944, 313)

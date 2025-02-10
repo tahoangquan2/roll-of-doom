@@ -152,7 +152,7 @@ public partial class CardManager : Node2D
 		}		
 	}
 	public Card createCard(CardData cardData)
-	{
+	{	GD.Print("Creating card");
 		Card newCard = (Card)cardScene.Instantiate();
         AddChild(newCard);
         newCard.SetupCard(cardData);

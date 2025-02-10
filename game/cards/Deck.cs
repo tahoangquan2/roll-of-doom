@@ -83,7 +83,7 @@ public partial class Deck : Node2D
         {
             if (deck.Count == 0) continue;
 
-            int index = GD.RandRange(0, deck.Count);
+            int index = GD.RandRange(0, deck.Count-1);
             CardData card = deck[index];
             cardGot.Add(card);
             
