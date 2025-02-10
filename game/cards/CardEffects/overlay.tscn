@@ -1,9 +1,0 @@
-[gd_scene format=3 uid="uid://e3vhf1vfa8l5"]
-
-[node name="Control" type="ColorRect"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.203922, 0.215686, 0.215686, 0.423529)

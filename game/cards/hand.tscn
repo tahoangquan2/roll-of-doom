@@ -11,7 +11,6 @@ script = ExtResource("1_4ykbv")
 
 [node name="SelectionFilter" type="Control" parent="."]
 visible = false
-z_index = 99
 custom_minimum_size = Vector2(1920, 1080)
 layout_mode = 3
 anchors_preset = 0

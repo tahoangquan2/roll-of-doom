@@ -39,7 +39,7 @@ public partial class Deck : Node2D
         ShuffleDeck();
     }
 
-    public  Godot.Collections.Array<Card> DrawCards(int amount){
+    public Godot.Collections.Array<Card> DrawCards(int amount){
         Godot.Collections.Array<Card> drawnCards = new Godot.Collections.Array<Card>();
         amount = Mathf.Clamp(amount, 0, deck.Count);
         for (int i = 0; i < amount; i++)
@@ -75,6 +75,23 @@ public partial class Deck : Node2D
         if (deck.Count == 0) return;
         deck.RemoveAt(deck.Count - 1);
         EmitSignal(nameof(DeckUpdated), deck.Count);
+    }
+
+    public Godot.Collections.Array<CardData> GetRandomCard(int amount)    {
+        Godot.Collections.Array<CardData> cardGot = new Godot.Collections.Array<CardData>();
+        for (int i = 0; i < amount; i++)
+        {
+            if (deck.Count == 0) continue;
+
+            int index = GD.RandRange(0, deck.Count);
+            CardData card = deck[index];
+            cardGot.Add(card);
+            
+            deck.RemoveAt(index);
+        }
+        EmitSignal(nameof(DeckUpdated), deck.Count);
+
+        return cardGot;        
     }
     public void ShuffleIntoDeck(CardData card)    {
         deck.Insert(GD.RandRange(0, deck.Count), card);

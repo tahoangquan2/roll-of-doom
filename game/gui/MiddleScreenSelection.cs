@@ -6,31 +6,32 @@ public partial class MiddleScreenSelection : Control
 	// list of buttons
 	private Button[] buttons ;
 	// list of 2d nodes
-	private System.Collections.Generic.List<Node2D> nodes = new System.Collections.Generic.List<Node2D>();
+	private Godot.Collections.Array<Node2D> nodes = new Godot.Collections.Array<Node2D>();
 	private Vector2 itemSize;
 	private HBoxContainer hboxContainer;
 
 	private Action<int> onItemChosenCS=null;
 	private Callable onItemChosenGD;
+	private bool isInitialized = false;
 
 	public override void _Ready()
 	{
-		hboxContainer = GetChild<HBoxContainer>(1);
+		hboxContainer = GetNode<HBoxContainer>("Container");
 		GlobalAccessPoint.GetCardManager().Lock(); // stop card interaction
+		GD.Print("🔥 Node is inside Scene Tree: ", IsInsideTree());
 	}
-	public void Init(
-		System.Collections.Generic.List<Node2D> nodes,Vector2 itemSize, object onSelection
+	public void InitializeSelection(
+		Godot.Collections.Array<Node2D> nodes,
+		Vector2 itemSize, Callable onSelection
 	)// pass in list of 2d nodes, item size and what to do when item is chosen
 	{
+		this.nodes = nodes;
 		buttons = new Button[nodes.Count];
 		this.itemSize = itemSize;
 
-		if (onSelection is Action<int> csharpCallback){
-			onItemChosenCS = csharpCallback;
-		}
-		else if (onSelection is Callable gdscriptCallback){
-			onItemChosenGD = gdscriptCallback;
-		}
+		onItemChosenGD = onSelection;
+
+		GD.Print("Nodes count: " + nodes.Count);
 
 		for (int i = 0; i < nodes.Count; i++)
 		{
@@ -43,15 +44,30 @@ public partial class MiddleScreenSelection : Control
 			button.CustomMinimumSize = itemSize;
 			button.SizeFlagsHorizontal = SizeFlags.Fill;
 			button.SizeFlagsVertical = SizeFlags.Fill;
-			
+			button.MouseDefaultCursorShape = CursorShape.PointingHand;
 			hboxContainer.AddChild(button);			
 		}
+
+		if (nodes.Count==0){
+			OnItemChosen(-1);
+		}				
+		isInitialized = true;
+	}
+
+	public override void _Process(double delta)    
+	{
+		if (!isInitialized) return;
+		for (int i = 0; i < nodes.Count; i++)
+		{
+			nodes[i].GlobalPosition = buttons[i].GlobalPosition+new Vector2(itemSize.X/2, itemSize.Y/2);
+			nodes[i].ZIndex = CardGlobal.forCardSelectZindex;
+		}
+		SetProcess(false);
 	}
 
 	private void OnItemChosen(
 		int buttonIndex
 	)	{
-		GD.Print("Button " + buttonIndex + " pressed");
 		GlobalAccessPoint.GetCardManager().Unlock(); 
 
 		// this will execute the medthoed that was passed in
@@ -66,20 +82,7 @@ public partial class MiddleScreenSelection : Control
 		QueueFree();
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta) // set up the position of the nodes
-	{
-		for (int i = 0; i < nodes.Count; i++)
-		{
-			nodes[i].GlobalPosition = buttons[i].GlobalPosition+new Vector2(itemSize.X/2, itemSize.Y/2);
-		}
-
-		SetProcess(false);
-	}
-
 	public void _on_button_pressed(){
-		GD.Print("Button pressed");
-		GlobalAccessPoint.GetCardManager().Unlock();
-		QueueFree();
+		OnItemChosen(0);
 	}
 }
