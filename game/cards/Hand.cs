@@ -31,7 +31,6 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
 
         GlobalAccessPoint.Instance.Connect(nameof(GlobalAccessPoint.ReferencesUpdated), Callable.From(UpdateReferences));
     }
-
     public void UpdateReferences()
     {
         cardManager = GlobalAccessPoint.GetCardManager();
@@ -115,6 +114,10 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
             await drawnCards[i].FlipCard(true);
         }
         cardManager.Unlock();
+    }
+    public void drawFromDeckwithIndex(int index){
+        Card drawnCard = deck.DrawCard(index);
+        if (drawnCard != null) {AddCard(drawnCard);cardManager.cardSound();}
     }
     public void SelectCard(Card card)    {
         if (!isSelecting) return;

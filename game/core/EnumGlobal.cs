@@ -33,6 +33,7 @@ public partial class EnumGlobal : Node
         DiscardHand,     // Discards all cards in the hand (e.g., Hand Wipe)
 
 
+
         // Buff and Debuff (Affect Towers or Player)
         Buff,            // Enhances tower or hero attributes (e.g., Haste, Last Stand)
         Debuff,          // Weakens enemy stats (could be a future expansion)
@@ -54,7 +55,6 @@ public partial class EnumGlobal : Node
         ShuffleDeck=enumCardEffect.ShuffleDeck,
         ShuffleCard=enumCardEffect.ShuffleCard,
         ShuffleHand=enumCardEffect.ShuffleHand,
-
         DiscardHand=enumCardEffect.DiscardHand
     }
 

@@ -50,7 +50,6 @@ public partial class DeckManipulationEffect : CardEffect
                 hand.DiscardHand();
                 GD.Print("Discarded hand.");
                 break;
-
         }
 
         return true;

@@ -14,8 +14,7 @@ public partial class CardGlobal : Node
     	// make a function that raycasts and return object with passed in parameters
 	public static Godot.Collections.Array<Godot.Collections.Dictionary> RaycastCheckForObjects(Node2D node, Vector2 position, int collisionMask)
     {
-        if (node == null) 
-        {
+        if (node == null) {
             GD.PrintErr("RaycastCheckForObjects: Passed node is null!");
             return new Godot.Collections.Array<Godot.Collections.Dictionary>();
         }
