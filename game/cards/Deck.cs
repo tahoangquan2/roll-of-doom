@@ -97,7 +97,18 @@ public partial class Deck : Node2D
         deck.Insert(GD.RandRange(0, deck.Count), card);
         EmitSignal(nameof(DeckUpdated), deck.Count);
     }
-    // on button pressed
+    public async void ShuffleCardIntoDeck(Godot.Collections.Array<Card> cards)    {
+        GD.Print("Shuffling cards into deck");
+        foreach (Card card in cards)
+        {
+            deck.Insert(GD.RandRange(0, deck.Count), card.GetCardData());   
+            card.canBeHovered = false;
+            card.TransformCard(Position, 0, 0.15f);            
+            await card.FlipCard(false);
+            card.obliterateCard();
+            EmitSignal(nameof(DeckUpdated), deck.Count);            
+        }
+    }
     
     public void _on_button_pressed()
     {

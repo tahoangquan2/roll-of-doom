@@ -11,6 +11,8 @@ func ApplyEffect(_target):
 	if hand.StartSelectionMode(1,1): # If discard selection starts successfully
 		hand.connect("ActionCompleted", Callable(self, "_on_choose_complete"))
 		hand.connect("ActionCancelled", Callable(self, "_on_choose_cancel"))
+	else:
+		hand.AddCard(get_parent())
 
 func _on_choose_complete(_selectedCards):
 	s_disconnect()

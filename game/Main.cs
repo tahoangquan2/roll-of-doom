@@ -7,6 +7,8 @@ public partial class Main : Node2D
 	public override void _Ready()
 	{
 		GlobalAccessPoint.Instance.UpdateReferences();
+		//activate garbage collector
+		GC.Collect();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -38,7 +40,7 @@ public partial class Main : Node2D
 	{
 		if (@event.IsActionPressed("ui_filedialog_refresh"))
 		{
-			GetTree().ReloadCurrentScene();
+			GetTree().ReloadCurrentScene();			
 		}
 	}
 }

@@ -202,10 +202,11 @@ public partial class Card : Node2D
 
         cardTween.TweenProperty(this, "rotation_degrees", targetRotation, duration).SetEase(Tween.EaseType.OutIn);
 
-        cardTween.TweenCallback(Callable.From(() => 
+        cardTween.Finished += () => 
         {
-            cardTween = null;
-        }));
+            cardTween.Kill();  // Stop animation (optional)
+            cardTween = null;  // Remove reference
+        };
     }
 
     public CardData GetCardData()    {

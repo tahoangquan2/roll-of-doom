@@ -189,7 +189,6 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
         }
         isChanging = false;
     }
-    
     public void ShuffleHandtoDeck(){ 
         if (isSelecting) return;
 

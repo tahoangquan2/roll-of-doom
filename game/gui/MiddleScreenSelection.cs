@@ -13,16 +13,16 @@ public partial class MiddleScreenSelection : Control
 	private Action<int> onItemChosenCS=null;
 	private Callable onItemChosenGD;
 	private bool isInitialized = false;
+	private bool isGDscript = true;
 
 	public override void _Ready()
 	{
 		hboxContainer = GetNode<HBoxContainer>("Container");
 		GlobalAccessPoint.GetCardManager().Lock(); // stop card interaction
-		GD.Print("🔥 Node is inside Scene Tree: ", IsInsideTree());
 	}
 	public void InitializeSelection(
-		Godot.Collections.Array<Node2D> nodes,
-		Vector2 itemSize, Callable onSelection
+		Godot.Collections.Array<Node2D> nodes,Vector2 itemSize, 
+		Callable onSelection
 	)// pass in list of 2d nodes, item size and what to do when item is chosen
 	{
 		this.nodes = nodes;
@@ -31,8 +31,26 @@ public partial class MiddleScreenSelection : Control
 
 		onItemChosenGD = onSelection;
 
-		GD.Print("Nodes count: " + nodes.Count);
+		setUp();
+	}
 
+	public void InitializeSelection(
+		Godot.Collections.Array<Node2D> nodes,Vector2 itemSize, 
+		Action<int> onSelection
+	)
+	{
+		this.nodes = nodes;
+		buttons = new Button[nodes.Count];
+		this.itemSize = itemSize;
+
+		onItemChosenCS = onSelection;
+		isGDscript = false;
+
+		setUp();
+	}
+
+	private void setUp()
+	{
 		for (int i = 0; i < nodes.Count; i++)
 		{
 			Button button = new Button();
@@ -72,11 +90,13 @@ public partial class MiddleScreenSelection : Control
 
 		// this will execute the medthoed that was passed in
 
-		if (onItemChosenCS != null){
-			onItemChosenCS(buttonIndex);
-		}
-		else {
+		if (isGDscript)
+		{
 			onItemChosenGD.Call(buttonIndex);
+		}
+		else
+		{
+			onItemChosenCS(buttonIndex);
 		}
 		
 		QueueFree();

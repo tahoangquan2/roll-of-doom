@@ -14,7 +14,7 @@
 [ext_resource type="Script" path="res://game/cards/CardEffects/choose_to_draw.gd" id="12_b4s1y"]
 [ext_resource type="Texture2D" uid="uid://dggeruqaij3qe" path="res://assets/cards/Details/Backgrounds/Creature/BackgroundCard13.png" id="12_kya05"]
 
-[sub_resource type="Shader" id="Shader_p6fqu"]
+[sub_resource type="Shader" id="Shader_812ik"]
 resource_local_to_scene = true
 code = "// Hey this is Hei! This shader \"fakes\" a 3D-camera perspective on CanvasItems.
 // License: MIT
@@ -72,16 +72,16 @@ void fragment(){
 	COLOR.a *= step(max(abs(uv.x), abs(uv.y)), 0.5);
 }"
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ckfg5"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2gmd7"]
 resource_local_to_scene = true
-shader = SubResource("Shader_p6fqu")
+shader = SubResource("Shader_812ik")
 shader_parameter/fov = 90.0
 shader_parameter/cull_back = true
 shader_parameter/y_rot = 0.0
 shader_parameter/x_rot = 0.0
 shader_parameter/inset = 0.0
 
-[sub_resource type="Shader" id="Shader_slql8"]
+[sub_resource type="Shader" id="Shader_mggce"]
 resource_local_to_scene = true
 code = "// Hey this is Hei! This shader \"fakes\" a 3D-camera perspective on CanvasItems.
 // License: MIT
@@ -139,16 +139,16 @@ void fragment(){
 	COLOR.a *= step(max(abs(uv.x), abs(uv.y)), 0.5);
 }"
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_a72ul"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7ncwv"]
 resource_local_to_scene = true
-shader = SubResource("Shader_slql8")
+shader = SubResource("Shader_mggce")
 shader_parameter/fov = 90.0
 shader_parameter/cull_back = true
 shader_parameter/y_rot = 0.0
 shader_parameter/x_rot = 0.0
 shader_parameter/inset = 0.0
 
-[sub_resource type="Resource" id="Resource_e8tyf"]
+[sub_resource type="Resource" id="Resource_6v6c8"]
 resource_local_to_scene = true
 script = ExtResource("3_otn11")
 CardName = "Parallel timeline"
@@ -159,7 +159,7 @@ card_script = ExtResource("4_owpwo")
 Description = "This card has no description."
 ArtOffset = Vector2(0, 0)
 
-[sub_resource type="Shader" id="Shader_u5gsv"]
+[sub_resource type="Shader" id="Shader_sbtnu"]
 resource_local_to_scene = true
 code = "// Hey this is Hei! This shader \"fakes\" a 3D-camera perspective on CanvasItems.
 // License: MIT
@@ -217,9 +217,9 @@ void fragment(){
 	COLOR.a *= step(max(abs(uv.x), abs(uv.y)), 0.5);
 }"
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_0i2xp"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ujegp"]
 resource_local_to_scene = true
-shader = SubResource("Shader_u5gsv")
+shader = SubResource("Shader_sbtnu")
 shader_parameter/fov = 90.0
 shader_parameter/cull_back = true
 shader_parameter/y_rot = 0.0
@@ -241,7 +241,7 @@ Description = "This card has no description."
 CardArt = ExtResource("7_ib5k3")
 ArtOffset = Vector2(0, 0)
 
-[sub_resource type="Shader" id="Shader_h5b8f"]
+[sub_resource type="Shader" id="Shader_th261"]
 resource_local_to_scene = true
 code = "// Hey this is Hei! This shader \"fakes\" a 3D-camera perspective on CanvasItems.
 // License: MIT
@@ -299,9 +299,9 @@ void fragment(){
 	COLOR.a *= step(max(abs(uv.x), abs(uv.y)), 0.5);
 }"
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_3pwbv"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1rw0o"]
 resource_local_to_scene = true
-shader = SubResource("Shader_h5b8f")
+shader = SubResource("Shader_th261")
 shader_parameter/fov = 90.0
 shader_parameter/cull_back = true
 shader_parameter/y_rot = 0.0
@@ -319,7 +319,7 @@ Description = "This card has no description."
 CardArt = ExtResource("8_h3a18")
 ArtOffset = Vector2(0, 0)
 
-[sub_resource type="Shader" id="Shader_ckp6n"]
+[sub_resource type="Shader" id="Shader_edx41"]
 resource_local_to_scene = true
 code = "// Hey this is Hei! This shader \"fakes\" a 3D-camera perspective on CanvasItems.
 // License: MIT
@@ -377,9 +377,9 @@ void fragment(){
 	COLOR.a *= step(max(abs(uv.x), abs(uv.y)), 0.5);
 }"
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_4xxty"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xdsn8"]
 resource_local_to_scene = true
-shader = SubResource("Shader_ckp6n")
+shader = SubResource("Shader_edx41")
 shader_parameter/fov = 90.0
 shader_parameter/cull_back = true
 shader_parameter/y_rot = 0.0
@@ -396,7 +396,7 @@ card_script = ExtResource("11_7v7tt")
 Description = "This card has no description."
 ArtOffset = Vector2(0, 0)
 
-[sub_resource type="Shader" id="Shader_pur4j"]
+[sub_resource type="Shader" id="Shader_n48t8"]
 resource_local_to_scene = true
 code = "// Hey this is Hei! This shader \"fakes\" a 3D-camera perspective on CanvasItems.
 // License: MIT
@@ -454,9 +454,9 @@ void fragment(){
 	COLOR.a *= step(max(abs(uv.x), abs(uv.y)), 0.5);
 }"
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_8lni0"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_siwkd"]
 resource_local_to_scene = true
-shader = SubResource("Shader_pur4j")
+shader = SubResource("Shader_n48t8")
 shader_parameter/fov = 90.0
 shader_parameter/cull_back = true
 shader_parameter/y_rot = 0.0
@@ -479,34 +479,34 @@ process_mode = 1
 script = ExtResource("1_jqhmt")
 
 [node name="Card" parent="." instance=ExtResource("2_inu1s")]
-material = SubResource("ShaderMaterial_ckfg5")
+material = SubResource("ShaderMaterial_2gmd7")
 position = Vector2(454, 94)
 cardData = ExtResource("5_7cxlf")
 
 [node name="Card2" parent="." instance=ExtResource("2_inu1s")]
-material = SubResource("ShaderMaterial_a72ul")
+material = SubResource("ShaderMaterial_7ncwv")
 position = Vector2(322, 119)
-cardData = SubResource("Resource_e8tyf")
+cardData = SubResource("Resource_6v6c8")
 
 [node name="AudioPlayer" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("4_fy348")
 
 [node name="Card3" parent="." instance=ExtResource("2_inu1s")]
-material = SubResource("ShaderMaterial_0i2xp")
+material = SubResource("ShaderMaterial_ujegp")
 position = Vector2(60, 113)
 cardData = SubResource("Resource_bjsom")
 
 [node name="Card4" parent="." instance=ExtResource("2_inu1s")]
-material = SubResource("ShaderMaterial_3pwbv")
+material = SubResource("ShaderMaterial_1rw0o")
 position = Vector2(194, 116)
 cardData = SubResource("Resource_lsgtp")
 
 [node name="Card5" parent="." instance=ExtResource("2_inu1s")]
-material = SubResource("ShaderMaterial_4xxty")
+material = SubResource("ShaderMaterial_xdsn8")
 position = Vector2(256, -40)
 cardData = SubResource("Resource_qf7rs")
 
 [node name="Card6" parent="." instance=ExtResource("2_inu1s")]
-material = SubResource("ShaderMaterial_8lni0")
+material = SubResource("ShaderMaterial_siwkd")
 position = Vector2(63, 326)
 cardData = SubResource("Resource_eclng")
