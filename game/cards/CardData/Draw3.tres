@@ -11,7 +11,7 @@ Amount = 3
 
 [resource]
 script = ExtResource("1_57pie")
-CardName = "Open mind"
+CardName = "Open Mind"
 Cost = 3
 CardType = 1
 Effects = [SubResource("Resource_kma80")]

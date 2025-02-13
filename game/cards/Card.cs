@@ -12,7 +12,7 @@ public partial class Card : Node2D
 
     private Label costLbl;
     private Label nameLbl;
-    private Label descriptionLbl;
+    //private Label descriptionLbl;
     private Sprite2D CardTypeIcon;
     private Sprite2D CardArt;
     private ShaderMaterial shaderMaterial;
@@ -35,8 +35,9 @@ public partial class Card : Node2D
     public override void _Ready()
     {
         costLbl = GetNode<Label>("SubViewport/CostDisplay/CostLb");
-        nameLbl = GetNode<Label>("SubViewport/CardDisplay/CardFrontBannerDown/NameDisplay/NameLb");
-        descriptionLbl = GetNode<Label>("SubViewport/CardEffectLb");
+        //nameLbl = GetNode<Label>("SubViewport/CardDisplay/CardFrontBannerDown/NameDisplay/NameLb");
+        nameLbl = GetNode<Label>("SubViewport/CardEffectLb");
+        //descriptionLbl = GetNode<Label>("SubViewport/CardEffectLb");
         CardTypeIcon = GetNode<Sprite2D>("SubViewport/CardTypeIcon");
         CardArt = GetNode<Sprite2D>("SubViewport/CardDisplay/CardArt");
 
@@ -104,7 +105,7 @@ public partial class Card : Node2D
 
 		costLbl.Text = cardData.Cost.ToString();
 		nameLbl.Text = cardData.CardName;
-		descriptionLbl.Text = cardData.Description.ToString();
+		//descriptionLbl.Text = cardData.Description.ToString();
         CardArt.Texture = cardData.CardArt;
         switch (cardData.CardType)
         {

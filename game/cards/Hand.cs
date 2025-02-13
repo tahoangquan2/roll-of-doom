@@ -35,6 +35,7 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
     {
         cardManager = GlobalAccessPoint.GetCardManager();
         deck = GlobalAccessPoint.GetDeck();
+ 
         ConnectCardMagnagerSignals();
     }
     public void AddCard(Card card)

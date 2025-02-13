@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=3 uid="uid://ci580fctofejp"]
+
+[ext_resource type="Script" path="res://game/gui/Player.cs" id="1_w7j82"]
+[ext_resource type="PackedScene" uid="uid://cayqj43ene72e" path="res://game/gui/side_menu.tscn" id="2_r37qf"]
+
+[node name="Player" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+script = ExtResource("1_w7j82")
+
+[node name="SideMenu" parent="." instance=ExtResource("2_r37qf")]
+layout_mode = 1
+anchor_left = 1.05
+
+[node name="InfoToggle" type="Button" parent="."]
+layout_mode = 0
+offset_left = 1852.0
+offset_top = 97.0
+offset_right = 1915.0
+offset_bottom = 128.0
+toggle_mode = true
+text = "Info"
+
+[connection signal="toggled" from="InfoToggle" to="SideMenu" method="_on_info_toggle_toggled"]

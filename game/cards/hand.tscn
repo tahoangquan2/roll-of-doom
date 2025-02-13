@@ -40,6 +40,7 @@ grow_vertical = 2
 text = "Cancel"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 shape = SubResource("CircleShape2D_qsgox")
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]

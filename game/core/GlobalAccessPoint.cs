@@ -7,6 +7,7 @@ public partial class GlobalAccessPoint : Node
     private CardManager cardManager;
     private Hand hand;
     private Deck deck;
+    private Player player;
 
     [Signal] public delegate void ReferencesUpdatedEventHandler();
 
@@ -45,10 +46,12 @@ public partial class GlobalAccessPoint : Node
         cardManager = root.GetNodeOrNull<CardManager>("CardManager");
         hand = root.GetNodeOrNull<Hand>("Hand");
         deck = root.GetNodeOrNull<Deck>("Deck");
+        player = root.GetNodeOrNull<Player>("Player");
 
         if (cardManager == null) GD.PrintErr("GlobalAccessPoint: CardManager not found!");
         if (hand == null) GD.PrintErr("GlobalAccessPoint: Hand not found!");
         if (deck == null) GD.PrintErr("GlobalAccessPoint: Deck not found!");
+        if (player == null) GD.PrintErr("GlobalAccessPoint: Player not found!");
         EmitSignal(nameof(ReferencesUpdated));
     }
     public static CardManager GetCardManager() => Instance?.cardManager;

@@ -12,6 +12,7 @@ public partial class CardManager : Node2D
 	private bool Locked =false; // if true, no card can be selected or dragged
 	[Signal] public delegate void CardPushupEventHandler(Card card,bool isHovered);
 	[Signal] public delegate void CardUnhandEventHandler(Card card);
+	[Signal] public delegate void CardSelectEventHandler(Card card);
 	public override void _Input(InputEvent @event)
 	{	if (Locked) return;
 		if (hand is not null && hand.isSelecting) {
@@ -84,6 +85,7 @@ public partial class CardManager : Node2D
 		DeselectCard();
 		selected_card = card;
 		EmitSignal(nameof(CardPushup), card, true);	
+		EmitSignal(nameof(CardSelect), card);
 	}
 	private void DeselectCard()
 	{
