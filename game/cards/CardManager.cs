@@ -67,17 +67,12 @@ public partial class CardManager : Node2D
 			}
 		}
 	}
-	public override void _Ready()
+	public override void _Ready() 
 	{	cardScene = GD.Load<PackedScene>("res://game/cards/card.tscn");
 		audioPlayer = GetNode<AudioStreamPlayer2D>("AudioPlayer");
-		GlobalAccessPoint.Instance.Connect(nameof(GlobalAccessPoint.ReferencesUpdated), Callable.From(UpdateReferences));
+		hand = GetTree().CurrentScene.GetNodeOrNull<Hand>(GlobalAccessPoint.handPath);
 	}
-	public void UpdateReferences()
-	{
-		hand = GlobalAccessPoint.GetHand();
-	}
-	private void SelectCard(Card card)
-	{
+	private void SelectCard(Card card) {
 		if (selected_card == card) {
 			DeselectCard();
 			return;
@@ -147,10 +142,17 @@ public partial class CardManager : Node2D
 		
 		cardEffectZone zone = RaycastCheckForZone();
 		if (zone != null){
-			EmitSignal(nameof(CardUnhand), tmpCard);
-			card_being_hovered = null;
-			tmpCard.ResetShader();
-			zone.activeCard(tmpCard,GetGlobalMousePosition()-zone.GlobalPosition);
+			if (GlobalVariables.spirit >= tmpCard.GetCardData().Cost)
+			{
+				EmitSignal(nameof(CardUnhand), tmpCard);
+				card_being_hovered = null;
+				tmpCard.ResetShader();
+				zone.activeCard(tmpCard,GetGlobalMousePosition()-zone.GlobalPosition);
+				GD.Print("cost: "+tmpCard.GetCardData().Cost);
+				GlobalVariables.ChangeSpirit(-tmpCard.GetCardData().Cost);
+				GD.Print("spirit: "+GlobalVariables.spirit);
+			}
+			
 		}		
 	}
 	public Card createCard(CardData cardData)

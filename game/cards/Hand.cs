@@ -13,6 +13,7 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
     private Godot.Collections.Array<Card> hand = new Godot.Collections.Array<Card>(); // Stores all cards
     private CardManager cardManager; // 
     private Deck deck;
+    private Player player;
     private Control selectionFilter;
     private Godot.Collections.Array<Card> selectedCards = new Godot.Collections.Array<Card>();
     public bool isSelecting = false;
@@ -23,20 +24,20 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
     [Signal] public delegate void ActionCancelledEventHandler();
 
     EnumGlobal.HandSelectionPurpose currentPurpose = EnumGlobal.HandSelectionPurpose.None;
-    public override void _Ready()
-    {
+    public override void _Ready() {
         collisionShape = GetNode<CollisionShape2D>("CollisionShape2D");
         selectionFilter = GetNode<Control>("SelectionFilter");
         cardRadius = HandRadius-200;
 
-        GlobalAccessPoint.Instance.Connect(nameof(GlobalAccessPoint.ReferencesUpdated), Callable.From(UpdateReferences));
-    }
-    public void UpdateReferences()
-    {
-        cardManager = GlobalAccessPoint.GetCardManager();
-        deck = GlobalAccessPoint.GetDeck();
- 
+        cardManager = GetTree().CurrentScene.GetNodeOrNull<CardManager>(GlobalAccessPoint.cardManagerPath);
+        deck = GetTree().CurrentScene.GetNodeOrNull<Deck>(GlobalAccessPoint.deckPath);
         ConnectCardMagnagerSignals();
+
+        for (int i=0;i<cardManager.GetChildCount()-1;i++){
+            if (cardManager.GetChild(i) is Card card){
+                AddCard(card);
+            }
+        }
     }
     public void AddCard(Card card)
     {
@@ -269,7 +270,7 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
 
         if (@event.IsActionPressed("Action2"))
         {
-            ShuffleHandtoDeck();
+            GlobalVariables.ChangeHealth(-10);
         }
     }
     public void _on_button_pressed(){

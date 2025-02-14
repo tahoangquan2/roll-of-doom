@@ -9,8 +9,13 @@ public partial class SideMenu : Control
 	private Label CardNameLabel;
 	private Label CardEffectLabel;
 	private Label CardCostLabel;
-
 	private TextureRect CardTextureRect;
+	enum infoType
+	{
+		CardInfo,
+		TowerInfo,
+		ItemInfo
+	}
 
 	public override void _Ready()
 	{
@@ -19,7 +24,7 @@ public partial class SideMenu : Control
 		CardNameLabel = GetNode<Label>("CardInfoPage/NameLabel");
 		CardEffectLabel = GetNode<Label>("CardInfoPage/EffectLabel");
 		CardCostLabel = GetNode<Label>("CardInfoPage/Cost/CostLabel");
-		CardTextureRect = GetNode<TextureRect>("CardInfoPage/TextureRect");
+		CardTextureRect = GetNode<TextureRect>("CardInfoPage/OutlineRect/TextureRect");
 		
 		CardManager cardManager = GetTree().CurrentScene.GetNodeOrNull<CardManager>("CardManager");
 
@@ -53,7 +58,7 @@ public partial class SideMenu : Control
 	{
 		//CardTypeLabel.Text = card.GetCardData();
 		CardNameLabel.Text = card.GetCardData().CardName;
-		CardEffectLabel.Text = "Name: "+card.GetCardData().Description;
+		CardEffectLabel.Text = "Effect: "+card.GetCardData().Description;
 		CardCostLabel.Text = "Cost: "+card.GetCardData().Cost.ToString();
 		CardTextureRect.Texture = card.GetCardData().CardArt;
 	}

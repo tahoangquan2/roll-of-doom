@@ -6,10 +6,34 @@ public partial class GlobalVariables : Node
 
     public static int health = 100;
     public static int maxHealth = 100;
+    public static int spirit = 100;
+
+    public static GlobalVariables gv;
 
     // get random number with range
     public static int GetRandomNumber(int min, int max)
     {
         return new Random().Next(min, max);
     }
+    public override void _Ready()
+    {
+        gv = this;
+    }
+
+    public static void ChangeHealth(int value)
+    {
+        health += value;
+        if (health > maxHealth) health = maxHealth;
+        if (health < 0) health = 0;
+        gv.EmitSignal(nameof(HealthChanged));
+    }
+    public static void ChangeSpirit(int value)
+    {
+       spirit += value;
+       if (spirit < 0) spirit = 0;
+       gv.EmitSignal(nameof(SpiritChanged));
+    }
+
+    [Signal] public delegate void HealthChangedEventHandler();
+    [Signal] public delegate void SpiritChangedEventHandler();
 }

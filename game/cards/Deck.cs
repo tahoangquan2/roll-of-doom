@@ -11,11 +11,10 @@ public partial class Deck : Node2D
     [Signal] public delegate void DeckUpdatedEventHandler(int cardsRemaining);
     [Signal] public delegate void DeckEmptyEventHandler();
 
-    public override void _Ready()
-    { // demo
+    public override void _Ready() { 
         deck = new Godot.Collections.Array<CardData>();
         cardScene = GD.Load<PackedScene>("res://game/cards/card.tscn");
-        GlobalAccessPoint.Instance.Connect(nameof(GlobalAccessPoint.ReferencesUpdated), Callable.From(UpdateReferences));
+        cardManager = GetTree().CurrentScene.GetNodeOrNull<CardManager>(GlobalAccessPoint.cardManagerPath);
         
         for (int i = 0; i < deckSize; i++)
         {
@@ -29,11 +28,6 @@ public partial class Deck : Node2D
         }
         EmitSignal(nameof(DeckUpdated), deckSize);
     }
-
-    public void UpdateReferences(){
-        cardManager = GlobalAccessPoint.GetCardManager();
-    }
-
     public void SetupDeck( Godot.Collections.Array<CardData> cards)
     {
         deck = cards;

@@ -1,3 +1,4 @@
+using System;
 using Godot;
 
 public partial class GlobalAccessPoint : Node
@@ -8,6 +9,8 @@ public partial class GlobalAccessPoint : Node
     private Hand hand;
     private Deck deck;
     private Player player;
+
+    public static String handPath, deckPath, cardManagerPath, playerPath;
 
     [Signal] public delegate void ReferencesUpdatedEventHandler();
 
@@ -23,6 +26,11 @@ public partial class GlobalAccessPoint : Node
             return;
         }
 
+        handPath = "Hand";
+        deckPath = "Deck";
+        cardManagerPath = "CardManager";
+        playerPath = "Player";
+
         UpdateReferences();
     }
 
@@ -34,6 +42,7 @@ public partial class GlobalAccessPoint : Node
         cardManager = null;
         hand = null;
         deck = null;
+        player = null;
 
         Node root = GetTree().CurrentScene;
         if (root == null)
@@ -43,10 +52,10 @@ public partial class GlobalAccessPoint : Node
         }
 
         // Assign new references
-        cardManager = root.GetNodeOrNull<CardManager>("CardManager");
-        hand = root.GetNodeOrNull<Hand>("Hand");
-        deck = root.GetNodeOrNull<Deck>("Deck");
-        player = root.GetNodeOrNull<Player>("Player");
+        cardManager = root.GetNodeOrNull<CardManager>(cardManagerPath);
+        hand = root.GetNodeOrNull<Hand>(handPath);
+        deck = root.GetNodeOrNull<Deck>(deckPath);
+        player = root.GetNodeOrNull<Player>(playerPath);
 
         if (cardManager == null) GD.PrintErr("GlobalAccessPoint: CardManager not found!");
         if (hand == null) GD.PrintErr("GlobalAccessPoint: Hand not found!");
