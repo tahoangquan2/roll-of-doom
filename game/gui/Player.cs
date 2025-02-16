@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class Player : Control
+public partial class Player : CanvasLayer
 {
 	// Called when the node enters the scene tree for the first time.
 	private int health;

@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://cayqj43ene72e"]
+[gd_scene load_steps=12 format=3 uid="uid://cayqj43ene72e"]
 
 [ext_resource type="Texture2D" uid="uid://bcdeba4qnlm5q" path="res://assets/sprites/scroll.png" id="1_o6les"]
 [ext_resource type="Script" path="res://game/gui/SideMenu.cs" id="1_r0w7c"]
@@ -7,7 +7,6 @@
 [ext_resource type="Texture2D" uid="uid://62t6ctia6pme" path="res://assets/cards/mana_slot.png" id="4_a8ur7"]
 [ext_resource type="Texture2D" uid="uid://b7kiid3ln6ec4" path="res://assets/cards/Details/Backgrounds/Creature/BackgroundCard1.png" id="5_s4kvo"]
 [ext_resource type="Texture2D" uid="uid://djc8w4snelyh8" path="res://assets/cards/UI board Medium  parchment.png" id="6_nbf07"]
-[ext_resource type="Texture2D" uid="uid://dij5rb0km24i0" path="res://icon.svg" id="7_r5l1u"]
 
 [sub_resource type="Animation" id="Animation_vfdq0"]
 resource_name = "RESET"
@@ -15,7 +14,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Scroll:frame")
+tracks/0/path = NodePath("TextureRect/Scroll:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -44,7 +43,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Scroll:frame")
+tracks/1/path = NodePath("TextureRect/Scroll:frame")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -80,15 +79,6 @@ offset_bottom = -6.10352e-05
 grow_horizontal = 0
 grow_vertical = 2
 script = ExtResource("1_r0w7c")
-
-[node name="Scroll" type="Sprite2D" parent="."]
-top_level = true
-z_index = -1
-position = Vector2(2084, 520)
-scale = Vector2(2.3, 2.3)
-texture = ExtResource("1_o6les")
-hframes = 3
-vframes = 2
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -183,12 +173,20 @@ label_settings = ExtResource("3_i54ew")
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="."]
-visible = false
+[node name="TextureRect" type="Control" parent="."]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = 11
+anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-grow_horizontal = 2
+grow_horizontal = 0
 grow_vertical = 2
-texture = ExtResource("7_r5l1u")
+
+[node name="Scroll" type="Sprite2D" parent="TextureRect"]
+top_level = true
+z_index = -1
+position = Vector2(2084, 520)
+scale = Vector2(2.3, 2.3)
+texture = ExtResource("1_o6les")
+hframes = 3
+vframes = 2

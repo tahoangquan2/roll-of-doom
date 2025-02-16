@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://r4mtbdq6b4tq"]
+[gd_scene load_steps=10 format=3 uid="uid://r4mtbdq6b4tq"]
 
 [ext_resource type="Texture2D" uid="uid://bgh2fcq2glqn" path="res://assets/sprites/UI/HealthBarPanel_160x41.png" id="1_7g01q"]
 [ext_resource type="LabelSettings" path="res://assets/fonts/gui_basic_font.tres" id="2_5xr16"]
@@ -7,9 +7,11 @@
 [ext_resource type="Texture2D" uid="uid://ds807dtcefuv2" path="res://assets/sprites/UI/BlackBigCircleBoxWithBorder_27x27.png" id="5_hfw72"]
 [ext_resource type="Texture2D" uid="uid://o3sr0chb2vr6" path="res://assets/sprites/UI/HeartIcons_32x32.png" id="6_7lu2l"]
 [ext_resource type="Texture2D" uid="uid://62t6ctia6pme" path="res://assets/cards/mana_slot.png" id="7_l3n0l"]
+[ext_resource type="PackedScene" uid="uid://dt867ndl8axqy" path="res://game/gui/setting.tscn" id="9_4t5r4"]
 [ext_resource type="Texture2D" uid="uid://cwhnc3x4kmjrf" path="res://assets/sprites/Coin.png" id="9_feks5"]
 
 [node name="TopGui" type="Control"]
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 3
 anchors_preset = 10
 anchor_right = 1.0
@@ -17,13 +19,17 @@ grow_horizontal = 2
 
 [node name="Container" type="HBoxContainer" parent="."]
 layout_mode = 1
-anchors_preset = 5
+anchors_preset = 8
 anchor_left = 0.5
+anchor_top = 0.5
 anchor_right = 0.5
+anchor_bottom = 0.5
 offset_left = -282.5
+offset_top = -22.5
 offset_right = 282.5
-offset_bottom = 45.0
+offset_bottom = 22.5
 grow_horizontal = 2
+grow_vertical = 2
 theme_override_constants/separation = 20
 
 [node name="Health" type="Control" parent="Container"]
@@ -209,3 +215,13 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("9_feks5")
 stretch_mode = 3
+
+[node name="Setting" parent="." instance=ExtResource("9_4t5r4")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 0.2
+anchor_right = 1.0
+anchor_bottom = 0.2
+offset_right = -23.04
+grow_horizontal = 0
