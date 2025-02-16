@@ -6,7 +6,7 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
 {
     private int HandRadius = 750;
     private int cardRadius ;
-    private float AngleLimit = 65;
+    private float AngleLimit = 70;
     private float MaxCardSpreadAngle = 10;
     [Export] public int MaxHandSize { get; set; }=10;
      // max cards in hand
@@ -178,6 +178,9 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
                 deck.ShuffleIntoDeck(hand[index].cardData);
             }
         }
+        
+        Vector2 deckPosition = deck.Position + Mathf.Min(GlobalVariables.maxStackSize, deck.GetDeckSize()) * new Vector2(-2.0f, 3.0f);
+
         for (int i = indexes.Count - 1; i >= 0; i--){
             int index = indexes[i];
             GD.Print(index);
@@ -185,7 +188,7 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
                 Card card = hand[index];
                 card.canBeHovered = false;
                 
-                card.TransformCard(deck.Position, 0, 0.15f);                
+                card.TransformCard(deckPosition, 0, 0.15f);                
 
                 RemoveCard(index);
                 await card.FlipCard(false);

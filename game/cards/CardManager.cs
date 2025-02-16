@@ -87,7 +87,8 @@ public partial class CardManager : Node2D
 		if (selected_card != null){
 			selected_card.ResetShader();
 			if (card_being_dragged != selected_card) EmitSignal(nameof(CardPushup), selected_card, false);	
-			selected_card = null;
+			if (card_being_hovered != selected_card) selected_card.Scale = new Vector2(1,1);
+			selected_card = null;			
 		}
 	}
 	public void ConnectCardSignals(Card card)
@@ -115,7 +116,7 @@ public partial class CardManager : Node2D
 	{
 		if (card_being_dragged != null || card==selected_card || hand.isSelecting) return;
 
-		float targetScale = isHovering ? 1.05f : 1.0f;
+		float targetScale = isHovering ? 1.2f : 1.0f;
 
 		if (card.Scale.X != targetScale) 
 		{
@@ -200,6 +201,9 @@ public partial class CardManager : Node2D
 	}
 	public void checkChange(Card card) {
 		if (card_being_hovered == card) card_being_hovered = null;
+		if (card_being_dragged == card) card_being_dragged = null;
+		if (selected_card == card) selected_card = null;
+		RemoveChild(card);
 	}
 	public void cardSound() {audioPlayer.Play();}
 	public void Lock() {Locked = true;}

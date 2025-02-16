@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://game/gui/Player.cs" id="1_w7j82"]
 [ext_resource type="PackedScene" uid="uid://cayqj43ene72e" path="res://game/gui/side_menu.tscn" id="2_r37qf"]
-[ext_resource type="LabelSettings" uid="uid://btn2vsej74w0d" path="res://game/gui/gui_basic_font.tres" id="3_nwkao"]
+[ext_resource type="PackedScene" uid="uid://r4mtbdq6b4tq" path="res://game/gui/top_gui.tscn" id="3_cfuo1"]
 
 [node name="Player" type="Control"]
 layout_mode = 3
@@ -26,25 +26,8 @@ offset_bottom = 128.0
 toggle_mode = true
 text = "Info"
 
-[node name="TopGui" type="HBoxContainer" parent="."]
+[node name="TopGui" parent="." instance=ExtResource("3_cfuo1")]
 layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 23.0
-grow_horizontal = 2
-
-[node name="HealthLabel" type="Label" parent="TopGui"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Health : 50/100    "
-label_settings = ExtResource("3_nwkao")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="PointLabel" type="Label" parent="TopGui"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Spirit : 300"
-label_settings = ExtResource("3_nwkao")
+offset_bottom = 45.0
 
 [connection signal="toggled" from="InfoToggle" to="SideMenu" method="_on_info_toggle_toggled"]

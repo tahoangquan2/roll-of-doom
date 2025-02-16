@@ -18,6 +18,7 @@ public partial class Card : Node2D
     private ShaderMaterial shaderMaterial;
     private Control display;
     private AnimationPlayer animPlayer;
+    private CardManager parentManager;
     private readonly float AngleXMax = Mathf.DegToRad(7.0f); 
     private readonly float AngleYMax = Mathf.DegToRad(7.0f); 
 
@@ -34,14 +35,13 @@ public partial class Card : Node2D
 
     public override void _Ready()
     {
-        costLbl = GetNode<Label>("SubViewport/CostDisplay/CostLb");
-        //nameLbl = GetNode<Label>("SubViewport/CardDisplay/CardFrontBannerDown/NameDisplay/NameLb");
-        nameLbl = GetNode<Label>("SubViewport/CardEffectLb");
-        //descriptionLbl = GetNode<Label>("SubViewport/CardEffectLb");
-        CardTypeIcon = GetNode<Sprite2D>("SubViewport/CardTypeIcon");
-        CardArt = GetNode<Sprite2D>("SubViewport/CardDisplay/CardArt");
-
         var subViewport = GetNode<SubViewport>("SubViewport");
+        
+        costLbl = subViewport.GetNode<Label>("CostDisplay/CostLb");
+        nameLbl = subViewport.GetNode<Label>("CardEffectLb");
+        CardTypeIcon = subViewport.GetNode<Sprite2D>("CardTypeIcon");
+        CardArt = subViewport.GetNode<Sprite2D>("CardDisplay/CardArt");
+        
         var shaderDisplay = GetNode<TextureRect>("Control/TextureRect"); // This will hold the shader
 
         shaderDisplay.Texture = subViewport.GetTexture();shaderDisplay.UseParentMaterial = false;
@@ -55,8 +55,8 @@ public partial class Card : Node2D
         }
 
         // Connect card to CardManager
-        CardManager parentManager = GetParent() as CardManager;
-        parentManager?.ConnectCardSignals(this);
+        parentManager = GetParent() as CardManager;
+        parentManager.ConnectCardSignals(this);
 
         UpdateGraphics();
     }
@@ -91,8 +91,6 @@ public partial class Card : Node2D
     private async Task<bool> EffectExecution(CardEffect effect, Node2D target)
     {
         if (effect == null) return false;
-        
-        GD.Print($"Executing effect: {effect}");
         bool result = effect.ApplyEffect(target);
         
         await ToSignal(GetTree(), "process_frame"); // Allow processing between effects
@@ -105,7 +103,6 @@ public partial class Card : Node2D
 
 		costLbl.Text = cardData.Cost.ToString();
 		nameLbl.Text = cardData.CardName;
-		//descriptionLbl.Text = cardData.Description.ToString();
         CardArt.Texture = cardData.CardArt;
         switch (cardData.CardType)
         {
@@ -178,8 +175,7 @@ public partial class Card : Node2D
     }
 
     public void obliterateCard() {       
-        GlobalAccessPoint.GetCardManager().checkChange(this); 
-        GetParent().RemoveChild(this);
+        parentManager.checkChange(this); 
         QueueFree();
     }
 

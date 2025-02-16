@@ -2,11 +2,14 @@ using Godot;
 using System;
 public partial class GlobalVariables : Node
 {
-    public static Vector2 cardSize= new Vector2(150, 210);
+    public static Vector2 cardSize= new Vector2(138, 210);
 
-    public static int health = 100;
+    public static int health = 75;
     public static int maxHealth = 100;
-    public static int spirit = 100;
+    public static int spirit = 500;
+    public static int maxStackSize = 10;
+
+    public static int gold = 1420;
 
     public static GlobalVariables gv;
 
