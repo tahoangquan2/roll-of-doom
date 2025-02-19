@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dkbb1ixka80na"
-path="res://.godot/imported/#2 - Transparent Icons & Drop Shadow-6.png-2e01b0896c249d8dbdcd8e099a1b4de9.ctex"
+uid="uid://s6ebw5bobvgi"
+path="res://.godot/imported/QuitBTN.png-417dadb452138ac7ab48a29caea9eb5f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/#2 - Transparent Icons & Drop Shadow/#2 - Transparent Icons & Drop Shadow-6.png"
-dest_files=["res://.godot/imported/#2 - Transparent Icons & Drop Shadow-6.png-2e01b0896c249d8dbdcd8e099a1b4de9.ctex"]
+source_file="res://assets/sprites/UI/Button/Rect/QuitBTN.png"
+dest_files=["res://.godot/imported/QuitBTN.png-417dadb452138ac7ab48a29caea9eb5f.ctex"]
 
 [params]
 

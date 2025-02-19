@@ -1,16 +1,26 @@
-[gd_scene load_steps=9 format=3 uid="uid://dt867ndl8axqy"]
+[gd_scene load_steps=15 format=3 uid="uid://dt867ndl8axqy"]
 
 [ext_resource type="Script" path="res://game/gui/setting.gd" id="1_2onwm"]
 [ext_resource type="LabelSettings" path="res://assets/fonts/gui_basic_font.tres" id="1_tt5mu"]
 [ext_resource type="Texture2D" uid="uid://cq4iyyu53yohu" path="res://assets/sprites/UI/Square/SoundOn/Default.png" id="2_oakne"]
+[ext_resource type="FontFile" uid="uid://c1j227ygpp51v" path="res://assets/fonts/DragonHunter-9Ynxj.otf" id="2_tntnh"]
 [ext_resource type="Texture2D" uid="uid://s1ub21o65aif" path="res://assets/sprites/UI/Square/Default.png" id="3_g6nvb"]
 [ext_resource type="Texture2D" uid="uid://b46qpdaif7axk" path="res://assets/sprites/UI/Square/SoundOn/Hover.png" id="3_lrjit"]
 [ext_resource type="Texture2D" uid="uid://bakctsfdsoa25" path="res://assets/sprites/UI/Square/Home/Default.png" id="4_me0tj"]
 [ext_resource type="Texture2D" uid="uid://byjbrfxl3puhe" path="res://assets/sprites/UI/Square/Levels/Default.png" id="5_hafey"]
+[ext_resource type="Texture2D" uid="uid://bf0mmdpfvrv2d" path="res://assets/sprites/UI/Square/Play/Default.png" id="6_m4dp8"]
 [ext_resource type="Texture2D" uid="uid://diassfrgn2j6n" path="res://assets/sprites/UI/Square/Levels/Hover.png" id="6_vhg4b"]
+[ext_resource type="Texture2D" uid="uid://b2cibchccychn" path="res://assets/sprites/UI/Square/Pause/Default.png" id="7_cy3c7"]
+[ext_resource type="Texture2D" uid="uid://sunbf7g8am86" path="res://assets/sprites/UI/Square/Play/Hover.png" id="8_hggks"]
+[ext_resource type="Texture2D" uid="uid://cckvfys757bx8" path="res://assets/sprites/UI/RectangleBox_624x288.png" id="13_rsitf"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_5sttw"]
+font = ExtResource("2_tntnh")
+font_size = 50
 
 [node name="Setting" type="Control"]
 light_mask = 2
+z_index = 100
 texture_filter = 1
 texture_repeat = 1
 layout_mode = 3
@@ -18,8 +28,51 @@ anchors_preset = 0
 size_flags_horizontal = 8
 mouse_default_cursor_shape = 2
 script = ExtResource("1_2onwm")
+orientation = 1
 
-[node name="HBoxContainer2" type="PanelContainer" parent="."]
+[node name="Node" type="Node" parent="."]
+
+[node name="Pause" type="Control" parent="Node"]
+process_mode = 2
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ColorRect" type="ColorRect" parent="Node/Pause"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.309804, 0.309804, 0.309804, 0.501961)
+
+[node name="Label" type="Label" parent="Node/Pause"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -31.0
+offset_top = -11.5
+offset_right = 31.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "PAUSED"
+label_settings = SubResource("LabelSettings_5sttw")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Control" type="Control" parent="."]
+process_mode = 3
 self_modulate = Color(1, 1, 1, 0)
 show_behind_parent = true
 layout_direction = 2
@@ -28,16 +81,16 @@ anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -64.0
-offset_bottom = 64.0
+offset_right = -64.0
 grow_horizontal = 0
 
-[node name="VolumeBtn" type="TextureButton" parent="HBoxContainer2"]
+[node name="VolumeBtn" type="TextureButton" parent="Control"]
 light_mask = 2
 texture_filter = 1
 texture_repeat = 1
-clip_contents = true
 custom_minimum_size = Vector2(64, 64)
-layout_mode = 2
+layout_mode = 1
+anchors_preset = -1
 size_flags_horizontal = 0
 size_flags_vertical = 0
 mouse_default_cursor_shape = 2
@@ -46,14 +99,15 @@ texture_normal = ExtResource("2_oakne")
 texture_pressed = ExtResource("3_g6nvb")
 texture_hover = ExtResource("3_lrjit")
 ignore_texture_size = true
-stretch_mode = 0
+stretch_mode = 5
 
-[node name="RatioBtn" type="TextureButton" parent="HBoxContainer2"]
+[node name="RatioBtn" type="TextureButton" parent="Control"]
 light_mask = 2
 texture_filter = 1
 texture_repeat = 1
 custom_minimum_size = Vector2(64, 64)
-layout_mode = 2
+layout_mode = 1
+anchors_preset = -1
 size_flags_horizontal = 4
 size_flags_vertical = 4
 mouse_default_cursor_shape = 2
@@ -62,14 +116,15 @@ button_pressed = true
 texture_normal = ExtResource("4_me0tj")
 texture_pressed = ExtResource("3_g6nvb")
 ignore_texture_size = true
-stretch_mode = 0
+stretch_mode = 5
 
-[node name="InfoBtn" type="TextureButton" parent="HBoxContainer2"]
+[node name="InfoBtn" type="TextureButton" parent="Control"]
 light_mask = 2
 texture_filter = 1
 texture_repeat = 1
 custom_minimum_size = Vector2(64, 64)
-layout_mode = 2
+layout_mode = 1
+anchors_preset = -1
 size_flags_horizontal = 8
 size_flags_vertical = 8
 mouse_default_cursor_shape = 2
@@ -77,7 +132,24 @@ toggle_mode = true
 texture_normal = ExtResource("4_me0tj")
 texture_pressed = ExtResource("3_g6nvb")
 ignore_texture_size = true
-stretch_mode = 0
+stretch_mode = 5
+
+[node name="PauseBtn" type="TextureButton" parent="Control"]
+light_mask = 2
+texture_filter = 1
+texture_repeat = 1
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 1
+anchors_preset = -1
+size_flags_horizontal = 8
+size_flags_vertical = 8
+mouse_default_cursor_shape = 2
+toggle_mode = true
+texture_normal = ExtResource("6_m4dp8")
+texture_pressed = ExtResource("7_cy3c7")
+texture_hover = ExtResource("8_hggks")
+ignore_texture_size = true
+stretch_mode = 5
 
 [node name="SettingBtn" type="TextureButton" parent="."]
 light_mask = 2
@@ -98,109 +170,7 @@ texture_hover = ExtResource("6_vhg4b")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="Poppin" type="Node2D" parent="."]
-scale = Vector2(2.5, 2.5)
-
-[node name="Popup" type="TextureRect" parent="Poppin"]
-texture_filter = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -2195.2
-offset_top = -2150.4
-offset_right = -1584.2
-offset_bottom = -1452.4
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(0.75, 0.75)
-pivot_offset = Vector2(300, 300)
-size_flags_horizontal = 4
-size_flags_vertical = 4
-expand_mode = 1
-stretch_mode = 4
-
-[node name="Volume" type="VBoxContainer" parent="Poppin/Popup"]
-custom_minimum_size = Vector2(500, 0)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -232.0
-offset_top = -20.0
-offset_right = 232.0
-offset_bottom = 20.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 30
-
-[node name="Master" type="HSlider" parent="Poppin/Popup/Volume"]
-layout_mode = 2
-max_value = 1.0
-step = 0.01
-metadata/bus_index = 0
-metadata/busIndex = 0
-
-[node name="Label" type="Label" parent="Poppin/Popup/Volume/Master"]
-layout_mode = 0
-offset_top = -25.0
-offset_right = 164.0
-offset_bottom = 12.0
-theme_override_font_sizes/font_size = 30
-text = "MASTER"
-label_settings = ExtResource("1_tt5mu")
-
-[node name="Music" type="HSlider" parent="Poppin/Popup/Volume"]
-layout_mode = 2
-max_value = 1.0
-step = 0.01
-metadata/bus_index = 1
-metadata/busIndex = 1
-
-[node name="Label" type="Label" parent="Poppin/Popup/Volume/Music"]
-layout_mode = 0
-offset_top = -25.0
-offset_right = 164.0
-offset_bottom = 12.0
-theme_override_font_sizes/font_size = 30
-text = "MUSIC
-"
-label_settings = ExtResource("1_tt5mu")
-
-[node name="SFX" type="HSlider" parent="Poppin/Popup/Volume"]
-layout_mode = 2
-max_value = 1.0
-step = 0.01
-metadata/bus_index = 2
-metadata/busIndex = 2
-
-[node name="Label" type="Label" parent="Poppin/Popup/Volume/SFX"]
-layout_mode = 0
-offset_top = -25.0
-offset_right = 164.0
-offset_bottom = 12.0
-theme_override_font_sizes/font_size = 30
-text = "SFX"
-label_settings = ExtResource("1_tt5mu")
-
-[node name="GameSFX" type="HSlider" parent="Poppin/Popup/Volume"]
-layout_mode = 2
-max_value = 1.0
-step = 0.01
-metadata/bus_index = 3
-metadata/busIndex = 3
-
-[node name="Label" type="Label" parent="Poppin/Popup/Volume/GameSFX"]
-layout_mode = 0
-offset_top = -25.0
-offset_right = 164.0
-offset_bottom = 12.0
-theme_override_font_sizes/font_size = 30
-text = "Game SFX"
-label_settings = ExtResource("1_tt5mu")
+[node name="Poppin" type="Node" parent="."]
 
 [node name="Credit" type="TextureRect" parent="Poppin"]
 texture_filter = 1
@@ -270,8 +240,115 @@ label_settings = ExtResource("1_tt5mu")
 horizontal_alignment = 1
 autowrap_mode = 2
 
+[node name="Volume" type="Control" parent="Poppin"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Popup" type="TextureRect" parent="Poppin/Volume"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("13_rsitf")
+stretch_mode = 4
+
+[node name="Volume" type="VBoxContainer" parent="Poppin/Volume/Popup"]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -232.0
+offset_top = -20.0
+offset_right = 232.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 30
+
+[node name="Master" type="HSlider" parent="Poppin/Volume/Popup/Volume"]
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+metadata/bus_index = 0
+metadata/busIndex = 0
+
+[node name="Label" type="Label" parent="Poppin/Volume/Popup/Volume/Master"]
+layout_mode = 0
+offset_top = -25.0
+offset_right = 164.0
+offset_bottom = 12.0
+theme_override_font_sizes/font_size = 30
+text = "MASTER"
+label_settings = ExtResource("1_tt5mu")
+
+[node name="Music" type="HSlider" parent="Poppin/Volume/Popup/Volume"]
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+metadata/bus_index = 1
+metadata/busIndex = 1
+
+[node name="Label" type="Label" parent="Poppin/Volume/Popup/Volume/Music"]
+layout_mode = 0
+offset_top = -25.0
+offset_right = 164.0
+offset_bottom = 12.0
+theme_override_font_sizes/font_size = 30
+text = "MUSIC
+"
+label_settings = ExtResource("1_tt5mu")
+
+[node name="SFX" type="HSlider" parent="Poppin/Volume/Popup/Volume"]
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+metadata/bus_index = 2
+metadata/busIndex = 2
+
+[node name="Label" type="Label" parent="Poppin/Volume/Popup/Volume/SFX"]
+layout_mode = 0
+offset_top = -25.0
+offset_right = 164.0
+offset_bottom = 12.0
+theme_override_font_sizes/font_size = 30
+text = "SFX"
+label_settings = ExtResource("1_tt5mu")
+
+[node name="GameSFX" type="HSlider" parent="Poppin/Volume/Popup/Volume"]
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+metadata/bus_index = 3
+metadata/busIndex = 3
+
+[node name="Label" type="Label" parent="Poppin/Volume/Popup/Volume/GameSFX"]
+layout_mode = 0
+offset_top = -25.0
+offset_right = 164.0
+offset_bottom = 12.0
+theme_override_font_sizes/font_size = 30
+text = "Game SFX"
+label_settings = ExtResource("1_tt5mu")
+
 [connection signal="tree_exited" from="." to="." method="_on_tree_exited"]
-[connection signal="toggled" from="HBoxContainer2/VolumeBtn" to="." method="_on_volume_btn_toggled"]
-[connection signal="toggled" from="HBoxContainer2/RatioBtn" to="." method="_on_ratio_btn_toggled"]
-[connection signal="toggled" from="HBoxContainer2/InfoBtn" to="." method="_on_info_btn_toggled"]
+[connection signal="toggled" from="Control/VolumeBtn" to="." method="_on_volume_btn_toggled"]
+[connection signal="toggled" from="Control/RatioBtn" to="." method="_on_ratio_btn_toggled"]
+[connection signal="toggled" from="Control/InfoBtn" to="." method="_on_info_btn_toggled"]
+[connection signal="toggled" from="Control/PauseBtn" to="." method="_on_pause_btn_toggled"]
 [connection signal="pressed" from="SettingBtn" to="." method="_on_setting_btn_pressed"]

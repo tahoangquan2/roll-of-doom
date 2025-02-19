@@ -10,14 +10,13 @@ public partial class Player : CanvasLayer
 
 	private Label healthLabel;
 	private Label spiritLabel;
+	private Control pauseMenu;
 
 	private TextureProgressBar healthProgressBar;
 	public override void _Ready()
 	{
 		health=GlobalVariables.health;
 		spirit=GlobalVariables.spirit;
-
-
 
 		healthLabel = GetNode<Label>("TopGui/Container/Health/TxtBox/HealthLabel");
 		spiritLabel = GetNode<Label>("TopGui/Container/Spirit/TxtBox/PointLabel");
@@ -26,16 +25,10 @@ public partial class Player : CanvasLayer
 		GlobalVariables.gv.HealthChanged += update_values;
 		GlobalVariables.gv.SpiritChanged += update_values;
 
+		pauseMenu = GetNode<Control>("Pause");
+
 		update_values();
 	}
-	public void _on_info_toggle_toggled(bool button_pressed)
-	{
-		if (button_pressed) 
-			GetNode<Label>("Info").Show();
-		else
-			GetNode<Label>("Info").Hide();
-	}
-
 	public void update_values() // access though unique name
 	{
 		health=GlobalVariables.health;

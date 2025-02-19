@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://d30ipmxtvmvco" path="res://game/cards/deck.tscn" id="5_frlwn"]
 [ext_resource type="PackedScene" uid="uid://ci580fctofejp" path="res://game/gui/player.tscn" id="6_8bqau"]
 
-[node name="Node2D" type="Node2D"]
+[node name="Game" type="Node2D"]
 process_priority = -1
 script = ExtResource("1_3ktym")
 

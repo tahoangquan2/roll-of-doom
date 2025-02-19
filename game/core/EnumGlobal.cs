@@ -68,4 +68,15 @@ public partial class EnumGlobal : Node
         
     }
 
+    public enum State
+    {
+        MainMenu,
+        PreGame,
+        GameMap,
+        Load,
+        GamePlay,
+        Settings,
+        GameOver
+    }
+
 }
