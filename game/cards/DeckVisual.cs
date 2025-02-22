@@ -4,12 +4,12 @@ using System.Collections.Generic;
 public partial class DeckVisual : Node2D
 {
     [Export] public Texture2D CardBackTexture; // Assign in Inspector
-    private int maxStackSize = 40;  // Max number of cards in visual stack
     [Export] public Vector2 offset = new Vector2(-2.0f, 3.0f); // Spacing between stacked cards
     private int currentDeckSize = 0;
 
     public override void _Ready()
     {
+        Position = new Vector2(-69, -105); // Set position
         if (GetParent() is Deck deck)
         {
             deck.Connect(nameof(Deck.DeckUpdated), Callable.From((int size) => UpdateDeckVisual(size)));
@@ -21,7 +21,7 @@ public partial class DeckVisual : Node2D
 
     private void DrawDeck()
     {
-        for (int i = 0; i < Mathf.Min(currentDeckSize, maxStackSize); i++)
+        for (int i = 0; i < Mathf.Min(currentDeckSize, GlobalVariables.maxStackSize); i++)
         {
             TextureRect cardBack = new TextureRect();
             cardBack.Texture = CardBackTexture;
@@ -40,6 +40,7 @@ public partial class DeckVisual : Node2D
         }
 
         currentDeckSize = newSize;
+        GD.Print("Deck size: " + currentDeckSize);
         DrawDeck();
     }
 

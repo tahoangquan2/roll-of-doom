@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=4 format=3 uid="uid://dg5uiwq3uc8bs"]
+
+[ext_resource type="Texture2D" uid="uid://dggeruqaij3qe" path="res://assets/cards/Details/Backgrounds/Creature/BackgroundCard13.png" id="1_rqi6n"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/choose_to_draw.gd" id="2_ifmtx"]
+[ext_resource type="Script" path="res://game/cards/CardData.cs" id="3_rjed6"]
+
+[resource]
+script = ExtResource("3_rjed6")
+CardName = "Scrying Destiny"
+Cost = 40
+CardType = 2
+Effects = []
+card_script = ExtResource("2_ifmtx")
+Description = "Look though 3 random cards in deck to draw 1."
+CardArt = ExtResource("1_rqi6n")
+ArtOffset = Vector2(0, 0)

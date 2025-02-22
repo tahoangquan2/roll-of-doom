@@ -6,9 +6,10 @@ public partial class DeckManipulationEffect : CardEffect
     // Draw, Discard, Duplicate, ResetDeck are the options
     [Export] public int Amount = 1;
 
-    public override void ApplyEffect(Node2D target)
+    public override bool ApplyEffect(Node2D target)
     {
-        Hand hand = GlobalAccessPoint.hand;
+        Hand hand = GlobalAccessPoint.GetHand();
+        Deck deck = GlobalAccessPoint.GetDeck();
         GD.Print(hand);
         GD.Print(this,$" Applying deck manipulation effect: {DeckEffectType} to {target.Name}.");
         
@@ -21,6 +22,7 @@ public partial class DeckManipulationEffect : CardEffect
 
             case EnumGlobal.enumDeckEffect.Discard:
                 //cardManager.DiscardCards(Amount);
+                hand.startDiscard(Amount);
                 GD.Print($"Discarded {Amount} cards.");
                 break;
 
@@ -30,7 +32,7 @@ public partial class DeckManipulationEffect : CardEffect
                 break;
 
             case EnumGlobal.enumDeckEffect.ShuffleDeck:
-                //cardManager.ShuffleDeck();
+                deck.ShuffleDeck();
                 GD.Print("Shuffled deck.");
                 break;
 
@@ -44,6 +46,12 @@ public partial class DeckManipulationEffect : CardEffect
                 GD.Print("Shuffled hand back into the deck.");
                 break;
 
+            case EnumGlobal.enumDeckEffect.DiscardHand:
+                hand.DiscardHand();
+                GD.Print("Discarded hand.");
+                break;
         }
+
+        return true;
     }
 }

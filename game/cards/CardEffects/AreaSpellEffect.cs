@@ -4,7 +4,7 @@ public partial class AreaSpellEffect : CardEffect
     [Export] public PackedScene SpellEffectPrefab;
     [Export] public float Radius = 100f;
 
-    public override void ApplyEffect(Node2D target)
+    public override bool ApplyEffect(Node2D target)
     {
         if (target is Node2D playArea)
         {
@@ -12,6 +12,9 @@ public partial class AreaSpellEffect : CardEffect
             playArea.AddChild(spellEffect);
             spellEffect.GlobalPosition = playArea.GlobalPosition;
             GD.Print($"Casted {spellEffect.Name} with radius {Radius}");
+
+            return true;
         }
+        return false;
     }
 }

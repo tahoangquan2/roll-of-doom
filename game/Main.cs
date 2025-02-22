@@ -6,7 +6,9 @@ public partial class Main : Node2D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		CallDeferred(nameof(DeferredPrintTree));
+		GlobalAccessPoint.Instance.UpdateReferences();
+		//activate garbage collector
+		GC.Collect();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -16,7 +18,7 @@ public partial class Main : Node2D
 
 	private void DeferredPrintTree()
 	{
-		PrintTree(GetTree().Root, 0);
+		//PrintTree(GetTree().Root, 0);
 	}
 
 	private void PrintTree(Node node, int depth)
@@ -30,6 +32,15 @@ public partial class Main : Node2D
 		foreach (Node child in node.GetChildren())
 		{
 			PrintTree(child, depth + 1);
+		}
+	}
+
+	//input
+	public override void _Input(InputEvent @event)
+	{
+		if (@event.IsActionPressed("ui_filedialog_refresh"))
+		{
+			GetTree().ReloadCurrentScene();			
 		}
 	}
 }

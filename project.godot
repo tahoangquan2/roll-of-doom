@@ -8,6 +8,10 @@
 
 config_version=5
 
+[animation]
+
+warnings/check_invalid_track_paths=false
+
 [application]
 
 config/name="Roll of Doom"
@@ -20,11 +24,13 @@ config/icon="res://icon.svg"
 GlobalAccessPoint="*res://game/core/GlobalAccessPoint.cs"
 EnumGlobal="*res://game/core/EnumGlobal.cs"
 GlobalVariables="*res://game/core/GlobalVariables.cs"
+CardGlobal="*res://game/core/CardGlobal.cs"
 
 [display]
 
 window/size/viewport_width=1920
 window/size/viewport_height=1000
+window/size/initial_position_type=2
 
 [dotnet]
 

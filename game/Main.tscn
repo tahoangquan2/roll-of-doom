@@ -1,22 +1,26 @@
-[gd_scene load_steps=6 format=3 uid="uid://wth47pxkkh7u"]
+[gd_scene load_steps=7 format=3 uid="uid://wth47pxkkh7u"]
 
 [ext_resource type="Script" path="res://game/Main.cs" id="1_3ktym"]
 [ext_resource type="PackedScene" uid="uid://darh3kkm8ew07" path="res://game/cards/card_manager.tscn" id="2_nqpy4"]
 [ext_resource type="PackedScene" uid="uid://dytog6pc71ik4" path="res://game/cards/hand.tscn" id="3_l11hp"]
 [ext_resource type="PackedScene" uid="uid://du3m5tmrky0oq" path="res://game/cards/card_active_zone.tscn" id="5_e70is"]
 [ext_resource type="PackedScene" uid="uid://d30ipmxtvmvco" path="res://game/cards/deck.tscn" id="5_frlwn"]
+[ext_resource type="PackedScene" uid="uid://ci580fctofejp" path="res://game/gui/player.tscn" id="6_8bqau"]
 
-[node name="Node2D" type="Node2D"]
+[node name="Game" type="Node2D"]
+process_priority = -1
 script = ExtResource("1_3ktym")
 
-[node name="CardManager" parent="." instance=ExtResource("2_nqpy4")]
+[node name="Player" parent="." instance=ExtResource("6_8bqau")]
 
 [node name="Hand" parent="." instance=ExtResource("3_l11hp")]
-position = Vector2(916, 1500)
+
+[node name="CardManager" parent="." instance=ExtResource("2_nqpy4")]
+process_mode = 0
 
 [node name="CardActiveZone" parent="." instance=ExtResource("5_e70is")]
-position = Vector2(944, 313)
-scale = Vector2(6, 2)
+position = Vector2(1019, 393)
+scale = Vector2(6.6, 2.2)
 
 [node name="Deck" parent="." instance=ExtResource("5_frlwn")]
 position = Vector2(210, 770)

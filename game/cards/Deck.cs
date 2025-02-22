@@ -1,3 +1,4 @@
+using System;
 using Godot;
 
 public partial class Deck : Node2D
@@ -10,11 +11,10 @@ public partial class Deck : Node2D
     [Signal] public delegate void DeckUpdatedEventHandler(int cardsRemaining);
     [Signal] public delegate void DeckEmptyEventHandler();
 
-    public override void _Ready()
-    { // demo
+    public override void _Ready() { 
         deck = new Godot.Collections.Array<CardData>();
         cardScene = GD.Load<PackedScene>("res://game/cards/card.tscn");
-        cardManager = GlobalAccessPoint.cardManager;
+        cardManager = GetTree().CurrentScene.GetNodeOrNull<CardManager>(GlobalAccessPoint.cardManagerPath);
         
         for (int i = 0; i < deckSize; i++)
         {
@@ -28,14 +28,20 @@ public partial class Deck : Node2D
         }
         EmitSignal(nameof(DeckUpdated), deckSize);
     }
-
     public void SetupDeck( Godot.Collections.Array<CardData> cards)
     {
         deck = cards;
         ShuffleDeck();
     }
-
-    public  Godot.Collections.Array<Card> DrawCards(int amount){
+    public Card DrawCard(int index){
+        if (index < 0 || index >= deck.Count) return null;
+        CardData card = deck[index];deck.RemoveAt(index);
+        EmitSignal(nameof(DeckUpdated), deck.Count);
+        Card newCard=cardManager.createCard(card);
+        newCard.Position = Position;
+        return newCard;
+    }
+    public Godot.Collections.Array<Card> DrawCards(int amount){
         Godot.Collections.Array<Card> drawnCards = new Godot.Collections.Array<Card>();
         amount = Mathf.Clamp(amount, 0, deck.Count);
         for (int i = 0; i < amount; i++)
@@ -54,34 +60,65 @@ public partial class Deck : Node2D
         EmitSignal(nameof(DeckUpdated), deck.Count);
         return drawnCards;
     }
-
-
     public void ShuffleDeck()    {
         deck.Shuffle();
     }
-
     public int GetDeckSize()    {
         return deck.Count;
     }
-
     public void AddCard(CardData card)    {
         deck.Add(card);
         EmitSignal(nameof(DeckUpdated), deck.Count);
     }
-
     public void RemoveCard()    {
         if (deck.Count == 0) return;
         deck.RemoveAt(deck.Count - 1);
         EmitSignal(nameof(DeckUpdated), deck.Count);
     }
-    // on button pressed
-    
+    public Godot.Collections.Array<CardData> GetRandomCard(int amount)    {
+        Godot.Collections.Array<CardData> cardGot = new Godot.Collections.Array<CardData>();
+        for (int i = 0; i < amount; i++)
+        {
+            if (deck.Count == 0) continue;
+
+            int index = GD.RandRange(0, deck.Count-1);
+            CardData card = deck[index];
+            cardGot.Add(card);
+            
+            deck.RemoveAt(index);
+        }
+        EmitSignal(nameof(DeckUpdated), deck.Count);
+
+        return cardGot;        
+    }
+    public int GetCardIndexFromType(EnumGlobal.enumCardType type)    {
+        for (int i = 0; i < deck.Count; i++)
+        {
+            if (deck[i].CardType == type) return i;
+        }
+        return -1;
+    }   
+    public void ShuffleIntoDeck(CardData card)    {
+        deck.Insert(GD.RandRange(0, deck.Count), card);
+        EmitSignal(nameof(DeckUpdated), deck.Count);
+    }
+    public async void ShuffleCardIntoDeck(Godot.Collections.Array<Card> cards)    {
+        GD.Print("Shuffling cards into deck");
+        foreach (Card card in cards)
+        {
+            deck.Insert(GD.RandRange(0, deck.Count), card.GetCardData());   
+            card.canBeHovered = false;
+            card.TransformCard(Position, 0, 0.15f);            
+            await card.FlipCard(false);
+            card.obliterateCard();
+            EmitSignal(nameof(DeckUpdated), deck.Count);            
+        }
+    }
     public void _on_button_pressed()
     {
         Godot.Collections.Array<Card> drawnCards = DrawCards(1);
         foreach (Card card in drawnCards)
         {
-            
         }
         EmitSignal(nameof(DeckUpdated), deck.Count);
     }

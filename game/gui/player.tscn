@@ -1,0 +1,32 @@
+[gd_scene load_steps=4 format=3 uid="uid://ci580fctofejp"]
+
+[ext_resource type="Script" path="res://game/gui/Player.cs" id="1_w7j82"]
+[ext_resource type="PackedScene" uid="uid://cayqj43ene72e" path="res://game/gui/side_menu.tscn" id="2_r37qf"]
+[ext_resource type="PackedScene" uid="uid://r4mtbdq6b4tq" path="res://game/gui/top_gui.tscn" id="3_cfuo1"]
+
+[node name="Player" type="CanvasLayer"]
+script = ExtResource("1_w7j82")
+
+[node name="Pause" type="Control" parent="."]
+process_mode = 2
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="Pause"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.309804, 0.309804, 0.309804, 0.501961)
+
+[node name="SideMenuBig" parent="." instance=ExtResource("2_r37qf")]
+
+[node name="TopGui" parent="." instance=ExtResource("3_cfuo1")]
+offset_bottom = 50.0

@@ -1,0 +1,228 @@
+[gd_scene load_steps=10 format=3 uid="uid://r4mtbdq6b4tq"]
+
+[ext_resource type="Texture2D" uid="uid://bgh2fcq2glqn" path="res://assets/sprites/UI/HealthBarPanel_160x41.png" id="1_7g01q"]
+[ext_resource type="LabelSettings" path="res://assets/fonts/gui_basic_font.tres" id="2_5xr16"]
+[ext_resource type="Texture2D" uid="uid://cxl2svraw3dsj" path="res://assets/sprites/UI/ValueBar_128x16.png" id="3_pf51r"]
+[ext_resource type="Texture2D" uid="uid://byllcush7ax5q" path="res://assets/sprites/UI/ValueRed_120x8.png" id="4_cxo4q"]
+[ext_resource type="Texture2D" uid="uid://ds807dtcefuv2" path="res://assets/sprites/UI/BlackBigCircleBoxWithBorder_27x27.png" id="5_hfw72"]
+[ext_resource type="Texture2D" uid="uid://o3sr0chb2vr6" path="res://assets/sprites/UI/HeartIcons_32x32.png" id="6_7lu2l"]
+[ext_resource type="Texture2D" uid="uid://62t6ctia6pme" path="res://assets/cards/mana_slot.png" id="7_l3n0l"]
+[ext_resource type="PackedScene" uid="uid://dt867ndl8axqy" path="res://game/gui/setting.tscn" id="9_4t5r4"]
+[ext_resource type="Texture2D" uid="uid://cwhnc3x4kmjrf" path="res://assets/sprites/Coin.png" id="9_feks5"]
+
+[node name="TopGui" type="Control"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 3
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+
+[node name="Container" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -282.5
+offset_top = -22.5
+offset_right = 282.5
+offset_bottom = 22.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="Health" type="Control" parent="Container"]
+custom_minimum_size = Vector2(175, 45)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="TxtBox" type="TextureRect" parent="Container/Health"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.06
+anchor_top = 0.713
+anchor_right = 0.689
+anchor_bottom = 0.713
+offset_left = 4.0
+offset_top = -20.085
+offset_right = 12.42
+offset_bottom = 20.915
+grow_vertical = 2
+texture = ExtResource("1_7g01q")
+stretch_mode = 3
+
+[node name="HealthLabel" type="Label" parent="Container/Health/TxtBox"]
+modulate = Color(1, 0.505882, 0.278431, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 0.5
+offset_right = 0.5
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+text = " 50"
+label_settings = ExtResource("2_5xr16")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="Container/Health"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.171
+anchor_top = 0.33
+anchor_right = 0.188
+anchor_bottom = 0.33
+offset_top = -8.0
+offset_right = 128.0
+offset_bottom = 8.0
+grow_vertical = 2
+size_flags_vertical = 4
+value = 75.0
+texture_under = ExtResource("3_pf51r")
+texture_progress = ExtResource("4_cxo4q")
+texture_progress_offset = Vector2(4, 4)
+
+[node name="Round" type="TextureRect" parent="Container/Health"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -20.5
+offset_right = 41.0
+offset_bottom = 20.5
+grow_vertical = 2
+texture = ExtResource("5_hfw72")
+
+[node name="Heart" type="TextureRect" parent="Container/Health/Round"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_7lu2l")
+stretch_mode = 3
+
+[node name="Spirit" type="Control" parent="Container"]
+custom_minimum_size = Vector2(175, 45)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="TxtBox" type="TextureRect" parent="Container/Spirit"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.33
+anchor_top = 0.65
+anchor_right = 0.523
+anchor_bottom = 0.738
+offset_left = -42.75
+offset_top = -16.25
+offset_right = 83.475
+offset_bottom = 20.79
+grow_vertical = 2
+texture = ExtResource("1_7g01q")
+stretch_mode = 3
+
+[node name="PointLabel" type="Label" parent="Container/Spirit/TxtBox"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "300"
+label_settings = ExtResource("2_5xr16")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Round" type="TextureRect" parent="Container/Spirit"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -22.5
+offset_right = 41.0
+offset_bottom = 22.5
+grow_vertical = 2
+texture = ExtResource("5_hfw72")
+stretch_mode = 3
+
+[node name="Mana" type="TextureRect" parent="Container/Spirit/Round"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("7_l3n0l")
+stretch_mode = 3
+
+[node name="Gold" type="Control" parent="Container"]
+custom_minimum_size = Vector2(175, 45)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="TxtBox" type="TextureRect" parent="Container/Gold"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.468
+anchor_top = 0.65
+anchor_right = 0.523
+anchor_bottom = 0.738
+offset_left = -65.9
+offset_top = -18.25
+offset_right = 84.475
+offset_bottom = 22.79
+grow_vertical = 2
+texture = ExtResource("1_7g01q")
+stretch_mode = 3
+
+[node name="GoldLabel" type="Label" parent="Container/Gold/TxtBox"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "1520"
+label_settings = ExtResource("2_5xr16")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Round" type="TextureRect" parent="Container/Gold"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -22.5
+offset_right = 41.0
+offset_bottom = 22.5
+grow_vertical = 2
+texture = ExtResource("5_hfw72")
+stretch_mode = 3
+
+[node name="Coin" type="TextureRect" parent="Container/Gold/Round"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("9_feks5")
+stretch_mode = 3
+
+[node name="Setting" parent="." instance=ExtResource("9_4t5r4")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 0.2
+anchor_right = 1.0
+anchor_bottom = 0.2
+offset_right = -23.04
+grow_horizontal = 0
+orientation = 0

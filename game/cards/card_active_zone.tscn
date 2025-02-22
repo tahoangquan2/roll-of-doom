@@ -17,6 +17,7 @@ script = ExtResource("1_d6sdb")
 shape = SubResource("RectangleShape2D_3u7qw")
 
 [node name="CardSlot" type="Sprite2D" parent="."]
+visible = false
 texture = ExtResource("2_0161m")
 
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]

@@ -30,6 +30,9 @@ public partial class EnumGlobal : Node
 
         ShuffleHand,     // Shuffles all cards in the hand (e.g., Shuffle Hand)
 
+        DiscardHand,     // Discards all cards in the hand (e.g., Hand Wipe)
+
+
 
         // Buff and Debuff (Affect Towers or Player)
         Buff,            // Enhances tower or hero attributes (e.g., Haste, Last Stand)
@@ -51,7 +54,29 @@ public partial class EnumGlobal : Node
         
         ShuffleDeck=enumCardEffect.ShuffleDeck,
         ShuffleCard=enumCardEffect.ShuffleCard,
-        ShuffleHand=enumCardEffect.ShuffleHand
+        ShuffleHand=enumCardEffect.ShuffleHand,
+        DiscardHand=enumCardEffect.DiscardHand
+    }
+
+    public enum HandSelectionPurpose
+    {
+        None,      // Default (no selection),
+        Choose, // Selecting cards for a specific purpose
+        Discard,   // Selecting cards to discard
+        Duplicate, // Selecting a card to duplicate
+        Upgrade,    // Selecting a card to upgrade
+        
+    }
+
+    public enum State
+    {
+        MainMenu,
+        PreGame,
+        GameMap,
+        Load,
+        GamePlay,
+        Settings,
+        GameOver
     }
 
 }

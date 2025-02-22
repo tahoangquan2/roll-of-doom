@@ -1,26 +1,28 @@
 using Godot;
-using System.Linq;
 using System.Threading.Tasks;
 
 public partial class Card : Node2D
 {
     [Export] public CardData cardData { get; set; }
     public bool canBeHovered = true;
-
+    public bool canActivate = true;
+    public bool canBeMoved = true;
     [Signal] public delegate void CardHoveredEventHandler(Card card);
     [Signal] public delegate void CardUnhoveredEventHandler(Card card);
 
     private Label costLbl;
     private Label nameLbl;
-    private Label descriptionLbl;
+    //private Label descriptionLbl;
     private Sprite2D CardTypeIcon;
     private Sprite2D CardArt;
-
     private ShaderMaterial shaderMaterial;
-
-    private readonly float AngleXMax = Mathf.DegToRad(7.0f); // Adjust for rotation limits 
+    private Control display;
+    private AnimationPlayer animPlayer;
+    private CardManager parentManager;
+    private readonly float AngleXMax = Mathf.DegToRad(7.0f); 
     private readonly float AngleYMax = Mathf.DegToRad(7.0f); 
 
+    public Tween cardTween=null;
     public Card()
     {
         cardData = new CardData(); // Ensure initialization
@@ -33,16 +35,18 @@ public partial class Card : Node2D
 
     public override void _Ready()
     {
-        costLbl = GetNode<Label>("SubViewport/CostDisplay/CostLb");
-        nameLbl = GetNode<Label>("SubViewport/CardDisplay/CardFrontBannerDown/NameDisplay/NameLb");
-        descriptionLbl = GetNode<Label>("SubViewport/CardEffectLb");
-        CardTypeIcon = GetNode<Sprite2D>("SubViewport/CardTypeIcon");
-        CardArt = GetNode<Sprite2D>("SubViewport/CardDisplay/CardArt");
-
         var subViewport = GetNode<SubViewport>("SubViewport");
+        
+        costLbl = subViewport.GetNode<Label>("CostDisplay/CostLb");
+        nameLbl = subViewport.GetNode<Label>("CardEffectLb");
+        CardTypeIcon = subViewport.GetNode<Sprite2D>("CardTypeIcon");
+        CardArt = subViewport.GetNode<Sprite2D>("CardDisplay/CardArt");
+        
         var shaderDisplay = GetNode<TextureRect>("Control/TextureRect"); // This will hold the shader
 
         shaderDisplay.Texture = subViewport.GetTexture();shaderDisplay.UseParentMaterial = false;
+        display = GetNode<Control>("Control");
+        animPlayer = GetNode<AnimationPlayer>("AnimationPlayer");        
 
         // Apply the shader material
         if (shaderDisplay.Material is ShaderMaterial mat)
@@ -51,47 +55,47 @@ public partial class Card : Node2D
         }
 
         // Connect card to CardManager
-        CardManager parentManager = GetParent() as CardManager;
-        parentManager?.ConnectCardSignals(this);
+        parentManager = GetParent() as CardManager;
+        parentManager.ConnectCardSignals(this);
 
         UpdateGraphics();
     }
 
-    public void ActivateEffects(Node2D target)
+    public virtual async void ActivateEffects(Node2D target)
     {
-        if (cardData == null) return;
+        if (cardData == null || !canActivate) return;
 
-        if (!string.IsNullOrEmpty(cardData.ScriptFilePath))
-        {
-            // Load and execute the script if assigned
-            Script script = GD.Load<Script>(cardData.ScriptFilePath);
-            if (script != null)
-            {
-                GD.Print($"Executing script: {cardData.ScriptFilePath}");
-                var scriptInstance = new Node();
-                scriptInstance.SetScript(script);
-                AddChild(scriptInstance);
-                scriptInstance.Call("ApplyEffect", target);
-                scriptInstance.QueueFree(); // Remove script node after execution
-            }
-            else
-            {
-                GD.PrintErr($"Script at {cardData.ScriptFilePath} not found.");
-            }
+        if (cardData.card_script!=null)
+        {            
+            var scriptInstance = new Node();
+            scriptInstance.SetScript(cardData.card_script);
+            AddChild(scriptInstance);
+            scriptInstance.Call("ApplyEffect", target); // Execute the effect then kill the card from the script                
         }
         else if (cardData.Effects != null)
         {
             foreach (var effect in cardData.Effects)
             {
-                GD.Print($"Applying effect: {effect}");
-                effect.ApplyEffect(target);
+                if (effect != null)
+                {
+                    bool effectFinished = await EffectExecution(effect, target);
+                    if (!effectFinished) break; // Stop if effect fails
+                }
             }
-        }
 
-        KillCard();
+            await ToSignal(GetTree(), "process_frame"); // Ensure frame update before deletion
+            KillCard();
+        }        
     }
 
-
+    private async Task<bool> EffectExecution(CardEffect effect, Node2D target)
+    {
+        if (effect == null) return false;
+        bool result = effect.ApplyEffect(target);
+        
+        await ToSignal(GetTree(), "process_frame"); // Allow processing between effects
+        return result;
+    }
 
     private void UpdateGraphics()
     {
@@ -99,9 +103,7 @@ public partial class Card : Node2D
 
 		costLbl.Text = cardData.Cost.ToString();
 		nameLbl.Text = cardData.CardName;
-		descriptionLbl.Text = cardData.Description.ToString();
         CardArt.Texture = cardData.CardArt;
-        // Set the card type icon
         switch (cardData.CardType)
         {
             case EnumGlobal.enumCardType.Tower:
@@ -119,8 +121,7 @@ public partial class Card : Node2D
         }
     }  
 
-    public void Shadering(Vector2 mousePos) 
-    {
+    public void Shadering(Vector2 mousePos) {
         if (shaderMaterial == null) return;
 
         Vector2 size = GlobalVariables.cardSize;
@@ -152,18 +153,60 @@ public partial class Card : Node2D
         EmitSignal(nameof(CardUnhovered), this);
     }
 
-    public async void KillCard()
+    public async void BurnCard() 
+    { 
+        await AnimateAndDestroy(CardGlobal.GetBurnMaterial(), "card_dissolve_or_burn");
+    }
+
+    public async void KillCard() 
+    { 
+        await AnimateAndDestroy(CardGlobal.GetDissolveMaterial(), "card_dissolve_or_burn");
+    }
+
+    private async Task AnimateAndDestroy(ShaderMaterial material, string animationName)
     {
-        await PlayDissolveAnimation();
-        GetParent().RemoveChild(this);
+        _on_area_2d_mouse_exited();  // Ensure mouse exit state
+
+        display.Material = material; animPlayer.SpeedScale = (float)GD.RandRange(0.95f, 1.0f);
+        animPlayer.Play(animationName);
+        await ToSignal(animPlayer, "animation_finished");
+
+        obliterateCard(); 
+    }
+
+    public void obliterateCard() {       
+        parentManager.checkChange(this); 
         QueueFree();
     }
 
-    public async Task PlayDissolveAnimation()
-    {
-        var animPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
 
-        animPlayer.Play("card_dissolveOrBurn"); // Ensure animation name matches
+    public async Task FlipCard(bool flipUp=false)    {
+        if (flipUp) animPlayer.PlayBackwards("card_flip"); 
+        else animPlayer.Play("card_flip"); 
         await ToSignal(animPlayer, "animation_finished"); // Wait for the animation to end
+    }
+
+    public void TransformCard(Vector2 targetPosition, float targetRotation, float duration){
+		if (cardTween!= null && cardTween.IsRunning())
+		{
+			cardTween.Kill();
+			cardTween = null;
+		}
+		cardTween = GetTree().CreateTween().SetLoops(1);
+
+        if (!Position.IsEqualApprox(targetPosition)) 
+            cardTween.TweenProperty(this, "position", targetPosition, duration).SetEase(Tween.EaseType.Out);
+
+        cardTween.TweenProperty(this, "rotation_degrees", targetRotation, duration).SetEase(Tween.EaseType.OutIn);
+
+        cardTween.Finished += () => 
+        {
+            cardTween.Kill();  // Stop animation (optional)
+            cardTween = null;  // Remove reference
+        };
+    }
+
+    public CardData GetCardData()    {
+        return cardData;
     }
 }

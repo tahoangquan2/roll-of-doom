@@ -5,14 +5,21 @@ public partial class CardManager : Node2D
 	public Card card_being_dragged = null;
 	public Card card_being_hovered = null;
 	public Card selected_card = null;
-	private Tween tween = null;
-	public bool isProcessingHover = false;
+	private bool isProcessingHover = false;
 	private AudioStreamPlayer2D audioPlayer;	
     private PackedScene cardScene=null;	
+	private Hand hand=null;
+	private bool Locked =false; // if true, no card can be selected or dragged
 	[Signal] public delegate void CardPushupEventHandler(Card card,bool isHovered);
 	[Signal] public delegate void CardUnhandEventHandler(Card card);
+	[Signal] public delegate void CardSelectEventHandler(Card card);
 	public override void _Input(InputEvent @event)
-	{
+	{	if (Locked) return;
+		if (hand is not null && hand.isSelecting) {
+			HandleSelectionInput(@event, hand);
+			return;			
+		}		
+
 		if (@event is InputEventMouseButton mouseButton)        {
 			if (mouseButton.ButtonIndex == MouseButton.Left)
 			{
@@ -41,7 +48,7 @@ public partial class CardManager : Node2D
 
 		if (@event is InputEventMouseMotion mouseMotion)
 		{
-			if (card_being_dragged != null){
+			if (card_being_dragged != null && card_being_dragged.canBeMoved){
 				card_being_dragged.Position += mouseMotion.Relative;
 			} else 
 			if (card_being_hovered != null){
@@ -49,12 +56,23 @@ public partial class CardManager : Node2D
 			}
 		}
 	}
-	public override void _Ready()
+	private void HandleSelectionInput(InputEvent @event, Hand hand)
+	{
+		if (@event is InputEventMouseButton mouseButton)
+		{
+			if (mouseButton.ButtonIndex == MouseButton.Left && mouseButton.Pressed)
+			{
+				Card card = RaycastCheckForCard();
+				if (card != null) hand.SelectCard(card);
+			}
+		}
+	}
+	public override void _Ready() 
 	{	cardScene = GD.Load<PackedScene>("res://game/cards/card.tscn");
 		audioPlayer = GetNode<AudioStreamPlayer2D>("AudioPlayer");
+		hand = GetTree().CurrentScene.GetNodeOrNull<Hand>(GlobalAccessPoint.handPath);
 	}
-	private void SelectCard(Card card)
-	{
+	private void SelectCard(Card card) {
 		if (selected_card == card) {
 			DeselectCard();
 			return;
@@ -62,28 +80,28 @@ public partial class CardManager : Node2D
 		DeselectCard();
 		selected_card = card;
 		EmitSignal(nameof(CardPushup), card, true);	
+		EmitSignal(nameof(CardSelect), card);
 	}
 	private void DeselectCard()
 	{
 		if (selected_card != null){
 			selected_card.ResetShader();
 			if (card_being_dragged != selected_card) EmitSignal(nameof(CardPushup), selected_card, false);	
-			selected_card = null;
+			if (card_being_hovered != selected_card) selected_card.Scale = new Vector2(1,1);
+			selected_card = null;			
 		}
 	}
 	public void ConnectCardSignals(Card card)
 	{card.CardHovered += _on_card_hovered;   card.CardUnhovered += _on_card_unhovered;}
 	public void _on_card_hovered(Card card)
-	{
-		if (isProcessingHover) return;
+	{	if (isProcessingHover) return;
 
 		isProcessingHover = true;
 		card_being_hovered = card;
 		CardHoveredEffect(card);
 	}
 	public void _on_card_unhovered(Card card)
-	{
-		isProcessingHover = false;
+	{	isProcessingHover = false;
 
 		Card newCard = RaycastCheckForCard();
 		if (newCard!=null) {
@@ -96,16 +114,16 @@ public partial class CardManager : Node2D
 	}
 	private void CardHoveredEffect(Card card, bool isHovering = true)
 	{
-		if (card_being_dragged != null || card==selected_card) return;
+		if (card_being_dragged != null || card==selected_card || hand.isSelecting) return;
 
-		float targetScale = isHovering ? 1.05f : 1.0f;
+		float targetScale = isHovering ? 1.2f : 1.0f;
 
 		if (card.Scale.X != targetScale) 
 		{
 			card.Scale = new Vector2(targetScale, targetScale);	
 
 			EmitSignal(nameof(CardPushup), card, isHovering);	
-			audioPlayer.Play();					
+			cardSound();			
 		}
 	}
 	private void StartDrag(Card card)
@@ -116,8 +134,6 @@ public partial class CardManager : Node2D
 		card.Rotation = 0;
 		card.ZIndex = 11;
 		card.ResetShader();
-
-		if (tween != null && tween.IsRunning()) tween.Kill();
 	}
 	private void EndDrag()
 	{
@@ -127,14 +143,21 @@ public partial class CardManager : Node2D
 		
 		cardEffectZone zone = RaycastCheckForZone();
 		if (zone != null){
-			EmitSignal(nameof(CardUnhand), tmpCard);
-			card_being_hovered = null;
-			tmpCard.ResetShader();
-			zone.activeCard(tmpCard,GetGlobalMousePosition()-zone.GlobalPosition);
+			if (GlobalVariables.spirit >= tmpCard.GetCardData().Cost)
+			{
+				EmitSignal(nameof(CardUnhand), tmpCard);
+				card_being_hovered = null;
+				tmpCard.ResetShader();
+				zone.activeCard(tmpCard,GetGlobalMousePosition()-zone.GlobalPosition);
+				GD.Print("cost: "+tmpCard.GetCardData().Cost);
+				GlobalVariables.ChangeSpirit(-tmpCard.GetCardData().Cost);
+				GD.Print("spirit: "+GlobalVariables.spirit);
+			}
+			
 		}		
 	}
 	public Card createCard(CardData cardData)
-	{
+	{	GD.Print("Creating card");
 		Card newCard = (Card)cardScene.Instantiate();
         AddChild(newCard);
         newCard.SetupCard(cardData);
@@ -155,7 +178,6 @@ public partial class CardManager : Node2D
 		}
 		return null;
 	}
-	// Get the card with the highest ZIndex from a list of collision results
 	public static Card GetCardWithHighestZIndex(Godot.Collections.Array<Godot.Collections.Dictionary> cards)
 	{
 		if (cards.Count == 0) return null; 
@@ -177,4 +199,13 @@ public partial class CardManager : Node2D
 
 		return highestCard;
 	}
+	public void checkChange(Card card) {
+		if (card_being_hovered == card) card_being_hovered = null;
+		if (card_being_dragged == card) card_being_dragged = null;
+		if (selected_card == card) selected_card = null;
+		RemoveChild(card);
+	}
+	public void cardSound() {audioPlayer.Play();}
+	public void Lock() {Locked = true;}
+	public void Unlock() {Locked = false;}
 }

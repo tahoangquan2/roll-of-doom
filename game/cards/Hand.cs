@@ -6,36 +6,45 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
 {
     private int HandRadius = 750;
     private int cardRadius ;
-    private float AngleLimit = 65;
+    private float AngleLimit = 70;
     private float MaxCardSpreadAngle = 10;
     [Export] public int MaxHandSize { get; set; }=10;
      // max cards in hand
-
-    private List<Card> hand = new List<Card>(); // Stores all cards
+    private Godot.Collections.Array<Card> hand = new Godot.Collections.Array<Card>(); // Stores all cards
     private CardManager cardManager; // 
-
     private Deck deck;
+    private Player player;
+    private Control selectionFilter;
+    private Godot.Collections.Array<Card> selectedCards = new Godot.Collections.Array<Card>();
+    public bool isSelecting = false;
+    public bool isChanging = false;
     private CollisionShape2D collisionShape;
-    private int currentSelectedCardIndex = -1;
-    private Dictionary<Card, Tween> activeTweens = new Dictionary<Card, Tween>(); 
 
-    public override void _Ready()
-    {
+    [Signal] public delegate void ActionCompletedEventHandler(Godot.Collections.Array<Card> selectedCards);
+    [Signal] public delegate void ActionCancelledEventHandler();
+
+    EnumGlobal.HandSelectionPurpose currentPurpose = EnumGlobal.HandSelectionPurpose.None;
+    public override void _Ready() {
         collisionShape = GetNode<CollisionShape2D>("CollisionShape2D");
-
-        // Get CardManager and its child cards
-        cardManager = GetParent().GetNode<CardManager>("CardManager");
-        deck = GetParent().GetNode<Deck>("Deck");
-        ConnectCardMagnagerSignals();
+        selectionFilter = GetNode<Control>("SelectionFilter");
         cardRadius = HandRadius-200;
-    }
 
+        cardManager = GetTree().CurrentScene.GetNodeOrNull<CardManager>(GlobalAccessPoint.cardManagerPath);
+        deck = GetTree().CurrentScene.GetNodeOrNull<Deck>(GlobalAccessPoint.deckPath);
+        ConnectCardMagnagerSignals();
+
+        for (int i=0;i<cardManager.GetChildCount()-1;i++){
+            if (cardManager.GetChild(i) is Card card){
+                AddCard(card);
+            }
+        }
+    }
     public void AddCard(Card card)
     {
         if (card == null || hand.Contains(card)) return;
         if (hand.Count >= MaxHandSize) 
         {
-            card.KillCard();
+            card.BurnCard();
             return;
         }
         hand.Add(card);
@@ -74,38 +83,20 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
         AnimateCardTransform(card, GetCardAngle(index, hand.Count));
         card.ZIndex = index + 1; 
     }
-
     private void AnimateCardTransform(Card card, float angleInDegrees)
     {
         Vector2 targetPosition = Position + GetCardPosition(angleInDegrees);
         float targetRotation = angleInDegrees + 90;
         float tweenDuration = 0.25f; // Duration of the tween
 
-        if (activeTweens.TryGetValue(card, out Tween existingTween) && existingTween.IsRunning())
-        {
-            existingTween.Kill();
-        }
-
-        Tween tween = GetTree().CreateTween();
-        activeTweens[card] = tween; // Store it in the dictionary
-
-        // Animate movement & rotation
-        tween.TweenProperty(card, "position", targetPosition, tweenDuration).SetEase(Tween.EaseType.Out);
-        tween.TweenProperty(card, "rotation_degrees", targetRotation, tweenDuration).SetEase(Tween.EaseType.Out);
+        card.TransformCard( targetPosition, targetRotation, tweenDuration);
     }
     private void AnimateCardHover(Card card)
     {
         float angle = card.Rotation;
         Vector2 targetPosition = Position + GetCardPosition(Mathf.RadToDeg(angle)-90) + new Vector2(0,-50).Rotated(angle);
 
-        if (card.Position.IsEqualApprox(targetPosition)) return;
-
-        if (activeTweens.ContainsKey(card) && activeTweens[card].IsRunning()) activeTweens[card].Kill();
-
-        Tween tween = GetTree().CreateTween();
-        activeTweens[card] = tween;
-
-        tween.TweenProperty(card, "position", targetPosition, 0.15f).SetEase(Tween.EaseType.Out);
+        card.TransformCard(targetPosition, Mathf.RadToDeg(angle), 0.15f);
     }
     private Vector2 GetCardPosition(float angleInDegrees){
         return new Vector2(0,-cardRadius).Rotated(Mathf.DegToRad(angleInDegrees+90));
@@ -117,32 +108,114 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
         return -(cardSpread * (totalCards - 1)) / 2 - 90 + (cardSpread * index);
     }
     public async void drawFromDeck(int amount){
-        Godot.Collections.Array<Card> drawnCards = deck.DrawCards(amount);
-
-        GD.Print(drawnCards);
-        
-        // slow down beetwen each card
-        for (int i = 0; i < amount; i++) if (drawnCards[i] != null) 
-        {
+        Godot.Collections.Array<Card> drawnCards = deck.DrawCards(amount);  
+        cardManager.Lock();      
+        for (int i = 0; i < amount; i++) if (drawnCards[i] != null) {            
             AddCard(drawnCards[i]);
-            await ToSignal(GetTree().CreateTimer(0.7f), "timeout");
+            cardManager.cardSound();
+            await drawnCards[i].FlipCard(true);
+        }
+        cardManager.Unlock();
+    }
+    public void drawFromDeckwithIndex(int index){
+        Card drawnCard = deck.DrawCard(index);
+        if (drawnCard != null) {AddCard(drawnCard);cardManager.cardSound();}
+    }
+    public void SelectCard(Card card)    {
+        if (!isSelecting) return;
+
+        if (selectedCards.Contains(card))
+        {
+            selectedCards.Remove(card);
+            _on_card_pushup(card,false);
+        }
+        else if (selectedCards.Count < requiredSelectionCount)
+        {
+            selectedCards.Add(card);
+            _on_card_pushup(card,true);
+        }
+
+        if (selectedCards.Count == requiredSelectionCount)
+        {
+            ApplySelectionEffect();
         }
     }
-    public override void _Process(double delta)
-    {
-        if (collisionShape.Shape is CircleShape2D circle){
+    private void ApplySelectionEffect()    {
+        if (currentPurpose == EnumGlobal.HandSelectionPurpose.Discard)
+        {
+            foreach (Card card in selectedCards)
+            {
+                RemoveCard(hand.IndexOf(card));
+                card.BurnCard();
+            }
+            selectedCards.Clear();
+        } else
+        if (currentPurpose == EnumGlobal.HandSelectionPurpose.Duplicate)
+        {
+            foreach (Card card in selectedCards)
+            {
+                Card duplicate = cardManager.createCard(card.cardData);
+                AddCard(duplicate);
+            }
+        }
+        
+        EmitSignal(nameof(ActionCompleted), selectedCards);   
+        selectedCards.Clear();
+        ExitSelectionMode();
+    }
+    public void DiscardHand(){
+        foreach (Card card in hand)
+        {
+            card.BurnCard();
+        }
+        hand.Clear();
+    }
+    public async void ShuffleFromHandtoDeck(Godot.Collections.Array<int> indexes){ // list of indexes
+        if (isSelecting) return;
+        isChanging = true;
+        foreach (int index in indexes){
+            if (index >= 0 && index < hand.Count){
+                deck.ShuffleIntoDeck(hand[index].cardData);
+            }
+        }
+        
+        Vector2 deckPosition = deck.Position + Mathf.Min(GlobalVariables.maxStackSize, deck.GetDeckSize()) * new Vector2(-2.0f, 3.0f);
+
+        for (int i = indexes.Count - 1; i >= 0; i--){
+            int index = indexes[i];
+            GD.Print(index);
+            if (index >= 0 && index < hand.Count){
+                Card card = hand[index];
+                card.canBeHovered = false;
+                
+                card.TransformCard(deckPosition, 0, 0.15f);                
+
+                RemoveCard(index);
+                await card.FlipCard(false);
+                card.obliterateCard();
+            }
+        }
+        isChanging = false;
+    }
+    public void ShuffleHandtoDeck(){ 
+        if (isSelecting) return;
+
+        Godot.Collections.Array<int> indexes = new Godot.Collections.Array<int>();
+        for (int i = 0;i<hand.Count;i++) indexes.Add(i);
+        ShuffleFromHandtoDeck(new Godot.Collections.Array<int>(indexes));
+    }
+    public override void _Process(double delta)    {
+        if (collisionShape.Shape is CircleShape2D circle){ // this for the hand circle shape
             if (circle.Radius != HandRadius){
                 circle.Radius = HandRadius;
             }
         }
     }
-    private void _on_card_pushup(Card card,bool isHovered)
-    {
+    private void _on_card_pushup(Card card,bool isHovered)    {
         if (card == null) return;
 
         int index = hand.IndexOf(card);
-        if (index != -1)
-        {
+        if (index != -1){
             if (isHovered)
             {
                 AnimateCardHover(card);
@@ -159,15 +232,40 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
     public void ConnectCardMagnagerSignals()
     {   cardManager.CardPushup += _on_card_pushup;cardManager.CardUnhand += _on_card_unhand;}
     public void _on_mouse_entered()
-    {   if (cardManager.selected_card != null) return;
-        HandRadius = 900;cardRadius = HandRadius-200;RepositionCards();
-    }
+    {   setHandRadius(900);}
     public void _on_mouse_exited()
-    {   if (cardManager.selected_card != null) return;
-        HandRadius = 750;cardRadius = HandRadius-200;RepositionCards();
-    }    
-    public void _input(InputEvent @event)
-    {//action "Action" from input map, this is for testing
+    {   setHandRadius(750);}    
+    private void setHandRadius(int radius){
+        if (cardManager.selected_card != null || isSelecting) return;
+        HandRadius = radius;cardRadius = HandRadius-200;
+        RepositionCards();
+    }
+    private bool StartSelectionMode(int numToSelect, EnumGlobal.HandSelectionPurpose purpose){
+        if (hand.Count < numToSelect) return false;
+        selectionFilter.Visible = true;
+
+        cardManager.selected_card = null;
+        setHandRadius(900);
+
+        isSelecting= true;
+        requiredSelectionCount = numToSelect;
+        currentPurpose = purpose;
+        selectedCards.Clear();
+        return true;
+    }
+    private void ExitSelectionMode(){
+        selectionFilter.Visible = false;
+        isSelecting = false;
+        selectedCards.Clear();
+        currentPurpose = EnumGlobal.HandSelectionPurpose.None;
+        EmitSignal(nameof(ActionCancelled));
+    }
+    public bool startDiscard(int numToSelect){
+        return StartSelectionMode(numToSelect, EnumGlobal.HandSelectionPurpose.Discard);
+    }
+    int requiredSelectionCount = 0;
+    public void _input(InputEvent @event){//action "Action" from input map, this is for testing
+    if (@event is InputEventMouseMotion) return;
         if (@event.IsActionPressed("Action"))
         {
             drawFromDeck(3);
@@ -175,8 +273,14 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
 
         if (@event.IsActionPressed("Action2"))
         {
-            Card card = RemoveCard(0);
-            card.KillCard();
+            GlobalVariables.ChangeHealth(-10);
         }
+    }
+    public void _on_button_pressed(){
+        ExitSelectionMode();
+        setHandRadius(750);
+    }
+    public int GetHandSize(){
+        return hand.Count;
     }
 }
