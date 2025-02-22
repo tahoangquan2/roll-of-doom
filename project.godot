@@ -36,6 +36,10 @@ window/size/initial_position_type=2
 
 project/assembly_name="Roll of Doom"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/gaea/plugin.cfg")
+
 [input]
 
 Action={
