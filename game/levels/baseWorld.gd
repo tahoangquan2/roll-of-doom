@@ -3,41 +3,27 @@ extends TileMapLayer
 # Map dimensions
 const MAP_WIDTH = 100
 const MAP_HEIGHT = 100
-const SCALE = 0.05  # Controls the smoothness of biome transitions
+const SCALE = 0.07  # Controls the smoothness of biome transitions
 
 # Biome and Tile Type Mapping
 var biome_noise = FastNoiseLite.new()
-var tile_noise = FastNoiseLite.new()
 
 # Biome Thresholds (the chance of a biome being selected is from its threshold to the last biome's threshold)
 # one biome can appear in multiple thresholds
 # from -1 to 1
-# var biome_thresholds: = {
-# 	-0.8: "Ocean",
-# 	-0.6: "Sea",      
-# 	-0.4: "Plain", 
-# 	-0.2: "Forest",   
-# 	0.0: "Desert",
-# 	0.3: "Badlands",
-# 	0.5: "Plain",
-# 	0.7: "Snow"
-# }
+# Ocean, Sea, Plain, Swamp, Forest, Desert, Badlands,Plain, Taiga, Tundra, 
+# transitions tile: Desert-Badlands, Plain-Desert, Plain-Taiga, Badlands-Taiga
 
-var biome_thresholds = {
-	-0.6: "Ocean",
-	-0.2: "Sea",      
-	0.2: "Plain", 
-	0.5: "Forest",   
-	0.6: "Plain",
-	0.7: "Snow"
-}
 
-var tileType_thresholds = {	
-	0.0 : "Grass",
-	0.4 : "Forest",
-	0.45 : "Water",
-	0.7 : "Stone",
-	0.9 : "Mountain"
+var biome_thresholds = { # put in array to allow multiple biomes in the same threshold
+	-0.95: ["Ocean"],
+	-0.6: ["Sea"],
+	-0.5: ["Plain"],
+	-0.45: ["Swamp"],
+	-0.3: ["Desert"],
+	-0.2: ["Badlands"],
+	0.3: ["Plain"],
+	1.0: ["Taiga"]
 }
 
 # dict of tile atlas coordinates for each biome and tile type
@@ -55,6 +41,7 @@ func _ready():
 	print(source.get_tiles_count())
 
 	map_all_tiles()
+	make_thresholds_transitions()
 	generate_map()
 
 	for i in 3:
@@ -77,25 +64,57 @@ func map_all_tiles():
 						var tile_data:TileData = source.get_tile_data(tile_pos, 0)
 						if tile_data:
 							var biome = tile_data.get_custom_data("Biome")
-							var tile_type = tile_data.get_custom_data("TileType")
-							var key = biome + "_" + tile_type  # Unique key
+							var key = biome   # Unique key
 
 							if not tile_map.has(key):
 								tile_map[key] = []
 
 							for k in tile_data.probability:
 								tile_map[key].append(tile_pos)
-	print("Tile Lookup Table:", tile_map)  # Debug check
+	#print("Tile Lookup Table:", tile_map)  # Debug check
+
+func make_thresholds_transitions():
+	# look for transitions in to add to biome_thresholds
+	# transitions tile: Desert-Badlands, Plain-Desert, Plain-Taiga, Badlands-Taiga, 
+	# transitions should be 0.05+this biome biome if the next has a transition with it
+	pass
+
+	var transitions = {
+		"Desert": ["Badlands","Plain"],
+		"Plain": ["Desert","Taiga"],
+		"Badlands": ["Taiga","Desert"],
+		"Taiga": ["Plain"]
+	}
+
+	# go linearly through the thresholds from the start
+	# if the next biome has a transition with the current biome, add a threshold in the middle of the two
+
+	var current_thresholds = biome_thresholds.keys()
+	
+	for i in range(current_thresholds.size()-1):
+		var current_biome = biome_thresholds[current_thresholds[i]]
+		var next_biome = biome_thresholds[current_thresholds[i+1]]
+
+		if transitions.has(current_biome) and transitions[current_biome].has(next_biome):
+			var new_threshold = current_thresholds[i]+0.05
+			var new_biome = current_biome+"-"+next_biome
+
+			if new_biome not in tile_map.keys():
+				new_biome = next_biome+"-"+current_biome
+
+			biome_thresholds[new_threshold] = new_biome
+
+	# check if the next biome has a transition with the current biome
+	
+
+
 
 
 # Configure Perlin Noise settings
 func configure_noise():
 	biome_noise.seed = randi()
 	biome_noise.frequency = SCALE
-	biome_noise.noise_type = FastNoiseLite.TYPE_SIMPLEX
-
-	tile_noise.seed = randi()
-	tile_noise.frequency = SCALE * 2.5  # Smaller-scale variations for tile types
+	biome_noise.noise_type = FastNoiseLite.TYPE_VALUE
 
 # Generate the world using noise
 func generate_map():
@@ -104,17 +123,15 @@ func generate_map():
 
 	for x in range(MAP_WIDTH):
 		for y in range(MAP_HEIGHT):
-			var distance:float = center.distance_to(Vector2(x, y))/max_distance
-			var noise_value = biome_noise.get_noise_2d(x, y)
+			var distance:float = center.distance_to(Vector2(x, y))/max_distance # Normalize distance
+			var noise_value = biome_noise.get_noise_2d(x, y) 
 
-			var falloff:float = pow(distance, 2)  
+			var falloff:float = distance*1.2
+			  # 1 or -1 depend on is the x> or < center
 			noise_value = noise_value-falloff  # Smooth out the noise
 
 			var biome = determine_biome(noise_value)
-
-			# Get a valid tile that matches this biome
-			noise_value = tile_noise.get_noise_2d(x, y)
-			var tile_coords = get_tile_for_biome(biome,noise_value)
+			var tile_coords = get_tile_for_biome(biome)
 			
 			set_cell(Vector2i(x, y), 3, tile_coords)
 
@@ -122,20 +139,12 @@ func generate_map():
 func determine_biome(noise_value: float) -> String:
 	for threshold in biome_thresholds.keys():
 		if noise_value <= threshold:
-			return biome_thresholds[threshold]
+			return biome_thresholds[threshold][0]#.pick_random()
 	return "Plain"  # Default fallback
 
-func determine_tile_type(noise_value: float) -> String:
-	for threshold in tileType_thresholds.keys():
-		if noise_value <= threshold:
-			return tileType_thresholds[threshold]
-	return "Grass"  # Default fallback
-
 # Get a valid tile that matches a given biome
-func get_tile_for_biome(biome: String,noise_value: float) -> Vector2i:
-	var tileType = determine_tile_type(noise_value)
-	#print(" TileType: ",tileType)
-	var tiles = get_used_cells_by_biome(biome, tileType)
+func get_tile_for_biome(biome: String) -> Vector2i:
+	var tiles = get_used_cells_by_biome(biome)
     
 	if tiles.is_empty():
 		return Vector2i(0, 0)  # Fallback tile
@@ -143,21 +152,17 @@ func get_tile_for_biome(biome: String,noise_value: float) -> Vector2i:
 		return tiles.pick_random()  # Pick a random matching tile
 
 # Retrieve all tiles matching a given biome from the TileSet
-func get_used_cells_by_biome(biome: String,tileType:String) -> Array:
+func get_used_cells_by_biome(biome: String) -> Array:
 
 	var matching_tiles = []	
 
-	var key = biome + "_" + tileType
-	if biome=="Sea":
-		key = "Sea"
+	var key = biome 
 
 	if tile_map.has(key):
 		matching_tiles = tile_map[key]
 
 	if matching_tiles.is_empty():
-		key = biome + "_"
-		if tile_map.has(key):
-			matching_tiles = tile_map[key]
-		return matching_tiles
+		key = "Sea"
+		matching_tiles = tile_map[key]
 
 	return matching_tiles
