@@ -53,7 +53,6 @@ func setUp():
 		if i.visible:
 			count+=1
 			sizeEach=i.size
-	print(count)
 
 	var j:int=0	
 
@@ -64,7 +63,6 @@ func setUp():
 			i.anchor_top=0.0+(1.0/count)*j
 			i.anchor_bottom=0.0+(1.0/count)*(j+1)
 			j+=1
-			print( i.anchor_left,i.anchor_right,i.anchor_top,i.anchor_bottom)
 
 	
 func _on_value_changed(value:float,bus_index:int):

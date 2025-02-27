@@ -16,7 +16,7 @@ var biome_noise = FastNoiseLite.new()
 
 
 var biome_thresholds = { # put in array to allow multiple biomes in the same threshold
-	-0.95: ["Ocean"],
+	-0.98: ["Ocean"],
 	-0.6: ["Sea"],
 	-0.5: ["Plain"],
 	-0.45: ["Swamp"],
@@ -32,20 +32,11 @@ var biome_thresholds = { # put in array to allow multiple biomes in the same thr
 # Runs at startup
 func _ready():
 	configure_noise()
-
 	tile_set.get_source(3)
-
-
-	var source:TileSetAtlasSource = tile_set.get_source(3)
-
-	print(source.get_tiles_count())
 
 	map_all_tiles()
 	make_thresholds_transitions()
 	generate_map()
-
-	for i in 3:
-		print(i)
 
 var tile_map:Dictionary = {}  # Dictionary to store (Biome, TileType) → Array [Tile Position]
 
@@ -105,10 +96,6 @@ func make_thresholds_transitions():
 			biome_thresholds[new_threshold] = new_biome
 
 	# check if the next biome has a transition with the current biome
-	
-
-
-
 
 # Configure Perlin Noise settings
 func configure_noise():
@@ -120,14 +107,16 @@ func configure_noise():
 func generate_map():
 	var center:Vector2 = Vector2(MAP_WIDTH / 2.0, MAP_HEIGHT / 2.0)
 	var max_distance:float = center.length()  # Max possible distance	
+	center = Vector2(0,0)
 
-	for x in range(MAP_WIDTH):
-		for y in range(MAP_HEIGHT):
+	# from -map_width/2 to map_width/2
+
+	for x in range(-MAP_WIDTH/2, MAP_WIDTH/2):
+		for y in range(-MAP_HEIGHT/2,MAP_HEIGHT/2):
 			var distance:float = center.distance_to(Vector2(x, y))/max_distance # Normalize distance
 			var noise_value = biome_noise.get_noise_2d(x, y) 
 
-			var falloff:float = distance*1.2
-			  # 1 or -1 depend on is the x> or < center
+			var falloff:float = distance*1.2 # 1 or -1 depend on is the x> or < center
 			noise_value = noise_value-falloff  # Smooth out the noise
 
 			var biome = determine_biome(noise_value)

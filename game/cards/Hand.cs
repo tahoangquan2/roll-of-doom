@@ -179,7 +179,7 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
             }
         }
         
-        Vector2 deckPosition = deck.Position + Mathf.Min(GlobalVariables.maxStackSize, deck.GetDeckSize()) * new Vector2(-2.0f, 3.0f);
+        Vector2 deckPosition = deck.GlobalPosition + Mathf.Min(GlobalVariables.maxStackSize, deck.GetDeckSize()) * new Vector2(-2.0f, 3.0f);
 
         for (int i = indexes.Count - 1; i >= 0; i--){
             int index = indexes[i];

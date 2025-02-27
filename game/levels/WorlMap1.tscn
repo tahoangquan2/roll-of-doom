@@ -1,27 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://b7p303v4b8fnc"]
+[gd_scene load_steps=5 format=3 uid="uid://b7p303v4b8fnc"]
 
 [ext_resource type="Script" path="res://game/levels/worl_map_1.gd" id="1_aecxu"]
 [ext_resource type="TileSet" uid="uid://rbj1v6cj7pq4" path="res://game/levels/WorlMapBaseLayerTileset.tres" id="1_icol3"]
 [ext_resource type="TileSet" uid="uid://b5fv1j4fsgx3f" path="res://game/levels/WorlMapOverLayerTileset.tres" id="2_pirih"]
-[ext_resource type="Script" path="res://game/levels/baseWorld.gd" id="3_edvrc"]
-[ext_resource type="Script" path="res://addons/gaea/generators/2D/noise_generator/noise_generator.gd" id="5_5kfv0"]
-[ext_resource type="Script" path="res://addons/gaea/modifiers/2D/modifier_2d.gd" id="6_cuciw"]
-[ext_resource type="Script" path="res://addons/gaea/generators/2D/noise_generator/noise_generator_settings.gd" id="7_f2qg8"]
-[ext_resource type="Script" path="res://addons/gaea/generators/2D/noise_generator/noise_generator_data.gd" id="8_7xldq"]
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_qg1pj"]
-noise_type = 5
-frequency = 0.05
-
-[sub_resource type="Resource" id="Resource_af8it"]
-resource_name = "Settings"
-script = ExtResource("7_f2qg8")
-tiles = Array[ExtResource("8_7xldq")]([])
-noise = SubResource("FastNoiseLite_qg1pj")
-infinite = false
-world_size = Vector2i(256, 256)
-falloff_enabled = false
-modifiers = Array[ExtResource("6_cuciw")]([])
+[ext_resource type="Script" path="res://game/levels/BaseWorld.cs" id="3_26wnu"]
 
 [node name="WorldMap" type="Node2D"]
 script = ExtResource("1_aecxu")
@@ -29,18 +11,20 @@ script = ExtResource("1_aecxu")
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 texture_filter = 1
 tile_set = ExtResource("1_icol3")
-script = ExtResource("3_edvrc")
+script = ExtResource("3_26wnu")
 
 [node name="TileMapLayer2" type="TileMapLayer" parent="."]
 visible = false
 tile_set = ExtResource("2_pirih")
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(-251, 907)
-zoom = Vector2(1.2, 1.2)
+zoom = Vector2(0.5, 0.5)
+limit_left = -2000
+limit_top = -1000
+limit_right = 2000
+limit_bottom = 1000
+limit_smoothed = true
+position_smoothing_enabled = true
+position_smoothing_speed = 10.0
 drag_horizontal_enabled = true
 drag_vertical_enabled = true
-
-[node name="NoiseGenerator" type="Node" parent="."]
-script = ExtResource("5_5kfv0")
-settings = SubResource("Resource_af8it")

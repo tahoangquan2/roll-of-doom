@@ -29,7 +29,7 @@ public partial class GlobalAccessPoint : Node
         }
 
         handPath = "Hand";
-        deckPath = "Deck";
+        deckPath = "Player/MainControl/DeckControl/Deck";
         cardManagerPath = "CardManager";
         playerPath = "Player";
         gamePlayPath = "GamePlay";
@@ -56,9 +56,9 @@ public partial class GlobalAccessPoint : Node
 
         // Assign new references
         cardManager = root.GetNodeOrNull<CardManager>(cardManagerPath);
-        hand = root.GetNodeOrNull<Hand>(handPath);
-        deck = root.GetNodeOrNull<Deck>(deckPath);
+        hand = root.GetNodeOrNull<Hand>(handPath);        
         player = root.GetNodeOrNull<Player>(playerPath);
+        deck = root.GetNodeOrNull<Deck>(deckPath);
         
         EmitSignal(nameof(ReferencesUpdated));
     }
