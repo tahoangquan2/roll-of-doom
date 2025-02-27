@@ -27,6 +27,10 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
     public override void _Ready() {
         collisionShape = GetNode<CollisionShape2D>("CollisionShape2D");
         selectionFilter = GetNode<Control>("SelectionFilter");
+
+        RemoveChild(selectionFilter);
+        GetParent().GetParent().CallDeferred("add_child", selectionFilter);
+
         cardRadius = HandRadius-200;
 
         cardManager = GetTree().CurrentScene.GetNodeOrNull<CardManager>(GlobalAccessPoint.cardManagerPath);
@@ -85,7 +89,7 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
     }
     private void AnimateCardTransform(Card card, float angleInDegrees)
     {
-        Vector2 targetPosition = Position + GetCardPosition(angleInDegrees);
+        Vector2 targetPosition = GlobalPosition + GetCardPosition(angleInDegrees);
         float targetRotation = angleInDegrees + 90;
         float tweenDuration = 0.25f; // Duration of the tween
 
@@ -94,7 +98,7 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
     private void AnimateCardHover(Card card)
     {
         float angle = card.Rotation;
-        Vector2 targetPosition = Position + GetCardPosition(Mathf.RadToDeg(angle)-90) + new Vector2(0,-50).Rotated(angle);
+        Vector2 targetPosition = GlobalPosition + GetCardPosition(Mathf.RadToDeg(angle)-90) + new Vector2(0,-50).Rotated(angle);
 
         card.TransformCard(targetPosition, Mathf.RadToDeg(angle), 0.15f);
     }
@@ -123,6 +127,8 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
     }
     public void SelectCard(Card card)    {
         if (!isSelecting) return;
+
+        if (card == null || !hand.Contains(card)) return;
 
         if (selectedCards.Contains(card))
         {

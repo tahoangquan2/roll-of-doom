@@ -20,7 +20,7 @@ func ApplyEffect(_target):
 
 	var instance = selectingScreen.instantiate()
 
-	hand.get_parent().add_child(instance)
+	hand.get_parent().get_parent().add_child(instance)
 	
 	instance.InitializeSelection(cardList, Vector2(138, 210), Callable(self, "_on_card_selected"))	
 

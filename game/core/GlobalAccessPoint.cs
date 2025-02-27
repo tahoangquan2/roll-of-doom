@@ -28,7 +28,7 @@ public partial class GlobalAccessPoint : Node
             return;
         }
 
-        handPath = "Hand";
+        handPath = "Player/MainControl/HandControl/Hand";
         deckPath = "Player/MainControl/DeckControl/Deck";
         cardManagerPath = "CardManager";
         playerPath = "Player";
