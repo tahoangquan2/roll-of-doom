@@ -101,9 +101,9 @@ public partial class BaseWorld : TileMapLayer
         biomeNoise.Seed = (int) GD.Randi();
         biomeNoise.Frequency = SCALE;
         biomeNoise.NoiseType = FastNoiseLite.NoiseTypeEnum.Value;
-		 biomeNoise.FractalOctaves = 3;
-		 biomeNoise.FractalLacunarity = 2.0f;
-		biomeNoise.FractalGain = 0.5f;
+		//  biomeNoise.FractalOctaves = 3;
+		//  biomeNoise.FractalLacunarity = 2.0f;
+		// biomeNoise.FractalGain = 0.5f;
     }
 
     private void GenerateMap()
