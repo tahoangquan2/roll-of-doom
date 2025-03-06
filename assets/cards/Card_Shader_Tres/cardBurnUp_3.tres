@@ -1,10 +1,10 @@
-[gd_resource type="ShaderMaterial" load_steps=6 format=3 uid="uid://n2fe8ali0y"]
+[gd_resource type="ShaderMaterial" load_steps=6 format=3 uid="uid://b1mk7v3r33w2x"]
 
-[ext_resource type="Shader" path="res://assets/cards/burnUp.gdshader" id="1_qfmwt"]
+[ext_resource type="Shader" path="res://assets/cards/burnUp.gdshader" id="1_0fl8c"]
 
 [sub_resource type="Gradient" id="Gradient_w3fn0"]
-offsets = PackedFloat32Array(0, 0.576087, 0.874477, 1)
-colors = PackedColorArray(0, 0.34902, 0.85098, 1, 1, 0, 0, 1, 1, 1, 0.0666667, 1, 1, 1, 0.615686, 0)
+offsets = PackedFloat32Array(0, 0.157895, 0.931889, 1)
+colors = PackedColorArray(0, 0.34902, 0.85098, 1, 1, 1, 0.0666667, 1, 0.0705882, 1, 0, 1, 1, 1, 0.615686, 0)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_qx8b2"]
 gradient = SubResource("Gradient_w3fn0")
@@ -15,7 +15,7 @@ gradient = SubResource("Gradient_w3fn0")
 noise = SubResource("FastNoiseLite_jccv4")
 
 [resource]
-shader = ExtResource("1_qfmwt")
+shader = ExtResource("1_0fl8c")
 shader_parameter/progress = 1.3
 shader_parameter/width = 0.3
 shader_parameter/timed = false

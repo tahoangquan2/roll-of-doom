@@ -1,6 +1,6 @@
 [gd_resource type="ShaderMaterial" load_steps=4 format=3 uid="uid://lpjg0wubg5i7"]
 
-[ext_resource type="Shader" path="res://assets/cards/burnEdge.gdshader" id="1_ftysa"]
+[ext_resource type="Shader" path="res://assets/cards/burnEdge.gdshader" id="1_x7uhx"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_6c2so"]
 frequency = 0.008
@@ -9,7 +9,7 @@ frequency = 0.008
 noise = SubResource("FastNoiseLite_6c2so")
 
 [resource]
-shader = ExtResource("1_ftysa")
+shader = ExtResource("1_x7uhx")
 shader_parameter/dissolve_value = 1.0
 shader_parameter/burn_size = 0.1
 shader_parameter/burn_color = Color(0.997425, 0.275841, 0.415285, 1)

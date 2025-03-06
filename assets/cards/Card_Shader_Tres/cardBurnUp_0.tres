@@ -1,28 +1,25 @@
 [gd_resource type="ShaderMaterial" load_steps=6 format=3 uid="uid://n2fe8ali0y"]
 
-[ext_resource type="Shader" path="res://assets/cards/burnUp.gdshader" id="1_qfmwt"]
+[ext_resource type="Shader" path="res://assets/cards/burnUp.gdshader" id="1_e25u5"]
 
 [sub_resource type="Gradient" id="Gradient_w3fn0"]
-offsets = PackedFloat32Array(0, 0.471014, 0.942029, 1)
-colors = PackedColorArray(1, 0, 0, 1, 1, 0.133333, 0.54902, 1, 1, 1, 0.0666667, 1, 1, 1, 0.615686, 0)
+offsets = PackedFloat32Array(0, 0.576087, 0.874477, 1)
+colors = PackedColorArray(0, 0.34902, 0.85098, 1, 1, 0, 0, 1, 1, 1, 0.0666667, 1, 1, 1, 0.615686, 0)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_qx8b2"]
 gradient = SubResource("Gradient_w3fn0")
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_q5rv3"]
-noise_type = 3
-seed = 4
-frequency = 0.015
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_jccv4"]
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_irkrj"]
-noise = SubResource("FastNoiseLite_q5rv3")
+noise = SubResource("FastNoiseLite_jccv4")
 
 [resource]
-shader = ExtResource("1_qfmwt")
-shader_parameter/progress = -1.0
-shader_parameter/width = 0.2
+shader = ExtResource("1_e25u5")
+shader_parameter/progress = 1.3
+shader_parameter/width = 0.3
 shader_parameter/timed = false
 shader_parameter/speed = 1.0
-shader_parameter/angle = -0.2
+shader_parameter/angle = 0.1
 shader_parameter/noise = SubResource("NoiseTexture2D_irkrj")
 shader_parameter/colorCurve = SubResource("GradientTexture1D_qx8b2")

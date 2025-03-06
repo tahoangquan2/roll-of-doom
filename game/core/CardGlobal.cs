@@ -42,28 +42,28 @@ public partial class CardGlobal : Node
     {
         if (dissolveMaterials == null)
         {
-            dissolveMaterials = new ShaderMaterial[3];
-            for (int i = 0; i < 3; i++)
+            dissolveMaterials = new ShaderMaterial[6];
+            for (int i = 0; i < 6; i++)
             {
-                dissolveMaterials[i] = GD.Load<ShaderMaterial>($"res://assets/cards/cardDissolve_{i}.tres");
+                dissolveMaterials[i] = GD.Load<ShaderMaterial>($"res://assets/cards/Card_Shader_Tres/cardDissolve_{i}.tres");
             }
         }
         
-        return dissolveMaterials[GlobalVariables.GetRandomNumber(0, 3)];
+        return dissolveMaterials[GlobalVariables.GetRandomNumber(0, 5)];
     }
 
     public static ShaderMaterial GetBurnMaterial()
     {
         if (burnMaterials == null)
         {
-            burnMaterials = new ShaderMaterial[3];
-            for (int i = 0; i < 3; i++)
+            burnMaterials = new ShaderMaterial[6];
+            for (int i = 0; i < 6; i++)
             {
-                burnMaterials[i] = GD.Load<ShaderMaterial>($"res://assets/cards/cardBurnUp_{i}.tres");
+                burnMaterials[i] = GD.Load<ShaderMaterial>($"res://assets/cards/Card_Shader_Tres/cardBurnUp_{i}.tres");
             }
         }
         
-        return burnMaterials[GlobalVariables.GetRandomNumber(0, 3)];
+        return burnMaterials[GlobalVariables.GetRandomNumber(0, 5)];
     }
 
     public static void LockCard(Card card)
