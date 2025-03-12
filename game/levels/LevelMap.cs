@@ -30,7 +30,8 @@ public partial class LevelMap : Control
 	// path can only connect to the 3 closest rooms on the next floor (left, right, center)
 	// path cannot cross over each other ie cannot have [0,0] -> [1,1] and [0,1] -> [1,0]
 	private HashSet<int> startingPoint = new HashSet<int>();
-	private MapNode[,] Rooms=new MapNode[7,15];
+	private MapNode[,] Rooms;
+	private bool mapGenerated = false;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -38,6 +39,7 @@ public partial class LevelMap : Control
 		mapBackground = GetNode<NinePatchRect>("MapBackground");
 		camera = GetNode<Camera2D>("Camera2D");
 		mapContainer = GetNode<GridContainer>("MapBackground/GridContainer");
+		Rooms = new MapNode[Floor,Width];
 
 		//generate 15*7 button inside grid container and set to size expand fill
 		for (int i = 0; i < Floor; i++)
@@ -54,18 +56,16 @@ public partial class LevelMap : Control
 		}
 
 		setCameraLimit();
-
-		GenerateMap();
 	}
 
 	private void GenerateMap() // at least two on the first floor
 	{
-		int random = GlobalVariables.GetRandomNumber(0, Width);
+		int random = GlobalVariables.GetRandomNumber(0, Width-1);
 		startingPoint.Add(random);
 		GeneratePath(0,random);
 		
 		while (true){
-			random = GlobalVariables.GetRandomNumber(0, Width);
+			random = GlobalVariables.GetRandomNumber(0, Width-1);
 			if (!startingPoint.Contains(random)){
 				startingPoint.Add(random);
 				GeneratePath(0,random);
@@ -74,7 +74,7 @@ public partial class LevelMap : Control
 		}
 
 		for (int i=2;i<PathCnt;i++){
-			random = GlobalVariables.GetRandomNumber(0, Width);
+			random = GlobalVariables.GetRandomNumber(0, Width-1);
 			startingPoint.Add(random);
 			GeneratePath(0,random);
 		}
@@ -82,29 +82,36 @@ public partial class LevelMap : Control
 	
 	private void GeneratePath(int floor, int pos)
 	{	
-		if (floor>=Floor-1) return;
 		// get random position on the next floor left, right, center
 		int nextFloor = floor+1;
-		int nextPos =  Math.Min(Math.Max(pos + GlobalVariables.GetRandomNumber(-1, 1), 0), Width - 1);
+		int random = GlobalVariables.GetRandomNumber(-1, 1);
+		int nextPos =  Math.Min(Math.Max(pos + random, 0), Width - 1);
 
 		// check if the path is not crossing over each other
 		// check for adjacent node
 		
 		int adjacentPos=pos-1;
 		if (adjacentPos>=0 && Rooms[floor,adjacentPos].Connections[2] && nextPos==adjacentPos){
-			nextPos=Math.Min(pos + GlobalVariables.GetRandomNumber(0, 1), Width - 1);			
+			nextPos=Math.Min(pos + GlobalVariables.GetRandomNumber(0, 1), Width - 1);	
 		}
 
 		adjacentPos=pos+1;
 		if (adjacentPos<Width && Rooms[floor,adjacentPos].Connections[0] && nextPos==adjacentPos){
-			nextPos=Math.Max(pos + GlobalVariables.GetRandomNumber(-1, 0), 0);						
+			nextPos=Math.Max(pos + GlobalVariables.GetRandomNumber(-1, 0), 0);		
 		}
 
 		// add path
 		Rooms[floor,pos].SetConnection(nextPos);
 		//set color of the button to indicate path :modulate to red
 		mapContainer.GetChild<Button>(pos+floor*Width).Modulate=Color.Color8(255,0,0,255);
+		
 		GD.Print($"({floor},{pos}) -> ({nextFloor},{nextPos})");
+		//add Line2D to indicate path
+		if (nextFloor>=Floor) return;
+		var line = new Line2D();
+		line.AddPoint(mapContainer.GetChild<Button>(pos+floor*Width).Position);
+		line.AddPoint(mapContainer.GetChild<Button>(nextPos+nextFloor*Width).Position);
+		mapBackground.AddChild(line);		
 		
 		GeneratePath(nextFloor,nextPos);
 	}
@@ -117,5 +124,14 @@ public partial class LevelMap : Control
 		//camera.LimitRight = (int)mapBackground.Size.X;
 		camera.LimitTop = -100;
 		camera.LimitBottom = (int)(mapBackground.Size.Y+mapPosition.Y+200);
+	}
+
+	// process 
+	public override void _Process(double delta)
+	{
+		if (!mapGenerated) {
+			mapGenerated = true;
+			GenerateMap();
+		}
 	}
 }

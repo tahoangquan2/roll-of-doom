@@ -3,8 +3,8 @@
 [ext_resource type="Shader" path="res://assets/cards/burnUp.gdshader" id="1_0fl8c"]
 
 [sub_resource type="Gradient" id="Gradient_w3fn0"]
-offsets = PackedFloat32Array(0, 0.157895, 0.931889, 1)
-colors = PackedColorArray(0, 0.34902, 0.85098, 1, 1, 1, 0.0666667, 1, 0.0705882, 1, 0, 1, 1, 1, 0.615686, 0)
+offsets = PackedFloat32Array(0, 0.0866873, 0.931889, 1)
+colors = PackedColorArray(0, 0.34902, 0.85098, 1, 1, 1, 0.0666667, 1, 1, 0, 0, 1, 1, 1, 0.615686, 0)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_qx8b2"]
 gradient = SubResource("Gradient_w3fn0")
