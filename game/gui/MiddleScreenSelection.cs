@@ -58,7 +58,8 @@ public partial class MiddleScreenSelection : Control
 			int index = i;
 			button.ButtonDown += () => OnItemChosen(index);
 			buttons[i] = button;
-
+			
+			button.Modulate = new Color(1, 1, 1, 0.0f);
 			button.CustomMinimumSize = itemSize;
 			button.SizeFlagsHorizontal = SizeFlags.Fill;
 			button.SizeFlagsVertical = SizeFlags.Fill;
