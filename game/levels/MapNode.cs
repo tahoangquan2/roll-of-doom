@@ -24,6 +24,8 @@ public partial class MapNode : TextureButton
 
     private Control linesParent;
 
+    private static float lineOffset = 30; // offset for the line to be drawn from the center of the button
+
     public void setUp(int x,int y){
         Floor = x;
         Pos = y;
@@ -43,6 +45,7 @@ public partial class MapNode : TextureButton
         sizeOfButton = (int)Size.X;
 
         assignType();
+        Disabled = true;
     }
 	public void SetConnection( int next,MapNode nextNode)
 	{
@@ -53,8 +56,19 @@ public partial class MapNode : TextureButton
         Nexts.Add(nextNode);
 
         var line = (Line2D) packedLine.Instantiate();
-		line.AddPoint(new Vector2(sizeOfButton/2,sizeOfButton/2));
-		line.AddPoint(nextNode.Position-Position+new Vector2(sizeOfButton/2,sizeOfButton/2));
+
+        Vector2 point1 = new Vector2(sizeOfButton/2, sizeOfButton/2);
+        Vector2 point2 = nextNode.Position-Position+new Vector2(sizeOfButton/2, sizeOfButton/2);
+
+        // move the two point nearer to each other by the offset
+        var angle = point1.AngleToPoint(point2);
+        point1 += new Vector2(lineOffset * Mathf.Cos(angle), lineOffset * Mathf.Sin(angle));
+        point2 += new Vector2(-lineOffset * Mathf.Cos(angle), -lineOffset * Mathf.Sin(angle));
+
+		line.AddPoint(point1);
+		line.AddPoint(point2);
+        
+        
 		linesParent.AddChild(line);	
 	}
 
@@ -85,15 +99,12 @@ public partial class MapNode : TextureButton
             nodeType = EnumGlobal.RoomType.Start;
         else if (Floor == FloorCount)
             nodeType = EnumGlobal.RoomType.Boss;
-        else 
-        {
+        else {
             nodeType = dungeonFloors[Floor][GlobalVariables.GetRandomNumber(0, dungeonFloors[Floor].Count-1)];
         }
-
-            TextureNormal = TextureforNode[(int)nodeType];
-            TextureDisabled = TextureforNode[(int)nodeType];
-            
-        }
+        TextureNormal = TextureforNode[(int)nodeType];
+        TextureDisabled = TextureforNode[(int)nodeType];            
+    }
     
     //_on_toggled
     public void _on_toggled(bool toggled_on)
@@ -127,11 +138,9 @@ public partial class MapNode : TextureButton
         {
             Line2D line = (Line2D) child;
             ShaderMaterial shaderMat = (ShaderMaterial)line.Material;
-            GD.Print(line);
             if (toggle ) // set material.shader_paramerter/speed
             {
-                shaderMat.SetShaderParameter("speed", 2);
-                GD.Print(line.Material);                
+                shaderMat.SetShaderParameter("speed", 0.2);     
             }
             else
             {
