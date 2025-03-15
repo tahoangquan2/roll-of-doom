@@ -116,10 +116,8 @@ _data = {
 
 [node name="TextureButton" type="TextureButton"]
 texture_filter = 1
-offset_left = 121.0
-offset_top = 99.0
-offset_right = 185.0
-offset_bottom = 163.0
+offset_right = 64.0
+offset_bottom = 64.0
 toggle_mode = true
 texture_normal = ExtResource("1_q2hta")
 texture_disabled = ExtResource("1_q2hta")
@@ -146,5 +144,13 @@ texture = ExtResource("3_jsfq5")
 libraries = {
 "": SubResource("AnimationLibrary_ehcsf")
 }
+
+[node name="Lines" type="Control" parent="."]
+show_behind_parent = true
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
 
 [connection signal="toggled" from="." to="." method="_on_toggled"]

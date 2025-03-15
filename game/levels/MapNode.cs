@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Godot;
 public partial class MapNode : TextureButton
 {
@@ -15,16 +16,19 @@ public partial class MapNode : TextureButton
     public static int FloorCount = 15;
     public static int WidthCount = 7;
     public static Vector2 mapBackgroundSize = new Vector2(800, 800);
+    private int sizeOfButton =0;
 
-    private static Texture2D[] TextureforNode = new Texture2D[7];
+    private static Texture2D[] TextureforNode = new Texture2D[7];    
 
-    private static Texture2D VisitedTexture = GD.Load<Texture2D>("res://assets/maps/ink-swirl.png");
-    
+    private static PackedScene packedLine = GD.Load<PackedScene>("res://game/levels/MapLine.tscn");
+
+    private Control linesParent;
 
     public void setUp(int x,int y){
         Floor = x;
         Pos = y;
         TextureNormal = GD.Load<Texture2D>("res://assets/maps/crowned-skull.png");
+        linesParent = GetNode<Control>("Lines");
         MouseDefaultCursorShape = CursorShape.PointingHand;
 
         int offsetLimit = (int) mapBackgroundSize.Y /FloorCount/5;
@@ -32,14 +36,13 @@ public partial class MapNode : TextureButton
 
         // set position of the button based on the size of the map background
         Position = new Vector2((y+1)*mapBackgroundSize.X/(WidthCount+1),
-				(x+2) * mapBackgroundSize.Y / (FloorCount+3)+randomOffset);	
+			(x+2) * mapBackgroundSize.Y / (FloorCount+3)+randomOffset);	
 
         Position-= new Vector2(Size.X/2, Size.Y/2);
 
-        assignType();
+        sizeOfButton = (int)Size.X;
 
-        if (Floor != -1)
-            Disabled=true;
+        assignType();
     }
 	public void SetConnection( int next,MapNode nextNode)
 	{
@@ -48,6 +51,11 @@ public partial class MapNode : TextureButton
 		else Connections[1] = true;
 
         Nexts.Add(nextNode);
+
+        var line = (Line2D) packedLine.Instantiate();
+		line.AddPoint(new Vector2(sizeOfButton/2,sizeOfButton/2));
+		line.AddPoint(nextNode.Position-Position+new Vector2(sizeOfButton/2,sizeOfButton/2));
+		linesParent.AddChild(line);	
 	}
 
     public bool isNone()
@@ -100,12 +108,34 @@ public partial class MapNode : TextureButton
                 next.parentRoom = this;
             }
 
+            toggleLines(true);
+
             if (parentRoom != null)
             {
                 foreach (var next in parentRoom.Nexts)
                 {
                     next.Disabled = true;
                 }
+                parentRoom.toggleLines(false);
+            }
+        }
+    }
+
+    private void toggleLines(bool toggle)
+    {        
+        foreach (var child in linesParent.GetChildren())
+        {
+            Line2D line = (Line2D) child;
+            ShaderMaterial shaderMat = (ShaderMaterial)line.Material;
+            GD.Print(line);
+            if (toggle ) // set material.shader_paramerter/speed
+            {
+                shaderMat.SetShaderParameter("speed", 2);
+                GD.Print(line.Material);                
+            }
+            else
+            {
+                shaderMat.SetShaderParameter("speed", 0);
             }
         }
     }

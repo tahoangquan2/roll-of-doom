@@ -6,7 +6,6 @@ public partial class LevelMap : Control
 {
 	private NinePatchRect mapBackground;
 	private Camera2D camera;
-	private Control lines;
 	// Map Template: A predetermined set of positions where Rooms can be generated or not. (A Grid)
 	// Rooms: Each individual place you can visit. (Also known as a Nodes).
 	// Paths: Lines connecting Rooms. (A connection between two Nodes).
@@ -37,14 +36,11 @@ public partial class LevelMap : Control
 	private MapNode endNode;
 	private bool mapGenerated = false;
 
-	private int sizeOfButton =0;
-
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		mapBackground = GetNode<NinePatchRect>("MapBackground");
 		camera = GetNode<Camera2D>("Camera2D");
-		lines = GetNode<Control>("MapBackground/Lines");
 		Rooms = new MapNode[Floor,Width];
 		Vector2 mapBackgroundSize= mapBackground.Size;
 		
@@ -62,8 +58,7 @@ public partial class LevelMap : Control
 				Rooms[i,j]=(MapNode) packedRoom.Instantiate();
 				Rooms[i,j].setUp(i,j);
 				mapBackground.AddChild(Rooms[i,j]);
-				// set position of the button based on the size of the map background
-				sizeOfButton = (int)Rooms[i,j].Size.X;							
+				// set position of the button based on the size of the map background					
 			}
 		}
 
@@ -73,10 +68,11 @@ public partial class LevelMap : Control
 		endNode.setUp(Floor,(Width-1)/2);
 		
 		mapBackground.AddChild(startNode);
-		mapBackground.AddChild(endNode);
-		
+		mapBackground.AddChild(endNode);		
 
 		setCameraLimit();
+
+		GenerateMap();
 	}
 
 	private void GenerateMap() // at least two on the first floor
@@ -111,22 +107,16 @@ public partial class LevelMap : Control
 		// path to the start to the first floor
 		for (int i=0;i<Width;i++) if (Rooms[0,i]!=null)
 		{
-			startNode.SetConnection(i,Rooms[0,i]);
-			var line = (Line2D) packedLine.Instantiate();
-			line.AddPoint(startNode.Position+new Vector2(sizeOfButton/2,sizeOfButton/2));
-			line.AddPoint(Rooms[0,i].Position+new Vector2(sizeOfButton/2,sizeOfButton/2));
-			lines.AddChild(line);	
+			startNode.SetConnection(i,Rooms[0,i]);			
 		}
 
 		// path to last floor to the end
 		for (int i=0;i<Width;i++) if (Rooms[Floor-1,i]!=null)
 		{
-			var line = (Line2D) packedLine.Instantiate();
-			line.AddPoint(Rooms[Floor-1,i].Position+new Vector2(sizeOfButton/2,sizeOfButton/2));
-			line.AddPoint(endNode.Position+new Vector2(sizeOfButton/2,sizeOfButton/2));
-			lines.AddChild(line);	
 			Rooms[Floor-1,i].SetConnection((Width-1)/2,endNode);
 		}
+
+		startNode._on_toggled(true);
 	}
 	
 	private void AssignRooms()
@@ -179,11 +169,6 @@ public partial class LevelMap : Control
 		}
 		// add path
 		Rooms[floor,pos].SetConnection(nextPos,Rooms[nextFloor,nextPos]);	
-		//add Line2D to indicate path		
-		var line = (Line2D) packedLine.Instantiate();
-		line.AddPoint(Rooms[floor,pos].Position+new Vector2(sizeOfButton/2,sizeOfButton/2));
-		line.AddPoint(Rooms[nextFloor,nextPos].Position+new Vector2(sizeOfButton/2,sizeOfButton/2));
-		lines.AddChild(line);		
 		
 		GeneratePath(nextFloor,nextPos);
 	}
@@ -196,14 +181,5 @@ public partial class LevelMap : Control
 		//camera.LimitRight = (int)mapBackground.Size.X;
 		camera.LimitTop = -100;
 		camera.LimitBottom = (int)(mapBackground.Size.Y+mapPosition.Y+200);
-	}
-
-	// process 
-	public override void _Process(double delta)
-	{
-		if (!mapGenerated) {
-			mapGenerated = true;
-			GenerateMap();
-		}
 	}
 }
