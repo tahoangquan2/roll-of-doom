@@ -1,0 +1,33 @@
+{
+	"textures": [
+		{
+			"image": "scroll-0.png.png",
+			"size": {
+				"w": 476,
+				"h": 375
+			},
+			"sprites": [
+				{
+					"filename": "scroll-0.png",
+					"region": {
+						"x": 0,
+						"y": 0,
+						"w": 476,
+						"h": 375
+					},
+					"margin": {
+						"x": 154,
+						"y": 176,
+						"w": 308,
+						"h": 313
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "1.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:b35742b1ba9982f129d34407e18cecd8:b9ed8770bffd3c171fb4b0eebb9af829:1151c83364f0333521f429bee2a2b85e$"
+	}
+}

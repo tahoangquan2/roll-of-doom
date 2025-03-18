@@ -6,23 +6,26 @@
 radius = 700.0
 
 [node name="Hand" type="Area2D"]
-position = Vector2(916, 1500)
 script = ExtResource("1_4ykbv")
 
 [node name="SelectionFilter" type="Control" parent="."]
 visible = false
-custom_minimum_size = Vector2(1920, 1080)
 layout_mode = 3
-anchors_preset = 0
-offset_left = -916.0
-offset_top = -1500.0
-offset_right = 1004.0
-offset_bottom = -420.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 
 [node name="ColorRect" type="ColorRect" parent="SelectionFilter"]
-layout_mode = 0
-offset_right = 1920.0
-offset_bottom = 1080.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 color = Color(0.239216, 0.239216, 0.239216, 0.462745)
 
 [node name="Button" type="Button" parent="SelectionFilter"]

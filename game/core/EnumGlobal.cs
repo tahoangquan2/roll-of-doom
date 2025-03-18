@@ -79,4 +79,14 @@ public partial class EnumGlobal : Node
         GameOver
     }
 
+    public enum RoomType
+    {
+        Start,
+        Battle,
+        Boss,
+        MiniBoss,
+        CardShop,
+        Rest,
+        Treasure,        
+    }
 }

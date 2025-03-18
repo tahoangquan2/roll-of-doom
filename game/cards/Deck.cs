@@ -38,7 +38,7 @@ public partial class Deck : Node2D
         CardData card = deck[index];deck.RemoveAt(index);
         EmitSignal(nameof(DeckUpdated), deck.Count);
         Card newCard=cardManager.createCard(card);
-        newCard.Position = Position;
+        newCard.Position = GlobalPosition;
         return newCard;
     }
     public Godot.Collections.Array<Card> DrawCards(int amount){
@@ -55,7 +55,7 @@ public partial class Deck : Node2D
             deck.RemoveAt(0);
             Card newCard = cardManager.createCard(card);
             drawnCards.Add(newCard);
-            newCard.Position = Position;
+            newCard.Position = GlobalPosition;
         }
         EmitSignal(nameof(DeckUpdated), deck.Count);
         return drawnCards;
@@ -108,7 +108,7 @@ public partial class Deck : Node2D
         {
             deck.Insert(GD.RandRange(0, deck.Count), card.GetCardData());   
             card.canBeHovered = false;
-            card.TransformCard(Position, 0, 0.15f);            
+            card.TransformCard(GlobalPosition, 0, 0.15f);            
             await card.FlipCard(false);
             card.obliterateCard();
             EmitSignal(nameof(DeckUpdated), deck.Count);            

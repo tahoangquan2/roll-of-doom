@@ -2,14 +2,14 @@
 
 [ext_resource type="Script" path="res://game/cards/Card.cs" id="1_6fwt5"]
 [ext_resource type="Texture2D" uid="uid://62t6ctia6pme" path="res://assets/cards/mana_slot.png" id="2_1dond"]
-[ext_resource type="Material" uid="uid://b7p0x577k0cu3" path="res://assets/cards/Fake2d.tres" id="3_0sbrr"]
+[ext_resource type="Material" uid="uid://b7p0x577k0cu3" path="res://assets/cards/Card_Shader_Tres/Fake2d.tres" id="3_0sbrr"]
 [ext_resource type="Texture2D" uid="uid://ba043na0yb5a" path="res://assets/cards/Details/Backgrounds/Water/BackgroundCard67.png" id="3_qwmw2"]
 [ext_resource type="FontFile" uid="uid://sc71p0eebbyj" path="res://assets/fonts/buddychampion.ttf" id="5_7kfuc"]
 [ext_resource type="Texture2D" uid="uid://bsbdm7rrajbej" path="res://assets/cards/CardRarity.png" id="5_huc0s"]
 [ext_resource type="Texture2D" uid="uid://cfod7vdoc2uym" path="res://assets/cards/card fantasy back.png" id="6_jqwol"]
 [ext_resource type="Texture2D" uid="uid://ceit2wuxyrq5j" path="res://assets/cards/CardTypeIcon.png" id="8_i61uh"]
 [ext_resource type="FontFile" uid="uid://c1j227ygpp51v" path="res://assets/fonts/DragonHunter-9Ynxj.otf" id="9_nxcu3"]
-[ext_resource type="Material" uid="uid://n2fe8ali0y" path="res://assets/cards/cardBurnUp_2.tres" id="11_kpgmd"]
+[ext_resource type="Material" uid="uid://n2fe8ali0y" path="res://assets/cards/Card_Shader_Tres/cardBurnUp_2.tres" id="11_kpgmd"]
 [ext_resource type="Animation" uid="uid://7dhkqo8rflab" path="res://assets/cards/cardDissolveOrBurnAnimation.tres" id="12_4ke4g"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_f7hch"]

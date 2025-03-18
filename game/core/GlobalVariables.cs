@@ -16,7 +16,7 @@ public partial class GlobalVariables : Node
     // get random number with range
     public static int GetRandomNumber(int min, int max)
     {
-        return new Random().Next(min, max);
+        return new Random().Next(min, max+1);
     }
     public override void _Ready()
     {

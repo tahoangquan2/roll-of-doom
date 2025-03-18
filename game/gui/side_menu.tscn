@@ -1,5 +1,6 @@
-[gd_scene load_steps=12 format=3 uid="uid://cayqj43ene72e"]
+[gd_scene load_steps=13 format=3 uid="uid://cayqj43ene72e"]
 
+[ext_resource type="Texture2D" uid="uid://bmbag5t453hnh" path="res://assets/sprites/scroll-0.png.png" id="1_h15bj"]
 [ext_resource type="Texture2D" uid="uid://bcdeba4qnlm5q" path="res://assets/sprites/scroll.png" id="1_o6les"]
 [ext_resource type="Script" path="res://game/gui/SideMenu.cs" id="1_r0w7c"]
 [ext_resource type="FontFile" uid="uid://d0n6rt5p7f7tn" path="res://assets/fonts/buddychampionrotate.ttf" id="2_fg4rt"]
@@ -11,18 +12,6 @@
 [sub_resource type="Animation" id="Animation_vfdq0"]
 resource_name = "RESET"
 length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("../Control/Scroll:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [0]
-}
 
 [sub_resource type="Animation" id="Animation_tqp2k"]
 resource_name = "OpenSroll"
@@ -31,26 +20,14 @@ step = 0.0001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath(".:anchor_left")
+tracks/0/path = NodePath("..:anchor_left")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.0498, 0.0515, 0.1493, 0.1515, 0.2488, 0.2506, 0.3483, 0.3502, 0.4489, 0.45, 0.5),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [1.0, 1.0, 0.985, 0.985, 0.948, 0.948, 0.91, 0.91, 0.87, 0.87, 0.85, 0.85]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("../Control/Scroll:frame")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.5),
+"times": PackedFloat32Array(0, 0.49),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [0, 5]
+"values": [1.0, 0.802]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_sqb3f"]
@@ -78,53 +55,61 @@ mouse_filter = 1
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 1
-anchor_left = 1.084
-anchor_top = 0.521
-anchor_right = 1.084
-anchor_bottom = 0.521
-grow_horizontal = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
-[node name="Scroll" type="Sprite2D" parent="Control"]
-z_index = -1
-scale = Vector2(2.3, 2.3)
-texture = ExtResource("1_o6les")
-hframes = 3
-vframes = 2
-
-[node name="SideMenu" type="Control" parent="."]
-clip_contents = true
+[node name="Scooll" type="TextureRect" parent="Control"]
 layout_mode = 1
+anchors_preset = -1
 anchor_left = 1.0
-anchor_top = 0.222
-anchor_right = 1.05
-anchor_bottom = 0.908
-offset_right = -95.9999
-offset_bottom = -6.10352e-05
-grow_horizontal = 0
+anchor_top = 0.157
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -21.84
+offset_top = -22.0
+offset_right = 687.088
+offset_bottom = -7.0
+grow_vertical = 2
+texture = ExtResource("1_h15bj")
+expand_mode = 3
+stretch_mode = 4
+
+[node name="SideMenu" type="Control" parent="Control/Scooll"]
+clip_contents = true
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 1
+anchor_right = 0.37
+anchor_bottom = 1.0
 grow_vertical = 2
 script = ExtResource("1_r0w7c")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="SideMenu"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Control/Scooll/SideMenu"]
 libraries = {
 "": SubResource("AnimationLibrary_sqb3f")
 }
 
-[node name="CardInfoPage" type="VBoxContainer" parent="SideMenu"]
+[node name="CardInfoPage" type="VBoxContainer" parent="Control/Scooll/SideMenu"]
 clip_contents = true
 custom_minimum_size = Vector2(288, 0)
 layout_mode = 1
-anchors_preset = 11
+anchors_preset = 6
 anchor_left = 1.0
+anchor_top = 0.5
 anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -253.0
+anchor_bottom = 0.5
+offset_left = -288.0
+offset_top = -184.5
+offset_bottom = 184.5
 grow_horizontal = 0
 grow_vertical = 2
 size_flags_horizontal = 8
 theme_override_constants/separation = 0
 
-[node name="TypeLabel" type="Label" parent="SideMenu/CardInfoPage"]
+[node name="TypeLabel" type="Label" parent="Control/Scooll/SideMenu/CardInfoPage"]
 custom_minimum_size = Vector2(0, 54)
 layout_mode = 2
 text = "Tower Card"
@@ -133,7 +118,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="NameLabel" type="Label" parent="SideMenu/CardInfoPage"]
+[node name="NameLabel" type="Label" parent="Control/Scooll/SideMenu/CardInfoPage"]
 clip_contents = true
 custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
@@ -142,13 +127,13 @@ label_settings = ExtResource("3_i54ew")
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="Cost" type="HBoxContainer" parent="SideMenu/CardInfoPage"]
+[node name="Cost" type="HBoxContainer" parent="Control/Scooll/SideMenu/CardInfoPage"]
 custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
 
-[node name="CostLabel" type="Label" parent="SideMenu/CardInfoPage/Cost"]
+[node name="CostLabel" type="Label" parent="Control/Scooll/SideMenu/CardInfoPage/Cost"]
 layout_direction = 2
 layout_mode = 2
 size_flags_horizontal = 2
@@ -156,7 +141,7 @@ text = "Card Cost: 40 "
 label_settings = ExtResource("3_i54ew")
 vertical_alignment = 1
 
-[node name="Mana" type="TextureRect" parent="SideMenu/CardInfoPage/Cost"]
+[node name="Mana" type="TextureRect" parent="Control/Scooll/SideMenu/CardInfoPage/Cost"]
 custom_minimum_size = Vector2(26, 26)
 layout_direction = 3
 layout_mode = 2
@@ -166,13 +151,13 @@ texture = ExtResource("4_a8ur7")
 expand_mode = 2
 stretch_mode = 4
 
-[node name="OutlineRect" type="TextureRect" parent="SideMenu/CardInfoPage"]
+[node name="OutlineRect" type="TextureRect" parent="Control/Scooll/SideMenu/CardInfoPage"]
 custom_minimum_size = Vector2(0, 240)
 layout_mode = 2
 texture = ExtResource("6_nbf07")
 stretch_mode = 3
 
-[node name="TextureRect" type="TextureRect" parent="SideMenu/CardInfoPage/OutlineRect"]
+[node name="TextureRect" type="TextureRect" parent="Control/Scooll/SideMenu/CardInfoPage/OutlineRect"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 1
 anchors_preset = 8
@@ -189,7 +174,7 @@ grow_vertical = 2
 texture = ExtResource("5_s4kvo")
 stretch_mode = 3
 
-[node name="EffectLabel" type="Label" parent="SideMenu/CardInfoPage"]
+[node name="EffectLabel" type="Label" parent="Control/Scooll/SideMenu/CardInfoPage"]
 clip_contents = true
 custom_minimum_size = Vector2(200, 24)
 layout_mode = 2
@@ -197,6 +182,28 @@ text = "Effect : Deploy a Wizard Tower"
 label_settings = ExtResource("3_i54ew")
 vertical_alignment = 1
 autowrap_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/Scooll/SideMenu"]
+visible = false
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_s4kvo")
+stretch_mode = 1
+
+[node name="Scroll" type="Sprite2D" parent="Control"]
+visible = false
+z_index = -1
+position = Vector2(882, 565)
+scale = Vector2(2.3, 2.3)
+texture = ExtResource("1_o6les")
+offset = Vector2(0, -20)
+hframes = 3
+vframes = 2
 
 [node name="InfoToggle" type="Button" parent="."]
 layout_mode = 1
@@ -210,4 +217,4 @@ offset_bottom = 31.0
 toggle_mode = true
 text = "Info"
 
-[connection signal="toggled" from="InfoToggle" to="SideMenu" method="_on_info_toggle_toggled"]
+[connection signal="toggled" from="InfoToggle" to="Control/Scooll/SideMenu" method="_on_info_toggle_toggled"]

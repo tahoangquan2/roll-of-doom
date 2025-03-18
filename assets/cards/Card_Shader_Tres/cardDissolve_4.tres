@@ -1,0 +1,16 @@
+[gd_resource type="ShaderMaterial" load_steps=4 format=3 uid="uid://yn1lf4w1flku"]
+
+[ext_resource type="Shader" path="res://assets/cards/burnEdge.gdshader" id="1_0h75f"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_6c2so"]
+seed = 23
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_3bg8t"]
+noise = SubResource("FastNoiseLite_6c2so")
+
+[resource]
+shader = ExtResource("1_0h75f")
+shader_parameter/dissolve_value = 1.0
+shader_parameter/burn_size = 0.15
+shader_parameter/burn_color = Color(0.247981, 0.807586, 0.982956, 1)
+shader_parameter/dissolve_texture = SubResource("NoiseTexture2D_3bg8t")

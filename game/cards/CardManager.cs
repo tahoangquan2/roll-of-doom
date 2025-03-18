@@ -95,7 +95,7 @@ public partial class CardManager : Node2D
 	{card.CardHovered += _on_card_hovered;   card.CardUnhovered += _on_card_unhovered;}
 	public void _on_card_hovered(Card card)
 	{	if (isProcessingHover) return;
-
+		GD.Print("Card hovered");
 		isProcessingHover = true;
 		card_being_hovered = card;
 		CardHoveredEffect(card);
