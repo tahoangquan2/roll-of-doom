@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using Godot;
 
@@ -79,4 +81,22 @@ public partial class CardGlobal : Node
         card.canBeMoved = true;
         card.ZIndex = 1;
     }
+
+    public static HashSet<CardData> currentCardDataPool = new HashSet<CardData>();
+    // this is the pool of cards that are currently in the game
+    public static HashSet<CardData> GetRandomCards(int amount)
+    {
+        HashSet<CardData> cards = new HashSet<CardData>();
+        // get random cards from the pool hashset
+        while (cards.Count < amount)
+        {
+            CardData card = currentCardDataPool.ElementAt(GlobalVariables.GetRandomNumber(0, currentCardDataPool.Count));
+            cards.Add(card);
+        }
+        
+        return cards;
+    }
+
+    public static Godot.Collections.Array<CardData> deckCurrent=new Godot.Collections.Array<CardData>(); 
+    // in game can change, this is the deck that player has outside of the game
 }

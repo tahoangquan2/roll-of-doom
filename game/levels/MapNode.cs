@@ -19,6 +19,7 @@ public partial class MapNode : TextureButton
     private int sizeOfButton =0;
 
     private static Texture2D[] TextureforNode = new Texture2D[7];    
+    private static Texture2D[] TextureforNodeHover = new Texture2D[7]; 
 
     private static PackedScene packedLine = GD.Load<PackedScene>("res://game/levels/MapLine.tscn");
 
@@ -91,6 +92,14 @@ public partial class MapNode : TextureButton
         TextureforNode[(int)EnumGlobal.RoomType.CardShop] = GD.Load<Texture2D>("res://assets/maps/letter-bomb.png") ;
         TextureforNode[(int)EnumGlobal.RoomType.Rest] = GD.Load<Texture2D>("res://assets/maps/campfire.png") ;
         TextureforNode[(int)EnumGlobal.RoomType.Treasure] = GD.Load<Texture2D>("res://assets/maps/locked-chest.png") ;
+
+        TextureforNodeHover[(int)EnumGlobal.RoomType.Start] = GD.Load<Texture2D>("res://assets/maps/ResizedMap/barbute.png") ;
+        TextureforNodeHover[(int)EnumGlobal.RoomType.Battle] = GD.Load<Texture2D>("res://assets/maps/ResizedMap/dread-skull.png") ;
+        TextureforNodeHover[(int)EnumGlobal.RoomType.Boss] = GD.Load<Texture2D>("res://assets/maps/ResizedMap/crowned-skull.png") ;
+        TextureforNodeHover[(int)EnumGlobal.RoomType.MiniBoss] = GD.Load<Texture2D>("res://assets/maps/ResizedMap/daemon-skull.png") ;
+        TextureforNodeHover[(int)EnumGlobal.RoomType.CardShop] = GD.Load<Texture2D>("res://assets/maps/ResizedMap/letter-bomb.png") ;
+        TextureforNodeHover[(int)EnumGlobal.RoomType.Rest] = GD.Load<Texture2D>("res://assets/maps/ResizedMap/campfire.png") ;
+        TextureforNodeHover[(int)EnumGlobal.RoomType.Treasure] = GD.Load<Texture2D>("res://assets/maps/ResizedMap/locked-chest.png") ;
     }
 
     public void assignType()
@@ -103,7 +112,8 @@ public partial class MapNode : TextureButton
             nodeType = dungeonFloors[Floor][GlobalVariables.GetRandomNumber(0, dungeonFloors[Floor].Count-1)];
         }
         TextureNormal = TextureforNode[(int)nodeType];
-        TextureDisabled = TextureforNode[(int)nodeType];            
+        TextureDisabled = TextureforNode[(int)nodeType];     
+        TextureHover = TextureforNodeHover[(int)nodeType];       
     }
     
     //_on_toggled

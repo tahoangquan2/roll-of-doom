@@ -41,3 +41,5 @@ position_smoothing_enabled = true
 position_smoothing_speed = 10.0
 script = ExtResource("2_jv6q7")
 zoomSpeed = 7.0
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]

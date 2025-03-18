@@ -69,12 +69,13 @@ _data = {
 [node name="TextureButton" type="TextureButton"]
 self_modulate = Color(0.18359, 0.18359, 0.18359, 1)
 z_index = 1
-texture_filter = 1
+texture_filter = 2
 offset_right = 64.0
 offset_bottom = 64.0
 toggle_mode = true
 texture_normal = ExtResource("1_q2hta")
 texture_disabled = ExtResource("1_q2hta")
+stretch_mode = 3
 script = ExtResource("2_7to33")
 
 [node name="TextureProgressBar" type="TextureProgressBar" parent="."]
