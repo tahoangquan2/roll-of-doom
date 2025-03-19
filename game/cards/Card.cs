@@ -9,6 +9,7 @@ public partial class Card : Node2D
     public bool canBeMoved = true;
     [Signal] public delegate void CardHoveredEventHandler(Card card);
     [Signal] public delegate void CardUnhoveredEventHandler(Card card);
+    [Signal] public delegate void CardRightPressedEventHandler(Card card);
 
     private Label costLbl;
     private Label nameLbl;
@@ -42,9 +43,10 @@ public partial class Card : Node2D
         CardTypeIcon = subViewport.GetNode<Sprite2D>("CardTypeIcon");
         CardArt = subViewport.GetNode<Sprite2D>("CardDisplay/CardArt");
         
-        var shaderDisplay = GetNode<TextureRect>("Control/TextureRect"); // This will hold the shader
+        var shaderDisplay = GetNode<Button>("Control/TextureRect"); // This will hold the shader
 
-        shaderDisplay.Texture = subViewport.GetTexture();shaderDisplay.UseParentMaterial = false;
+        shaderDisplay.Icon = subViewport.GetTexture();
+        shaderDisplay.UseParentMaterial = false;
         display = GetNode<Control>("Control");
         animPlayer = GetNode<AnimationPlayer>("AnimationPlayer");        
 
@@ -151,6 +153,11 @@ public partial class Card : Node2D
     public void _on_area_2d_mouse_exited(){
         if (!canBeHovered) return;
         EmitSignal(nameof(CardUnhovered), this);
+    }
+
+    public void _on_texture_rect_pressed(){
+        GD.Print("Card right pressed");
+        EmitSignal(nameof(CardRightPressed), this);
     }
 
     public async void BurnCard() 
