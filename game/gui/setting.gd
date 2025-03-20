@@ -29,7 +29,7 @@ func _ready():
 
 	buttonContainer=$Control
 		
-	var j:int =0
+	#var j:int =0
 	# for i in $Poppin/Popup/Volume.get_children():
 	# 	i.value_changed.connect(_on_value_changed.bind(i.get_meta("busIndex")))
 	# 	#i.value=Global.Volume[j]
@@ -124,6 +124,9 @@ func _on_tree_exited():
 	#Data.save_Data()
 
 func _on_info_btn_toggled(toggled_on):
+	#quit
+	if (toggled_on):
+		get_tree().quit()
 	pass
 	# if toggled_on:
 	# 	$Poppin/Credit.global_position=Global.ScreenSize/2.0-$Poppin/Credit.size/(2.0*$Poppin/Credit.scale)+Vector2(100.0,0)

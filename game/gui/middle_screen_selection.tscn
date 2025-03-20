@@ -3,12 +3,17 @@
 [ext_resource type="Script" path="res://game/gui/MiddleScreenSelection.cs" id="1_kqmks"]
 
 [node name="Selecting" type="Control"]
+z_as_relative = false
+custom_minimum_size = Vector2(1920, 1080)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 1
 script = ExtResource("1_kqmks")
 
 [node name="ColorRect" type="ColorRect" parent="."]
@@ -21,9 +26,11 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 6
 size_flags_vertical = 4
+mouse_filter = 1
 color = Color(0.239216, 0.239216, 0.239216, 0.592157)
 
 [node name="Container" type="HBoxContainer" parent="."]
+z_as_relative = false
 clip_contents = true
 custom_minimum_size = Vector2(1920, 0)
 layout_mode = 1

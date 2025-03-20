@@ -21,6 +21,8 @@ public partial class Main : Node2D
 		//PrintTree(GetTree().Root, 0);
 	}
 
+	
+
 	private void PrintTree(Node node, int depth)
 	{
 		string indent = "";
@@ -42,5 +44,7 @@ public partial class Main : Node2D
 		{
 			GetTree().ReloadCurrentScene();			
 		}
+
+		//GD.Print(GetViewport().GuiGetFocusOwner());
 	}
 }

@@ -9,7 +9,6 @@ public partial class Card : Node2D
     public bool canBeMoved = true;
     [Signal] public delegate void CardHoveredEventHandler(Card card);
     [Signal] public delegate void CardUnhoveredEventHandler(Card card);
-    [Signal] public delegate void CardRightPressedEventHandler(Card card);
 
     private Label costLbl;
     private Label nameLbl;
@@ -156,8 +155,8 @@ public partial class Card : Node2D
     }
 
     public void _on_texture_rect_pressed(){
-        GD.Print("Card right pressed");
-        EmitSignal(nameof(CardRightPressed), this);
+        //GD.Print("Card right pressed");
+        parentManager.EmitSignal(nameof(CardManager.CardSelect), this);
     }
 
     public async void BurnCard() 

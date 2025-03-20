@@ -1,10 +1,9 @@
 using Godot;
-using System.Collections.Generic;
 
 public partial class DeckVisual : Node2D
 {
     [Export] public Texture2D CardBackTexture; // Assign in Inspector
-    [Export] public Vector2 offset = new Vector2(-2.0f, 3.0f); // Spacing between stacked cards
+    [Export] public Vector2 offset = new Vector2(-1.0f, 2.0f); // Spacing between stacked cards
     private int currentDeckSize = 0;
 
     public override void _Ready()
@@ -40,7 +39,6 @@ public partial class DeckVisual : Node2D
         }
 
         currentDeckSize = newSize;
-        GD.Print("Deck size: " + currentDeckSize);
         DrawDeck();
     }
 
@@ -50,5 +48,10 @@ public partial class DeckVisual : Node2D
         {
             child.QueueFree();
         }
+    }
+    public Vector2 getTopCardPosition()
+    {
+        int topCardIndex = Mathf.Min(currentDeckSize, GlobalVariables.maxStackSize) - 1;
+        return new Vector2(topCardIndex * offset.X, topCardIndex * offset.Y)+GlobalPosition+ new Vector2(69, 105);
     }
 }

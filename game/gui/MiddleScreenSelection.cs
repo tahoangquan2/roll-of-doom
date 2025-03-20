@@ -15,6 +15,8 @@ public partial class MiddleScreenSelection : Control
 	private bool isInitialized = false;
 	private bool isGDscript = true;
 
+	private string buttonPath = "";
+
 	public override void _Ready()
 	{
 		hboxContainer = GetNode<HBoxContainer>("Container");
@@ -22,7 +24,7 @@ public partial class MiddleScreenSelection : Control
 	}
 	public void InitializeSelection(
 		Godot.Collections.Array<Node2D> nodes,Vector2 itemSize, 
-		Callable onSelection
+		Callable onSelection,string buttonPath=""
 	)// pass in list of 2d nodes, item size and what to do when item is chosen
 	{
 		this.nodes = nodes;
@@ -30,13 +32,14 @@ public partial class MiddleScreenSelection : Control
 		this.itemSize = itemSize;
 
 		onItemChosenGD = onSelection;
+		this.buttonPath = buttonPath;
 
 		setUp();
 	}
 
 	public void InitializeSelection(
 		Godot.Collections.Array<Node2D> nodes,Vector2 itemSize, 
-		Action<int> onSelection
+		Action<int> onSelection,string buttonPath =""
 	)
 	{
 		this.nodes = nodes;
@@ -45,12 +48,14 @@ public partial class MiddleScreenSelection : Control
 
 		onItemChosenCS = onSelection;
 		isGDscript = false;
+		this.buttonPath = buttonPath;
 
 		setUp();
 	}
 
 	private void setUp()
 	{
+		
 		for (int i = 0; i < nodes.Count; i++)
 		{
 			Button button = new Button();
@@ -65,6 +70,8 @@ public partial class MiddleScreenSelection : Control
 			button.SizeFlagsVertical = SizeFlags.Fill;
 			button.MouseDefaultCursorShape = CursorShape.PointingHand;
 			hboxContainer.AddChild(button);			
+			// mouse pass
+			button.MouseFilter = MouseFilterEnum.Pass;
 		}
 
 		if (nodes.Count==0){
@@ -80,6 +87,12 @@ public partial class MiddleScreenSelection : Control
 		{
 			nodes[i].GlobalPosition = buttons[i].GlobalPosition+new Vector2(itemSize.X/2, itemSize.Y/2);
 			nodes[i].ZIndex = CardGlobal.forCardSelectZindex;
+		}
+		for (int i=0;i<nodes.Count;i++){
+			// remove button from the container then add it to nodes
+			hboxContainer.RemoveChild(buttons[i]);
+			nodes[i].GetNode(buttonPath).AddChild(buttons[i]);
+			buttons[i].Position = new Vector2(0, 0);
 		}
 		SetProcess(false);
 	}
@@ -105,5 +118,10 @@ public partial class MiddleScreenSelection : Control
 
 	public void _on_button_pressed(){
 		OnItemChosen(0);
+		for (int i = 0; i < nodes.Count; i++)
+		{
+			buttons[i].QueueFree();
+			nodes[i].ZIndex = 0;
+		}
 	}
 }
