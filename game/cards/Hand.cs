@@ -29,7 +29,10 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
         selectionFilter = GetNode<Control>("SelectionFilter");
 
         RemoveChild(selectionFilter);
-        GetParent().GetParent().CallDeferred("add_child", selectionFilter);
+
+        Node Parent = GetParent();
+        Parent.CallDeferred("add_child", selectionFilter);
+        Parent.CallDeferred("move_child", selectionFilter, 1);
 
         cardRadius = HandRadius-200;
 
@@ -43,17 +46,18 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
             }
         }
     }
-    public void AddCard(Card card)
+    public bool AddCard(Card card)
     {
-        if (card == null || hand.Contains(card)) return;
+        if (card == null || hand.Contains(card)) return false;
         if (hand.Count >= MaxHandSize) 
         {
             card.BurnCard();
-            return;
+            return false;
         }
         hand.Add(card);
 
         RepositionCards();
+        return true;
     }
     public Card RemoveCard(int index)
     {
@@ -115,9 +119,11 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
         Godot.Collections.Array<Card> drawnCards = deck.DrawCards(amount);  
         cardManager.Lock();      
         for (int i = 0; i < amount; i++) if (drawnCards[i] != null) {            
-            AddCard(drawnCards[i]);
-            cardManager.cardSound();
-            await drawnCards[i].FlipCard(true);
+            
+            if (AddCard(drawnCards[i])){
+                cardManager.cardSound();
+                await drawnCards[i].FlipCard(true);
+            }
         }
         cardManager.Unlock();
     }
@@ -270,18 +276,18 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
         return StartSelectionMode(numToSelect, EnumGlobal.HandSelectionPurpose.Discard);
     }
     int requiredSelectionCount = 0;
-    public void _input(InputEvent @event){//action "Action" from input map, this is for testing
-    if (@event is InputEventMouseMotion) return;
-        if (@event.IsActionPressed("Action"))
-        {
-            drawFromDeck(3);
-        }
+    // public void _input(InputEvent @event){//action "Action" from input map, this is for testing
+    // if (@event is InputEventMouseMotion) return;
+    //     if (@event.IsActionPressed("Action"))
+    //     {
+    //         drawFromDeck(3);
+    //     }
 
-        if (@event.IsActionPressed("Action2"))
-        {
-            GlobalVariables.ChangeHealth(-10);
-        }
-    }
+    //     if (@event.IsActionPressed("Action2"))
+    //     {
+    //         GlobalVariables.ChangeHealth(-10);
+    //     }
+    // }
     public void _on_button_pressed(){
         ExitSelectionMode();
         setHandRadius(750);

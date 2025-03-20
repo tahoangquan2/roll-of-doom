@@ -1,10 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://ci580fctofejp"]
+[gd_scene load_steps=4 format=3 uid="uid://ci580fctofejp"]
 
 [ext_resource type="Script" path="res://game/gui/Player.cs" id="1_w7j82"]
 [ext_resource type="PackedScene" uid="uid://cayqj43ene72e" path="res://game/gui/side_menu.tscn" id="2_r37qf"]
-[ext_resource type="PackedScene" uid="uid://d30ipmxtvmvco" path="res://game/cards/deck.tscn" id="3_0fp7p"]
 [ext_resource type="PackedScene" uid="uid://r4mtbdq6b4tq" path="res://game/gui/top_gui.tscn" id="3_cfuo1"]
-[ext_resource type="PackedScene" uid="uid://dytog6pc71ik4" path="res://game/cards/hand.tscn" id="4_hux6o"]
 
 [node name="Player" type="CanvasLayer"]
 script = ExtResource("1_w7j82")
@@ -42,9 +40,6 @@ offset_bottom = -210.0
 grow_vertical = 0
 mouse_filter = 2
 
-[node name="Deck" parent="MainControl/DeckControl" instance=ExtResource("3_0fp7p")]
-position = Vector2(0, -20)
-
 [node name="HandControl" type="Control" parent="MainControl"]
 layout_mode = 1
 anchors_preset = 7
@@ -56,8 +51,6 @@ offset_top = 500.0
 offset_bottom = 500.0
 grow_horizontal = 2
 grow_vertical = 0
-
-[node name="Hand" parent="MainControl/HandControl" instance=ExtResource("4_hux6o")]
 
 [node name="TopGui" parent="." instance=ExtResource("3_cfuo1")]
 offset_bottom = 50.0

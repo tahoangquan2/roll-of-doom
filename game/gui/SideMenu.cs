@@ -32,7 +32,6 @@ public partial class SideMenu : Control
         {
             // Connect signal dynamically
             cardManager.CardSelect += OnCardSelect;
-            GD.Print("Connected CardManager signal to Player.");
         }
 	}
 

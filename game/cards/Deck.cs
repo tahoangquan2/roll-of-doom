@@ -7,7 +7,7 @@ public partial class Deck : Node2D
     private int deckSize = 40;    
     private PackedScene cardScene=null;
     private CardManager cardManager;
-
+    private DeckVisual deckVisual => GetNode<DeckVisual>("DeckVisual");
     [Signal] public delegate void DeckUpdatedEventHandler(int cardsRemaining);
     [Signal] public delegate void DeckEmptyEventHandler();
 
@@ -55,7 +55,7 @@ public partial class Deck : Node2D
             deck.RemoveAt(0);
             Card newCard = cardManager.createCard(card);
             drawnCards.Add(newCard);
-            newCard.Position = GlobalPosition;
+            newCard.Position = deckVisual.getTopCardPosition();
         }
         EmitSignal(nameof(DeckUpdated), deck.Count);
         return drawnCards;
@@ -108,7 +108,7 @@ public partial class Deck : Node2D
         {
             deck.Insert(GD.RandRange(0, deck.Count), card.GetCardData());   
             card.canBeHovered = false;
-            card.TransformCard(GlobalPosition, 0, 0.15f);            
+            card.TransformCard(deckVisual.getTopCardPosition(), 0, 0.15f);            
             await card.FlipCard(false);
             card.obliterateCard();
             EmitSignal(nameof(DeckUpdated), deck.Count);            

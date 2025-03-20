@@ -20,9 +20,13 @@ func ApplyEffect(_target):
 
 	var instance = selectingScreen.instantiate()
 
-	hand.get_parent().get_parent().add_child(instance)
+	var grandParent = cardManager.get_parent()
+
+	grandParent.add_child(instance)
+	grandParent.move_child(instance, 1)
+	instance.set_position(Vector2(0, 0))
 	
-	instance.InitializeSelection(cardList, Vector2(138, 210), Callable(self, "_on_card_selected"))	
+	instance.InitializeSelection(cardList, Vector2(138, 210), Callable(self, "_on_card_selected"),"Control/TextureRect")	
 
 func _on_card_selected(index):
 	hand.AddCard(cardList[index])
