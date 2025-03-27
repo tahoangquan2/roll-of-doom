@@ -7,7 +7,11 @@ public partial class Deck : Node2D
     private int deckSize = 40;    
     private PackedScene cardScene=null;
     private CardManager cardManager;
+
+    private CardPileView cardPileView = null;
     private DeckVisual deckVisual => GetNode<DeckVisual>("DeckVisual");
+
+    private PackedScene cardPilePacked = GD.Load<PackedScene>("res://game/cards/card_pile_view.tscn");
     [Signal] public delegate void DeckUpdatedEventHandler(int cardsRemaining);
     [Signal] public delegate void DeckEmptyEventHandler();
 
@@ -15,6 +19,12 @@ public partial class Deck : Node2D
         deck = new Godot.Collections.Array<CardData>();
         cardScene = GD.Load<PackedScene>("res://game/cards/card.tscn");
         cardManager = GetTree().CurrentScene.GetNodeOrNull<CardManager>(GlobalAccessPoint.cardManagerPath);
+        cardPileView = (CardPileView) cardPilePacked.Instantiate();
+        cardPileView.Visible = false;
+
+        //GetParent().AddChild(cardPileView);
+        GetParent().CallDeferred("add_child", cardPileView);
+        cardPileView.SetGlobalPosition(new Vector2(0, 0));
         
         for (int i = 0; i < deckSize; i++)
         {
@@ -27,6 +37,8 @@ public partial class Deck : Node2D
             deck.Add(card);
         }
         EmitSignal(nameof(DeckUpdated), deckSize);
+
+        
     }
     public void SetupDeck( Godot.Collections.Array<CardData> cards)
     {
@@ -114,12 +126,19 @@ public partial class Deck : Node2D
             EmitSignal(nameof(DeckUpdated), deck.Count);            
         }
     }
-    public void _on_button_pressed()
+
+    public void _on_button_toggled(bool buttonPressed)
     {
-        Godot.Collections.Array<Card> drawnCards = DrawCards(1);
-        foreach (Card card in drawnCards)
-        {
+        if (buttonPressed)
+        {         
+            cardManager.Lock();
+            cardPileView.SetCardPile(deck);
+            cardPileView.Visible = true;
         }
-        EmitSignal(nameof(DeckUpdated), deck.Count);
+        else
+        {
+            cardPileView.Visible = false;            
+            cardManager.Unlock();
+        }
     }
 }

@@ -1,0 +1,142 @@
+[gd_scene load_steps=13 format=3 uid="uid://dxgx6nvhkq38t"]
+
+[ext_resource type="Script" path="res://game/cards/CardMenuUi.cs" id="1_mn1jw"]
+[ext_resource type="Texture2D" uid="uid://ba043na0yb5a" path="res://assets/cards/Details/Backgrounds/Water/BackgroundCard67.png" id="3_ftnqf"]
+[ext_resource type="Texture2D" uid="uid://bsbdm7rrajbej" path="res://assets/cards/CardRarity.png" id="4_fq2l2"]
+[ext_resource type="FontFile" uid="uid://sc71p0eebbyj" path="res://assets/fonts/buddychampion.ttf" id="6_t3nr6"]
+[ext_resource type="Texture2D" uid="uid://ceit2wuxyrq5j" path="res://assets/cards/CardTypeIcon.png" id="7_4jogw"]
+[ext_resource type="Texture2D" uid="uid://62t6ctia6pme" path="res://assets/cards/mana_slot.png" id="8_xr6mc"]
+[ext_resource type="FontFile" uid="uid://c1j227ygpp51v" path="res://assets/fonts/DragonHunter-9Ynxj.otf" id="9_qcy7c"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_f7hch"]
+line_spacing = 0.0
+font = ExtResource("6_t3nr6")
+shadow_size = 0
+
+[sub_resource type="LabelSettings" id="LabelSettings_8dd1d"]
+line_spacing = 1.0
+font = ExtResource("9_qcy7c")
+font_size = 13
+outline_size = 7
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 0
+
+[sub_resource type="Theme" id="Theme_0loya"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_sile1"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1gj62"]
+
+[node name="CenterContainer" type="CenterContainer"]
+custom_minimum_size = Vector2(138, 300)
+offset_right = 138.0
+offset_bottom = 300.0
+size_flags_horizontal = 3
+script = ExtResource("1_mn1jw")
+
+[node name="CardVisual" type="Control" parent="."]
+z_as_relative = false
+custom_minimum_size = Vector2(138, 210)
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 6
+
+[node name="CardArt" type="Sprite2D" parent="CardVisual"]
+texture_filter = 1
+position = Vector2(69, 105)
+texture = ExtResource("3_ftnqf")
+
+[node name="CardRarity" type="Sprite2D" parent="CardVisual"]
+texture_filter = 1
+position = Vector2(69, 105)
+texture = ExtResource("4_fq2l2")
+hframes = 4
+
+[node name="CardName" type="Label" parent="CardVisual"]
+use_parent_material = true
+layout_mode = 0
+offset_left = 10.0
+offset_top = 188.0
+offset_right = 132.0
+offset_bottom = 205.0
+size_flags_horizontal = 4
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0)
+theme_override_constants/outline_size = 0
+theme_override_constants/shadow_outline_size = 0
+text = "Wizard Tower "
+label_settings = SubResource("LabelSettings_f7hch")
+horizontal_alignment = 1
+autowrap_mode = 2
+justification_flags = 160
+clip_text = true
+uppercase = true
+
+[node name="CardTypeIcon" type="Sprite2D" parent="CardVisual"]
+position = Vector2(26, 168)
+texture = ExtResource("7_4jogw")
+hframes = 3
+frame = 1
+
+[node name="CostDisplay" type="Node2D" parent="CardVisual"]
+position = Vector2(80, 225)
+
+[node name="ManaSlot" type="Sprite2D" parent="CardVisual/CostDisplay"]
+self_modulate = Color(0.52549, 1, 1, 1)
+use_parent_material = true
+position = Vector2(33, -56)
+texture = ExtResource("8_xr6mc")
+
+[node name="CostLb" type="Label" parent="CardVisual/CostDisplay"]
+texture_filter = 1
+use_parent_material = true
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 23.0
+offset_top = -63.0
+offset_right = 45.0
+offset_bottom = -47.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "50"
+label_settings = SubResource("LabelSettings_8dd1d")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="CardVisual"]
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(138, 210)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -69.0
+offset_top = -105.0
+offset_right = 69.0
+offset_bottom = 105.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_default_cursor_shape = 2
+theme = SubResource("Theme_0loya")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_sile1")
+flat = true
+
+[node name="Button2" type="Button" parent="CardVisual/Button"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+mouse_default_cursor_shape = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_1gj62")
+button_mask = 2
+
+[connection signal="mouse_entered" from="CardVisual/Button" to="CardVisual" method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="CardVisual/Button" to="CardVisual" method="_on_button_mouse_exited"]
+[connection signal="pressed" from="CardVisual/Button/Button2" to="." method="_on_button_2_pressed"]

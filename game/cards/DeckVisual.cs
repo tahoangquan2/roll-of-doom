@@ -6,6 +6,10 @@ public partial class DeckVisual : Node2D
     [Export] public Vector2 offset = new Vector2(-1.0f, 2.0f); // Spacing between stacked cards
     private int currentDeckSize = 0;
 
+    private Label CardCount => GetNode<Label>("Circle-64/CardCount");
+
+    private Node2D Cardstack => GetNode<Node2D>("CardStack");
+
     public override void _Ready()
     {
         Position = new Vector2(-69, -105); // Set position
@@ -27,24 +31,25 @@ public partial class DeckVisual : Node2D
             cardBack.StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered;
             cardBack.Size = new Vector2(138, 210);
             cardBack.Position = new Vector2(i * offset.X, i * offset.Y);
-            AddChild(cardBack);
+            Cardstack.AddChild(cardBack);
         }
     }
 
     public void UpdateDeckVisual(int newSize)
     {
-        foreach (Node child in GetChildren())
+        foreach (Node child in Cardstack.GetChildren())
         {
             child.QueueFree(); // Remove old visual cards
         }
 
         currentDeckSize = newSize;
+        CardCount.Text = currentDeckSize.ToString();
         DrawDeck();
     }
 
     private void ClearDeckVisual()
     {
-        foreach (Node child in GetChildren())
+        foreach (Node child in Cardstack.GetChildren())
         {
             child.QueueFree();
         }

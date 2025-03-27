@@ -1,0 +1,126 @@
+[gd_scene load_steps=5 format=3 uid="uid://s8umrbxvw1sf"]
+
+[ext_resource type="Texture2D" uid="uid://f5311oh3pubu" path="res://assets/sprites/UI/RectangleBox_96x96.png" id="1_7fm65"]
+[ext_resource type="Script" path="res://game/cards/CardPileView.cs" id="1_hkdir"]
+[ext_resource type="Texture2D" uid="uid://cg18krtlfyckf" path="res://assets/sprites/UI/BottomPatternPanel_119x17.png" id="2_5ejhm"]
+[ext_resource type="Texture2D" uid="uid://c5u716bs2xssv" path="res://assets/sprites/UI/TopPatternPanel_02_33x15.png" id="3_n6k53"]
+
+[node name="CardPileView" type="Control"]
+z_index = 15
+custom_minimum_size = Vector2(1920, 1080)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_hkdir")
+
+[node name="SelectionFilter" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="ColorRect" type="ColorRect" parent="SelectionFilter"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.239216, 0.239216, 0.231373, 0.462745)
+
+[node name="Button" type="Button" parent="SelectionFilter"]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 1
+offset_left = 40.0
+offset_top = 35.0
+offset_right = 115.0
+offset_bottom = 80.0
+theme_override_font_sizes/font_size = 24
+text = "Cancel"
+
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -736.0
+offset_top = -430.0
+offset_right = 736.0
+offset_bottom = 430.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_7fm65")
+region_rect = Rect2(0, 0, 96, 96)
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="ScrollContainer" type="ScrollContainer" parent="NinePatchRect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -599.0
+offset_top = -369.0
+offset_right = 599.0
+offset_bottom = 370.0
+grow_horizontal = 2
+grow_vertical = 2
+follow_focus = true
+horizontal_scroll_mode = 0
+
+[node name="GridContainer" type="GridContainer" parent="NinePatchRect/ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+columns = 6
+
+[node name="TopPatternPanel0233x15" type="TextureRect" parent="NinePatchRect"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -42.0
+offset_top = 55.0
+offset_right = 42.0
+offset_bottom = 63.0
+grow_horizontal = 2
+scale = Vector2(10.5, 11.125)
+pivot_offset = Vector2(42, 4)
+mouse_filter = 2
+texture = ExtResource("3_n6k53")
+
+[node name="BottomPatternPanel119x17" type="TextureRect" parent="NinePatchRect"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -53.9999
+offset_top = -118.0
+offset_right = 65.0001
+offset_bottom = -101.0
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(10, 10)
+pivot_offset = Vector2(60, 9)
+mouse_filter = 2
+texture = ExtResource("2_5ejhm")
+expand_mode = 1
+stretch_mode = 5
+
+[connection signal="pressed" from="SelectionFilter/Button" to="." method="_on_button_pressed"]
