@@ -113,16 +113,19 @@ public partial class CardManager : Node2D
 	}
 	private void CardHoveredEffect(Card card, bool isHovering = true)
 	{
-		if (card_being_dragged != null || card==selected_card || hand.isSelecting) return;
+		if (card_being_dragged != null || card == selected_card || hand.isSelecting) return;
 
 		float targetScale = isHovering ? 1.2f : 1.0f;
 
-		if (card.Scale.X != targetScale) 
+		if (card.Scale.X != targetScale)
 		{
-			card.Scale = new Vector2(targetScale, targetScale);	
+			Tween tween = GetTree().CreateTween(); // Auto-deletes when done
+			tween.TweenProperty(card, "scale", new Vector2(targetScale, targetScale), 0.35f)
+				.SetTrans(Tween.TransitionType.Elastic)
+				.SetEase(Tween.EaseType.Out);
 
 			EmitSignal(nameof(CardPushup), card, isHovering);	
-			cardSound();			
+			cardSound();
 		}
 	}
 	private void StartDrag(Card card)

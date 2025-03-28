@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public partial class CardPileView : Control
 {
@@ -9,20 +10,42 @@ public partial class CardPileView : Control
 
 	private Label title => GetNode<Label>("NinePatchRect/Title");
 
+	private Button SortTypeLabel => GetNode<Button>("NinePatchRect/SortType");
+
+	private List<CardData> cardPile;
+
 	[Export] public string Title
 	{
 		get => title.Text;
 		set => title.Text = value;
 	}
 
+	enum SortType	{
+		Alphabetical,Cost,Type
+	}
+
+	private SortType sortType = SortType.Alphabetical;
+
 	private Callable onItemChosenGD;
 
 	public void SetCardPile(Godot.Collections.Array<CardData> cardPile)
 	{
+		var tmpCardPile = sortPile(sortType,new List<CardData>(cardPile));
+
+		if (tmpCardPile==this.cardPile)
+			return;
+
+		this.cardPile = tmpCardPile;
+
+		resetView();
+	}
+
+	private void resetView()
+	{
 		foreach (Node child in gridContainer.GetChildren())
 		{
 			child.QueueFree();
-		}
+		}		
 		
 		foreach (CardData card in cardPile)
 		{
@@ -43,6 +66,31 @@ public partial class CardPileView : Control
 		onItemChosenGD = onSelection;
 	}
 
+	public void switchSortType(){
+		sortType = (SortType)(((int)sortType + 1) % Enum.GetValues(typeof(SortType)).Length);
+		cardPile = sortPile(sortType,cardPile);
+		SortTypeLabel.Text = "Sort Type: "+sortType.ToString();
+		resetView();
+	}
+
+	private List<CardData> sortPile(SortType sortType,List<CardData> cardPile)
+	{
+		var sortedCardPile = new List<CardData>(cardPile);
+		switch (sortType)
+		{
+			case SortType.Alphabetical:				
+				sortedCardPile.Sort((a, b) => a.CardName.CompareTo(b.CardName));				
+				break;
+			case SortType.Cost:
+				sortedCardPile.Sort((a, b) => a.Cost.CompareTo(b.Cost));
+				break;
+			case SortType.Type:
+				sortedCardPile.Sort((a, b) => a.CardType.CompareTo(b.CardType));
+				break;
+		}
+		return sortedCardPile;
+	}
+
 	public void setTitle(string title)
 	{
 		Title = title;
@@ -55,5 +103,10 @@ public partial class CardPileView : Control
 		{
 			parentControl.Call("_on_button_toggled",false);
 		}
+	}
+
+	public void _on_sort_type_pressed()
+	{
+		switchSortType();
 	}
 }

@@ -185,4 +185,19 @@ label_settings = SubResource("LabelSettings_m44jg")
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="SortType" type="Button" parent="NinePatchRect"]
+layout_mode = 0
+offset_left = 13.0
+offset_top = 13.0
+offset_right = 198.0
+offset_bottom = 59.0
+theme_override_fonts/font = ExtResource("6_vr23i")
+theme_override_font_sizes/font_size = 20
+text = "Sort Type: "
+alignment = 0
+icon_alignment = 1
+vertical_icon_alignment = 0
+expand_icon = true
+
 [connection signal="pressed" from="SelectionFilter/Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="NinePatchRect/SortType" to="." method="_on_sort_type_pressed"]

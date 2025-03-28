@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3 uid="uid://db4hoqfmh4ue4"]
+
+[ext_resource type="PackedScene" uid="uid://dohunb1gqlydm" path="res://game/cards/card_pile.tscn" id="1_5qaex"]
+[ext_resource type="Script" path="res://game/cards/DiscardPile.cs" id="2_me42l"]
+[ext_resource type="Script" path="res://game/cards/DeckVisual.cs" id="3_5lejm"]
+
+[node name="DiscardPile" instance=ExtResource("1_5qaex")]
+script = ExtResource("2_me42l")
+
+[node name="ColorRect" type="ColorRect" parent="." index="0"]
+custom_minimum_size = Vector2(142, 214)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -71.0
+offset_top = -107.0
+offset_right = 71.0
+offset_bottom = 107.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.356863, 0.356863, 0.356863, 0.803922)
+
+[node name="DeckVisual" parent="." index="2"]
+script = ExtResource("3_5lejm")
+
+[node name="CardStack" type="Node2D" parent="DeckVisual" index="0"]

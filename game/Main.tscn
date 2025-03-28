@@ -1,11 +1,13 @@
-[gd_scene load_steps=7 format=3 uid="uid://wth47pxkkh7u"]
+[gd_scene load_steps=9 format=3 uid="uid://wth47pxkkh7u"]
 
 [ext_resource type="Script" path="res://game/Main.cs" id="1_3ktym"]
 [ext_resource type="PackedScene" uid="uid://darh3kkm8ew07" path="res://game/cards/card_manager.tscn" id="2_nqpy4"]
+[ext_resource type="Texture2D" uid="uid://cp4iq5fd6j8be" path="res://assets/art/background.png" id="3_bo5dm"]
 [ext_resource type="PackedScene" uid="uid://d30ipmxtvmvco" path="res://game/cards/deck.tscn" id="5_3bhax"]
 [ext_resource type="PackedScene" uid="uid://du3m5tmrky0oq" path="res://game/cards/card_active_zone.tscn" id="5_e70is"]
 [ext_resource type="PackedScene" uid="uid://dytog6pc71ik4" path="res://game/cards/hand.tscn" id="6_4w38m"]
 [ext_resource type="PackedScene" uid="uid://ci580fctofejp" path="res://game/gui/player.tscn" id="6_8bqau"]
+[ext_resource type="PackedScene" uid="uid://db4hoqfmh4ue4" path="res://game/cards/discard_pile.tscn" id="8_jqrpu"]
 
 [node name="Game" type="Node2D"]
 process_priority = -1
@@ -14,6 +16,14 @@ script = ExtResource("1_3ktym")
 [node name="CardActiveZone" parent="." instance=ExtResource("5_e70is")]
 position = Vector2(1019, 393)
 scale = Vector2(6.6, 2.2)
+
+[node name="TextureRect" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(1920, 1080)
+offset_right = 1920.0
+offset_bottom = 1080.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("3_bo5dm")
 
 [node name="Player" parent="." instance=ExtResource("6_8bqau")]
 
@@ -28,3 +38,6 @@ anchor_mode = 0
 
 [node name="Hand" parent="." instance=ExtResource("6_4w38m")]
 position = Vector2(960, 1580)
+
+[node name="DiscardPile" parent="." instance=ExtResource("8_jqrpu")]
+position = Vector2(1718, 926)
