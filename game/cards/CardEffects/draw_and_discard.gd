@@ -14,8 +14,8 @@ func ApplyEffect(_target):
 func _on_discard_complete(_selectedCards):
 	hand.drawFromDeck(DrawAmount)
 	s_disconnect()
-	get_parent().KillCard()
-
+	get_parent().EffectFinished()
+	
 func _on_discard_cancel():
 	s_disconnect()
 	hand.AddCard(get_parent())

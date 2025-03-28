@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Godot;
 using Godot.Collections;
 
@@ -15,6 +16,7 @@ public partial class CardData : Resource
     // card art, and art offset
     [Export] public Texture2D CardArt { get; set; }
     [Export] public Vector2 ArtOffset { get; set; }
+    [Export] public Array<EnumGlobal.CardKeywords> Keywords { get; set; } = new Array<EnumGlobal.CardKeywords>();
 
     public CardData()
     {

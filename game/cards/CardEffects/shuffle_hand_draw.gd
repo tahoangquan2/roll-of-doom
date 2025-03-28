@@ -8,4 +8,4 @@ func ApplyEffect(_target):
 	amount = hand.GetHandSize()
 	hand.ShuffleHandtoDeck()	
 	hand.drawFromDeck(amount)
-	get_parent().KillCard()
+	get_parent().EffectFinished()

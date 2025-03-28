@@ -2,6 +2,7 @@ using Godot;
 
 public partial class Deck : CardPile
 { 
+    private int deckSize = 2; 
     private DeckVisual deckVisual => GetNode<DeckVisual>("DeckVisual");
     
     // when the decksize is updated cardcount is updated
@@ -37,13 +38,15 @@ public partial class Deck : CardPile
     }
     public Godot.Collections.Array<Card> DrawCards(int amount){
         Godot.Collections.Array<Card> drawnCards = new Godot.Collections.Array<Card>();
-        amount = Mathf.Clamp(amount, 0, deck.Count);
         for (int i = 0; i < amount; i++)
         {   
             if (deck.Count == 0)
             {
-                GD.Print("Deck is empty.");
-                break;
+                DiscardPile discardPile = GetParent().GetNodeOrNull<DiscardPile>(GlobalAccessPoint.discardPilePath);
+
+                discardPile.Restock();
+                GD.Print("Deck is empty, restocking from discard pile");
+                if (deck.Count == 0) break;
             }
             CardData card = deck[0];            
             deck.RemoveAt(0);

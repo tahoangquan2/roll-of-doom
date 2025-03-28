@@ -12,7 +12,9 @@ public partial class GlobalAccessPoint : Node
     private Deck deck;
     private Player player;
 
-    public static string handPath, deckPath, cardManagerPath, playerPath, gamePlayPath;
+    private DiscardPile discardPile;
+
+    public static string handPath, deckPath, cardManagerPath, playerPath, gamePlayPath,discardPilePath;
 
     [Signal] public delegate void ReferencesUpdatedEventHandler();
 
@@ -33,6 +35,7 @@ public partial class GlobalAccessPoint : Node
         cardManagerPath = "CardManager";
         playerPath = "Player";
         gamePlayPath = "GamePlay";
+        discardPilePath = "DiscardPile";
 
         UpdateReferences();
     }
@@ -59,10 +62,12 @@ public partial class GlobalAccessPoint : Node
         hand = root.GetNodeOrNull<Hand>(handPath);        
         player = root.GetNodeOrNull<Player>(playerPath);
         deck = root.GetNodeOrNull<Deck>(deckPath);
+        discardPile = root.GetNodeOrNull<DiscardPile>(discardPilePath);
         
         EmitSignal(nameof(ReferencesUpdated));
     }
     public static CardManager GetCardManager() => Instance?.cardManager;
     public static Hand GetHand() => Instance?.hand;
     public static Deck GetDeck() => Instance?.deck;
+    public static DiscardPile GetDiscardPile() => Instance?.discardPile;
 }

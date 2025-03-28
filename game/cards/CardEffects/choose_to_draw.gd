@@ -14,6 +14,10 @@ func ApplyEffect(_target):
 
 	var cards = deck.GetRandomCard(fishAmout)
 
+	if cards.size() == 0:
+		get_parent().EffectFinished()
+		return
+
 	#list of cards to be created
 	for card in cards:
 		cardList.append(cardManager.createCard(card))
@@ -36,4 +40,4 @@ func _on_card_selected(index):
 	print(cardList)
 	deck.ShuffleCardIntoDeck(cardList)
 
-	get_parent().KillCard()
+	get_parent().EffectFinished()

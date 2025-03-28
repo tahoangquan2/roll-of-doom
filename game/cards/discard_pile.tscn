@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://db4hoqfmh4ue4"]
+[gd_scene load_steps=5 format=3 uid="uid://db4hoqfmh4ue4"]
 
 [ext_resource type="PackedScene" uid="uid://dohunb1gqlydm" path="res://game/cards/card_pile.tscn" id="1_5qaex"]
 [ext_resource type="Script" path="res://game/cards/DiscardPile.cs" id="2_me42l"]
 [ext_resource type="Script" path="res://game/cards/DeckVisual.cs" id="3_5lejm"]
+[ext_resource type="Texture2D" uid="uid://cfod7vdoc2uym" path="res://assets/cards/card fantasy back.png" id="4_rkasy"]
 
 [node name="DiscardPile" instance=ExtResource("1_5qaex")]
 script = ExtResource("2_me42l")
@@ -24,5 +25,6 @@ color = Color(0.356863, 0.356863, 0.356863, 0.803922)
 
 [node name="DeckVisual" parent="." index="2"]
 script = ExtResource("3_5lejm")
+CardBackTexture = ExtResource("4_rkasy")
 
 [node name="CardStack" type="Node2D" parent="DeckVisual" index="0"]

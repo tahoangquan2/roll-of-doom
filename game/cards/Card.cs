@@ -19,6 +19,8 @@ public partial class Card : Node2D
     private Control display;
     private AnimationPlayer animPlayer;
     private CardManager parentManager;
+    private Deck deck;
+    private DiscardPile discardPile;
     private readonly float AngleXMax = Mathf.DegToRad(7.0f); 
     private readonly float AngleYMax = Mathf.DegToRad(7.0f); 
 
@@ -59,6 +61,10 @@ public partial class Card : Node2D
         parentManager = GetParent() as CardManager;
         parentManager.ConnectCardSignals(this);
 
+        // Deck and DiscardPile
+        deck = GetTree().CurrentScene.GetNodeOrNull<Deck>(GlobalAccessPoint.deckPath);
+        discardPile = GetTree().CurrentScene.GetNodeOrNull<DiscardPile>(GlobalAccessPoint.discardPilePath);
+
         UpdateGraphics();
     }
 
@@ -84,8 +90,8 @@ public partial class Card : Node2D
                 }
             }
 
-            await ToSignal(GetTree(), "process_frame"); // Ensure frame update before deletion
-            KillCard();
+            await ToSignal(GetTree(), "process_frame"); // Ensure frame update before deletion           
+            EffectFinished();
         }        
     }
 
@@ -121,7 +127,6 @@ public partial class Card : Node2D
                 break;
         }
     }  
-
     public void Shadering(Vector2 mousePos) {
         if (shaderMaterial == null) return;
 
@@ -136,11 +141,9 @@ public partial class Card : Node2D
         shaderMaterial.SetShaderParameter("x_rot", rotY);
         shaderMaterial.SetShaderParameter("y_rot", rotX);
     }
-
     public void ResetShader(){
         if (shaderMaterial != null){
-            shaderMaterial.SetShaderParameter("x_rot", 0f);shaderMaterial.SetShaderParameter("y_rot", 0f);
-        }
+            shaderMaterial.SetShaderParameter("x_rot", 0f);shaderMaterial.SetShaderParameter("y_rot", 0f);}
     }
 
     // 🟢 Emit signals correctly on mouse enter/exit
@@ -180,18 +183,26 @@ public partial class Card : Node2D
         obliterateCard(); 
     }
 
+    public void putToDiscardPile() { 
+        discardPile.AddCard(this);
+    }
+
+    public void EffectFinished() { 
+        if (cardData.Keywords.Contains(EnumGlobal.CardKeywords.Ephemeral)) 
+            KillCard();
+        else 
+            putToDiscardPile();
+    }
+
     public void obliterateCard() {       
         parentManager.checkChange(this); 
         QueueFree();
     }
-
-
     public async Task FlipCard(bool flipUp=false)    {
         if (flipUp) animPlayer.PlayBackwards("card_flip"); 
         else animPlayer.Play("card_flip"); 
         await ToSignal(animPlayer, "animation_finished"); // Wait for the animation to end
     }
-
     public void TransformCard(Vector2 targetPosition, float targetRotation, float duration){
 		if (cardTween!= null && cardTween.IsRunning())
 		{
@@ -211,7 +222,6 @@ public partial class Card : Node2D
             cardTween = null;  // Remove reference
         };
     }
-
     public CardData GetCardData()    {
         return cardData;
     }

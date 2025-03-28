@@ -117,6 +117,7 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
     }
     public async void drawFromDeck(int amount){
         Godot.Collections.Array<Card> drawnCards = deck.DrawCards(amount);  
+        amount = drawnCards.Count;
         cardManager.Lock();      
         for (int i = 0; i < amount; i++) if (drawnCards[i] != null) {            
             
@@ -276,18 +277,18 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
         return StartSelectionMode(numToSelect, EnumGlobal.HandSelectionPurpose.Discard);
     }
     int requiredSelectionCount = 0;
-    // public void _input(InputEvent @event){//action "Action" from input map, this is for testing
-    // if (@event is InputEventMouseMotion) return;
-    //     if (@event.IsActionPressed("Action"))
-    //     {
-    //         drawFromDeck(3);
-    //     }
+    public void _input(InputEvent @event){//action "Action" from input map, this is for testing
+    if (@event is InputEventMouseMotion) return;
+        if (@event.IsActionPressed("Action"))
+        {
+            drawFromDeck(3);
+        }
 
-    //     if (@event.IsActionPressed("Action2"))
-    //     {
-    //         GlobalVariables.ChangeHealth(-10);
-    //     }
-    // }
+        if (@event.IsActionPressed("Action2"))
+        {
+            GlobalVariables.ChangeHealth(-10);
+        }
+    }
     public void _on_button_pressed(){
         ExitSelectionMode();
         setHandRadius(750);

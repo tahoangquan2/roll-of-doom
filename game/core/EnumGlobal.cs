@@ -68,6 +68,48 @@ public partial class EnumGlobal : Node
         
     }
 
+public enum CardKeywords
+{
+    // The card does not got to discard pile at Cycle.
+    Keep, 
+
+    /// <summary>The card cannot be played.</summary>
+    Unplayable,
+
+    /// <summary>When <b>Cycle</b> while this is in hand, <b>Forget</b>.</summary>
+    Needy,
+
+    /// <summary>When played, <b>Forget</b>.</summary>
+    Ephemeral,
+
+    /// <summary>When drawn, draw an additional card.</summary>
+    Bundled,
+
+    /// <summary>When drawn, activates without costing mana.</summary>
+    Auto,
+
+    /// <summary>While in hand, grants an ongoing effect.</summary>
+    Aura,
+
+    /// <summary>Cannot be <b>Discarded</b> or <b>Forgotten</b>; can only be played once per turn.</summary>
+    Eternal,
+
+    /// <summary>Always starts in your opening hand.</summary>
+    Fated,
+
+    /// <summary>When <b>Restock</b>, automatically moves to your hand.</summary>
+    Magnetic,
+
+    /// <summary>Temporary cards added to weaken the player (e.g., burns, wounds, curses).</summary>
+    Status,
+
+    /// <summary>Cannot be <b>Dodge</b>.</summary>
+    Precise,
+
+    /// This effect activates whenever the card is put into the <b>Discard</b> or <b>Forgotten</b> pile.
+    Overwork
+}
+
     public enum State
     {
         MainMenu,

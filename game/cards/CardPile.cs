@@ -4,7 +4,7 @@ using Godot;
 public partial class CardPile : Node2D
 {
     public Godot.Collections.Array<CardData> deck=new Godot.Collections.Array<CardData>();
-    protected int deckSize = 40;    
+       
     protected CardManager cardManager;
     protected CardPileView cardPileView = null;
 
@@ -95,7 +95,7 @@ public partial class CardPile : Node2D
         }
     }
 
-    private Vector2 getTopCardPosition()
+    protected Vector2 getTopCardPosition()
     {
         if (deckVisual == null) return new Vector2(0, 0);
         return deckVisual.getTopCardPosition();

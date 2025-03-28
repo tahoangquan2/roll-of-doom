@@ -33,11 +33,11 @@ process_mode = 0
 [node name="Deck" parent="." instance=ExtResource("5_3bhax")]
 position = Vector2(160, 900)
 
+[node name="DiscardPile" parent="." instance=ExtResource("8_jqrpu")]
+position = Vector2(1718, 926)
+
 [node name="Camera2D" type="Camera2D" parent="."]
 anchor_mode = 0
 
 [node name="Hand" parent="." instance=ExtResource("6_4w38m")]
 position = Vector2(960, 1580)
-
-[node name="DiscardPile" parent="." instance=ExtResource("8_jqrpu")]
-position = Vector2(1718, 926)
