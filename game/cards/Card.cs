@@ -156,7 +156,7 @@ public partial class Card : Node2D
 
     public void _on_texture_rect_pressed(){
         //GD.Print("Card right pressed");
-        parentManager.EmitSignal(nameof(CardManager.CardSelect), this);
+        parentManager.EmitSignal(nameof(CardManager.CardSelect), cardData);
     }
 
     public async void BurnCard() 

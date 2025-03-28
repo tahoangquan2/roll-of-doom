@@ -11,11 +11,21 @@ public partial class CardMenuUi : CenterContainer
 	private Label cardCost => GetNode<Label>("CardVisual/CostDisplay/CostLb");
 	private Sprite2D cardType => GetNode<Sprite2D>("CardVisual/CardTypeIcon");
 
+	private CardManager cardManager=null;
+
+	Button button => GetNode<Button>("CardVisual/Button");
+
 	//set card data
 	public void SetCardData(CardData cardData)
 	{
 		this.cardData = cardData;
 		UpdateGraphics();
+		cardManager = GetTree().CurrentScene.GetNodeOrNull<CardManager>(GlobalAccessPoint.cardManagerPath);
+	}
+
+	public void SetFunctionForButtonPressed(Callable onSelection)
+	{
+		button.Connect("pressed", onSelection);
 	}
 
 	private void UpdateGraphics()
@@ -42,21 +52,20 @@ public partial class CardMenuUi : CenterContainer
         }
     }  
 
-	public void _on_button_mouse_entered(){
-		cardRarity.Modulate = new Color(1, .9f, 0.9f, 1);
+	public void _on_button_2_mouse_entered(){
+		cardRarity.Modulate = new Color(.9f, .9f, 0.9f, 1);
 	}
 
-	public void _on_button_mouse_exited(){
+	public void _on_button_2_mouse_exited(){
 		cardRarity.Modulate = new Color(1, 1, 1, 1);
 	}
 
 	public void _on_button_pressed()
 	{
-		GD.Print("button1");
 	}
 
 	public void _on_button_2_pressed(){
-		GD.Print("button2");
+		cardManager.EmitSignal(nameof(CardManager.CardSelect), cardData);
 	}
 
 }

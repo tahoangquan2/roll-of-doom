@@ -35,7 +35,6 @@ size_flags_horizontal = 3
 script = ExtResource("1_mn1jw")
 
 [node name="CardVisual" type="Control" parent="."]
-z_as_relative = false
 custom_minimum_size = Vector2(138, 210)
 layout_mode = 2
 size_flags_horizontal = 6
@@ -120,6 +119,7 @@ offset_right = 69.0
 offset_bottom = 105.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 mouse_default_cursor_shape = 2
 theme = SubResource("Theme_0loya")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_sile1")
@@ -136,7 +136,9 @@ mouse_filter = 1
 mouse_default_cursor_shape = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_1gj62")
 button_mask = 2
+flat = true
 
-[connection signal="mouse_entered" from="CardVisual/Button" to="CardVisual" method="_on_button_mouse_entered"]
-[connection signal="mouse_exited" from="CardVisual/Button" to="CardVisual" method="_on_button_mouse_exited"]
+[connection signal="pressed" from="CardVisual/Button" to="." method="_on_button_pressed"]
+[connection signal="mouse_entered" from="CardVisual/Button/Button2" to="." method="_on_button_2_mouse_entered"]
+[connection signal="mouse_exited" from="CardVisual/Button/Button2" to="." method="_on_button_2_mouse_exited"]
 [connection signal="pressed" from="CardVisual/Button/Button2" to="." method="_on_button_2_pressed"]

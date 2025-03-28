@@ -10,20 +10,17 @@ public partial class Deck : Node2D
 
     private CardPileView cardPileView = null;
     private DeckVisual deckVisual => GetNode<DeckVisual>("DeckVisual");
-
-    private PackedScene cardPilePacked = GD.Load<PackedScene>("res://game/cards/card_pile_view.tscn");
     [Signal] public delegate void DeckUpdatedEventHandler(int cardsRemaining);
     [Signal] public delegate void DeckEmptyEventHandler();
-
+    private Button button => GetNode<Button>("Button");
     public override void _Ready() { 
         deck = new Godot.Collections.Array<CardData>();
         cardScene = GD.Load<PackedScene>("res://game/cards/card.tscn");
         cardManager = GetTree().CurrentScene.GetNodeOrNull<CardManager>(GlobalAccessPoint.cardManagerPath);
-        cardPileView = (CardPileView) cardPilePacked.Instantiate();
+        cardPileView = GetNode<CardPileView>("CardPileView");
         cardPileView.Visible = false;
-
-        //GetParent().AddChild(cardPileView);
-        GetParent().CallDeferred("add_child", cardPileView);
+        cardPileView.SetFunctionForButtonPressed(new Callable(this, nameof(ShuffleDeck)));
+        
         cardPileView.SetGlobalPosition(new Vector2(0, 0));
         
         for (int i = 0; i < deckSize; i++)
@@ -36,9 +33,7 @@ public partial class Deck : Node2D
             card.Cost = GD.RandRange(1, 10);
             deck.Add(card);
         }
-        EmitSignal(nameof(DeckUpdated), deckSize);
-
-        
+        EmitSignal(nameof(DeckUpdated), deckSize);        
     }
     public void SetupDeck( Godot.Collections.Array<CardData> cards)
     {
@@ -126,7 +121,6 @@ public partial class Deck : Node2D
             EmitSignal(nameof(DeckUpdated), deck.Count);            
         }
     }
-
     public void _on_button_toggled(bool buttonPressed)
     {
         if (buttonPressed)
@@ -139,6 +133,7 @@ public partial class Deck : Node2D
         {
             cardPileView.Visible = false;            
             cardManager.Unlock();
+            button.ButtonPressed = false;
         }
     }
 }

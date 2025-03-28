@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://d30ipmxtvmvco"]
+[gd_scene load_steps=8 format=3 uid="uid://d30ipmxtvmvco"]
 
 [ext_resource type="Script" path="res://game/cards/Deck.cs" id="1_yimvb"]
 [ext_resource type="Texture2D" uid="uid://cfod7vdoc2uym" path="res://assets/cards/card fantasy back.png" id="2_1tldn"]
+[ext_resource type="PackedScene" uid="uid://s8umrbxvw1sf" path="res://game/cards/card_pile_view.tscn" id="2_5sr7x"]
 [ext_resource type="Script" path="res://game/cards/DeckVisual.cs" id="2_gq3cn"]
 [ext_resource type="Texture2D" uid="uid://dsae5chtt7mdl" path="res://assets/sprites/circle-64.png" id="4_jgdc0"]
 [ext_resource type="FontFile" uid="uid://c1j227ygpp51v" path="res://assets/fonts/DragonHunter-9Ynxj.otf" id="5_wp0f3"]
@@ -11,6 +12,14 @@ font = ExtResource("5_wp0f3")
 
 [node name="Deck" type="Node2D"]
 script = ExtResource("1_yimvb")
+
+[node name="CardPileView" parent="." instance=ExtResource("2_5sr7x")]
+visible = false
+offset_left = -960.0
+offset_top = -540.0
+offset_right = 960.0
+offset_bottom = 540.0
+Title = "Draw Pile"
 
 [node name="DeckVisual" type="Node2D" parent="."]
 script = ExtResource("2_gq3cn")

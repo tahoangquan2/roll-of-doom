@@ -9,11 +9,8 @@ public partial class MiddleScreenSelection : Control
 	private Godot.Collections.Array<Node2D> nodes = new Godot.Collections.Array<Node2D>();
 	private Vector2 itemSize;
 	private HBoxContainer hboxContainer;
-
-	private Action<int> onItemChosenCS=null;
 	private Callable onItemChosenGD;
 	private bool isInitialized = false;
-	private bool isGDscript = true;
 
 	private string buttonPath = "";
 
@@ -36,23 +33,6 @@ public partial class MiddleScreenSelection : Control
 
 		setUp();
 	}
-
-	public void InitializeSelection(
-		Godot.Collections.Array<Node2D> nodes,Vector2 itemSize, 
-		Action<int> onSelection,string buttonPath =""
-	)
-	{
-		this.nodes = nodes;
-		buttons = new Button[nodes.Count];
-		this.itemSize = itemSize;
-
-		onItemChosenCS = onSelection;
-		isGDscript = false;
-		this.buttonPath = buttonPath;
-
-		setUp();
-	}
-
 	private void setUp()
 	{
 		
@@ -100,23 +80,16 @@ public partial class MiddleScreenSelection : Control
 	private void OnItemChosen(
 		int buttonIndex
 	)	{
-		GlobalAccessPoint.GetCardManager().Unlock(); 
-
 		// this will execute the medthoed that was passed in
 
-		if (isGDscript)
-		{
-			onItemChosenGD.Call(buttonIndex);
-		}
-		else
-		{
-			onItemChosenCS(buttonIndex);
-		}
+		onItemChosenGD.Call(buttonIndex);
+
+		GlobalAccessPoint.GetCardManager().Unlock(); 
 		
 		QueueFree();
 	}
 
-	public void _on_button_pressed(){
+	public void _on_button_pressed(){ // cancel and choose the first item
 		OnItemChosen(0);
 		for (int i = 0; i < nodes.Count; i++)
 		{
