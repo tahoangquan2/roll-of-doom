@@ -53,13 +53,13 @@ public partial class SideMenu : Control
 		}
 	}
 
-	private void OnCardSelect(Card card)
+	private void OnCardSelect(CardData cardData)
 	{
 		//CardTypeLabel.Text = card.GetCardData();
-		CardNameLabel.Text = card.GetCardData().CardName;
-		CardEffectLabel.Text = "Effect: "+card.GetCardData().Description;
-		CardCostLabel.Text = "Cost: "+card.GetCardData().Cost.ToString();
-		CardTextureRect.Texture = card.GetCardData().CardArt;
+		CardNameLabel.Text = cardData.CardName;
+		CardEffectLabel.Text = "Effect: "+cardData.Description;
+		CardCostLabel.Text = "Cost: "+cardData.Cost.ToString();
+		CardTextureRect.Texture = cardData.CardArt;
 	}
 
 }

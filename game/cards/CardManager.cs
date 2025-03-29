@@ -12,7 +12,7 @@ public partial class CardManager : Node2D
 	private bool Locked =false; // if true, no card can be selected or dragged
 	[Signal] public delegate void CardPushupEventHandler(Card card,bool isHovered);
 	[Signal] public delegate void CardUnhandEventHandler(Card card);
-	[Signal] public delegate void CardSelectEventHandler(Card card);
+	[Signal] public delegate void CardSelectEventHandler(CardData card);
 	public override void _Input(InputEvent @event)
 	{	if (Locked) return;
 		if (hand is not null && hand.isSelecting) {
@@ -93,13 +93,14 @@ public partial class CardManager : Node2D
 	public void ConnectCardSignals(Card card)
 	{card.CardHovered += _on_card_hovered;   card.CardUnhovered += _on_card_unhovered;}
 	public void _on_card_hovered(Card card)
-	{	if (isProcessingHover) return;
+	{	if (isProcessingHover || Locked) return;
 		isProcessingHover = true;
 		card_being_hovered = card;
 		CardHoveredEffect(card);
 	}
 	public void _on_card_unhovered(Card card)
-	{	isProcessingHover = false;
+	{	if (Locked) return;
+		isProcessingHover = false;
 
 		Card newCard = RaycastCheckForCard();
 		if (newCard!=null) {
@@ -112,16 +113,19 @@ public partial class CardManager : Node2D
 	}
 	private void CardHoveredEffect(Card card, bool isHovering = true)
 	{
-		if (card_being_dragged != null || card==selected_card || hand.isSelecting) return;
+		if (card_being_dragged != null || card == selected_card || hand.isSelecting) return;
 
 		float targetScale = isHovering ? 1.2f : 1.0f;
 
-		if (card.Scale.X != targetScale) 
+		if (card.Scale.X != targetScale)
 		{
-			card.Scale = new Vector2(targetScale, targetScale);	
+			Tween tween = GetTree().CreateTween(); // Auto-deletes when done
+			tween.TweenProperty(card, "scale", new Vector2(targetScale, targetScale), 0.35f)
+				.SetTrans(Tween.TransitionType.Elastic)
+				.SetEase(Tween.EaseType.Out);
 
 			EmitSignal(nameof(CardPushup), card, isHovering);	
-			cardSound();			
+			cardSound();
 		}
 	}
 	private void StartDrag(Card card)
@@ -155,7 +159,7 @@ public partial class CardManager : Node2D
 		}		
 	}
 	public Card createCard(CardData cardData)
-	{	GD.Print("Creating card");
+	{	
 		Card newCard = (Card)cardScene.Instantiate();
         AddChild(newCard);
         newCard.SetupCard(cardData);

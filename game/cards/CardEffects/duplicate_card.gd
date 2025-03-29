@@ -18,7 +18,7 @@ func _on_choose_complete(_selectedCards):
 	s_disconnect()
 	for i in range(DuplicateAmount):
 		deck.ShuffleIntoDeck(_selectedCards[0].GetCardData())
-	get_parent().KillCard()
+	get_parent().EffectFinished()
 
 func _on_choose_cancel():
 	s_disconnect()

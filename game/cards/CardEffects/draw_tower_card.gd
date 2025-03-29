@@ -12,4 +12,4 @@ func ApplyEffect(_target):
 	if ind != -1:
 		hand.drawFromDeckwithIndex(ind)
 
-	get_parent().KillCard()
+	get_parent().EffectFinished()
