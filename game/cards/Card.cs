@@ -113,13 +113,13 @@ public partial class Card : Node2D
         CardArt.Texture = cardData.CardArt;
         switch (cardData.CardType)
         {
-            case EnumGlobal.enumCardType.Tower:
+            case EnumGlobal.enumCardType.Attack:
                 CardTypeIcon.Frame = 1;
                 break;
-            case EnumGlobal.enumCardType.Spell:
+            case EnumGlobal.enumCardType.Defense:
                 CardTypeIcon.Frame = 2;
                 break;
-            case EnumGlobal.enumCardType.Deck:
+            case EnumGlobal.enumCardType.Spell:
                 CardTypeIcon.Frame = 0;
                 break;
             default:
@@ -184,6 +184,7 @@ public partial class Card : Node2D
     }
 
     public void putToDiscardPile() { 
+        canBeHovered = false;
         discardPile.AddCard(this);
     }
 

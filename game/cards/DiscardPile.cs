@@ -17,7 +17,7 @@ public partial class DiscardPile : CardPile
 		card.TransformCard(getTopCardPosition(),0.0f,0.15f);
 		card.canBeHovered = false;
 		await card.FlipCard(false);
-        card.obliterateCard();
+		card.obliterateCard();
 
 		emitDeckUpdated(deck.Count);
 	}
@@ -38,7 +38,6 @@ public partial class DiscardPile : CardPile
 			card.QueueFree();
 		}
 		
-
 		this.deck.Clear();
 		CardCount.Text = this.deck.Count.ToString(); 
 		emitDeckUpdated(this.deck.Count);

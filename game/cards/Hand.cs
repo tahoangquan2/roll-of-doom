@@ -22,6 +22,7 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
 
     [Signal] public delegate void ActionCompletedEventHandler(Godot.Collections.Array<Card> selectedCards);
     [Signal] public delegate void ActionCancelledEventHandler();
+    [Signal] public delegate void FinishedDrawingEventHandler(Godot.Collections.Array<Card> drawnCards);
 
     EnumGlobal.HandSelectionPurpose currentPurpose = EnumGlobal.HandSelectionPurpose.None;
     public override void _Ready() {
@@ -127,6 +128,7 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
             }
         }
         cardManager.Unlock();
+        EmitSignal(nameof(FinishedDrawing), drawnCards);
     }
     public void drawFromDeckwithIndex(int index){
         Card drawnCard = deck.DrawCard(index);
@@ -295,5 +297,8 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
     }
     public int GetHandSize(){
         return hand.Count;
+    }
+    public Godot.Collections.Array<Card> GetHand(){
+        return hand;
     }
 }

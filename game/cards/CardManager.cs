@@ -143,7 +143,7 @@ public partial class CardManager : Node2D
 		Card tmpCard = card_being_dragged;
 		card_being_dragged = null;
 		
-		cardEffectZone zone = RaycastCheckForZone();
+		CardPlayZone zone = RaycastCheckForZone();
 		if (zone != null){
 			if (GlobalVariables.spirit >= tmpCard.GetCardData().Cost)
 			{
@@ -151,9 +151,10 @@ public partial class CardManager : Node2D
 				card_being_hovered = null;
 				tmpCard.ResetShader();
 				zone.activeCard(tmpCard,GetGlobalMousePosition()-zone.GlobalPosition);
-				GD.Print("cost: "+tmpCard.GetCardData().Cost);
+
+				//GD.Print("cost: "+tmpCard.GetCardData().Cost);
 				GlobalVariables.ChangeSpirit(-tmpCard.GetCardData().Cost);
-				GD.Print("spirit: "+GlobalVariables.spirit);
+				//GD.Print("spirit: "+GlobalVariables.spirit);
 			}
 			
 		}		
@@ -172,11 +173,11 @@ public partial class CardManager : Node2D
 
 		return null;
 	}
-	public cardEffectZone RaycastCheckForZone()
+	public CardPlayZone RaycastCheckForZone()
 	{
 		var result = CardGlobal.RaycastCheckForObjects(this,GetGlobalMousePosition(), CardGlobal.cardSlotMask);
 		if (result.Count > 0){ // get result[0]
-			return (cardEffectZone)result[0]["collider"];			
+			return (CardPlayZone)result[0]["collider"];			
 		}
 		return null;
 	}

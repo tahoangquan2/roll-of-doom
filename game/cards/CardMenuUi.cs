@@ -37,13 +37,13 @@ public partial class CardMenuUi : CenterContainer
 		cardArt.Texture = cardData.CardArt;
         switch (cardData.CardType)
         {
-            case EnumGlobal.enumCardType.Tower:
+            case EnumGlobal.enumCardType.Attack:
                 cardType.Frame = 1;
                 break;
-            case EnumGlobal.enumCardType.Spell:
+            case EnumGlobal.enumCardType.Defense:
                 cardType.Frame = 2;
                 break;
-            case EnumGlobal.enumCardType.Deck:
+            case EnumGlobal.enumCardType.Spell:
                 cardType.Frame = 0;
                 break;
             default:

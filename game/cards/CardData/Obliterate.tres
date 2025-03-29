@@ -1,20 +1,17 @@
-[gd_resource type="Resource" script_class="CardData" load_steps=5 format=3 uid="uid://c6va1gi6puixe"]
+[gd_resource type="Resource" script_class="CardData" load_steps=4 format=3 uid="uid://c6va1gi6puixe"]
 
 [ext_resource type="Texture2D" uid="uid://crbutn8eh1p7o" path="res://assets/cards/Details/Backgrounds/Fire/SpellCardBackground7.png" id="1_2guo8"]
-[ext_resource type="Script" path="res://game/cards/CardEffects/DeckManipulationEffect.cs" id="2_whvu0"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/thanos.gd" id="2_g1fw6"]
 [ext_resource type="Script" path="res://game/cards/CardData.cs" id="3_t21th"]
-
-[sub_resource type="Resource" id="Resource_hp04t"]
-script = ExtResource("2_whvu0")
-DeckEffectType = 13
-Amount = 1
 
 [resource]
 script = ExtResource("3_t21th")
 CardName = "Mercy"
 Cost = 40
 CardType = 1
-Effects = [SubResource("Resource_hp04t")]
+Effects = []
+card_script = ExtResource("2_g1fw6")
 Description = "Balance the Universe - Obliterate half your hand to kill half of enemies randomly."
 CardArt = ExtResource("1_2guo8")
 ArtOffset = Vector2(0, 0)
+Keywords = []

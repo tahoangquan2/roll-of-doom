@@ -22,7 +22,7 @@ public partial class CardData : Resource
     {
         CardName = "Default Card";
         Cost = 0;
-        CardType = EnumGlobal.enumCardType.Tower;
+        CardType = EnumGlobal.enumCardType.Spell;
         Description = "This card has no description.";
         Effects = new Array<CardEffect>();
         CardArt = null;        

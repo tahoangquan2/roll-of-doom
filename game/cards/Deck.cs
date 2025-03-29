@@ -2,7 +2,7 @@ using Godot;
 
 public partial class Deck : CardPile
 { 
-    private int deckSize = 2; 
+    private int deckSize =40; 
     private DeckVisual deckVisual => GetNode<DeckVisual>("DeckVisual");
     
     // when the decksize is updated cardcount is updated
