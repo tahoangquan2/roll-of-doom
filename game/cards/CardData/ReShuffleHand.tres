@@ -15,3 +15,5 @@ card_script = ExtResource("2_t7ot3")
 Description = "Shuffle hand to draw the same"
 CardArt = ExtResource("1_onrpw")
 ArtOffset = Vector2(0, 0)
+Keywords = []
+TargetMask = 2

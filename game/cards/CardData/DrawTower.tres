@@ -14,3 +14,5 @@ card_script = ExtResource("2_6agjl")
 Description = "Draw a Tower."
 CardArt = ExtResource("1_62jbo")
 ArtOffset = Vector2(0, 0)
+Keywords = []
+TargetMask = 2

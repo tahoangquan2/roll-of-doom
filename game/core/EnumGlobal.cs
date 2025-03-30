@@ -11,9 +11,9 @@ public partial class EnumGlobal : Node
 
     public enum enumCardTargetLayer
     {
-        None=1,
-        Enemy=2, 
-        Ally=3,
+        None=2,
+        Enemy=3, 
+        Ally=4,
     }
 
     public enum enumCardEffect

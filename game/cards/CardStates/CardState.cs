@@ -5,31 +5,32 @@ public abstract partial class CardState : Node
 	public enum State { Idle, Hover, Selected, Dragging, Released }
 
 	protected static CardManager cardManager = null;
-	protected Card card{ get; set; } = null;
+	public static Card card{ get; set; } = null;
 	[Export] public State cardState = State.Idle;
 	public abstract void EnterState(Card card=null);
 	public abstract void ExitState(Card card=null);
 
 	public virtual void HandleInput(InputEvent @event)
 	{
-		GD.Print("CardState input: "+cardState);
+		//GD.Print("CardState input: "+cardState);
 	}
 
 	public void changeState(State newState, Card card=null)
 	{
+		GD.Print("CardState changeState: "+cardState+" -> "+newState);
 		cardManager.StateChangeRequest(cardState, newState, card);
 	}
 
 	public override void _Ready()
 	{
+		card=null;
 		cardManager = GetParent<CardManager>();
-		GD.Print("CardState: "+cardState+" CardManager: "+cardManager);
 		SetProcessInput(false);
 		SetProcessUnhandledInput(false);
 	}	
 
 	public virtual void setCard(Card card){
-		this.card = card;
+		CardState.card = card;
 	}
 
 	public static Card RaycastCheckForCard()
@@ -42,7 +43,6 @@ public abstract partial class CardState : Node
 	public static CardPlayZone RaycastCheckForZone(EnumGlobal.enumCardTargetLayer targetMask = EnumGlobal.enumCardTargetLayer.None)
 	{
 		var result = CardGlobal.RaycastCheckForObjects(cardManager,cardManager.GetGlobalMousePosition(), (int) targetMask);
-		GD.Print("RaycastCheckForZone: "+result);
 		if (result.Count > 0){ // get result[0]
 			return (CardPlayZone)result[0]["collider"];			
 		}

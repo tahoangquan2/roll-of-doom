@@ -4,10 +4,8 @@ using Godot;
 
 public partial class CardManager : Node2D
 {
-	public Card card_being_dragged = null;
+	//public Card card_being_dragged = null;
 	public Card selected_card = null;
-	public Card card_being_processed = null; // for the state machine
-	private bool isProcessingHover = false;
 	private AudioStreamPlayer2D audioPlayer;	
     private PackedScene cardScene = GD.Load<PackedScene>("res://game/cards/Card.tscn");
 	private Hand hand=null;
@@ -27,16 +25,20 @@ public partial class CardManager : Node2D
 			return;			
 		}		
 
-		cardStates[currentCardState].HandleInput(@event);		
+		cardStates[currentCardState].HandleInput(@event);	
+		GetNode<Label>("Label").Text = currentCardState.ToString();	
 	}
 
 	public void StateChangeRequest(CardState.State from,CardState.State to,Card card=null)
 	{
-		if (from != currentCardState) return;
+		if (from != currentCardState) 
+		{
+			GD.Print("StateChangeRequest: "+from+" != "+currentCardState);
+			return;}
 
 		cardStates[from].ExitState(card);
-		cardStates[to].EnterState(card);
-		currentCardState = to;		
+		currentCardState = to;	
+		cardStates[to].EnterState(card);			
 	}
 	private void HandleSelectionInput(InputEvent @event)
 	{
@@ -56,6 +58,8 @@ public partial class CardManager : Node2D
 		foreach (Node a in GetChildren()){
 			if (a is CardState cardState) cardStates.Add(cardState.cardState,cardState);			
 		}
+
+		currentCardState = CardState.State.Idle;
 	}
 	public void SelectCard(Card card) {
 		if (selected_card == card) {
@@ -70,7 +74,8 @@ public partial class CardManager : Node2D
 	{
 		if (selected_card != null){
 			selected_card.ResetShader();
-			if (card_being_dragged != selected_card) EmitSignal(nameof(CardPushup), selected_card, false);	
+			//if (card_being_dragged != selected_card) 
+			EmitSignal(nameof(CardPushup), selected_card, false);	
 			//if (card_being_hovered != selected_card) selected_card.Scale = new Vector2(1,1);
 			selected_card = null;			
 		}
@@ -78,32 +83,15 @@ public partial class CardManager : Node2D
 	public void ConnectCardSignals(Card card)
 	{card.CardHovered += _on_card_hovered;   card.CardUnhovered += _on_card_unhovered;}
 	public void _on_card_hovered(Card card)
-	{	if (currentCardState!=CardState.State.Idle || Locked) return;
-
-		StateChangeRequest(CardState.State.Idle, CardState.State.Hover, card);
-
-		isProcessingHover = true;
+	{	if (Locked) return;
+		cardStates[currentCardState]._on_card_hovered(card);
 	}
 	public void _on_card_unhovered(Card card)
 	{	if (Locked) return;
-		isProcessingHover = false;
-
-		Card newCard = CardState.RaycastCheckForCard();
-		if (currentCardState==CardState.State.Hover)
-		{
-			if (newCard!=null) {
-				isProcessingHover = true;
-				cardStates[currentCardState].setCard(newCard);
-			} else 
-			{
-				StateChangeRequest(CardState.State.Hover, CardState.State.Idle, card);
-			}
-		}
+		cardStates[currentCardState]._on_card_unhovered(card);
 	}
-	
 	public void StartDrag(Card card)
 	{
-		card_being_dragged = card;
 		DeselectCard();
 		card.Scale = new Vector2(1.05f, 1.05f);
 		card.Rotation = 0;
@@ -112,9 +100,7 @@ public partial class CardManager : Node2D
 	}
 	public void EndDrag()
 	{
-		if (card_being_dragged == null) return;
-		Card tmpCard = card_being_dragged;
-		card_being_dragged = null;
+		Card tmpCard = CardState.card;
 		
 		CardPlayZone zone = CardState.RaycastCheckForZone(tmpCard.GetCardData().TargetMask);
 		if (zone != null){
@@ -127,8 +113,7 @@ public partial class CardManager : Node2D
 				//GD.Print("cost: "+tmpCard.GetCardData().Cost);
 				GlobalVariables.ChangeSpirit(-tmpCard.GetCardData().Cost);
 				//GD.Print("spirit: "+GlobalVariables.spirit);
-			}
-			
+			}			
 		}		
 	}
 	public Card createCard(CardData cardData)
@@ -139,12 +124,11 @@ public partial class CardManager : Node2D
 		return newCard;
 	}
 	public void checkChange(Card card) {
-		//if (card_being_hovered == card) card_being_hovered = null;
-		if (card_being_dragged == card) card_being_dragged = null;
 		if (selected_card == card) selected_card = null;
-		RemoveChild(card);
+		if (card == CardState.card) CardState.card = null;
 	}
 	public void cardSound() {audioPlayer.Play();}
 	public void Lock() {Locked = true;GD.Print("Locked");}
 	public void Unlock() {Locked = false;}
+	public bool IsLocked() {return Locked;}
 }

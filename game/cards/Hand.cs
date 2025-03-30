@@ -1,6 +1,5 @@
 using Godot;
 using System;
-using System.Collections.Generic;
 
 public partial class Hand : Area2D // card are in cardmanager this is the hand just for display and interaction cards are not children of hand
 {
@@ -78,7 +77,7 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
         for (int i = 0; i < hand.Count; i++)
         {
             Card card = hand[i];
-            if (card != null /* && card != cardManager.card_being_dragged */)
+            if (card != null  && card != CardState.card)
             {
                 AnimateCardTransform(card, GetCardAngle(i, hand.Count));
                 card.ZIndex = i + 1;

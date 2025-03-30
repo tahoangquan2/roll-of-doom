@@ -6,9 +6,7 @@ public partial class CardHoverState : CardState
 		setCard(card);	
 	}
 
-	public override void ExitState(Card card)
-	{
-	}
+	public override void ExitState(Card card)	{}
 
 	public override void HandleInput(InputEvent @event)
 	{
@@ -32,24 +30,32 @@ public partial class CardHoverState : CardState
 		}
 	}
 
+	public override void _on_card_unhovered(Card card)
+	{
+		Card NewCard = RaycastCheckForCard();
+		if (NewCard != null){
+			setCard(NewCard);
+		} else {
+			setCard(null);
+			changeState(State.Idle, card);
+		}
+	}
+
 	public override void setCard(Card card){
-		if (card==this.card) return;
-		if (this.card != null) {
-			CardHoveredEffect(this.card, false);
-			this.card.ResetShader();
+		if (card==CardState.card) return;
+		if (CardState.card != null) {
+			CardHoveredEffect(CardState.card, false);
+			CardState.card.ResetShader();
 		}
-		this.card = card;
-		if (this.card != null) {
-			CardHoveredEffect(this.card, true);
-			this.card.Shadering(cardManager.GetGlobalMousePosition()-this.card.GlobalPosition);
+		CardState.card = card;
+		if (CardState.card != null) {
+			CardHoveredEffect(CardState.card, true);
+			CardState.card.Shadering(cardManager.GetGlobalMousePosition()-CardState.card.GlobalPosition);
 		}
-		cardManager.card_being_processed = card;
 	}
 
 	private void CardHoveredEffect(Card card, bool isHovering = true)
 	{
-		//if (card_being_dragged != null || card == selected_card || hand.isSelecting) return;
-
 		float targetScale = isHovering ? 1.2f : 1.0f;
 
 		if (card.Scale.X != targetScale)

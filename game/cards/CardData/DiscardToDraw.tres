@@ -14,3 +14,5 @@ card_script = ExtResource("2_awx6e")
 Description = "Discard 1 to draw 2."
 CardArt = ExtResource("1_7wmnb")
 ArtOffset = Vector2(0, 0)
+Keywords = []
+TargetMask = 2
