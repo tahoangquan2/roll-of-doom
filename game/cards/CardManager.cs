@@ -143,7 +143,7 @@ public partial class CardManager : Node2D
 		Card tmpCard = card_being_dragged;
 		card_being_dragged = null;
 		
-		CardPlayZone zone = RaycastCheckForZone();
+		CardPlayZone zone = RaycastCheckForZone(tmpCard.GetCardData().TargetMask);
 		if (zone != null){
 			if (GlobalVariables.spirit >= tmpCard.GetCardData().Cost)
 			{
@@ -168,14 +168,15 @@ public partial class CardManager : Node2D
 	}
 	public Card RaycastCheckForCard()
 	{
-		var result = CardGlobal.RaycastCheckForObjects(this,GetGlobalMousePosition(), CardGlobal.cardCollisionMask);
+		var result = CardGlobal.RaycastCheckForObjects(this,GetGlobalMousePosition(), CardGlobal.CardCollisionMask);
 		if (result.Count > 0) return GetCardWithHighestZIndex(result);
 
 		return null;
 	}
-	public CardPlayZone RaycastCheckForZone()
+	public CardPlayZone RaycastCheckForZone(EnumGlobal.enumCardTargetLayer targetMask = EnumGlobal.enumCardTargetLayer.None)
 	{
-		var result = CardGlobal.RaycastCheckForObjects(this,GetGlobalMousePosition(), CardGlobal.cardSlotMask);
+		var result = CardGlobal.RaycastCheckForObjects(this,GetGlobalMousePosition(), (int) targetMask);
+		GD.Print("RaycastCheckForZone: "+result);
 		if (result.Count > 0){ // get result[0]
 			return (CardPlayZone)result[0]["collider"];			
 		}

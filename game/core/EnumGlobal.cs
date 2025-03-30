@@ -9,19 +9,11 @@ public partial class EnumGlobal : Node
         Spell,
     }
 
-    public enum enumCardTarget
+    public enum enumCardTargetLayer
     {
-        None,
-        Enemy,
-        AllEnemies,
-        AllAllies,
-        RandomEnemy,
-    }
-
-    public enum enumCardPlayZoneType{
-        None=0,
-        Enemy,
-        Ally,
+        None=1,
+        Enemy=2, 
+        Ally=3,
     }
 
     public enum enumCardEffect

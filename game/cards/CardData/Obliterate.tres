@@ -15,3 +15,4 @@ Description = "Balance the Universe - Obliterate half your hand to kill half of 
 CardArt = ExtResource("1_2guo8")
 ArtOffset = Vector2(0, 0)
 Keywords = []
+TargetMask = 1
