@@ -50,7 +50,7 @@ public partial class Card : Node2D
         shaderDisplay.UseParentMaterial = false;
         display = GetNode<Control>("Control");
         animPlayer = GetNode<AnimationPlayer>("AnimationPlayer");     
-        Area2D area = GetNode<Area2D>("Area2D");
+        //Area2D area = GetNode<Area2D>("Area2D");
         //area.SetCollisionLayerValue
 
         // Apply the shader material
