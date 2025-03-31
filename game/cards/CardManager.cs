@@ -13,11 +13,8 @@ public partial class CardManager : Node2D
 	[Signal] public delegate void CardPushupEventHandler(Card card,bool isHovered);
 	[Signal] public delegate void CardUnhandEventHandler(Card card);
 	[Signal] public delegate void CardSelectEventHandler(CardData card);
-
 	public CardState.State currentCardState = CardState.State.Idle;
-
 	private Dictionary<CardState.State, CardState> cardStates = new Dictionary<CardState.State, CardState>();
-
 	public override void _Input(InputEvent @event)
 	{	if (Locked) return;
 		if (hand is not null && hand.isSelecting) {
@@ -28,7 +25,6 @@ public partial class CardManager : Node2D
 		cardStates[currentCardState].HandleInput(@event);	
 		GetNode<Label>("Label").Text = currentCardState.ToString();	
 	}
-
 	public void StateChangeRequest(CardState.State from,CardState.State to,Card card=null)
 	{
 		if (from != currentCardState) 
@@ -80,16 +76,6 @@ public partial class CardManager : Node2D
 			selected_card = null;			
 		}
 	}
-	public void ConnectCardSignals(Card card)
-	{card.CardHovered += _on_card_hovered;   card.CardUnhovered += _on_card_unhovered;}
-	public void _on_card_hovered(Card card)
-	{	if (Locked) return;
-		cardStates[currentCardState]._on_card_hovered(card);
-	}
-	public void _on_card_unhovered(Card card)
-	{	if (Locked) return;
-		cardStates[currentCardState]._on_card_unhovered(card);
-	}
 	public void StartDrag(Card card)
 	{
 		DeselectCard();
@@ -131,4 +117,21 @@ public partial class CardManager : Node2D
 	public void Lock() {Locked = true;GD.Print("Locked");}
 	public void Unlock() {Locked = false;}
 	public bool IsLocked() {return Locked;}
+	
+	// signals for card and playzone
+	public void ConnectCardSignals(Card card)
+	{card.CardHovered += _on_card_hovered;   card.CardUnhovered += _on_card_unhovered;}
+	public void _on_card_hovered(Card card)
+	{	if (Locked) return;
+		cardStates[currentCardState]._on_card_hovered(card);
+	}
+	public void _on_card_unhovered(Card card)
+	{	if (Locked) return;
+		cardStates[currentCardState]._on_card_unhovered(card);
+	}
+	
+	public void ConnectPlayZoneSignals(CardPlayZone zone)
+	{zone.ZoneUpdate += _on_zone_update;  }
+	public void _on_zone_update(bool isEntered, CardPlayZone zone)
+	{cardStates[currentCardState]._on_zone_update(isEntered, zone);}
 }

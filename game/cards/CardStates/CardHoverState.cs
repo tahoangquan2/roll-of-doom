@@ -10,7 +10,7 @@ public partial class CardHoverState : CardState
 
 	public override void HandleInput(InputEvent @event)
 	{
-		if (@event is InputEventMouseMotion)
+		if (@event is InputEventMouseMotion && card!=null)
 		{
 			card.Shadering(cardManager.GetGlobalMousePosition()-card.GlobalPosition);
 			return;
@@ -69,4 +69,13 @@ public partial class CardHoverState : CardState
 			cardManager.cardSound();
 		}
 	}
+
+	public override void _on_zone_update(bool isEntered, CardPlayZone zone)
+	{
+		if (card == null) return;
+		if (card.GetCardData().TargetMask==zone.GetPlayZoneType()) {
+			
+		}
+	}
+
 }

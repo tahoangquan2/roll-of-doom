@@ -4,7 +4,6 @@ public partial class CardDragState : CardState
 	public override void EnterState(Card card)
 	{		
 		CardState.card = card;
-		CardState.card.ResetShader();
 		cardManager.StartDrag(card);
 	}
 

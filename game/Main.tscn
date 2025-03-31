@@ -11,7 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://1u3b3hwqd8yh" path="res://assets/art/tile_0110.png" id="9_chh8o"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ce0rk"]
-size = Vector2(1826, 572)
+size = Vector2(1826, 654)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e5fvt"]
 size = Vector2(170, 170)
@@ -33,7 +33,7 @@ position = Vector2(1019, 393)
 scale = Vector2(1, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CardActiveZone"]
-position = Vector2(-96, -33)
+position = Vector2(-96, 8)
 shape = SubResource("RectangleShape2D_ce0rk")
 debug_color = Color(0, 0.67451, 0.784314, 0.0862745)
 
@@ -67,5 +67,20 @@ scale = Vector2(1, 1)
 playZoneType = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Enemy/CardActiveZone"]
+shape = SubResource("RectangleShape2D_e5fvt")
+debug_color = Color(0.968627, 0.321569, 0.627451, 0.439216)
+
+[node name="Enemy2" type="Node2D" parent="."]
+position = Vector2(1702, 532)
+
+[node name="Sprite2D" type="Sprite2D" parent="Enemy2"]
+scale = Vector2(5, 5)
+texture = ExtResource("9_chh8o")
+
+[node name="CardActiveZone" parent="Enemy2" instance=ExtResource("5_e70is")]
+scale = Vector2(1, 1)
+playZoneType = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemy2/CardActiveZone"]
 shape = SubResource("RectangleShape2D_e5fvt")
 debug_color = Color(0.968627, 0.321569, 0.627451, 0.439216)

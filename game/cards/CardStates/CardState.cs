@@ -72,4 +72,5 @@ public abstract partial class CardState : Node
 
 	public virtual void _on_card_hovered(Card card){}
 	public virtual void _on_card_unhovered(Card card){}
+	public virtual void _on_zone_update(bool isEntered, CardPlayZone zone){}
 }

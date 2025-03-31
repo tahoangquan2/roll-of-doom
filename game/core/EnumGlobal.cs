@@ -14,6 +14,7 @@ public partial class EnumGlobal : Node
         None=2,
         Enemy=3, 
         Ally=4,
+        Self=5,
     }
 
     public enum enumCardEffect
