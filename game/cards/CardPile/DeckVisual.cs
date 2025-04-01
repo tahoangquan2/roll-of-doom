@@ -36,7 +36,7 @@ public partial class DeckVisual : Node2D
     public void UpdateDeckVisual(int newSize)
     {
         if (newSize == currentDeckSize) return;
-        while (newSize < currentDeckSize)
+        while (newSize < currentDeckSize && currentDeckSize<GlobalVariables.maxStackSize)
         {
             Cardstack.GetChild(Cardstack.GetChildCount() - 1).QueueFree();
             currentDeckSize--;

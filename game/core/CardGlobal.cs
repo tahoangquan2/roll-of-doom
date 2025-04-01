@@ -5,10 +5,9 @@ using Godot;
 
 public partial class CardGlobal : Node
 {
-    public const int cardCollisionMask = 256;
-    public const int cardSlotMask = 512;
-
     public const int forCardSelectZindex = 100;
+
+    public const int CardCollisionMask = 256; // 1
 
     private static ShaderMaterial[] dissolveMaterials = null;
     private static ShaderMaterial[] burnMaterials = null;

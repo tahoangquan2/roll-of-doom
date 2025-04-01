@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://dohunb1gqlydm"]
 
-[ext_resource type="Script" path="res://game/cards/CardPile.cs" id="1_nt120"]
-[ext_resource type="PackedScene" uid="uid://s8umrbxvw1sf" path="res://game/cards/card_pile_view.tscn" id="2_ji8us"]
+[ext_resource type="Script" path="res://game/cards/CardPile/CardPile.cs" id="1_nt120"]
+[ext_resource type="PackedScene" uid="uid://s8umrbxvw1sf" path="res://game/cards/CardPile/card_pile_view.tscn" id="2_ji8us"]
 [ext_resource type="Texture2D" uid="uid://dsae5chtt7mdl" path="res://assets/sprites/circle-64.png" id="3_crhjt"]
 [ext_resource type="FontFile" uid="uid://c1j227ygpp51v" path="res://assets/fonts/DragonHunter-9Ynxj.otf" id="4_pj0wn"]
 

@@ -14,3 +14,5 @@ card_script = ExtResource("2_n3aed")
 Description = "Choose card to create 3 then shuffle two into deck."
 CardArt = ExtResource("1_ka48v")
 ArtOffset = Vector2(0, 0)
+Keywords = []
+TargetMask = 2

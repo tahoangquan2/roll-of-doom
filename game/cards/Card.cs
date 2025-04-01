@@ -21,9 +21,7 @@ public partial class Card : Node2D
     private CardManager parentManager;
     private Deck deck;
     private DiscardPile discardPile;
-    private readonly float AngleXMax = Mathf.DegToRad(7.0f); 
-    private readonly float AngleYMax = Mathf.DegToRad(7.0f); 
-
+    private readonly float AngleMax = Mathf.DegToRad(7.0f);  
     public Tween cardTween=null;
     public Card()
     {
@@ -49,7 +47,7 @@ public partial class Card : Node2D
         shaderDisplay.Icon = subViewport.GetTexture();
         shaderDisplay.UseParentMaterial = false;
         display = GetNode<Control>("Control");
-        animPlayer = GetNode<AnimationPlayer>("AnimationPlayer");        
+        animPlayer = GetNode<AnimationPlayer>("AnimationPlayer");     
 
         // Apply the shader material
         if (shaderDisplay.Material is ShaderMaterial mat)
@@ -66,6 +64,11 @@ public partial class Card : Node2D
         discardPile = GetTree().CurrentScene.GetNodeOrNull<DiscardPile>(GlobalAccessPoint.discardPilePath);
 
         UpdateGraphics();
+    }
+
+    public bool IsLayerNone()
+    {
+        return cardData.TargetMask == EnumGlobal.enumCardTargetLayer.None;
     }
 
     public virtual async void ActivateEffects(Node2D target)
@@ -113,13 +116,13 @@ public partial class Card : Node2D
         CardArt.Texture = cardData.CardArt;
         switch (cardData.CardType)
         {
-            case EnumGlobal.enumCardType.Tower:
+            case EnumGlobal.enumCardType.Attack:
                 CardTypeIcon.Frame = 1;
                 break;
-            case EnumGlobal.enumCardType.Spell:
+            case EnumGlobal.enumCardType.Defense:
                 CardTypeIcon.Frame = 2;
                 break;
-            case EnumGlobal.enumCardType.Deck:
+            case EnumGlobal.enumCardType.Spell:
                 CardTypeIcon.Frame = 0;
                 break;
             default:
@@ -135,8 +138,8 @@ public partial class Card : Node2D
         float lerpValX = Mathf.Remap(mousePos.X, 0.0f, size.X, 0.0f, 1.0f)+0.5f;
         float lerpValY = Mathf.Remap(mousePos.Y, 0.0f, size.Y, 0.0f, 1.0f)+0.5f;
 
-        float rotX =  Mathf.RadToDeg(Mathf.LerpAngle(-AngleXMax, AngleXMax, lerpValX));
-        float rotY =  Mathf.RadToDeg(Mathf.LerpAngle(AngleYMax, -AngleYMax, lerpValY));
+        float rotX =  Mathf.RadToDeg(Mathf.LerpAngle(-AngleMax, AngleMax, lerpValX));
+        float rotY =  Mathf.RadToDeg(Mathf.LerpAngle(AngleMax, -AngleMax, lerpValY));
 
         shaderMaterial.SetShaderParameter("x_rot", rotY);
         shaderMaterial.SetShaderParameter("y_rot", rotX);
@@ -151,12 +154,10 @@ public partial class Card : Node2D
         if (!canBeHovered) return;
         EmitSignal(nameof(CardHovered), this);
     }
-
     public void _on_area_2d_mouse_exited(){
         if (!canBeHovered) return;
         EmitSignal(nameof(CardUnhovered), this);
     }
-
     public void _on_texture_rect_pressed(){
         //GD.Print("Card right pressed");
         parentManager.EmitSignal(nameof(CardManager.CardSelect), cardData);
@@ -166,12 +167,10 @@ public partial class Card : Node2D
     { 
         await AnimateAndDestroy(CardGlobal.GetBurnMaterial(), "card_dissolve_or_burn");
     }
-
     public async void KillCard() 
     { 
         await AnimateAndDestroy(CardGlobal.GetDissolveMaterial(), "card_dissolve_or_burn");
     }
-
     private async Task AnimateAndDestroy(ShaderMaterial material, string animationName)
     {
         _on_area_2d_mouse_exited();  // Ensure mouse exit state
@@ -182,18 +181,17 @@ public partial class Card : Node2D
 
         obliterateCard(); 
     }
-
+   
     public void putToDiscardPile() { 
+        canBeHovered = false;
         discardPile.AddCard(this);
     }
-
     public void EffectFinished() { 
         if (cardData.Keywords.Contains(EnumGlobal.CardKeywords.Ephemeral)) 
             KillCard();
         else 
             putToDiscardPile();
     }
-
     public void obliterateCard() {       
         parentManager.checkChange(this); 
         QueueFree();
@@ -203,18 +201,22 @@ public partial class Card : Node2D
         else animPlayer.Play("card_flip"); 
         await ToSignal(animPlayer, "animation_finished"); // Wait for the animation to end
     }
-    public void TransformCard(Vector2 targetPosition, float targetRotation, float duration){
+    public void TransformCard(Vector2 targetPosition, float targetRotation, float duration=0.15f){
 		if (cardTween!= null && cardTween.IsRunning())
 		{
 			cardTween.Kill();
 			cardTween = null;
 		}
-		cardTween = GetTree().CreateTween().SetLoops(1);
+		cardTween = CreateTween().SetLoops(1);
 
         if (!Position.IsEqualApprox(targetPosition)) 
-            cardTween.TweenProperty(this, "position", targetPosition, duration).SetEase(Tween.EaseType.Out);
+            cardTween.TweenProperty(this, "position", targetPosition, duration)
+            .SetTrans(Tween.TransitionType.Circ)
+            .SetEase(Tween.EaseType.Out);
 
-        cardTween.TweenProperty(this, "rotation_degrees", targetRotation, duration).SetEase(Tween.EaseType.OutIn);
+        cardTween.TweenProperty(this, "rotation_degrees", targetRotation, duration)
+            .SetTrans(Tween.TransitionType.Back)
+            .SetEase(Tween.EaseType.Out);
 
         cardTween.Finished += () => 
         {

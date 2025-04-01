@@ -9,11 +9,13 @@ public partial class Main : Node2D
 		GlobalAccessPoint.Instance.UpdateReferences();
 		//activate garbage collector
 		GC.Collect();
+		fpsLabel = GetNode<Label>("FPS");
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
+		fpsLabel.Text = "FPS: " + Engine.GetFramesPerSecond();
 	}
 
 	private void DeferredPrintTree()
@@ -47,4 +49,6 @@ public partial class Main : Node2D
 
 		//GD.Print(GetViewport().GuiGetFocusOwner());
 	}
+
+	private Label fpsLabel;
 }

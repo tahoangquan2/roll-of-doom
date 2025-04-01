@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public partial class CardPileView : Control
 {
-	private PackedScene cardUI = GD.Load<PackedScene>("res://game/cards/cardMenuUI.tscn");
+	private PackedScene cardUI = GD.Load<PackedScene>("res://game/cards/CardPile/cardMenuUI.tscn");
 
 	private GridContainer gridContainer => GetNode<GridContainer>("NinePatchRect/ScrollContainer/GridContainer");
 

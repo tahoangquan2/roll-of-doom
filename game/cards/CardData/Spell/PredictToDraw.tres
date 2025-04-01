@@ -14,3 +14,5 @@ card_script = ExtResource("2_ifmtx")
 Description = "Look though 3 random cards in deck to draw 1."
 CardArt = ExtResource("1_rqi6n")
 ArtOffset = Vector2(0, 0)
+Keywords = []
+TargetMask = 2

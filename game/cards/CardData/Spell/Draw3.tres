@@ -1,20 +1,18 @@
-[gd_resource type="Resource" script_class="CardData" load_steps=5 format=3 uid="uid://cl3hr86rfwxnh"]
+[gd_resource type="Resource" script_class="CardData" load_steps=4 format=3 uid="uid://cl3hr86rfwxnh"]
 
 [ext_resource type="Script" path="res://game/cards/CardData.cs" id="1_57pie"]
-[ext_resource type="Script" path="res://game/cards/CardEffects/DeckManipulationEffect.cs" id="1_f6h2u"]
 [ext_resource type="Texture2D" uid="uid://ba043na0yb5a" path="res://assets/cards/Details/Backgrounds/Water/BackgroundCard67.png" id="1_xvu2h"]
-
-[sub_resource type="Resource" id="Resource_kma80"]
-script = ExtResource("1_f6h2u")
-DeckEffectType = 7
-Amount = 3
+[ext_resource type="Script" path="res://game/cards/CardEffects/draw3.gd" id="2_u4rlj"]
 
 [resource]
 script = ExtResource("1_57pie")
 CardName = "Open Mind"
 Cost = 3
 CardType = 1
-Effects = [SubResource("Resource_kma80")]
+Effects = []
+card_script = ExtResource("2_u4rlj")
 Description = "Draw 3 cards"
 CardArt = ExtResource("1_xvu2h")
 ArtOffset = Vector2(0, 0)
+Keywords = []
+TargetMask = 2

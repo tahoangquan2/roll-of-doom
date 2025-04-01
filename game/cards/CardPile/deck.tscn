@@ -1,9 +1,9 @@
 [gd_scene load_steps=8 format=3 uid="uid://d30ipmxtvmvco"]
 
-[ext_resource type="Script" path="res://game/cards/Deck.cs" id="1_yimvb"]
+[ext_resource type="Script" path="res://game/cards/CardPile/Deck.cs" id="1_yimvb"]
 [ext_resource type="Texture2D" uid="uid://cfod7vdoc2uym" path="res://assets/cards/card fantasy back.png" id="2_1tldn"]
-[ext_resource type="PackedScene" uid="uid://s8umrbxvw1sf" path="res://game/cards/card_pile_view.tscn" id="2_5sr7x"]
-[ext_resource type="Script" path="res://game/cards/DeckVisual.cs" id="2_gq3cn"]
+[ext_resource type="PackedScene" uid="uid://s8umrbxvw1sf" path="res://game/cards/CardPile/card_pile_view.tscn" id="2_5sr7x"]
+[ext_resource type="Script" path="res://game/cards/CardPile/DeckVisual.cs" id="2_gq3cn"]
 [ext_resource type="Texture2D" uid="uid://dsae5chtt7mdl" path="res://assets/sprites/circle-64.png" id="4_jgdc0"]
 [ext_resource type="FontFile" uid="uid://c1j227ygpp51v" path="res://assets/fonts/DragonHunter-9Ynxj.otf" id="5_wp0f3"]
 

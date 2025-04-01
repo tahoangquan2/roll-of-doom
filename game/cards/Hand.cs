@@ -1,6 +1,5 @@
 using Godot;
 using System;
-using System.Collections.Generic;
 
 public partial class Hand : Area2D // card are in cardmanager this is the hand just for display and interaction cards are not children of hand
 {
@@ -17,11 +16,11 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
     private Control selectionFilter;
     private Godot.Collections.Array<Card> selectedCards = new Godot.Collections.Array<Card>();
     public bool isSelecting = false;
-    public bool isChanging = false;
     private CollisionShape2D collisionShape;
 
     [Signal] public delegate void ActionCompletedEventHandler(Godot.Collections.Array<Card> selectedCards);
     [Signal] public delegate void ActionCancelledEventHandler();
+    [Signal] public delegate void FinishedDrawingEventHandler(Godot.Collections.Array<Card> drawnCards);
 
     EnumGlobal.HandSelectionPurpose currentPurpose = EnumGlobal.HandSelectionPurpose.None;
     public override void _Ready() {
@@ -77,7 +76,7 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
         for (int i = 0; i < hand.Count; i++)
         {
             Card card = hand[i];
-            if (card != null && card != cardManager.card_being_dragged)
+            if (card != null  && card != CardState.card)
             {
                 AnimateCardTransform(card, GetCardAngle(i, hand.Count));
                 card.ZIndex = i + 1;
@@ -127,6 +126,7 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
             }
         }
         cardManager.Unlock();
+        EmitSignal(nameof(FinishedDrawing), drawnCards);
     }
     public void drawFromDeckwithIndex(int index){
         Card drawnCard = deck.DrawCard(index);
@@ -185,7 +185,6 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
     }
     public async void ShuffleFromHandtoDeck(Godot.Collections.Array<int> indexes){ // list of indexes
         if (isSelecting) return;
-        isChanging = true;
         foreach (int index in indexes){
             if (index >= 0 && index < hand.Count){
                 deck.ShuffleIntoDeck(hand[index].cardData);
@@ -208,7 +207,6 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
                 card.obliterateCard();
             }
         }
-        isChanging = false;
     }
     public void ShuffleHandtoDeck(){ 
         if (isSelecting) return;
@@ -247,7 +245,7 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
     public void _on_mouse_entered()
     {   setHandRadius(900);}
     public void _on_mouse_exited()
-    {   setHandRadius(750);}    
+    {   setHandRadius(800);}    
     private void setHandRadius(int radius){
         if (cardManager.selected_card != null || isSelecting) return;
         HandRadius = radius;cardRadius = HandRadius-200;
@@ -295,5 +293,8 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
     }
     public int GetHandSize(){
         return hand.Count;
+    }
+    public Godot.Collections.Array<Card> GetHand(){
+        return hand;
     }
 }

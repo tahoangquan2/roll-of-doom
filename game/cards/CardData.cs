@@ -17,16 +17,19 @@ public partial class CardData : Resource
     [Export] public Texture2D CardArt { get; set; }
     [Export] public Vector2 ArtOffset { get; set; }
     [Export] public Array<EnumGlobal.CardKeywords> Keywords { get; set; } = new Array<EnumGlobal.CardKeywords>();
+    [Export] public EnumGlobal.enumCardTargetLayer TargetMask { get; set; } = EnumGlobal.enumCardTargetLayer.None;    
 
     public CardData()
     {
         CardName = "Default Card";
         Cost = 0;
-        CardType = EnumGlobal.enumCardType.Tower;
+        CardType = EnumGlobal.enumCardType.Spell;
         Description = "This card has no description.";
         Effects = new Array<CardEffect>();
         CardArt = null;        
         ArtOffset = new Vector2(0, 0);
+        Keywords = new Array<EnumGlobal.CardKeywords>();
+        TargetMask = EnumGlobal.enumCardTargetLayer.None;
     }
 
     // Constructor
@@ -39,5 +42,7 @@ public partial class CardData : Resource
         card_script = script;
         CardArt = cardArt;
         ArtOffset = artOffset;
+        Keywords = new Array<EnumGlobal.CardKeywords>();
+        TargetMask = EnumGlobal.enumCardTargetLayer.None;
     }
 }
