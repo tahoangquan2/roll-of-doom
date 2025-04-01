@@ -1,9 +1,9 @@
 [gd_scene load_steps=8 format=3 uid="uid://s8umrbxvw1sf"]
 
 [ext_resource type="Texture2D" uid="uid://f5311oh3pubu" path="res://assets/sprites/UI/RectangleBox_96x96.png" id="1_7fm65"]
-[ext_resource type="Script" path="res://game/cards/CardPileView.cs" id="1_hkdir"]
+[ext_resource type="Script" path="res://game/cards/CardPile/CardPileView.cs" id="1_hkdir"]
 [ext_resource type="Texture2D" uid="uid://cg18krtlfyckf" path="res://assets/sprites/UI/BottomPatternPanel_119x17.png" id="2_5ejhm"]
-[ext_resource type="PackedScene" uid="uid://dxgx6nvhkq38t" path="res://game/cards/cardMenuUI.tscn" id="3_6rcvf"]
+[ext_resource type="PackedScene" uid="uid://dxgx6nvhkq38t" path="res://game/cards/CardPile/cardMenuUI.tscn" id="3_6rcvf"]
 [ext_resource type="Texture2D" uid="uid://c5u716bs2xssv" path="res://assets/sprites/UI/TopPatternPanel_02_33x15.png" id="3_n6k53"]
 [ext_resource type="FontFile" uid="uid://sc71p0eebbyj" path="res://assets/fonts/buddychampion.ttf" id="6_vr23i"]
 

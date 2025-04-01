@@ -1,6 +1,6 @@
 [gd_scene load_steps=13 format=3 uid="uid://dxgx6nvhkq38t"]
 
-[ext_resource type="Script" path="res://game/cards/CardMenuUi.cs" id="1_mn1jw"]
+[ext_resource type="Script" path="res://game/cards/CardPile/CardMenuUi.cs" id="1_mn1jw"]
 [ext_resource type="Texture2D" uid="uid://ba043na0yb5a" path="res://assets/cards/Details/Backgrounds/Water/BackgroundCard67.png" id="3_ftnqf"]
 [ext_resource type="Texture2D" uid="uid://bsbdm7rrajbej" path="res://assets/cards/CardRarity.png" id="4_fq2l2"]
 [ext_resource type="FontFile" uid="uid://sc71p0eebbyj" path="res://assets/fonts/buddychampion.ttf" id="6_t3nr6"]

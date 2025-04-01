@@ -16,7 +16,6 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
     private Control selectionFilter;
     private Godot.Collections.Array<Card> selectedCards = new Godot.Collections.Array<Card>();
     public bool isSelecting = false;
-    public bool isChanging = false;
     private CollisionShape2D collisionShape;
 
     [Signal] public delegate void ActionCompletedEventHandler(Godot.Collections.Array<Card> selectedCards);
@@ -186,7 +185,6 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
     }
     public async void ShuffleFromHandtoDeck(Godot.Collections.Array<int> indexes){ // list of indexes
         if (isSelecting) return;
-        isChanging = true;
         foreach (int index in indexes){
             if (index >= 0 && index < hand.Count){
                 deck.ShuffleIntoDeck(hand[index].cardData);
@@ -209,7 +207,6 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
                 card.obliterateCard();
             }
         }
-        isChanging = false;
     }
     public void ShuffleHandtoDeck(){ 
         if (isSelecting) return;

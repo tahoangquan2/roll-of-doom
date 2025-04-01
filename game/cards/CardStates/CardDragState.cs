@@ -5,10 +5,13 @@ public partial class CardDragState : CardState
 	{		
 		CardState.card = card;
 		cardManager.StartDrag(card);
+		movingCard = true;
 	}
 
 	public override void ExitState(Card card)
 	{
+		movingCard = true;
+		cardManager.displayArc(false);
 	}
 	
 	public override void HandleInput(InputEvent @event)
@@ -28,29 +31,38 @@ public partial class CardDragState : CardState
 
 		if (@event is InputEventMouseMotion mouseMotion)
 		{
-			if (card.canBeMoved)
+			if (card.canBeMoved && movingCard)
 				card.Position += mouseMotion.Relative;
 			
 			return;
-		} 
-
-		
+		} 		
 	}
 
-
-	private void CardHoveredEffect(Card card, bool isHovering = true)
+	public override void _on_zone_update(bool isEntered, CardPlayZone zone)
 	{
-		float targetScale = isHovering ? 1.2f : 1.0f;
+		
+		if (card == null) return;
 
-		if (card.Scale.X != targetScale)
+		if (!card.IsLayerNone()) 
 		{
-			Tween tween = GetTree().CreateTween(); 
-			tween.TweenProperty(card, "scale", new Vector2(targetScale, targetScale), 0.35f)
-				.SetTrans(Tween.TransitionType.Elastic)
-				.SetEase(Tween.EaseType.Out);
+			//GD.Print("CardDragState _on_zone_update: "+isEntered+" "+zone);
+			if (playZones.Count != 0) {
+				movingCard=false;
+				cardManager.SetCardMiddle(card);
+				cardManager.displayArc(true);				
+			} else{
+				movingCard=true;
+				card.TransformCard(cardManager.GetGlobalMousePosition(),0);
+				cardManager.displayArc(false);
+			}
 
-			cardManager.EmitSignal(nameof(cardManager.CardPushup), card, isHovering);	
-			cardManager.cardSound();
-		}
+			if (card.GetCardData().TargetMask==zone.GetPlayZoneType()) {
+				if (isEntered) cardManager.SetCardArcZone(zone);	
+				else cardManager.SetCardArcZone(null);
+			}
+			//GD.Print("CardDragState _on_zone_update: "+card.GetCardData().TargetMask+" "+zone.GetPlayZoneType());
+		}		
 	}
+
+	private bool movingCard = true;
 }

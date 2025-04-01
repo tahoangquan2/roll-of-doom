@@ -4,7 +4,7 @@ public partial class CardSelectedState : CardState
 	private Card tmpCard = null;
 	public override void EnterState(Card card)
 	{
-		cardManager.SelectCard(card);
+		cardManager.SelectCard(card);		
 		tmpCard = card;
 	}
 
@@ -87,7 +87,7 @@ public partial class CardSelectedState : CardState
 
 		if (card.Scale.X != targetScale)
 		{
-			Tween tween = GetTree().CreateTween(); 
+			Tween tween = CreateTween(); 
 			tween.TweenProperty(card, "scale", new Vector2(targetScale, targetScale), 0.35f)
 				.SetTrans(Tween.TransitionType.Elastic)
 				.SetEase(Tween.EaseType.Out);
@@ -97,4 +97,19 @@ public partial class CardSelectedState : CardState
 		}
 	}
 
+	public override void _on_zone_update(bool isEntered, CardPlayZone zone)
+	{		
+		if (card == null) return;
+
+		if (!card.IsLayerNone()) 
+		{
+			//GD.Print("CardDragState _on_zone_update: "+isEntered+" "+zone);
+
+			if (card.GetCardData().TargetMask==zone.GetPlayZoneType()) {
+				if (isEntered) cardManager.SetCardArcZone(zone);	
+				else cardManager.SetCardArcZone(null);
+			}
+			//GD.Print("CardDragState _on_zone_update: "+card.GetCardData().TargetMask+" "+zone.GetPlayZoneType());
+		}		
+	}
 }

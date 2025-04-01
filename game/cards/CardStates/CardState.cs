@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Godot;
 
 public abstract partial class CardState : Node
@@ -6,6 +7,7 @@ public abstract partial class CardState : Node
 
 	protected static CardManager cardManager = null;
 	public static Card card{ get; set; } = null;
+	public static List<CardPlayZone> playZones = new List<CardPlayZone>();
 	[Export] public State cardState = State.Idle;
 	public abstract void EnterState(Card card=null);
 	public abstract void ExitState(Card card=null);
@@ -42,6 +44,7 @@ public abstract partial class CardState : Node
 	}
 	public static CardPlayZone RaycastCheckForZone(EnumGlobal.enumCardTargetLayer targetMask = EnumGlobal.enumCardTargetLayer.None)
 	{
+		GD.Print("RaycastCheckForZone: "+(int) targetMask);
 		var result = CardGlobal.RaycastCheckForObjects(cardManager,cardManager.GetGlobalMousePosition(), (int) targetMask);
 		if (result.Count > 0){ // get result[0]
 			return (CardPlayZone)result[0]["collider"];			

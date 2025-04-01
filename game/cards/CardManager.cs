@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
 public partial class CardManager : Node2D
@@ -7,8 +8,9 @@ public partial class CardManager : Node2D
 	//public Card card_being_dragged = null;
 	public Card selected_card = null;
 	private AudioStreamPlayer2D audioPlayer;	
-    private PackedScene cardScene = GD.Load<PackedScene>("res://game/cards/Card.tscn");
+    private PackedScene cardScene = GD.Load<PackedScene>("res://game/cards/card.tscn");
 	private Hand hand=null;
+	private CardArc cardArc=null;
 	private bool Locked =false; // if true, no card can be selected or dragged
 	[Signal] public delegate void CardPushupEventHandler(Card card,bool isHovered);
 	[Signal] public delegate void CardUnhandEventHandler(Card card);
@@ -29,7 +31,7 @@ public partial class CardManager : Node2D
 	{
 		if (from != currentCardState) 
 		{
-			GD.Print("StateChangeRequest: "+from+" != "+currentCardState);
+			//GD.Print("StateChangeRequest: "+from+" != "+currentCardState);
 			return;}
 
 		cardStates[from].ExitState(card);
@@ -49,6 +51,7 @@ public partial class CardManager : Node2D
 	}
 	public override void _Ready() 
 	{	audioPlayer = GetNode<AudioStreamPlayer2D>("AudioPlayer");
+		cardArc = GetNode<CardArc>("CardArc");
 		hand = GetTree().CurrentScene.GetNodeOrNull<Hand>(GlobalAccessPoint.handPath);
 
 		foreach (Node a in GetChildren()){
@@ -64,12 +67,14 @@ public partial class CardManager : Node2D
 		};
 		DeselectCard();
 		selected_card = card;
-		EmitSignal(nameof(CardPushup), card, true);	
+		cardArc.ShowArc();
+		SetCardMiddle(card);
 	}
 	public void DeselectCard()
 	{
 		if (selected_card != null){
 			selected_card.ResetShader();
+			cardArc.HideArc();
 			//if (card_being_dragged != selected_card) 
 			EmitSignal(nameof(CardPushup), selected_card, false);	
 			//if (card_being_hovered != selected_card) selected_card.Scale = new Vector2(1,1);
@@ -88,6 +93,7 @@ public partial class CardManager : Node2D
 	{
 		Card tmpCard = CardState.card;
 		
+		GD.Print("Target Mask "+tmpCard.GetCardData().TargetMask);
 		CardPlayZone zone = CardState.RaycastCheckForZone(tmpCard.GetCardData().TargetMask);
 		if (zone != null){
 			if (GlobalVariables.spirit >= tmpCard.GetCardData().Cost)
@@ -101,6 +107,12 @@ public partial class CardManager : Node2D
 				//GD.Print("spirit: "+GlobalVariables.spirit);
 			}			
 		}		
+	}
+	public void SetCardMiddle(Card card)
+	{
+		card.Rotation = 0;
+		card.ZIndex = 15;
+		EmitSignal(nameof(CardPushup), card, true);
 	}
 	public Card createCard(CardData cardData)
 	{	
@@ -133,5 +145,23 @@ public partial class CardManager : Node2D
 	public void ConnectPlayZoneSignals(CardPlayZone zone)
 	{zone.ZoneUpdate += _on_zone_update;  }
 	public void _on_zone_update(bool isEntered, CardPlayZone zone)
-	{cardStates[currentCardState]._on_zone_update(isEntered, zone);}
+	{
+		if (isEntered){
+			if (!CardState.playZones.Contains(zone)) CardState.playZones.Add(zone);			
+		} else {
+			if (CardState.playZones.Contains(zone)) CardState.playZones.Remove(zone);
+		}
+		
+		cardStates[currentCardState]._on_zone_update(isEntered, zone);
+	}
+
+	public void SetCardArcZone(CardPlayZone zone)	{
+		cardArc.SnapToZone(zone);
+	}
+
+	public void displayArc(bool display)
+	{
+		if (display) cardArc.ShowArc();
+		else cardArc.HideArc();
+	}
 }
