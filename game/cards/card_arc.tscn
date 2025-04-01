@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://game/cards/CardArc.cs" id="1_hwobg"]
 
 [sub_resource type="Curve" id="Curve_ssp4u"]
-_data = [Vector2(0.0924658, 0.25277), 0.0, 0.0, 0, 0, Vector2(0.938356, 1), -0.746795, -0.746795, 0, 0, Vector2(0.996575, 0.297784), 0.0, 0.0, 0, 0]
+_data = [Vector2(0.0924658, 0.25277), 0.0, 0.0, 0, 0, Vector2(0.938356, 1), -0.746795, -0.746795, 0, 0, Vector2(0.996575, 0.511214), 0.0, 0.0, 0, 0]
 point_count = 3
 
 [node name="CardArc" type="Line2D"]

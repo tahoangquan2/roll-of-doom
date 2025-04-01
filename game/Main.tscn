@@ -83,3 +83,8 @@ playZoneType = 3
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Enemy2/CardActiveZone"]
 shape = SubResource("RectangleShape2D_e5fvt")
 debug_color = Color(0.968627, 0.321569, 0.627451, 0.439216)
+
+[node name="FPS" type="Label" parent="."]
+offset_top = 26.0
+offset_right = 40.0
+offset_bottom = 49.0

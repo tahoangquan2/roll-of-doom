@@ -42,15 +42,6 @@ public abstract partial class CardState : Node
 
 		return null;
 	}
-	public static CardPlayZone RaycastCheckForZone(EnumGlobal.enumCardTargetLayer targetMask = EnumGlobal.enumCardTargetLayer.None)
-	{
-		GD.Print("RaycastCheckForZone: "+(int) targetMask);
-		var result = CardGlobal.RaycastCheckForObjects(cardManager,cardManager.GetGlobalMousePosition(), (int) targetMask);
-		if (result.Count > 0){ // get result[0]
-			return (CardPlayZone)result[0]["collider"];			
-		}
-		return null;
-	}
 	public static Card GetCardWithHighestZIndex(Godot.Collections.Array<Godot.Collections.Dictionary> cards)
 	{
 		if (cards.Count == 0) return null; 

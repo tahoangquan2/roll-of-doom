@@ -245,7 +245,7 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
     public void _on_mouse_entered()
     {   setHandRadius(900);}
     public void _on_mouse_exited()
-    {   setHandRadius(750);}    
+    {   setHandRadius(800);}    
     private void setHandRadius(int radius){
         if (cardManager.selected_card != null || isSelecting) return;
         HandRadius = radius;cardRadius = HandRadius-200;

@@ -93,8 +93,7 @@ public partial class CardManager : Node2D
 	{
 		Card tmpCard = CardState.card;
 		
-		GD.Print("Target Mask "+tmpCard.GetCardData().TargetMask);
-		CardPlayZone zone = CardState.RaycastCheckForZone(tmpCard.GetCardData().TargetMask);
+		CardPlayZone zone = CardState.playZones.FirstOrDefault(z => z.GetPlayZoneType() == tmpCard.GetCardData().TargetMask);
 		if (zone != null){
 			if (GlobalVariables.spirit >= tmpCard.GetCardData().Cost)
 			{
