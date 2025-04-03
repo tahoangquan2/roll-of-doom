@@ -51,7 +51,7 @@ public partial class CardArc : Line2D
 
 	public void SnapToZone(CardPlayZone zone=null)
 	{
-		GD.Print("SnapToZone: "+zone);
+		//GD.Print("SnapToZone: "+zone);
 		if (zone == null) {
 			snapedToZone = false;
 			return;

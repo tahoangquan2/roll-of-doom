@@ -1,8 +1,20 @@
-[gd_scene load_steps=4 format=3 uid="uid://ci580fctofejp"]
+[gd_scene load_steps=10 format=3 uid="uid://ci580fctofejp"]
 
 [ext_resource type="Script" path="res://game/gui/Player.cs" id="1_w7j82"]
 [ext_resource type="PackedScene" uid="uid://cayqj43ene72e" path="res://game/gui/side_menu.tscn" id="2_r37qf"]
 [ext_resource type="PackedScene" uid="uid://r4mtbdq6b4tq" path="res://game/gui/top_gui.tscn" id="3_cfuo1"]
+[ext_resource type="Script" path="res://game/gui/ManaUi.cs" id="3_fbbhx"]
+[ext_resource type="Texture2D" uid="uid://62t6ctia6pme" path="res://assets/cards/mana_slot.png" id="3_k3c26"]
+[ext_resource type="Texture2D" uid="uid://f5311oh3pubu" path="res://assets/sprites/UI/RectangleBox_96x96.png" id="3_n1rb7"]
+[ext_resource type="Texture2D" uid="uid://bpjdv674mqidn" path="res://assets/cards/mana_spell.png" id="5_a72jn"]
+[ext_resource type="FontFile" uid="uid://c1j227ygpp51v" path="res://assets/fonts/DragonHunter-9Ynxj.otf" id="6_5pjae"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_kyvxj"]
+resource_local_to_scene = true
+font = ExtResource("6_5pjae")
+font_size = 20
+outline_size = 16
+outline_color = Color(0.270588, 0.513726, 1, 1)
 
 [node name="Player" type="CanvasLayer"]
 script = ExtResource("1_w7j82")
@@ -29,28 +41,103 @@ color = Color(0.309804, 0.309804, 0.309804, 0.501961)
 [node name="MainControl" parent="." instance=ExtResource("2_r37qf")]
 mouse_filter = 2
 
-[node name="DeckControl" type="Control" parent="MainControl"]
+[node name="ManaUI" type="HBoxContainer" parent="MainControl"]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 210.0
-offset_top = -210.0
-offset_bottom = -210.0
+offset_top = -213.0
+offset_right = 91.0
 grow_vertical = 0
-mouse_filter = 2
+theme_override_constants/separation = 1
+script = ExtResource("3_fbbhx")
 
-[node name="HandControl" type="Control" parent="MainControl"]
+[node name="BasicMana" type="NinePatchRect" parent="MainControl/ManaUI"]
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("3_n1rb7")
+patch_margin_left = 10
+patch_margin_top = 10
+patch_margin_right = 11
+patch_margin_bottom = 11
+
+[node name="Mana" type="TextureRect" parent="MainControl/ManaUI/BasicMana"]
+texture_filter = 2
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 1
-anchors_preset = 7
+anchors_preset = -1
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_top = 500.0
-offset_bottom = 500.0
+offset_left = -16.0
+offset_top = -44.0
+offset_right = 16.0
+offset_bottom = -12.0
+grow_horizontal = 2
+mouse_default_cursor_shape = 16
+texture = ExtResource("3_k3c26")
+stretch_mode = 1
+
+[node name="ManaLabel" type="Label" parent="MainControl/ManaUI/BasicMana"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -47.0
+offset_top = -12.0
+offset_right = -3.0
+offset_bottom = 22.0
+grow_horizontal = 0
+scale = Vector2(1.2, 1.2)
+text = "6
+"
+label_settings = SubResource("LabelSettings_kyvxj")
+horizontal_alignment = 2
+
+[node name="SpellMana" type="NinePatchRect" parent="MainControl/ManaUI"]
+custom_minimum_size = Vector2(40, 134)
+layout_mode = 2
+size_flags_vertical = 8
+texture = ExtResource("3_n1rb7")
+patch_margin_left = 10
+patch_margin_top = 10
+patch_margin_right = 11
+patch_margin_bottom = 11
+
+[node name="Mana" type="TextureRect" parent="MainControl/ManaUI/SpellMana"]
+texture_filter = 2
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.964
+anchor_right = 0.5
+anchor_bottom = 0.964
+offset_left = -16.5
+offset_top = -32.328
+offset_right = 15.5
+offset_bottom = -0.328003
 grow_horizontal = 2
 grow_vertical = 0
+texture = ExtResource("5_a72jn")
+stretch_mode = 1
+
+[node name="ManaLabel" type="Label" parent="MainControl/ManaUI/SpellMana"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -47.0
+offset_top = -12.0
+offset_right = -3.0
+offset_bottom = 22.0
+grow_horizontal = 0
+scale = Vector2(1.2, 1.2)
+text = "4
+"
+label_settings = SubResource("LabelSettings_kyvxj")
+horizontal_alignment = 2
 
 [node name="TopGui" parent="." instance=ExtResource("3_cfuo1")]
 offset_bottom = 50.0

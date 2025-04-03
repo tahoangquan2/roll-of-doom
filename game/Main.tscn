@@ -43,10 +43,10 @@ debug_color = Color(0, 0.67451, 0.784314, 0.0862745)
 process_mode = 0
 
 [node name="Deck" parent="." instance=ExtResource("5_3bhax")]
-position = Vector2(160, 900)
+position = Vector2(264, 950)
 
 [node name="DiscardPile" parent="." instance=ExtResource("8_jqrpu")]
-position = Vector2(1718, 926)
+position = Vector2(1796, 952)
 
 [node name="Camera2D" type="Camera2D" parent="."]
 anchor_mode = 0

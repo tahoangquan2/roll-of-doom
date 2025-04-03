@@ -3,7 +3,7 @@ using System;
 
 public partial class Hand : Area2D // card are in cardmanager this is the hand just for display and interaction cards are not children of hand
 {
-    private int HandRadius = 750;
+    private int HandRadius = 800;
     private int cardRadius ;
     private float AngleLimit = 70;
     private float MaxCardSpreadAngle = 10;

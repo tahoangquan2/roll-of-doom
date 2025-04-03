@@ -14,6 +14,7 @@ public partial class Card : Node2D
     private Label nameLbl;
     //private Label descriptionLbl;
     private Sprite2D CardTypeIcon;
+    private Sprite2D CardManaIcon;
     private Sprite2D CardArt;
     private ShaderMaterial shaderMaterial;
     private Control display;
@@ -40,6 +41,7 @@ public partial class Card : Node2D
         costLbl = subViewport.GetNode<Label>("CostDisplay/CostLb");
         nameLbl = subViewport.GetNode<Label>("CardEffectLb");
         CardTypeIcon = subViewport.GetNode<Sprite2D>("CardTypeIcon");
+        CardManaIcon = subViewport.GetNode<Sprite2D>("CostDisplay/ManaSlot");
         CardArt = subViewport.GetNode<Sprite2D>("CardDisplay/CardArt");
         
         var shaderDisplay = GetNode<Button>("Control/TextureRect"); // This will hold the shader
@@ -71,7 +73,7 @@ public partial class Card : Node2D
         return cardData.TargetMask == EnumGlobal.enumCardTargetLayer.None;
     }
 
-    public virtual async void ActivateEffects(Node2D target)
+    public virtual async void ActivateEffects(CardPlayZone target)
     {
         if (cardData == null || !canActivate) return;
 
@@ -98,7 +100,7 @@ public partial class Card : Node2D
         }        
     }
 
-    private async Task<bool> EffectExecution(CardEffect effect, Node2D target)
+    private async Task<bool> EffectExecution(CardEffect effect, CardPlayZone target)
     {
         if (effect == null) return false;
         bool result = effect.ApplyEffect(target);
@@ -117,16 +119,18 @@ public partial class Card : Node2D
         switch (cardData.CardType)
         {
             case EnumGlobal.enumCardType.Attack:
-                CardTypeIcon.Frame = 1;
+                CardTypeIcon.Frame = 2;                
                 break;
             case EnumGlobal.enumCardType.Defense:
-                CardTypeIcon.Frame = 2;
+                CardTypeIcon.Frame = 1;
                 break;
             case EnumGlobal.enumCardType.Spell:
                 CardTypeIcon.Frame = 0;
+                CardManaIcon.Frame = 1;
                 break;
             default:
                 CardTypeIcon.Frame = 0;
+                CardManaIcon.Frame = 0;
                 break;
         }
     }  

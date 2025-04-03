@@ -1,7 +1,8 @@
-[gd_resource type="LabelSettings" load_steps=2 format=3 uid="uid://btn2vsej74w0d"]
+[gd_resource type="LabelSettings" load_steps=2 format=3 uid="uid://cedvr6qkeke38"]
 
 [ext_resource type="FontFile" uid="uid://c1j227ygpp51v" path="res://assets/fonts/DragonHunter-9Ynxj.otf" id="1_rrja5"]
 
 [resource]
+resource_local_to_scene = true
 font = ExtResource("1_rrja5")
 font_size = 20

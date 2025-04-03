@@ -19,7 +19,7 @@ public abstract partial class CardState : Node
 
 	public void changeState(State newState, Card card=null)
 	{
-		GD.Print("CardState changeState: "+cardState+" -> "+newState);
+		//GD.Print("CardState changeState: "+cardState+" -> "+newState);
 		cardManager.StateChangeRequest(cardState, newState, card);
 	}
 
