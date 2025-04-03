@@ -7,7 +7,7 @@
 [resource]
 script = ExtResource("3_ipc06")
 CardName = "Frozen Reflection"
-Cost = 40
+Cost = 1
 CardType = 2
 Effects = []
 card_script = ExtResource("2_n3aed")

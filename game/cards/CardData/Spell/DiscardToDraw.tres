@@ -7,7 +7,7 @@
 [resource]
 script = ExtResource("3_y7w76")
 CardName = "Flame Offering"
-Cost = 30
+Cost = 1
 CardType = 2
 Effects = []
 card_script = ExtResource("2_awx6e")

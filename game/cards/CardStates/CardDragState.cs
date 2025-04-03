@@ -5,11 +5,13 @@ public partial class CardDragState : CardState
 	{		
 		CardState.card = card;
 		cardManager.StartDrag(card);
+		cardManager.EmitSignal(nameof(cardManager.CardFocus), card.GetCardData(),true);
 		movingCard = true;
 	}
 
 	public override void ExitState(Card card)
 	{
+		cardManager.EmitSignal(nameof(cardManager.CardFocus), card.GetCardData(),false);
 		movingCard = true;
 		cardManager.displayArc(false);
 	}

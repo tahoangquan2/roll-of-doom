@@ -8,7 +8,7 @@
 resource_local_to_scene = true
 script = ExtResource("3_ej7q6")
 CardName = "Mirror Gate"
-Cost = 40
+Cost = 3
 CardType = 2
 Effects = []
 card_script = ExtResource("2_t7ot3")

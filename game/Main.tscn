@@ -54,35 +54,35 @@ anchor_mode = 0
 [node name="Hand" parent="." instance=ExtResource("6_4w38m")]
 position = Vector2(960, 1580)
 
-[node name="Enemy" type="Node2D" parent="."]
+[node name="CardActiveZone2" parent="." instance=ExtResource("5_e70is")]
 position = Vector2(1494, 418)
-
-[node name="Sprite2D" type="Sprite2D" parent="Enemy"]
-scale = Vector2(5, 5)
-texture = ExtResource("9_chh8o")
-
-[node name="CardActiveZone" parent="Enemy" instance=ExtResource("5_e70is")]
 scale = Vector2(1, 1)
 playZoneType = 3
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemy/CardActiveZone"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CardActiveZone2"]
 shape = SubResource("RectangleShape2D_e5fvt")
 debug_color = Color(0.968627, 0.321569, 0.627451, 0.439216)
 
-[node name="Enemy2" type="Node2D" parent="."]
+[node name="Enemy" type="Node2D" parent="CardActiveZone2"]
+
+[node name="Sprite2D" type="Sprite2D" parent="CardActiveZone2/Enemy"]
+scale = Vector2(5, 5)
+texture = ExtResource("9_chh8o")
+
+[node name="CardActiveZone3" parent="." instance=ExtResource("5_e70is")]
 position = Vector2(1702, 532)
-
-[node name="Sprite2D" type="Sprite2D" parent="Enemy2"]
-scale = Vector2(5, 5)
-texture = ExtResource("9_chh8o")
-
-[node name="CardActiveZone" parent="Enemy2" instance=ExtResource("5_e70is")]
 scale = Vector2(1, 1)
 playZoneType = 3
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemy2/CardActiveZone"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CardActiveZone3"]
 shape = SubResource("RectangleShape2D_e5fvt")
 debug_color = Color(0.968627, 0.321569, 0.627451, 0.439216)
+
+[node name="Enemy2" type="Node2D" parent="CardActiveZone3"]
+
+[node name="Sprite2D" type="Sprite2D" parent="CardActiveZone3/Enemy2"]
+scale = Vector2(5, 5)
+texture = ExtResource("9_chh8o")
 
 [node name="FPS" type="Label" parent="."]
 offset_top = 26.0

@@ -3,10 +3,10 @@ public partial class CardHoverState : CardState
 {
 	public override void EnterState(Card card)
 	{
-		setCard(card);	
+		setCard(card);			
 	}
 
-	public override void ExitState(Card card)	{}
+	public override void ExitState(Card card)	{	}
 
 	public override void HandleInput(InputEvent @event)
 	{

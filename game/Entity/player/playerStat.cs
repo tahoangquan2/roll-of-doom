@@ -8,9 +8,12 @@ public partial class playerStat : stats
 	[Export] public int maxSpellMana = 2;
 	[Export] public Array<CardData> startingDeck = new Array<CardData>();
 	[Export] public int cardDrawperTurn = 4;
+	[Export] public int startingGold = 10;
 
 	public int currentMana = 0;
 	public int currentSpellMana = 0;
+
+	public int currentGold = 0;
 
 	public Array<CardData> currentDeck = new Array<CardData>();
 	

@@ -7,7 +7,7 @@
 [resource]
 script = ExtResource("1_57pie")
 CardName = "Open Mind"
-Cost = 3
+Cost = 2
 CardType = 1
 Effects = []
 card_script = ExtResource("2_u4rlj")

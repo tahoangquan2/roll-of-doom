@@ -5,12 +5,14 @@ public partial class CardSelectedState : CardState
 	public override void EnterState(Card card)
 	{
 		cardManager.SelectCard(card);		
+		cardManager.EmitSignal(nameof(cardManager.CardFocus), card.GetCardData(),true);
 		tmpCard = card;
 	}
 
 	public override void ExitState(Card card)
 	{
 		cardManager.DeselectCard();
+		cardManager.EmitSignal(nameof(cardManager.CardFocus),card.GetCardData(),false);
 		tmpCard = null;
 	}
 
