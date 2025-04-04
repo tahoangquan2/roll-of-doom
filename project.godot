@@ -39,9 +39,9 @@ window/stretch/mode="canvas_items"
 
 project/assembly_name="Roll of Doom"
 
-[editor_plugins]
+[global_group]
 
-enabled=PackedStringArray("res://addons/gaea/plugin.cfg")
+"Update on Cycle"="At every Cycle call Cycle function"
 
 [input]
 

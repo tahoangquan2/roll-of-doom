@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="PlayerStat" load_steps=7 format=3 uid="uid://cgwvkxpa73d5n"]
+
+[ext_resource type="Script" path="res://game/Entity/Resource/PlayerStat.cs" id="1_bvnqj"]
+[ext_resource type="Resource" uid="uid://b3j86o0lhj5qh" path="res://game/cards/CardData/Spell/DiscardToDraw.tres" id="2_dw231"]
+[ext_resource type="Resource" uid="uid://cl3hr86rfwxnh" path="res://game/cards/CardData/Spell/Draw3.tres" id="3_1ptd5"]
+[ext_resource type="Resource" uid="uid://c6va1gi6puixe" path="res://game/cards/CardData/Spell/Obliterate.tres" id="4_3hqqt"]
+[ext_resource type="Resource" uid="uid://lpydnjvdtqrq" path="res://game/cards/CardData/Spell/ReShuffleHand.tres" id="5_bwxff"]
+[ext_resource type="Resource" uid="uid://pkewwh5ghl7j" path="res://game/cards/CardData/Spell/DuplicateCard.tres" id="6_3ta17"]
+
+[resource]
+script = ExtResource("1_bvnqj")
+capSpellMana = 2
+maxMana = 4
+startingDeck = [ExtResource("2_dw231"), ExtResource("3_1ptd5"), ExtResource("4_3hqqt"), ExtResource("5_bwxff"), ExtResource("6_3ta17")]
+cardDrawPerTurn = 4
+gold = 10
+name = "Warrior"
+maxHealth = 30

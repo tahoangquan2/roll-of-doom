@@ -1,29 +1,16 @@
 using Godot;
-using System;
 
 public partial class Player : CanvasLayer
 {
 	// Called when the node enters the scene tree for the first time.
-	private int health;
-	private int maxHealth;
-	private int spirit;
-
-	private Label healthLabel;
-	private Label spiritLabel;
+	private Label manaLabel;
+	private Label goldLabel;
 	private Control pauseMenu;
 
-	private TextureProgressBar healthProgressBar;
 	public override void _Ready()
 	{
-		health=GlobalVariables.health;
-		spirit=GlobalVariables.spirit;
-
-		healthLabel = GetNode<Label>("TopGui/Container/Health/TxtBox/HealthLabel");
-		spiritLabel = GetNode<Label>("TopGui/Container/Spirit/TxtBox/PointLabel");
-		healthProgressBar = GetNode<TextureProgressBar>("TopGui/Container/Health/TextureProgressBar");
-
-		GlobalVariables.gv.HealthChanged += update_values;
-		GlobalVariables.gv.SpiritChanged += update_values;
+		manaLabel = GetNode<Label>("TopGui/Container/BaseMana/TxtBox/PointLabel");
+		goldLabel = GetNode<Label>("TopGui/Container/Gold/TxtBox/GoldLabel");
 
 		pauseMenu = GetNode<Control>("Pause");
 
@@ -31,13 +18,9 @@ public partial class Player : CanvasLayer
 	}
 	public void update_values() // access though unique name
 	{
-		health=GlobalVariables.health;
-		maxHealth=GlobalVariables.maxHealth;
-		spirit=GlobalVariables.spirit;
-
-		healthLabel.Text = $"{health}";
-		spiritLabel.Text = $"{spirit}";
-		healthProgressBar.MaxValue = maxHealth;
-		healthProgressBar.Value = health;
+		manaLabel.Text = $"{GlobalVariables.playerStat.baseMana}";
+		goldLabel.Text = $"{GlobalVariables.playerStat.gold}";
 	}
+
+
 }

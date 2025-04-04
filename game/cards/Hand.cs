@@ -284,7 +284,6 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
 
         if (@event.IsActionPressed("Action2"))
         {
-            GlobalVariables.ChangeHealth(-10);
         }
     }
     public void _on_button_pressed(){

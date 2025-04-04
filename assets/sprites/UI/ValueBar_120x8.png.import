@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://2vyxvu6pdq2i"
-path="res://.godot/imported/fantasyhextiles_randr_4_v1-9.png-0d8958a5b71427a5138042351df656c9.ctex"
+uid="uid://1mrnm4kv7wkq"
+path="res://.godot/imported/ValueBar_120x8.png-3cec52c2578dd5e6a79f28f7df38d039.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tilesets/fantasyhextiles_randr_4_v1/fantasyhextiles_randr_4_v1-9.png"
-dest_files=["res://.godot/imported/fantasyhextiles_randr_4_v1-9.png-0d8958a5b71427a5138042351df656c9.ctex"]
+source_file="res://assets/sprites/UI/ValueBar_120x8.png"
+dest_files=["res://.godot/imported/ValueBar_120x8.png-3cec52c2578dd5e6a79f28f7df38d039.ctex"]
 
 [params]
 

@@ -1,36 +1,38 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
-public partial class stats : Resource //  base class for character Stat. (Player or Enemy)
+[Tool]
+[GlobalClass]
+
+public partial class Stats : Resource //  base class for character Stat. (Player or Enemy)
 {	
 
 	[Export] public string name = "Character";
 	[Export] public int maxHealth = 30;
-	public int currentHealth = 30;	
 
+	[Signal] public delegate void StatChangedEventHandler(); // for health, guard, shield change specifically
+	public int currentHealth = 30;	
 	public int guard = 0;
 	public int shield = 0;
 
-	public void setHealth(int value)
-	{
+	//public List<EnumGlobal.enumBuff>
+
+	public void setHealth(int value)	{
 		currentHealth = Mathf.Clamp(value, 0, maxHealth);
+		EmitSignal(nameof(StatChanged));
 	}
-	public void add_guard(int value)
-	{
+	public void add_guard(int value)	{
 		guard = Mathf.Clamp(guard + value, 0, 999);	
+		EmitSignal(nameof(StatChanged));
 	}
 
-	public void add_shield(int value)
-	{
+	public void add_shield(int value)	{
 		shield = Mathf.Clamp(shield + value, 0, 999);		
-	}
-	public Resource getCopy()
-	{
-		return Duplicate();
+		EmitSignal(nameof(StatChanged));
 	}
 
-	public int takeDamage(int damage)
-	{
+	public int takeDamage(int damage)	{
 		if (damage <= 0) return 0;
 
 		int remainingDamage = damage;
@@ -51,6 +53,8 @@ public partial class stats : Resource //  base class for character Stat. (Player
 			currentHealth -= remainingDamage;
 		}
 
+		EmitSignal(nameof(StatChanged)); 
+
 		return remainingDamage; // Return actual HP loss
 	}
 
@@ -58,7 +62,18 @@ public partial class stats : Resource //  base class for character Stat. (Player
 	public void heal(int value)
 	{
 		currentHealth = Mathf.Clamp(currentHealth + value, 0, maxHealth);
+		EmitSignal(nameof(StatChanged));
 	}
+
+	public virtual Stats CreateInstance()
+	{
+		Stats newStat = Duplicate() as Stats;
+		newStat.maxHealth = maxHealth;
+		newStat.name = name;
+
+		return newStat;
+	}
+
 
 	//### **Stat**
 

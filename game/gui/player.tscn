@@ -1,29 +1,9 @@
-[gd_scene load_steps=12 format=3 uid="uid://ci580fctofejp"]
+[gd_scene load_steps=5 format=3 uid="uid://ci580fctofejp"]
 
 [ext_resource type="Script" path="res://game/gui/Player.cs" id="1_w7j82"]
 [ext_resource type="PackedScene" uid="uid://cayqj43ene72e" path="res://game/gui/side_menu.tscn" id="2_r37qf"]
 [ext_resource type="PackedScene" uid="uid://r4mtbdq6b4tq" path="res://game/gui/top_gui.tscn" id="3_cfuo1"]
-[ext_resource type="Script" path="res://game/gui/ManaUi.cs" id="3_fbbhx"]
-[ext_resource type="Texture2D" uid="uid://62t6ctia6pme" path="res://assets/cards/mana_slot.png" id="3_k3c26"]
-[ext_resource type="Texture2D" uid="uid://f5311oh3pubu" path="res://assets/sprites/UI/RectangleBox_96x96.png" id="3_n1rb7"]
-[ext_resource type="Texture2D" uid="uid://bpjdv674mqidn" path="res://assets/cards/mana_spell.png" id="5_a72jn"]
-[ext_resource type="FontFile" uid="uid://c1j227ygpp51v" path="res://assets/fonts/DragonHunter-9Ynxj.otf" id="6_5pjae"]
-[ext_resource type="FontFile" uid="uid://d0n6rt5p7f7tn" path="res://assets/fonts/buddychampionrotate.ttf" id="7_8smdu"]
-
-[sub_resource type="LabelSettings" id="LabelSettings_kyvxj"]
-resource_local_to_scene = true
-font = ExtResource("6_5pjae")
-font_size = 20
-outline_size = 16
-outline_color = Color(0.270588, 0.513726, 1, 1)
-
-[sub_resource type="LabelSettings" id="LabelSettings_blwbh"]
-line_spacing = 1.0
-font = ExtResource("7_8smdu")
-font_size = 20
-outline_size = 10
-outline_color = Color(0, 0.027451, 0, 1)
-shadow_size = 0
+[ext_resource type="PackedScene" uid="uid://cmnlubti2it5r" path="res://game/gui/mana_ui.tscn" id="3_lijl2"]
 
 [node name="Player" type="CanvasLayer"]
 script = ExtResource("1_w7j82")
@@ -50,135 +30,10 @@ color = Color(0.309804, 0.309804, 0.309804, 0.501961)
 [node name="MainControl" parent="." instance=ExtResource("2_r37qf")]
 mouse_filter = 2
 
-[node name="ManaUI" type="HBoxContainer" parent="MainControl"]
+[node name="ManaUI" parent="MainControl" instance=ExtResource("3_lijl2")]
 layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 10.0
-offset_top = -315.0
-offset_right = 101.0
-offset_bottom = -8.0
-grow_vertical = 0
-theme_override_constants/separation = 1
-script = ExtResource("3_fbbhx")
-
-[node name="BasicMana" type="NinePatchRect" parent="MainControl/ManaUI"]
-layout_mode = 2
-size_flags_horizontal = 3
-texture = ExtResource("3_n1rb7")
-patch_margin_left = 10
-patch_margin_top = 10
-patch_margin_right = 11
-patch_margin_bottom = 11
-
-[node name="ManaLabel" type="Label" parent="MainControl/ManaUI/BasicMana"]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -47.0
-offset_top = -12.0
-offset_right = -3.0
-offset_bottom = 10.0
-grow_horizontal = 0
-scale = Vector2(1.2, 1.2)
-text = "6
-"
-label_settings = SubResource("LabelSettings_kyvxj")
-horizontal_alignment = 2
-
-[node name="VContainer" type="VBoxContainer" parent="MainControl/ManaUI/BasicMana"]
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 9.0
-offset_top = -267.0
-offset_right = 41.0
-offset_bottom = -11.0
-grow_vertical = 0
-theme_override_constants/separation = 0
-alignment = 2
-
-[node name="Mana" type="TextureRect" parent="MainControl/ManaUI/BasicMana/VContainer"]
-texture_filter = 2
-custom_minimum_size = Vector2(32, 32)
-layout_mode = 2
-mouse_default_cursor_shape = 16
-texture = ExtResource("3_k3c26")
-stretch_mode = 3
-
-[node name="Mana2" type="TextureRect" parent="MainControl/ManaUI/BasicMana/VContainer"]
-texture_filter = 2
-custom_minimum_size = Vector2(32, 32)
-layout_mode = 2
-mouse_default_cursor_shape = 16
-texture = ExtResource("3_k3c26")
-stretch_mode = 3
-
-[node name="NotMana" type="Label" parent="MainControl/ManaUI/BasicMana"]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -50.0
-offset_top = -38.0
-offset_right = 88.0
-offset_bottom = -16.0
-grow_horizontal = 0
-scale = Vector2(1.2, 1.2)
-text = "Not enough mana"
-label_settings = SubResource("LabelSettings_blwbh")
-horizontal_alignment = 2
-
-[node name="SpellMana" type="NinePatchRect" parent="MainControl/ManaUI"]
-custom_minimum_size = Vector2(40, 134)
-layout_mode = 2
-size_flags_vertical = 8
-texture = ExtResource("3_n1rb7")
-patch_margin_left = 10
-patch_margin_top = 10
-patch_margin_right = 11
-patch_margin_bottom = 11
-
-[node name="ManaLabel" type="Label" parent="MainControl/ManaUI/SpellMana"]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -47.0
-offset_top = -12.0
-offset_right = -3.0
-offset_bottom = 22.0
-grow_horizontal = 0
-scale = Vector2(1.2, 1.2)
-text = "4
-"
-label_settings = SubResource("LabelSettings_kyvxj")
-horizontal_alignment = 2
-
-[node name="VContainer" type="VBoxContainer" parent="MainControl/ManaUI/SpellMana"]
-layout_mode = 1
-anchors_preset = 13
-anchor_left = 0.5
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -16.0
-offset_top = 8.0
-offset_right = 16.0
-offset_bottom = -9.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 0
-alignment = 2
-
-[node name="Mana9" type="TextureRect" parent="MainControl/ManaUI/SpellMana/VContainer"]
-texture_filter = 2
-custom_minimum_size = Vector2(24, 24)
-layout_mode = 2
-texture = ExtResource("5_a72jn")
-stretch_mode = 3
+offset_top = -317.0
+offset_bottom = -10.0
 
 [node name="TopGui" parent="." instance=ExtResource("3_cfuo1")]
 offset_bottom = 50.0

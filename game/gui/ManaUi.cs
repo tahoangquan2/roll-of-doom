@@ -4,16 +4,16 @@ using System.Collections.Generic;
 
 public partial class ManaUi : HBoxContainer
 {
+	PlayerStat playerStat;
 	private const int sizeOfContainer = 32;
-	private int mana = 0;
-	private int spellMana = 0;	
+	private int mana = 0; // can be unlimited
+	private int spellMana = 0;	// cap is to maxSpellMana
 	private CardManager cardManager;
 	private Tween mainTween = null;
 
 	private Label manaLabel => GetNode<Label>("BasicMana/ManaLabel");
 	private Label spellManaLabel => GetNode<Label>("SpellMana/ManaLabel");
 	private Label notEnoughManaLabel => GetNode<Label>("BasicMana/NotMana");
-
 	private VBoxContainer ManaContainer => GetNode<VBoxContainer>("BasicMana/VContainer");
 	private VBoxContainer SpellContainer => GetNode<VBoxContainer>("SpellMana/VContainer");
 
@@ -22,13 +22,19 @@ public partial class ManaUi : HBoxContainer
 
 	public override void _Ready()
 	{
-		setMana(6);
-		setSpellMana(2);
 		cardManager = GetTree().CurrentScene.GetNodeOrNull<CardManager>(GlobalAccessPoint.cardManagerPath);
 		if (cardManager != null) {
 			cardManager.CardFocus += hoverCard;
 		}
 
+		playerStat = GlobalVariables.playerStat;
+		setMana(playerStat.baseMana);
+		setSpellMana(playerStat.spellMana);
+
+		playerStat.ManaChanged += () => {
+			setMana(playerStat.mana);
+			setSpellMana(playerStat.spellMana);
+		};			
 	}
 	public void setMana(int value){		
 		mana = value;
@@ -49,12 +55,13 @@ public partial class ManaUi : HBoxContainer
 	}
 
 	public void setSpellMana(int value){
+		value = Mathf.Clamp(value, 0, playerStat.capSpellMana);
 		spellMana = value;
 		spellManaLabel.Text = value.ToString();
 		int childrenCount = SpellContainer.GetChildCount();
 
 		if (childrenCount < value)		{
-			value = Mathf.Clamp(value, 0, 3);
+			
 			for (int i = childrenCount; i < value; i++)		{
 				TextureRect newManaIcon = createManaIcon(spellManaIconTexture);
 				SpellContainer.AddChild(newManaIcon);
@@ -93,6 +100,8 @@ public partial class ManaUi : HBoxContainer
 
 	private void hoverSpellMana(int cost)
 	{
+		GD.Print("hover spell mana: "+cost);
+		GD.Print("mana: "+mana+" " +spellMana);
 		if (cost <= 0) return;
 
 		int totalAvailable = spellMana + mana;
@@ -173,5 +182,14 @@ public partial class ManaUi : HBoxContainer
 		} else{
 			hoverMana(card.Cost);
 		}
+	}
+
+	public void Cycle(){ //
+		setSpellMana(Mathf.Clamp(mana, 0, playerStat.capSpellMana));
+		setMana(playerStat.baseMana);
+		if (cardManager != null) {
+			//cardManager.Cycle();
+		}
+
 	}
 }
