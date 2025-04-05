@@ -95,13 +95,11 @@ public partial class ManaUi : HBoxContainer
 			BlinkIcons(manaIcons);
 		} else {
 			notEnoughManaLabel.Show();
+			UnhoverAllMana();
 		}		
 	}
 
-	private void hoverSpellMana(int cost)
-	{
-		GD.Print("hover spell mana: "+cost);
-		GD.Print("mana: "+mana+" " +spellMana);
+	private void hoverSpellMana(int cost)	{
 		if (cost <= 0) return;
 
 		int totalAvailable = spellMana + mana;
@@ -109,6 +107,7 @@ public partial class ManaUi : HBoxContainer
 		if (cost > totalAvailable)
 		{
 			notEnoughManaLabel.Show();
+			UnhoverAllMana();
 			return;
 		}
 
@@ -156,11 +155,15 @@ public partial class ManaUi : HBoxContainer
 
 
 	public void unhoverCard(){
+		notEnoughManaLabel.Hide();		
+		UnhoverAllMana();	
+	}
+
+	private void UnhoverAllMana() {
 		if (mainTween != null) {
 			mainTween.Kill();
 			mainTween = null;
 		}
-		notEnoughManaLabel.Hide();
 		for (int i = 0; i < ManaContainer.GetChildCount(); i++) {
 			Control manaIcon = ManaContainer.GetChild(i) as Control;
 			manaIcon.Modulate = new Color(1, 1, 1, 1.0f);
@@ -168,11 +171,10 @@ public partial class ManaUi : HBoxContainer
 		for (int i = 0; i < SpellContainer.GetChildCount(); i++) {
 			Control manaIcon = SpellContainer.GetChild(i) as Control;
 			manaIcon.Modulate = new Color(1, 1, 1, 1.0f);
-		}		
+		}
 	}
 
-	public void hoverCard(CardData card,bool isHovered)	{ // spell cost both mana and spell mana, priority to spell mana
-		
+	public void hoverCard(CardData card,bool isHovered)	{ // spell cost both mana and spell mana, priority to spell mana		
 		if (!isHovered) {
 			unhoverCard();
 			return;

@@ -275,17 +275,17 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
         return StartSelectionMode(numToSelect, EnumGlobal.HandSelectionPurpose.Discard);
     }
     int requiredSelectionCount = 0;
-    public void _input(InputEvent @event){//action "Action" from input map, this is for testing
-    if (@event is InputEventMouseMotion) return;
-        if (@event.IsActionPressed("Action"))
-        {
-            drawFromDeck(3);
-        }
+    // public void _input(InputEvent @event){//action "Action" from input map, this is for testing
+    // if (@event is InputEventMouseMotion) return;
+    //     if (@event.IsActionPressed("Action"))
+    //     {
+    //         drawFromDeck(3);
+    //     }
 
-        if (@event.IsActionPressed("Action2"))
-        {
-        }
-    }
+    //     if (@event.IsActionPressed("Action2"))
+    //     {
+    //     }
+    // }
     public void _on_button_pressed(){
         ExitSelectionMode();
         setHandRadius(750);

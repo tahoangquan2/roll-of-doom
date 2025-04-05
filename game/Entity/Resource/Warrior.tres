@@ -10,7 +10,7 @@
 [resource]
 script = ExtResource("1_bvnqj")
 capSpellMana = 2
-maxMana = 4
+baseMana = 4
 startingDeck = [ExtResource("2_dw231"), ExtResource("3_1ptd5"), ExtResource("4_3hqqt"), ExtResource("5_bwxff"), ExtResource("6_3ta17")]
 cardDrawPerTurn = 4
 gold = 10

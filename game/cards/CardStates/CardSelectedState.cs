@@ -50,6 +50,7 @@ public partial class CardSelectedState : CardState
 					CardHoveredEffect(tmpCard, false);
 					tmpCard = card;
 					cardManager.SelectCard(card);
+					cardManager.EmitSignal(nameof(cardManager.CardFocus), card.GetCardData(),true);
 				}
 				else changeState(State.Hover, card);
 				
