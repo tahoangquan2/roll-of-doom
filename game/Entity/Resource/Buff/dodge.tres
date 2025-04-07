@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="BuffData" load_steps=3 format=3 uid="uid://c7ciwuajrb6hp"]
+
+[ext_resource type="Texture2D" uid="uid://cmumfkc48ginc" path="res://assets/sprites/buffs/dodge.png" id="1_0qagq"]
+[ext_resource type="Script" path="res://game/Entity/Resource/BuffData.cs" id="1_ypv3p"]
+
+[resource]
+script = ExtResource("1_ypv3p")
+Type = 0
+Duration = 1
+icon = ExtResource("1_0qagq")
+description = "Evades a single instance of damage then lose one value. Calculate before Guard, Diminishing."

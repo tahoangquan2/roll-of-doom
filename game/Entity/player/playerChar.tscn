@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://b6refw0j55huo"]
+[gd_scene load_steps=14 format=3 uid="uid://b6refw0j55huo"]
 
 [ext_resource type="PackedScene" uid="uid://du3m5tmrky0oq" path="res://game/cards/card_active_zone.tscn" id="1_1oo0s"]
 [ext_resource type="Script" path="res://game/Entity/player/PlayerChar.cs" id="2_pqbwe"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://byllcush7ax5q" path="res://assets/sprites/UI/ValueRed_120x8.png" id="4_y0kat"]
 [ext_resource type="Texture2D" uid="uid://cwlisfybt81rw" path="res://assets/sprites/UI/ValueBlue_120x8.png" id="6_ma7dx"]
 [ext_resource type="Texture2D" uid="uid://rkc143a6qwfg" path="res://assets/sprites/UI/ValueGrey_120x8.png" id="7_j7tmq"]
+[ext_resource type="PackedScene" uid="uid://b8c0klkgryoqf" path="res://game/Entity/buffUI.tscn" id="9_xttxu"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kafyt"]
 size = Vector2(117.5, 112.5)
@@ -117,4 +118,12 @@ text = "20"
 label_settings = SubResource("LabelSettings_y308n")
 
 [node name="GridContainer" type="GridContainer" parent="CharacterTab" index="1"]
+layout_mode = 2
+theme_override_constants/h_separation = 10
+columns = 10
+
+[node name="Buff" parent="CharacterTab/GridContainer" index="0" instance=ExtResource("9_xttxu")]
+layout_mode = 2
+
+[node name="Buff2" parent="CharacterTab/GridContainer" index="1" instance=ExtResource("9_xttxu")]
 layout_mode = 2

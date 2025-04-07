@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Godot;
 
 public partial class PlayerChar : CardPlayZone
@@ -7,16 +9,22 @@ public partial class PlayerChar : CardPlayZone
 	private TextureRect HealthBar,GuardBar,ShieldBar,progressBackground;
 
 	private Label healthLabel,guardLabel,shieldLabel;
+	private GridContainer BuffGrid=> GetNode<GridContainer>("CharacterTab/GridContainer");
 	public override void _Ready()
 	{
 		base._Ready();
 		GlobalVariables.playerStat = baseStat.CreateInstance();
-		GlobalVariables.playerStat.spellMana = 2; // set to 0 after testing
-		GlobalVariables.playerStat.currentHealth = 25;
-		GlobalVariables.playerStat.guard = 50;
-		GlobalVariables.playerStat.shield = 5;
 
 		playerStat = GlobalVariables.playerStat;
+
+		playerStat.spellMana = 2; // set to 0 after testing
+		playerStat.currentHealth = 25;
+		playerStat.guard = 50;
+		playerStat.shield = 5;
+
+		// add a buff to the player stat
+		AddBuff(EnumGlobal.BuffType.Dodge, 5);
+		
 
 		progressBackground = GetNode<TextureRect>("CharacterTab/StatTab/ProgressBackground");
 
@@ -83,7 +91,7 @@ public partial class PlayerChar : CardPlayZone
         {
             // set some value to the player stat
 			playerStat.currentHealth -= 1;	
-			playerStat.takeDamage(10);
+			playerStat.TakeDamage(10);
 
 			UpdateValue();
         }
@@ -95,4 +103,29 @@ public partial class PlayerChar : CardPlayZone
 			UpdateValue();
         }
     }
+
+	public void AddBuff(EnumGlobal.BuffType type, int value)
+	{
+		bool hasBuff = playerStat.BuffExists(type);
+		BuffUI buff = playerStat.ApplyBuff(type, value);
+
+		GD.Print($"Adding buff: {type} with value: {value}");
+		GD.Print($"Has buff: {hasBuff}");
+		
+		// if buffgrid does not have the buff, add it
+		if (!hasBuff)		{
+			BuffGrid.AddChild(buff);
+			buff.SetBuff(type, value);
+		}
+		else
+		{
+			buff.AddValue(value);
+		}
+	}
+
+	public void Cycle()
+	{
+		playerStat.Cycle();
+		UpdateValue();
+	}
 }

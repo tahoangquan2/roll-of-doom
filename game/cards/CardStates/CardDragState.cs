@@ -41,8 +41,7 @@ public partial class CardDragState : CardState
 	}
 
 	public override void _on_zone_update(bool isEntered, CardPlayZone zone)
-	{
-		
+	{		
 		if (card == null) return;
 
 		if (!card.IsLayerNone()) 

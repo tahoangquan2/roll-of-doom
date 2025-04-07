@@ -193,8 +193,7 @@ public partial class Card : Node2D
     public void EffectFinished() { 
         if (cardData.Keywords.Contains(EnumGlobal.CardKeywords.Ephemeral)) 
             KillCard();
-        else 
-            putToDiscardPile();
+        else putToDiscardPile();
     }
     public void obliterateCard() {       
         parentManager.checkChange(this); 
@@ -212,6 +211,7 @@ public partial class Card : Node2D
 			cardTween = null;
 		}
 		cardTween = CreateTween().SetLoops(1);
+        //canBeHovered = false; // Disable hover during animation
 
         if (!Position.IsEqualApprox(targetPosition)) 
             cardTween.TweenProperty(this, "position", targetPosition, duration)
@@ -224,6 +224,7 @@ public partial class Card : Node2D
 
         cardTween.Finished += () => 
         {
+            //canBeHovered = true; // Re-enable hover after animation
             cardTween.Kill();  // Stop animation (optional)
             cardTween = null;  // Remove reference
         };

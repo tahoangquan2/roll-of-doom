@@ -29,6 +29,7 @@ public abstract partial class CardState : Node
 		cardManager = GetParent<CardManager>();
 		SetProcessInput(false);
 		SetProcessUnhandledInput(false);
+		playZones.Clear();
 	}	
 
 	public virtual void setCard(Card card){

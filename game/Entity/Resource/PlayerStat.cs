@@ -82,6 +82,14 @@ public partial class PlayerStat : Stats
 		return newStat;
 	}
 
+	public override void Cycle()
+	{
+		base.Cycle();		
+
+		spellMana = Mathf.Clamp(mana, 0, capSpellMana);
+		mana = baseMana;
+	}
+
 	//- **Mana:** Refills to base at the start of each turn.
 	//- **Spell Mana:** Stores unused mana from the previous turn (up to 2 max).
 }

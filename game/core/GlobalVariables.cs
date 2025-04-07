@@ -7,6 +7,8 @@ public partial class GlobalVariables : Node
     public static GlobalVariables gv;
     public static PlayerStat playerStat;
 
+    public static BuffDatabase buffDatabase;
+
     // get random number with range
     public static int GetRandomNumber(int min, int max)
     {
@@ -15,5 +17,7 @@ public partial class GlobalVariables : Node
     public override void _Ready()
     {
         gv = this;
+        buffDatabase = new BuffDatabase();
+        AddChild(buffDatabase);
     }
 }

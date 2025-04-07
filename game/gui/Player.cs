@@ -21,6 +21,4 @@ public partial class Player : CanvasLayer
 		manaLabel.Text = $"{GlobalVariables.playerStat.baseMana}";
 		goldLabel.Text = $"{GlobalVariables.playerStat.gold}";
 	}
-
-
 }

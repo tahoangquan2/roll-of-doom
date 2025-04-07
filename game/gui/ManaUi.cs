@@ -22,18 +22,17 @@ public partial class ManaUi : HBoxContainer
 
 	public override void _Ready()
 	{
+		// get group from the of this node
 		cardManager = GetTree().CurrentScene.GetNodeOrNull<CardManager>(GlobalAccessPoint.cardManagerPath);
 		if (cardManager != null) {
-			cardManager.CardFocus += hoverCard;
+			cardManager.CardFocus += HoverCard;
 		}
 
 		playerStat = GlobalVariables.playerStat;
-		setMana(playerStat.baseMana);
-		setSpellMana(playerStat.spellMana);
+		SetAllMana(playerStat.baseMana, playerStat.spellMana);
 
 		playerStat.ManaChanged += () => {
-			setMana(playerStat.mana);
-			setSpellMana(playerStat.spellMana);
+			SetAllMana(playerStat.mana, playerStat.spellMana);
 		};			
 	}
 	public void setMana(int value){		
@@ -43,13 +42,16 @@ public partial class ManaUi : HBoxContainer
 
 		if (childrenCount < value)		{
 			value = Mathf.Clamp(value, 0, 8);
-			for (int i = childrenCount; i < value; i++)		{
-				TextureRect newManaIcon = createManaIcon(manaIcon);
-				ManaContainer.AddChild(newManaIcon);
-			}
+			CreateManaIcons(value-childrenCount,manaIcon,ManaContainer);
 		} else if (childrenCount > value) {
-			for (int i = childrenCount - 1; i >= value; i--)
-				ManaContainer.RemoveChild(ManaContainer.GetChild(i));
+			int cnt = childrenCount - value;
+			for (int i = 0; i < cnt; i++) {			{
+				Control manaIcon = ManaContainer.GetChild(i) as Control;
+				if (manaIcon != null) {
+					AnimateManaDisappear(manaIcon);
+				}
+			}
+		}
 		}
 
 	}
@@ -61,28 +63,63 @@ public partial class ManaUi : HBoxContainer
 		int childrenCount = SpellContainer.GetChildCount();
 
 		if (childrenCount < value)		{
-			
-			for (int i = childrenCount; i < value; i++)		{
-				TextureRect newManaIcon = createManaIcon(spellManaIconTexture);
-				SpellContainer.AddChild(newManaIcon);
-			}
+			CreateManaIcons(value-childrenCount,spellManaIconTexture,SpellContainer);
 		} else if (childrenCount > value) {
-			for (int i = childrenCount - 1; i >= value; i--)			{
-				SpellContainer.RemoveChild(SpellContainer.GetChild(i));
+			int cnt = childrenCount - value;
+			for (int i = 0; i < cnt; i++) {
+				Control manaIcon = SpellContainer.GetChild(i) as Control;
+				if (manaIcon != null) {
+					AnimateManaDisappear(manaIcon);
+				}
 			}
 		}
 	}
 
-	private TextureRect createManaIcon(Texture2D manaIcon)	{
-		TextureRect newManaIcon = new TextureRect();
-		newManaIcon.Texture = manaIcon;
-		newManaIcon.SetSize(new Vector2(sizeOfContainer, sizeOfContainer));
-		newManaIcon.MouseDefaultCursorShape = CursorShape.Help;
-		newManaIcon.TextureFilter = TextureFilterEnum.Linear;
-		return newManaIcon;
+	private void CreateManaIcons(int cnt,Texture2D manaIcon,Control parentContainer) {			
+		for (int i = 0; i < cnt; i++) {			
+			TextureRect newManaIcon = new TextureRect
+			{
+				Texture = manaIcon,
+				Size = new Vector2(sizeOfContainer, sizeOfContainer),
+				MouseDefaultCursorShape = CursorShape.Help,
+				TextureFilter = TextureFilterEnum.Linear,
+				Scale = new Vector2(0f, 0f) ,
+				PivotOffset = new Vector2(sizeOfContainer / 2, sizeOfContainer / 2),
+			};
+			parentContainer.AddChild(newManaIcon);
+			AnimateManaAppear(newManaIcon);
+		}
 	}
 
-	private void hoverMana(int cost) { // if cost <= mana, create tween to continuously blink
+	private void AnimateManaAppear(Control icon)
+	{
+		icon.Scale = Vector2.Zero;
+		icon.Modulate = new Color(1, 1, 1, 1);
+
+		mainTween ??= CreateTween();
+		mainTween.SetParallel();
+
+		mainTween.TweenProperty(icon, "scale", Vector2.One, 0.4f)
+			.SetTrans(Tween.TransitionType.Bounce)
+			.SetEase(Tween.EaseType.Out);
+	}
+
+	private void AnimateManaDisappear(Control manaIcon)
+	{
+		mainTween ??= CreateTween();
+		mainTween.SetParallel();
+		mainTween.TweenProperty(manaIcon, "scale", new Vector2(0f, 0f), 0.3f)
+			.SetTrans(Tween.TransitionType.Back)
+			.SetEase(Tween.EaseType.In);
+
+		mainTween.TweenProperty(manaIcon, "modulate", new Color(1, 1, 1, 0), 0.3f)
+			.SetTrans(Tween.TransitionType.Sine)
+			.SetEase(Tween.EaseType.Out);
+
+		mainTween.Finished += () => {manaIcon.QueueFree();};
+	}
+
+	private void HoverMana(int cost) { // if cost <= mana, create tween to continuously blink
 		if (cost <= 0) return;
 		if (cost <= mana) {
 			List<TextureRect> manaIcons = new List<TextureRect>();
@@ -93,13 +130,14 @@ public partial class ManaUi : HBoxContainer
 			}
 			// Blink the icons
 			BlinkIcons(manaIcons);
+			notEnoughManaLabel.Hide();
 		} else {
 			notEnoughManaLabel.Show();
 			UnhoverAllMana();
 		}		
 	}
 
-	private void hoverSpellMana(int cost)	{
+	private void HoverSpellMana(int cost)	{
 		if (cost <= 0) return;
 
 		int totalAvailable = spellMana + mana;
@@ -110,17 +148,16 @@ public partial class ManaUi : HBoxContainer
 			UnhoverAllMana();
 			return;
 		}
+		notEnoughManaLabel.Hide();
 
 		List<TextureRect> iconsToBlink = new();
 
-		// First: collect spell mana icons to blink
 		int spellToUse = Math.Min(cost, spellMana);
 		for (int i = 0; i < spellToUse; i++)		{
 			if (SpellContainer.GetChild(i) is TextureRect spellIcon)
 				iconsToBlink.Add(spellIcon);
 		}
 
-		// Then: collect regular mana icons for the overflow
 		int remainingCost = cost - spellToUse;
 		for (int i = 0; i < remainingCost; i++)		{
 			if (ManaContainer.GetChild(i) is TextureRect manaIcon)
@@ -133,10 +170,7 @@ public partial class ManaUi : HBoxContainer
 
 	private void BlinkIcons(List<TextureRect> iconsToBlink)
 	{
-		if (mainTween != null)		{
-			mainTween.Kill();
-			mainTween = null;
-		}
+		CleanTween();
 		mainTween = CreateTween().SetLoops();
 		mainTween.SetParallel();
 		foreach (var icon in iconsToBlink)		{
@@ -154,16 +188,13 @@ public partial class ManaUi : HBoxContainer
 	}
 
 
-	public void unhoverCard(){
+	public void UnhoverCard(){
 		notEnoughManaLabel.Hide();		
 		UnhoverAllMana();	
 	}
 
 	private void UnhoverAllMana() {
-		if (mainTween != null) {
-			mainTween.Kill();
-			mainTween = null;
-		}
+		CleanTween();
 		for (int i = 0; i < ManaContainer.GetChildCount(); i++) {
 			Control manaIcon = ManaContainer.GetChild(i) as Control;
 			manaIcon.Modulate = new Color(1, 1, 1, 1.0f);
@@ -174,24 +205,42 @@ public partial class ManaUi : HBoxContainer
 		}
 	}
 
-	public void hoverCard(CardData card,bool isHovered)	{ // spell cost both mana and spell mana, priority to spell mana		
+	public void HoverCard(CardData card,bool isHovered)	{ // spell cost both mana and spell mana, priority to spell mana		
 		if (!isHovered) {
-			unhoverCard();
+			UnhoverCard();
 			return;
 		}
 		if (card.CardType==EnumGlobal.enumCardType.Spell) {
-			hoverSpellMana(card.Cost);
+			HoverSpellMana(card.Cost);
 		} else{
-			hoverMana(card.Cost);
+			HoverMana(card.Cost);
 		}
 	}
 
-	public void Cycle(){ //
-		setSpellMana(Mathf.Clamp(mana, 0, playerStat.capSpellMana));
-		setMana(playerStat.baseMana);
-		if (cardManager != null) {
-			//cardManager.Cycle();
-		}
+	public async void Cycle(){ //
+		UnhoverCard();
+		int spilledMana = Math.Clamp(mana, 0, playerStat.capSpellMana);
+		SetAllMana(0,0);		
 
+		if (mainTween!=null) await ToSignal(mainTween, "finished");
+
+		await ToSignal(GetTree(), "process_frame");
+
+		GD.Print(ManaContainer.GetChildCount());	
+
+		SetAllMana(playerStat.baseMana, spilledMana);
+	}
+
+	public void SetAllMana(int mana, int spellMana) {
+		CleanTween();
+		setMana(mana);
+		setSpellMana(spellMana);
+	}
+
+	private void CleanTween() {
+		if (mainTween != null) {
+			mainTween.Kill();
+			mainTween = null;
+		}
 	}
 }
