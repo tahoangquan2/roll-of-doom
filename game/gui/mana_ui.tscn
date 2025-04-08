@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cmnlubti2it5r"]
+[gd_scene load_steps=9 format=3 uid="uid://dgqoepjsu4wwg"]
 
 [ext_resource type="Script" path="res://game/gui/ManaUi.cs" id="1_8hd2b"]
 [ext_resource type="Texture2D" uid="uid://f5311oh3pubu" path="res://assets/sprites/UI/RectangleBox_96x96.png" id="2_nmk7g"]

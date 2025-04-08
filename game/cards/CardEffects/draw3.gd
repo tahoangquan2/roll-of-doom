@@ -7,6 +7,6 @@ func ApplyEffect(_target):
 	hand = GlobalAccessPoint.GetHand()
 	deck = GlobalAccessPoint.GetDeck()
 
-	hand.drawFromDeck(3)
+	hand.DrawFromDeckSimple(3)
 
 	get_parent().EffectFinished()

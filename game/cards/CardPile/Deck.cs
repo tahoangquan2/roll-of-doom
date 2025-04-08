@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Godot;
 
 public partial class Deck : CardPile
@@ -30,7 +31,7 @@ public partial class Deck : CardPile
         CardCount.Text = deck.Count.ToString(); 
         return newCard;
     }
-    public Godot.Collections.Array<Card> DrawCards(int amount){
+    public async Task<Godot.Collections.Array<Card>> DrawCards(int amount){
         Godot.Collections.Array<Card> drawnCards = new Godot.Collections.Array<Card>();
         for (int i = 0; i < amount; i++)
         {   
@@ -38,7 +39,7 @@ public partial class Deck : CardPile
             {
                 DiscardPile discardPile = GetParent().GetNodeOrNull<DiscardPile>(GlobalAccessPoint.discardPilePath);
 
-                discardPile.Restock();
+                await discardPile.Restock();
                 GD.Print("Deck is empty, restocking from discard pile");
                 if (deck.Count == 0) break;
             }

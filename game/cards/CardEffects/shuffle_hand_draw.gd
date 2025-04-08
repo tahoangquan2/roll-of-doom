@@ -7,5 +7,5 @@ func ApplyEffect(_target):
 	hand = GlobalAccessPoint.GetHand()
 	amount = hand.GetHandSize()
 	hand.ShuffleHandtoDeck()	
-	hand.drawFromDeck(amount)
+	hand.DrawFromDeckSimple(amount)
 	get_parent().EffectFinished()

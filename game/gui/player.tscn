@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://game/gui/Player.cs" id="1_w7j82"]
 [ext_resource type="PackedScene" uid="uid://cayqj43ene72e" path="res://game/gui/side_menu.tscn" id="2_r37qf"]
 [ext_resource type="PackedScene" uid="uid://r4mtbdq6b4tq" path="res://game/gui/top_gui.tscn" id="3_cfuo1"]
-[ext_resource type="PackedScene" uid="uid://cmnlubti2it5r" path="res://game/gui/mana_ui.tscn" id="3_lijl2"]
+[ext_resource type="PackedScene" uid="uid://dgqoepjsu4wwg" path="res://game/gui/mana_ui.tscn" id="3_lijl2"]
 [ext_resource type="Texture2D" uid="uid://ccji4npxsbalg" path="res://assets/sprites/UI/Button/Rect/EndturnBTN.png" id="4_61h2b"]
 [ext_resource type="Script" path="res://game/gui/TurnManager.cs" id="5_7pgvh"]
 [ext_resource type="Texture2D" uid="uid://dvwl6l0mn5rhf" path="res://assets/sprites/UI/Button/Rect/Hover.png" id="5_s4k1u"]

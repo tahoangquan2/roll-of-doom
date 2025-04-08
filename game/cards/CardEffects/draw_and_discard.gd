@@ -12,7 +12,7 @@ func ApplyEffect(_target):
 		hand.connect("ActionCancelled", Callable(self, "_on_discard_cancel"))
 
 func _on_discard_complete(_selectedCards):
-	hand.drawFromDeck(DrawAmount)
+	hand.DrawFromDeckSimple(DrawAmount)
 	s_disconnect()
 	get_parent().EffectFinished()
 	

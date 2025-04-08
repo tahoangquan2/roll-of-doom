@@ -23,7 +23,7 @@ public partial class PlayerStat : Stats
 	[Export] public int gold = 10; // gold from the start of the run
 	[Signal] public delegate void ManaChangedEventHandler();
 
-	private bool hasInfiniteMana = true; // if true, mana will not be consumed
+	private bool hasInfiniteMana = false; // if true, mana will not be consumed
 
 	public int mana = 0; // current mana
 	public int spellMana = 0; // current spell mana
