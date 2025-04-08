@@ -11,7 +11,9 @@ public partial class CardDragState : CardState
 
 	public override void ExitState(Card card)
 	{
-		cardManager.EmitSignal(nameof(cardManager.CardFocus), card.GetCardData(),false);
+		if (card != null) 
+			cardManager.EmitSignal(nameof(cardManager.CardFocus), card.GetCardData(),false);
+		
 		movingCard = true;
 		cardManager.displayArc(false);
 	}

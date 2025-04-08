@@ -27,7 +27,7 @@ public partial class CardPlayZone : Area2D
 
     public void activeCard(Card card, Vector2 actionPoint)
     {
-        GD.Print($"Card {card.cardData.CardName} Played");
+        GD.Print($"Card {card.cardData.CardName} {card} Played ");
 
         card.ActivateEffects(this);
     }

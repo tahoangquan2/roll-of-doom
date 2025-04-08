@@ -23,6 +23,7 @@ public partial class CardArc : Line2D
 
 	public void HideArc(){
 		Visible = false;
+		snapedToZone = false;
 		SetProcess(false);
 	}
 

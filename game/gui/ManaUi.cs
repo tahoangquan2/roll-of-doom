@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 public partial class ManaUi : HBoxContainer
 {
@@ -46,71 +47,43 @@ public partial class ManaUi : HBoxContainer
 			SetAllMana(playerStat.mana, playerStat.spellMana);
 		};			
 	}
-	public void setMana(int value) // max display is 8, 
-	// manaIcons has 8 mana icons, appear and disappear according ly
-	{
-		manaLabel.Text = value.ToString();
-		
-		List<TextureRect> toAppear = new();
-		List<TextureRect> toDisappear = new();
-
-		for (int i = 0; i < manaIcons.Count; i++)
-		{
-			var icon = manaIcons[i];
-
-			if (i < value)
-			{
-				if (!icon.Visible)
-				{
-					icon.Texture = manaIcon;
-					toAppear.Add(icon);
-				}
-			}
-			else if (icon.Visible)
-			{
-				toDisappear.Add(icon);
-			}
-		}		
-
-		AnimateManaAppear(toAppear);
-		AnimateManaDisappear(toDisappear);
-
-		mana = value;
+	public async Task setMana(int value){ // max display is 8, manaIcons has 8 mana icons, appear and disappear accordingly
+		await UpdateManaIcons(value, manaIcons, manaIcon, manaLabel, false);		
 	}
 
-	public void setSpellMana(int value){
-		value = Mathf.Clamp(value, 0, playerStat.capSpellMana);
-		spellManaLabel.Text = value.ToString();
+	public async Task setSpellMana(int value){
+		await UpdateManaIcons(value, spellManaIcons, spellManaIconTexture, spellManaLabel, true);
+	}
 
-		int visualValue = Mathf.Clamp(value, 0, playerStat.capSpellMana);
+	private async Task UpdateManaIcons(int value,List<TextureRect> iconList,Texture2D iconTexture,Label label,bool isSpell)
+	{
+		label.Text = value.ToString();
+		int clampedValue = Mathf.Clamp(value, 0, iconList.Count);
 
 		List<TextureRect> toAppear = new();
 		List<TextureRect> toDisappear = new();
 
-		for (int i = 0; i < spellManaIcons.Count; i++)
+		for (int i = 0; i < iconList.Count; i++)
 		{
-			var icon = spellManaIcons[i];
+			var icon = iconList[i];
 
-			if (i < visualValue)
-			{
-				if (!icon.Visible)
-				{
-					icon.Texture = spellManaIconTexture;
+			if (i < clampedValue){
+				if (!icon.Visible){
+					icon.Texture = iconTexture;
 					toAppear.Add(icon);
 				}
 			}
-			else if (icon.Visible)
-			{
+			else if (icon.Visible){
 				toDisappear.Add(icon);
 			}
 		}
 
-		AnimateManaAppear(toAppear);
-		AnimateManaDisappear(toDisappear);
+		await AnimateManaAppear(toAppear);
+		await AnimateManaDisappear(toDisappear);
 
-		spellMana = value;
+		if (isSpell) spellMana = value;
+		else mana = value;
 	}
-
 
 	private List<TextureRect> GetVisibleManaIcons(int count,bool isSpell=false)
 	{
@@ -120,8 +93,7 @@ public partial class ManaUi : HBoxContainer
 		count = Math.Clamp(count, 0, container.Count);
 
 		// get count of visible icons bottom to top
-		for (int i = container.Count - 1; i>=0 && count!=0; i--)
-		{
+		for (int i = container.Count - 1; i>=0 && count!=0; i--){
 			if (container[i].Visible) {
 				icons.Add(container[i]);
 				count--;
@@ -131,45 +103,49 @@ public partial class ManaUi : HBoxContainer
 		return icons;
 	}
 
-	private async void AnimateManaAppear(List<TextureRect> icons)
-	{	
-		if (icons.Count == 0) return;
-		GD.Print("AnimateManaAppear " + icons.Count);
-		foreach (var icon in icons){
-			icon.Scale = Vector2.Zero;
-			icon.Visible = true;			
-		}
-
-		mainTween ??= CreateTween();
-		mainTween.SetParallel();
-
-		foreach (var icon in icons)	{
-			mainTween.TweenProperty(icon, "scale", Vector2.One, 5.55f)
-				.SetTrans(Tween.TransitionType.Bounce)
-				.SetEase(Tween.EaseType.Out);
-		}
-	}
-
-	private void AnimateManaDisappear(List<TextureRect> icons)
+	private async Task AnimateManaDisappear(List<TextureRect> icons)
 	{
-		if (icons.Count == 0) return;		
-		GD.Print("AnimateManaDisappear " + icons.Count);
-		mainTween ??= CreateTween();
-		mainTween.SetParallel();
+		if (icons.Count == 0) return;
 
-		foreach (var icon in icons)		{
-			mainTween.TweenProperty(icon, "scale", Vector2.Zero, 0.55f)
+		var disappearTween = CreateTween();
+		disappearTween.SetParallel();
+
+		foreach (var icon in icons)
+		{
+			disappearTween.TweenProperty(icon, "scale", Vector2.Zero, 0.55f)
 				.SetTrans(Tween.TransitionType.Back)
 				.SetEase(Tween.EaseType.In);
 		}
 
-		mainTween.Chain().TweenCallback(Callable.From(() =>
+		disappearTween.Chain().TweenCallback(Callable.From(() =>
 		{
 			foreach (var icon in icons)
 				icon.Visible = false;
 		}));
-	}
 
+		await ToSignal(disappearTween, "finished");
+	}
+	private async Task AnimateManaAppear(List<TextureRect> icons)
+	{
+		if (icons.Count == 0) return;
+
+		foreach (var icon in icons)	{
+			icon.Scale = Vector2.Zero;
+			icon.Visible = true;
+		}
+		await ToSignal(GetTree(), "process_frame");
+
+		var appearTween = CreateTween();
+		appearTween.SetParallel();		
+
+		foreach (var icon in icons)	{
+			appearTween.TweenProperty(icon, "scale", Vector2.One, 0.55f)
+				.SetTrans(Tween.TransitionType.Bounce)
+				.SetEase(Tween.EaseType.Out);
+		}
+
+		await ToSignal(appearTween, "finished");
+	}
 
 
 	private void HoverMana(int cost) { // if cost <= mana, create tween to continuously blink
@@ -263,22 +239,25 @@ public partial class ManaUi : HBoxContainer
 		}
 	}
 
-	public async void Cycle(){ //
+	public async Task Cycle(){ //
 		UnhoverCard();
 		int spilledMana = Math.Clamp(mana, 0, playerStat.capSpellMana);
-		SetAllMana(0,0);		
 
-		if (mainTween!=null) await ToSignal(mainTween, "finished");
+		// First, disable all current mana
+		List<TextureRect> allMana = new(manaIcons);
+		allMana.AddRange(spellManaIcons);
+		await AnimateManaDisappear(allMana);
 
 		await ToSignal(GetTree(), "process_frame");
 
-		SetAllMana(playerStat.baseMana, spilledMana);
+		await SetAllMana(playerStat.baseMana, spilledMana);
+		//GD.Print("ManaUi Cycle end: "+playerStat.baseMana+" "+spilledMana);
 	}
 
-	public void SetAllMana(int mana, int spellMana) {
+	public async Task SetAllMana(int mana, int spellMana) {
 		CleanTween();
-		setSpellMana(spellMana);
-		setMana(mana);		
+		await setSpellMana(spellMana);
+		await setMana(mana);		
 	}
 
 	private void CleanTween() {

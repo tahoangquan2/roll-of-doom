@@ -169,15 +169,17 @@ public partial class Card : Node2D
 
     public async void BurnCard() 
     { 
+        canBeHovered = false; 
         await AnimateAndDestroy(CardGlobal.GetBurnMaterial(), "card_dissolve_or_burn");
     }
     public async void KillCard() 
     { 
+        canBeHovered = false; 
         await AnimateAndDestroy(CardGlobal.GetDissolveMaterial(), "card_dissolve_or_burn");
     }
     private async Task AnimateAndDestroy(ShaderMaterial material, string animationName)
     {
-        _on_area_2d_mouse_exited();  // Ensure mouse exit state
+        EmitSignal(nameof(CardUnhovered), this);
 
         display.Material = material; animPlayer.SpeedScale = (float)GD.RandRange(0.95f, 1.0f);
         animPlayer.Play(animationName);
@@ -196,6 +198,7 @@ public partial class Card : Node2D
         else putToDiscardPile();
     }
     public void obliterateCard() {       
+        //GD.Print("Card obliterate "+cardData.CardName + " "+this);
         parentManager.checkChange(this); 
         QueueFree();
     }

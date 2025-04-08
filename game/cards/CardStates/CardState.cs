@@ -54,7 +54,8 @@ public abstract partial class CardState : Node
 			if (hit.ContainsKey("collider")){
 				Node collider = (Node)hit["collider"];
 				if (collider is Node2D node2D && node2D.GetParent() is Card card){
-					if (card.ZIndex > highestZIndex){
+					if (!card.IsInsideTree()) continue;
+					if (card.ZIndex > highestZIndex && card.canBeHovered){
 						highestZIndex = card.ZIndex;
 						highestCard = card;
 					}

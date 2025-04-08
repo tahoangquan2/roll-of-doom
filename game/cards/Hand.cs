@@ -159,6 +159,8 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
             foreach (Card card in selectedCards)
             {
                 RemoveCard(hand.IndexOf(card));
+                //GD.Print("Discarding card: " + card.GetCardData().CardName+" "+card);
+                
                 card.BurnCard();
             }
             selectedCards.Clear();
@@ -170,7 +172,7 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
                 Card duplicate = cardManager.createCard(card.cardData);
                 AddCard(duplicate);
             }
-        }
+        }        
         
         EmitSignal(nameof(ActionCompleted), selectedCards);   
         selectedCards.Clear();

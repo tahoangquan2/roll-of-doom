@@ -18,8 +18,8 @@ public partial class CardManager : Node2D
 	[Signal] public delegate void CardFocusEventHandler(CardData card,bool isHovered);
 	public CardState.State currentCardState = CardState.State.Idle;
 	private Dictionary<CardState.State, CardState> cardStates = new Dictionary<CardState.State, CardState>();
-	public override void _Input(InputEvent @event)
-	{	if (Locked) return;
+	public override void _Input(InputEvent @event)	{	
+		if (Locked) return;
 		if (hand is not null && hand.isSelecting) {
 			HandleSelectionInput(@event);
 			return;			
@@ -118,7 +118,7 @@ public partial class CardManager : Node2D
         newCard.SetupCard(cardData);
 		return newCard;
 	}
-	public void checkChange(Card card) {
+	public void checkChange(Card card) {		
 		if (selected_card == card) selected_card = null;
 		if (card == CardState.card) CardState.card = null;
 	}

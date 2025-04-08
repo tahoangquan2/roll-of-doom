@@ -23,6 +23,8 @@ public partial class PlayerStat : Stats
 	[Export] public int gold = 10; // gold from the start of the run
 	[Signal] public delegate void ManaChangedEventHandler();
 
+	private bool hasInfiniteMana = true; // if true, mana will not be consumed
+
 	public int mana = 0; // current mana
 	public int spellMana = 0; // current spell mana
 
@@ -31,8 +33,7 @@ public partial class PlayerStat : Stats
 	}
 
 	public bool RequestPlayCard(CardData card)	{
-		GD.Print(" pre Spell mana: "+spellMana);
-		GD.Print(" pre Mana: "+mana);
+		if (hasInfiniteMana) return true;
 		bool result = true;
 		int cost = card.Cost;
 		if (card.CardType == EnumGlobal.enumCardType.Spell){
@@ -43,16 +44,12 @@ public partial class PlayerStat : Stats
 				spellMana -= spellToUse;	
 				cost -= spellToUse;
 				mana -= cost;
-				GD.Print("Spell mana: "+spellMana);
-				GD.Print("Mana: "+mana);
 				EmitSignal(nameof(ManaChanged));
 			}			
 		} else	
 		if (card.Cost > mana) result = false;	
 		else {
 			mana -= card.Cost;	
-			GD.Print("Spell mana: "+spellMana);
-			GD.Print("Mana: "+mana);
 			EmitSignal(nameof(ManaChanged));
 		}		
 			

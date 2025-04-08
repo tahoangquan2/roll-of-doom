@@ -1,5 +1,7 @@
 using Godot;
 using System;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 public partial class TurnManager : TextureButton
 {
@@ -14,36 +16,56 @@ public partial class TurnManager : TextureButton
 	{
 	}
 
-	public void EndTurn()
+	public async Task EndTurn()
 	{
-		//disable the button
 		Disabled = true;
 		EmitSignal(nameof(TurnEnded));
-		GD.Print("Turn Ended");
-		EnemyTurn();
+		//GD.Print("Turn Ended");
+		await EnemyTurn();
+		StartCycle();
 	}
-	public void StartCycle()
+	public async void StartCycle()
 	{
-		// Emit the CycleStarted signal
-		GD.Print("Cycle Started");
+		//GD.Print("Cycle Started");
 
-		GetTree().CallGroup("Update on Cycle", "Cycle");
+		var groupNodes = GetTree().GetNodesInGroup("Update on Cycle");
+		//GD.Print($"Found {groupNodes.Count} nodes in group 'Update on Cycle'");
+		var tasks = new List<Task>();
+
+		foreach (var node in groupNodes)
+		{
+			// Try casting to Node and using reflection to call the method properly
+			if (node is Node n)			{
+				var method = n.GetType().GetMethod("Cycle");
+				if (method != null )
+					if (method.ReturnType == typeof(Task)){
+						Task task = (Task)method.Invoke(n, null);
+						tasks.Add(task);
+					} else {
+						method.Invoke(n, null);
+					}
+			}
+		}
+
+		//GD.Print($"Waiting for {tasks.Count} tasks to complete...");
+
+		await Task.WhenAll(tasks);
+
+		//GD.Print("All cycle tasks completed");
+
 		EmitSignal(nameof(CycleStarted));
-		// Enable the button
 		Disabled = false;
 	}
 
+
 	public void _on_pressed()
 	{
-		//GD.Print("End Turn Button Pressed");
-		EndTurn();
-		
+		EndTurn();		
 	}
 
-	private async void EnemyTurn()
+	private async Task EnemyTurn()
 	{
-		GD.Print("Enemy Turn");
+		//GD.Print("Enemy Turn");
 		await ToSignal(GetTree().CreateTimer(1), "timeout");
-		StartCycle();
 	}
 }
