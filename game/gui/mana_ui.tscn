@@ -27,7 +27,7 @@ anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 10.0
-offset_top = -315.0
+offset_top = -284.0
 offset_right = 101.0
 offset_bottom = -8.0
 grow_vertical = 0
@@ -65,7 +65,7 @@ anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 9.0
-offset_top = -297.0
+offset_top = -267.0
 offset_right = 41.0
 offset_bottom = -11.0
 grow_vertical = 0
@@ -73,6 +73,7 @@ theme_override_constants/separation = 0
 alignment = 2
 
 [node name="Mana" type="TextureRect" parent="BasicMana/VContainer"]
+visible = false
 texture_filter = 2
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
@@ -81,6 +82,57 @@ texture = ExtResource("4_xp2qm")
 stretch_mode = 2
 
 [node name="Mana2" type="TextureRect" parent="BasicMana/VContainer"]
+visible = false
+texture_filter = 2
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+mouse_default_cursor_shape = 16
+texture = ExtResource("4_xp2qm")
+stretch_mode = 2
+
+[node name="Mana3" type="TextureRect" parent="BasicMana/VContainer"]
+visible = false
+texture_filter = 2
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+mouse_default_cursor_shape = 16
+texture = ExtResource("4_xp2qm")
+stretch_mode = 2
+
+[node name="Mana4" type="TextureRect" parent="BasicMana/VContainer"]
+visible = false
+texture_filter = 2
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+mouse_default_cursor_shape = 16
+texture = ExtResource("4_xp2qm")
+stretch_mode = 2
+
+[node name="Mana5" type="TextureRect" parent="BasicMana/VContainer"]
+texture_filter = 2
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+mouse_default_cursor_shape = 16
+texture = ExtResource("4_xp2qm")
+stretch_mode = 2
+
+[node name="Mana6" type="TextureRect" parent="BasicMana/VContainer"]
+texture_filter = 2
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+mouse_default_cursor_shape = 16
+texture = ExtResource("4_xp2qm")
+stretch_mode = 2
+
+[node name="Mana7" type="TextureRect" parent="BasicMana/VContainer"]
+texture_filter = 2
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+mouse_default_cursor_shape = 16
+texture = ExtResource("4_xp2qm")
+stretch_mode = 2
+
+[node name="Mana8" type="TextureRect" parent="BasicMana/VContainer"]
 texture_filter = 2
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
@@ -105,7 +157,7 @@ label_settings = SubResource("LabelSettings_blwbh")
 horizontal_alignment = 2
 
 [node name="SpellMana" type="NinePatchRect" parent="."]
-custom_minimum_size = Vector2(40, 134)
+custom_minimum_size = Vector2(40, 145)
 layout_mode = 2
 size_flags_vertical = 8
 texture = ExtResource("2_nmk7g")
@@ -145,7 +197,30 @@ grow_vertical = 2
 theme_override_constants/separation = 0
 alignment = 2
 
-[node name="Mana9" type="TextureRect" parent="SpellMana/VContainer"]
+[node name="Mana" type="TextureRect" parent="SpellMana/VContainer"]
+visible = false
+texture_filter = 2
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+texture = ExtResource("6_0dw64")
+stretch_mode = 3
+
+[node name="Mana2" type="TextureRect" parent="SpellMana/VContainer"]
+visible = false
+texture_filter = 2
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+texture = ExtResource("6_0dw64")
+stretch_mode = 3
+
+[node name="Mana3" type="TextureRect" parent="SpellMana/VContainer"]
+texture_filter = 2
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+texture = ExtResource("6_0dw64")
+stretch_mode = 3
+
+[node name="Mana4" type="TextureRect" parent="SpellMana/VContainer"]
 texture_filter = 2
 custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
