@@ -3,7 +3,7 @@ using System;
 
 public partial class Hand : Area2D // card are in cardmanager this is the hand just for display and interaction cards are not children of hand
 {
-    private int HandRadius = 750;
+    private int HandRadius = 800;
     private int cardRadius ;
     private float AngleLimit = 70;
     private float MaxCardSpreadAngle = 10;
@@ -159,6 +159,8 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
             foreach (Card card in selectedCards)
             {
                 RemoveCard(hand.IndexOf(card));
+                //GD.Print("Discarding card: " + card.GetCardData().CardName+" "+card);
+                
                 card.BurnCard();
             }
             selectedCards.Clear();
@@ -170,7 +172,7 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
                 Card duplicate = cardManager.createCard(card.cardData);
                 AddCard(duplicate);
             }
-        }
+        }        
         
         EmitSignal(nameof(ActionCompleted), selectedCards);   
         selectedCards.Clear();
@@ -275,18 +277,18 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
         return StartSelectionMode(numToSelect, EnumGlobal.HandSelectionPurpose.Discard);
     }
     int requiredSelectionCount = 0;
-    public void _input(InputEvent @event){//action "Action" from input map, this is for testing
-    if (@event is InputEventMouseMotion) return;
-        if (@event.IsActionPressed("Action"))
-        {
-            drawFromDeck(3);
-        }
+    // public void _input(InputEvent @event){//action "Action" from input map, this is for testing
+    // if (@event is InputEventMouseMotion) return;
+    //     if (@event.IsActionPressed("Action"))
+    //     {
+    //         drawFromDeck(3);
+    //     }
 
-        if (@event.IsActionPressed("Action2"))
-        {
-            GlobalVariables.ChangeHealth(-10);
-        }
-    }
+    //     if (@event.IsActionPressed("Action2"))
+    //     {
+    //         DiscardHand();
+    //     }
+    // }
     public void _on_button_pressed(){
         ExitSelectionMode();
         setHandRadius(750);

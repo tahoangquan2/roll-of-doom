@@ -1,12 +1,11 @@
 using Godot;
 public partial class CardHoverState : CardState
 {
-	public override void EnterState(Card card)
-	{
-		setCard(card);	
+	public override void EnterState(Card card)	{
+		setCard(card);			
 	}
 
-	public override void ExitState(Card card)	{}
+	public override void ExitState(Card card)	{	}
 
 	public override void HandleInput(InputEvent @event)
 	{
@@ -42,12 +41,13 @@ public partial class CardHoverState : CardState
 	}
 
 	public override void setCard(Card card){
-		if (card==CardState.card) return;
+		if (card==CardState.card) return;		
 		if (CardState.card != null) {
 			CardHoveredEffect(CardState.card, false);
 			CardState.card.ResetShader();
 		}
 		CardState.card = card;
+		//if (card != null) GD.Print("Enter Hover State: "+card.GetCardData().CardName+" "+card);
 		if (CardState.card != null) {
 			CardHoveredEffect(CardState.card, true);
 			CardState.card.Shadering(cardManager.GetGlobalMousePosition()-CardState.card.GlobalPosition);

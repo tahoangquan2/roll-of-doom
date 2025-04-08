@@ -21,14 +21,13 @@ public partial class CardPlayZone : Area2D
 
         SetCollisionLayerValue((int) playZoneType , true); // Enable collision mask for the play zone
         collisionLayer = playZoneType;
-        GD.Print($"PlayZoneType: {playZoneType}");
         
         GetTree().CurrentScene.GetNodeOrNull<CardManager>(GlobalAccessPoint.cardManagerPath).ConnectPlayZoneSignals(this);
     }
 
     public void activeCard(Card card, Vector2 actionPoint)
     {
-        GD.Print($"Card {card.cardData.CardName} Played");
+        GD.Print($"Card {card.cardData.CardName} {card} Played ");
 
         card.ActivateEffects(this);
     }

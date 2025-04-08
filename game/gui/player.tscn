@@ -1,8 +1,13 @@
-[gd_scene load_steps=4 format=3 uid="uid://ci580fctofejp"]
+[gd_scene load_steps=9 format=3 uid="uid://ci580fctofejp"]
 
 [ext_resource type="Script" path="res://game/gui/Player.cs" id="1_w7j82"]
 [ext_resource type="PackedScene" uid="uid://cayqj43ene72e" path="res://game/gui/side_menu.tscn" id="2_r37qf"]
 [ext_resource type="PackedScene" uid="uid://r4mtbdq6b4tq" path="res://game/gui/top_gui.tscn" id="3_cfuo1"]
+[ext_resource type="PackedScene" uid="uid://cmnlubti2it5r" path="res://game/gui/mana_ui.tscn" id="3_lijl2"]
+[ext_resource type="Texture2D" uid="uid://ccji4npxsbalg" path="res://assets/sprites/UI/Button/Rect/EndturnBTN.png" id="4_61h2b"]
+[ext_resource type="Script" path="res://game/gui/TurnManager.cs" id="5_7pgvh"]
+[ext_resource type="Texture2D" uid="uid://dvwl6l0mn5rhf" path="res://assets/sprites/UI/Button/Rect/Hover.png" id="5_s4k1u"]
+[ext_resource type="Texture2D" uid="uid://cgainvjk1awhn" path="res://assets/sprites/UI/Button/Rect/EndturnBTN_Hover.png" id="6_khp78"]
 
 [node name="Player" type="CanvasLayer"]
 script = ExtResource("1_w7j82")
@@ -26,31 +31,27 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.309804, 0.309804, 0.309804, 0.501961)
 
+[node name="EndturnButton" type="TextureButton" parent="."]
+offset_left = 1711.0
+offset_top = 748.0
+offset_right = 2031.0
+offset_bottom = 843.0
+scale = Vector2(0.5, 0.5)
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("4_61h2b")
+texture_pressed = ExtResource("5_s4k1u")
+texture_hover = ExtResource("6_khp78")
+script = ExtResource("5_7pgvh")
+
 [node name="MainControl" parent="." instance=ExtResource("2_r37qf")]
 mouse_filter = 2
 
-[node name="DeckControl" type="Control" parent="MainControl"]
+[node name="ManaUI" parent="MainControl" instance=ExtResource("3_lijl2")]
 layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 210.0
-offset_top = -210.0
-offset_bottom = -210.0
-grow_vertical = 0
-mouse_filter = 2
-
-[node name="HandControl" type="Control" parent="MainControl"]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_top = 500.0
-offset_bottom = 500.0
-grow_horizontal = 2
-grow_vertical = 0
+offset_top = -317.0
+offset_bottom = -10.0
 
 [node name="TopGui" parent="." instance=ExtResource("3_cfuo1")]
 offset_bottom = 50.0
+
+[connection signal="pressed" from="EndturnButton" to="EndturnButton" method="_on_pressed"]

@@ -19,7 +19,7 @@ public abstract partial class CardState : Node
 
 	public void changeState(State newState, Card card=null)
 	{
-		GD.Print("CardState changeState: "+cardState+" -> "+newState);
+		//GD.Print("CardState changeState: "+cardState+" -> "+newState);
 		cardManager.StateChangeRequest(cardState, newState, card);
 	}
 
@@ -29,6 +29,7 @@ public abstract partial class CardState : Node
 		cardManager = GetParent<CardManager>();
 		SetProcessInput(false);
 		SetProcessUnhandledInput(false);
+		playZones.Clear();
 	}	
 
 	public virtual void setCard(Card card){
@@ -53,7 +54,8 @@ public abstract partial class CardState : Node
 			if (hit.ContainsKey("collider")){
 				Node collider = (Node)hit["collider"];
 				if (collider is Node2D node2D && node2D.GetParent() is Card card){
-					if (card.ZIndex > highestZIndex){
+					if (!card.IsInsideTree()) continue;
+					if (card.ZIndex > highestZIndex && card.canBeHovered){
 						highestZIndex = card.ZIndex;
 						highestCard = card;
 					}

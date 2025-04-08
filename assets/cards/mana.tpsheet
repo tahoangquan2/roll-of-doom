@@ -1,0 +1,48 @@
+{
+	"textures": [
+		{
+			"image": "mana.png",
+			"size": {
+				"w": 64,
+				"h": 32
+			},
+			"sprites": [
+				{
+					"filename": "mana_slot.png",
+					"region": {
+						"x": 0,
+						"y": 0,
+						"w": 32,
+						"h": 32
+					},
+					"margin": {
+						"x": 0,
+						"y": 0,
+						"w": 0,
+						"h": 0
+					}
+				},
+				{
+					"filename": "mana_spell.png",
+					"region": {
+						"x": 32,
+						"y": 0,
+						"w": 32,
+						"h": 32
+					},
+					"margin": {
+						"x": 0,
+						"y": 0,
+						"w": 0,
+						"h": 0
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "1.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:745720d3f7e7c8b2b5d26047ac9f81f5:a13d6bc768d687c3e0a333c5d653eed8:fcc342b4b0e9beafa9e942e4e0c70d40$"
+	}
+}

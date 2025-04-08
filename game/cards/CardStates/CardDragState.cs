@@ -5,11 +5,15 @@ public partial class CardDragState : CardState
 	{		
 		CardState.card = card;
 		cardManager.StartDrag(card);
+		cardManager.EmitSignal(nameof(cardManager.CardFocus), card.GetCardData(),true);
 		movingCard = true;
 	}
 
 	public override void ExitState(Card card)
 	{
+		if (card != null) 
+			cardManager.EmitSignal(nameof(cardManager.CardFocus), card.GetCardData(),false);
+		
 		movingCard = true;
 		cardManager.displayArc(false);
 	}
@@ -39,8 +43,7 @@ public partial class CardDragState : CardState
 	}
 
 	public override void _on_zone_update(bool isEntered, CardPlayZone zone)
-	{
-		
+	{		
 		if (card == null) return;
 
 		if (!card.IsLayerNone()) 

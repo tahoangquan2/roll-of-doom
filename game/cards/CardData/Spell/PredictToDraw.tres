@@ -7,7 +7,7 @@
 [resource]
 script = ExtResource("3_rjed6")
 CardName = "Scrying Destiny"
-Cost = 40
+Cost = 2
 CardType = 2
 Effects = []
 card_script = ExtResource("2_ifmtx")

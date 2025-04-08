@@ -1,12 +1,12 @@
 [gd_scene load_steps=20 format=3 uid="uid://cq8hes5bcj3u1"]
 
 [ext_resource type="Script" path="res://game/cards/Card.cs" id="1_6fwt5"]
-[ext_resource type="Texture2D" uid="uid://62t6ctia6pme" path="res://assets/cards/mana_slot.png" id="2_1dond"]
 [ext_resource type="Material" uid="uid://b7p0x577k0cu3" path="res://assets/cards/Card_Shader_Tres/Fake2d.tres" id="3_0sbrr"]
 [ext_resource type="Texture2D" uid="uid://ba043na0yb5a" path="res://assets/cards/Details/Backgrounds/Water/BackgroundCard67.png" id="3_qwmw2"]
 [ext_resource type="FontFile" uid="uid://sc71p0eebbyj" path="res://assets/fonts/buddychampion.ttf" id="5_7kfuc"]
 [ext_resource type="Texture2D" uid="uid://bsbdm7rrajbej" path="res://assets/cards/CardRarity.png" id="5_huc0s"]
 [ext_resource type="Texture2D" uid="uid://cfod7vdoc2uym" path="res://assets/cards/card fantasy back.png" id="6_jqwol"]
+[ext_resource type="Texture2D" uid="uid://bhonhyn584gtm" path="res://assets/cards/mana.png" id="7_qatk4"]
 [ext_resource type="Texture2D" uid="uid://ceit2wuxyrq5j" path="res://assets/cards/CardTypeIcon.png" id="8_i61uh"]
 [ext_resource type="FontFile" uid="uid://c1j227ygpp51v" path="res://assets/fonts/DragonHunter-9Ynxj.otf" id="9_nxcu3"]
 [ext_resource type="Material" uid="uid://n2fe8ali0y" path="res://assets/cards/Card_Shader_Tres/cardBurnUp_2.tres" id="11_kpgmd"]
@@ -203,8 +203,9 @@ position = Vector2(80, 225)
 [node name="ManaSlot" type="Sprite2D" parent="SubViewport/CostDisplay"]
 self_modulate = Color(0.52549, 1, 1, 1)
 use_parent_material = true
-position = Vector2(33, -56)
-texture = ExtResource("2_1dond")
+position = Vector2(36, -56)
+texture = ExtResource("7_qatk4")
+hframes = 2
 
 [node name="CostLb" type="Label" parent="SubViewport/CostDisplay"]
 use_parent_material = true
@@ -213,13 +214,14 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 23.0
-offset_top = -63.0
-offset_right = 45.0
-offset_bottom = -47.0
+offset_left = 7.0
+offset_top = -60.0
+offset_right = 29.0
+offset_bottom = -44.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "50"
+text = "5
+"
 label_settings = SubResource("LabelSettings_8dd1d")
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -239,6 +241,26 @@ grow_vertical = 2
 pivot_offset = Vector2(69, 105)
 mouse_filter = 1
 mouse_default_cursor_shape = 2
+
+[node name="Shadow" type="TextureRect" parent="Control"]
+visible = false
+modulate = Color(0, 0, 0, 0.658824)
+self_modulate = Color(0.372549, 0.364706, 0.341176, 0.196078)
+texture_filter = 1
+custom_minimum_size = Vector2(138, 210)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -5.0
+offset_top = 9.0
+offset_right = 3.0
+offset_bottom = 17.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_default_cursor_shape = 2
+texture = ExtResource("6_jqwol")
+stretch_mode = 3
 
 [node name="TextureRect" type="Button" parent="Control"]
 texture_filter = 1

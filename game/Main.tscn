@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://wth47pxkkh7u"]
+[gd_scene load_steps=14 format=3 uid="uid://wth47pxkkh7u"]
 
 [ext_resource type="Script" path="res://game/Main.cs" id="1_3ktym"]
 [ext_resource type="PackedScene" uid="uid://darh3kkm8ew07" path="res://game/cards/card_manager.tscn" id="2_nqpy4"]
@@ -9,6 +9,8 @@
 [ext_resource type="PackedScene" uid="uid://ci580fctofejp" path="res://game/gui/player.tscn" id="6_8bqau"]
 [ext_resource type="PackedScene" uid="uid://db4hoqfmh4ue4" path="res://game/cards/CardPile/discard_pile.tscn" id="8_jqrpu"]
 [ext_resource type="Texture2D" uid="uid://1u3b3hwqd8yh" path="res://assets/art/tile_0110.png" id="9_chh8o"]
+[ext_resource type="PackedScene" uid="uid://b6refw0j55huo" path="res://game/Entity/player/playerChar.tscn" id="10_wfn2r"]
+[ext_resource type="Resource" uid="uid://cgwvkxpa73d5n" path="res://game/Entity/Resource/Warrior.tres" id="11_imauu"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ce0rk"]
 size = Vector2(1825, 654)
@@ -37,52 +39,58 @@ position = Vector2(-106.5, 8)
 shape = SubResource("RectangleShape2D_ce0rk")
 debug_color = Color(0, 0.67451, 0.784314, 0.0862745)
 
+[node name="EntityLayer" type="Node2D" parent="."]
+
+[node name="Enemy" parent="EntityLayer" instance=ExtResource("5_e70is")]
+position = Vector2(1494, 418)
+scale = Vector2(1, 1)
+playZoneType = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EntityLayer/Enemy"]
+shape = SubResource("RectangleShape2D_e5fvt")
+debug_color = Color(0.968627, 0.321569, 0.627451, 0.439216)
+
+[node name="Enemy" type="Node2D" parent="EntityLayer/Enemy"]
+
+[node name="Sprite2D" type="Sprite2D" parent="EntityLayer/Enemy/Enemy"]
+scale = Vector2(5, 5)
+texture = ExtResource("9_chh8o")
+
+[node name="Enemy2" parent="EntityLayer" instance=ExtResource("5_e70is")]
+position = Vector2(1702, 532)
+scale = Vector2(1, 1)
+playZoneType = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EntityLayer/Enemy2"]
+shape = SubResource("RectangleShape2D_e5fvt")
+debug_color = Color(0.968627, 0.321569, 0.627451, 0.439216)
+
+[node name="Enemy2" type="Node2D" parent="EntityLayer/Enemy2"]
+
+[node name="Sprite2D" type="Sprite2D" parent="EntityLayer/Enemy2/Enemy2"]
+scale = Vector2(5, 5)
+texture = ExtResource("9_chh8o")
+
+[node name="Player" parent="EntityLayer" instance=ExtResource("10_wfn2r")]
+position = Vector2(601, 461)
+baseStat = ExtResource("11_imauu")
+
 [node name="Player" parent="." instance=ExtResource("6_8bqau")]
 
 [node name="CardManager" parent="." instance=ExtResource("2_nqpy4")]
 process_mode = 0
 
 [node name="Deck" parent="." instance=ExtResource("5_3bhax")]
-position = Vector2(160, 900)
+position = Vector2(264, 950)
 
 [node name="DiscardPile" parent="." instance=ExtResource("8_jqrpu")]
-position = Vector2(1718, 926)
+position = Vector2(1796, 952)
 
 [node name="Camera2D" type="Camera2D" parent="."]
 anchor_mode = 0
 
 [node name="Hand" parent="." instance=ExtResource("6_4w38m")]
 position = Vector2(960, 1580)
-
-[node name="Enemy" type="Node2D" parent="."]
-position = Vector2(1494, 418)
-
-[node name="Sprite2D" type="Sprite2D" parent="Enemy"]
-scale = Vector2(5, 5)
-texture = ExtResource("9_chh8o")
-
-[node name="CardActiveZone" parent="Enemy" instance=ExtResource("5_e70is")]
-scale = Vector2(1, 1)
-playZoneType = 3
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemy/CardActiveZone"]
-shape = SubResource("RectangleShape2D_e5fvt")
-debug_color = Color(0.968627, 0.321569, 0.627451, 0.439216)
-
-[node name="Enemy2" type="Node2D" parent="."]
-position = Vector2(1702, 532)
-
-[node name="Sprite2D" type="Sprite2D" parent="Enemy2"]
-scale = Vector2(5, 5)
-texture = ExtResource("9_chh8o")
-
-[node name="CardActiveZone" parent="Enemy2" instance=ExtResource("5_e70is")]
-scale = Vector2(1, 1)
-playZoneType = 3
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemy2/CardActiveZone"]
-shape = SubResource("RectangleShape2D_e5fvt")
-debug_color = Color(0.968627, 0.321569, 0.627451, 0.439216)
 
 [node name="FPS" type="Label" parent="."]
 offset_top = 26.0

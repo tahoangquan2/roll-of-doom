@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
@@ -11,14 +10,16 @@ public partial class CardManager : Node2D
     private PackedScene cardScene = GD.Load<PackedScene>("res://game/cards/card.tscn");
 	private Hand hand=null;
 	private CardArc cardArc=null;
+	private PlayerStat playerStat;
 	private bool Locked =false; // if true, no card can be selected or dragged
 	[Signal] public delegate void CardPushupEventHandler(Card card,bool isHovered);
 	[Signal] public delegate void CardUnhandEventHandler(Card card);
 	[Signal] public delegate void CardSelectEventHandler(CardData card);
+	[Signal] public delegate void CardFocusEventHandler(CardData card,bool isHovered);
 	public CardState.State currentCardState = CardState.State.Idle;
 	private Dictionary<CardState.State, CardState> cardStates = new Dictionary<CardState.State, CardState>();
-	public override void _Input(InputEvent @event)
-	{	if (Locked) return;
+	public override void _Input(InputEvent @event)	{	
+		if (Locked) return;
 		if (hand is not null && hand.isSelecting) {
 			HandleSelectionInput(@event);
 			return;			
@@ -59,6 +60,8 @@ public partial class CardManager : Node2D
 		}
 
 		currentCardState = CardState.State.Idle;
+
+		playerStat = GlobalVariables.playerStat;
 	}
 	public void SelectCard(Card card) {
 		if (selected_card == card) {
@@ -95,15 +98,10 @@ public partial class CardManager : Node2D
 		
 		CardPlayZone zone = CardState.playZones.FirstOrDefault(z => z.GetPlayZoneType() == tmpCard.GetCardData().TargetMask);
 		if (zone != null){
-			if (GlobalVariables.spirit >= tmpCard.GetCardData().Cost)
-			{
+			if (GlobalVariables.playerStat!=null && playerStat.RequestPlayCard(tmpCard.GetCardData())) {
 				EmitSignal(nameof(CardUnhand), tmpCard);
 				tmpCard.ResetShader();
 				zone.activeCard(tmpCard,GetGlobalMousePosition()-zone.GlobalPosition);
-
-				//GD.Print("cost: "+tmpCard.GetCardData().Cost);
-				GlobalVariables.ChangeSpirit(-tmpCard.GetCardData().Cost);
-				//GD.Print("spirit: "+GlobalVariables.spirit);
 			}			
 		}		
 	}
@@ -120,7 +118,7 @@ public partial class CardManager : Node2D
         newCard.SetupCard(cardData);
 		return newCard;
 	}
-	public void checkChange(Card card) {
+	public void checkChange(Card card) {		
 		if (selected_card == card) selected_card = null;
 		if (card == CardState.card) CardState.card = null;
 	}

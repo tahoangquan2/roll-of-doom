@@ -14,6 +14,7 @@ public partial class Card : Node2D
     private Label nameLbl;
     //private Label descriptionLbl;
     private Sprite2D CardTypeIcon;
+    private Sprite2D CardManaIcon;
     private Sprite2D CardArt;
     private ShaderMaterial shaderMaterial;
     private Control display;
@@ -40,6 +41,7 @@ public partial class Card : Node2D
         costLbl = subViewport.GetNode<Label>("CostDisplay/CostLb");
         nameLbl = subViewport.GetNode<Label>("CardEffectLb");
         CardTypeIcon = subViewport.GetNode<Sprite2D>("CardTypeIcon");
+        CardManaIcon = subViewport.GetNode<Sprite2D>("CostDisplay/ManaSlot");
         CardArt = subViewport.GetNode<Sprite2D>("CardDisplay/CardArt");
         
         var shaderDisplay = GetNode<Button>("Control/TextureRect"); // This will hold the shader
@@ -71,7 +73,7 @@ public partial class Card : Node2D
         return cardData.TargetMask == EnumGlobal.enumCardTargetLayer.None;
     }
 
-    public virtual async void ActivateEffects(Node2D target)
+    public virtual async void ActivateEffects(CardPlayZone target)
     {
         if (cardData == null || !canActivate) return;
 
@@ -98,7 +100,7 @@ public partial class Card : Node2D
         }        
     }
 
-    private async Task<bool> EffectExecution(CardEffect effect, Node2D target)
+    private async Task<bool> EffectExecution(CardEffect effect, CardPlayZone target)
     {
         if (effect == null) return false;
         bool result = effect.ApplyEffect(target);
@@ -117,16 +119,18 @@ public partial class Card : Node2D
         switch (cardData.CardType)
         {
             case EnumGlobal.enumCardType.Attack:
-                CardTypeIcon.Frame = 1;
+                CardTypeIcon.Frame = 2;                
                 break;
             case EnumGlobal.enumCardType.Defense:
-                CardTypeIcon.Frame = 2;
+                CardTypeIcon.Frame = 1;
                 break;
             case EnumGlobal.enumCardType.Spell:
                 CardTypeIcon.Frame = 0;
+                CardManaIcon.Frame = 1;
                 break;
             default:
                 CardTypeIcon.Frame = 0;
+                CardManaIcon.Frame = 0;
                 break;
         }
     }  
@@ -165,15 +169,17 @@ public partial class Card : Node2D
 
     public async void BurnCard() 
     { 
+        canBeHovered = false; 
         await AnimateAndDestroy(CardGlobal.GetBurnMaterial(), "card_dissolve_or_burn");
     }
     public async void KillCard() 
     { 
+        canBeHovered = false; 
         await AnimateAndDestroy(CardGlobal.GetDissolveMaterial(), "card_dissolve_or_burn");
     }
     private async Task AnimateAndDestroy(ShaderMaterial material, string animationName)
     {
-        _on_area_2d_mouse_exited();  // Ensure mouse exit state
+        EmitSignal(nameof(CardUnhovered), this);
 
         display.Material = material; animPlayer.SpeedScale = (float)GD.RandRange(0.95f, 1.0f);
         animPlayer.Play(animationName);
@@ -189,10 +195,10 @@ public partial class Card : Node2D
     public void EffectFinished() { 
         if (cardData.Keywords.Contains(EnumGlobal.CardKeywords.Ephemeral)) 
             KillCard();
-        else 
-            putToDiscardPile();
+        else putToDiscardPile();
     }
     public void obliterateCard() {       
+        //GD.Print("Card obliterate "+cardData.CardName + " "+this);
         parentManager.checkChange(this); 
         QueueFree();
     }
@@ -208,6 +214,7 @@ public partial class Card : Node2D
 			cardTween = null;
 		}
 		cardTween = CreateTween().SetLoops(1);
+        //canBeHovered = false; // Disable hover during animation
 
         if (!Position.IsEqualApprox(targetPosition)) 
             cardTween.TweenProperty(this, "position", targetPosition, duration)
@@ -220,6 +227,7 @@ public partial class Card : Node2D
 
         cardTween.Finished += () => 
         {
+            //canBeHovered = true; // Re-enable hover after animation
             cardTween.Kill();  // Stop animation (optional)
             cardTween = null;  // Remove reference
         };

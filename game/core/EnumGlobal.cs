@@ -83,6 +83,16 @@ public enum CardKeywords
     Overwork
 }
 
+	public enum BuffType {
+		Dodge,Bounce,Fortify, Armed, Vigilant, Pump, Exhaust, Fragile, Poisoned
+	}
+
+	public enum BuffDuration { 
+		Volatile, // Disappears at Cycle
+        Diminishing, // Loses 1 value at Cycle
+        Permanent
+	}	
+
 
 
     public enum State
