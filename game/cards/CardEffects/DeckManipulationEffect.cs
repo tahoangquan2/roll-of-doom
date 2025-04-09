@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Godot;
 [GlobalClass]
 public partial class DeckManipulationEffect : CardEffect
@@ -6,7 +7,7 @@ public partial class DeckManipulationEffect : CardEffect
     // Draw, Discard, Duplicate, ResetDeck are the options
     [Export] public int Amount = 1;
 
-    public override bool ApplyEffect(Node2D target)
+    public override Task<bool> ApplyEffect(Node2D target)
     {
         Hand hand = GlobalAccessPoint.GetHand();
         Deck deck = GlobalAccessPoint.GetDeck();
@@ -31,6 +32,6 @@ public partial class DeckManipulationEffect : CardEffect
                 break;
         }
 
-        return true;
+        return Task.FromResult(true);
     }
 }

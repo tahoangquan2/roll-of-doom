@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cmnlubti2it5r"]
+[gd_scene load_steps=10 format=3 uid="uid://dgqoepjsu4wwg"]
 
 [ext_resource type="Script" path="res://game/gui/ManaUi.cs" id="1_8hd2b"]
 [ext_resource type="Texture2D" uid="uid://f5311oh3pubu" path="res://assets/sprites/UI/RectangleBox_96x96.png" id="2_nmk7g"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://62t6ctia6pme" path="res://assets/cards/mana_slot.png" id="4_xp2qm"]
 [ext_resource type="FontFile" uid="uid://d0n6rt5p7f7tn" path="res://assets/fonts/buddychampionrotate.ttf" id="5_rtdoo"]
 [ext_resource type="Texture2D" uid="uid://bpjdv674mqidn" path="res://assets/cards/mana_spell.png" id="6_0dw64"]
+[ext_resource type="AudioStream" uid="uid://bx1sgw31t4n74" path="res://assets/audio/diamond-found-190255.mp3" id="7_gc5na"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_kyvxj"]
 resource_local_to_scene = true
@@ -77,6 +78,8 @@ visible = false
 texture_filter = 2
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+size_flags_horizontal = 5
+size_flags_vertical = 5
 mouse_default_cursor_shape = 16
 texture = ExtResource("4_xp2qm")
 stretch_mode = 2
@@ -86,6 +89,8 @@ visible = false
 texture_filter = 2
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+size_flags_horizontal = 5
+size_flags_vertical = 5
 mouse_default_cursor_shape = 16
 texture = ExtResource("4_xp2qm")
 stretch_mode = 2
@@ -95,6 +100,8 @@ visible = false
 texture_filter = 2
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+size_flags_horizontal = 5
+size_flags_vertical = 5
 mouse_default_cursor_shape = 16
 texture = ExtResource("4_xp2qm")
 stretch_mode = 2
@@ -104,38 +111,52 @@ visible = false
 texture_filter = 2
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+size_flags_horizontal = 5
+size_flags_vertical = 5
 mouse_default_cursor_shape = 16
 texture = ExtResource("4_xp2qm")
 stretch_mode = 2
 
 [node name="Mana5" type="TextureRect" parent="BasicMana/VContainer"]
+visible = false
 texture_filter = 2
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+size_flags_horizontal = 5
+size_flags_vertical = 5
 mouse_default_cursor_shape = 16
 texture = ExtResource("4_xp2qm")
 stretch_mode = 2
 
 [node name="Mana6" type="TextureRect" parent="BasicMana/VContainer"]
+visible = false
 texture_filter = 2
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+size_flags_horizontal = 5
+size_flags_vertical = 5
 mouse_default_cursor_shape = 16
 texture = ExtResource("4_xp2qm")
 stretch_mode = 2
 
 [node name="Mana7" type="TextureRect" parent="BasicMana/VContainer"]
+visible = false
 texture_filter = 2
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+size_flags_horizontal = 5
+size_flags_vertical = 5
 mouse_default_cursor_shape = 16
 texture = ExtResource("4_xp2qm")
 stretch_mode = 2
 
 [node name="Mana8" type="TextureRect" parent="BasicMana/VContainer"]
+visible = false
 texture_filter = 2
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+size_flags_horizontal = 5
+size_flags_vertical = 5
 mouse_default_cursor_shape = 16
 texture = ExtResource("4_xp2qm")
 stretch_mode = 2
@@ -214,6 +235,7 @@ texture = ExtResource("6_0dw64")
 stretch_mode = 3
 
 [node name="Mana3" type="TextureRect" parent="SpellMana/VContainer"]
+visible = false
 texture_filter = 2
 custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
@@ -221,8 +243,12 @@ texture = ExtResource("6_0dw64")
 stretch_mode = 3
 
 [node name="Mana4" type="TextureRect" parent="SpellMana/VContainer"]
+visible = false
 texture_filter = 2
 custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
 texture = ExtResource("6_0dw64")
 stretch_mode = 3
+
+[node name="ManaSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("7_gc5na")

@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Threading.Tasks;
 
 public partial class Hand : Area2D // card are in cardmanager this is the hand just for display and interaction cards are not children of hand
 {
@@ -12,6 +13,8 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
     private Godot.Collections.Array<Card> hand = new Godot.Collections.Array<Card>(); // Stores all cards
     private CardManager cardManager; // 
     private Deck deck;
+    private DiscardPile discardPile;
+    private PlayerStat playerStat;
     private Player player;
     private Control selectionFilter;
     private Godot.Collections.Array<Card> selectedCards = new Godot.Collections.Array<Card>();
@@ -37,6 +40,8 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
 
         cardManager = GetTree().CurrentScene.GetNodeOrNull<CardManager>(GlobalAccessPoint.cardManagerPath);
         deck = GetTree().CurrentScene.GetNodeOrNull<Deck>(GlobalAccessPoint.deckPath);
+        discardPile = GetTree().CurrentScene.GetNodeOrNull<DiscardPile>(GlobalAccessPoint.discardPilePath);
+        playerStat = GlobalVariables.playerStat;
         ConnectCardMagnagerSignals();
 
         for (int i=0;i<cardManager.GetChildCount()-1;i++){
@@ -114,8 +119,8 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
         float cardSpread = Math.Min(AngleLimit / totalCards, MaxCardSpreadAngle);
         return -(cardSpread * (totalCards - 1)) / 2 - 90 + (cardSpread * index);
     }
-    public async void drawFromDeck(int amount){
-        Godot.Collections.Array<Card> drawnCards = deck.DrawCards(amount);  
+    public async Task drawFromDeck(int amount){
+        Godot.Collections.Array<Card> drawnCards = await deck.DrawCards(amount);  
         amount = drawnCards.Count;
         cardManager.Lock();      
         for (int i = 0; i < amount; i++) if (drawnCards[i] != null) {            
@@ -296,7 +301,19 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
     public int GetHandSize(){
         return hand.Count;
     }
-    public Godot.Collections.Array<Card> GetHand(){
-        return hand;
+    public async Task PutHandIntoDiscardPile(){
+        Godot.Collections.Array<Card> cardsToDiscard = new Godot.Collections.Array<Card>(hand);
+        hand.Clear();
+        await discardPile.AddCards(cardsToDiscard);
+    }
+
+    public async Task Cycle(){ //
+        await PutHandIntoDiscardPile();
+        await drawFromDeck(playerStat.cardDrawPerTurn);        
+    }
+
+    public void DrawFromDeckSimple(int amount)
+    {
+        _ = drawFromDeck(amount); // fire-and-forget
     }
 }

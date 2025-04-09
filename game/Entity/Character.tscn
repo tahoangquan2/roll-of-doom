@@ -1,0 +1,115 @@
+[gd_scene load_steps=12 format=3 uid="uid://ox4xdp3nbwyt"]
+
+[ext_resource type="PackedScene" uid="uid://du3m5tmrky0oq" path="res://game/cards/card_active_zone.tscn" id="1_xv6cq"]
+[ext_resource type="Script" path="res://game/Entity/Character.cs" id="2_74oxa"]
+[ext_resource type="FontFile" uid="uid://c1j227ygpp51v" path="res://assets/fonts/DragonHunter-9Ynxj.otf" id="3_ddgd5"]
+[ext_resource type="Texture2D" uid="uid://1mrnm4kv7wkq" path="res://assets/sprites/UI/ValueBar_120x8.png" id="4_mbs1w"]
+[ext_resource type="Texture2D" uid="uid://byllcush7ax5q" path="res://assets/sprites/UI/ValueRed_120x8.png" id="5_mc0ns"]
+[ext_resource type="Texture2D" uid="uid://cwlisfybt81rw" path="res://assets/sprites/UI/ValueBlue_120x8.png" id="6_d6a4f"]
+[ext_resource type="Texture2D" uid="uid://rkc143a6qwfg" path="res://assets/sprites/UI/ValueGrey_120x8.png" id="7_h02te"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kafyt"]
+size = Vector2(117.5, 112.5)
+
+[sub_resource type="LabelSettings" id="LabelSettings_q643r"]
+resource_local_to_scene = true
+font = ExtResource("3_ddgd5")
+font_size = 24
+font_color = Color(0.741176, 0.105882, 0, 1)
+outline_size = 10
+outline_color = Color(0.0867833, 0.0893178, 0.0880518, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_hk5uj"]
+resource_local_to_scene = true
+font = ExtResource("3_ddgd5")
+font_size = 24
+font_color = Color(0.298982, 0.649591, 0.790369, 1)
+outline_size = 10
+outline_color = Color(0.0867833, 0.0893178, 0.0880518, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_y308n"]
+resource_local_to_scene = true
+font = ExtResource("3_ddgd5")
+font_size = 24
+font_color = Color(0.819972, 0.787657, 0.742312, 1)
+outline_size = 10
+outline_color = Color(0.0867833, 0.0893178, 0.0880518, 1)
+
+[node name="Character" groups=["Update on Cycle"] instance=ExtResource("1_xv6cq")]
+script = ExtResource("2_74oxa")
+
+[node name="HitBox" type="CollisionShape2D" parent="." index="0"]
+shape = SubResource("RectangleShape2D_kafyt")
+
+[node name="Visual" type="Node2D" parent="." index="1"]
+
+[node name="CharacterTab" type="VBoxContainer" parent="." index="2"]
+offset_left = -211.0
+offset_top = 59.0
+offset_right = 208.0
+offset_bottom = 139.0
+
+[node name="StatTab" type="HBoxContainer" parent="CharacterTab" index="0"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="HealthLabel" type="Label" parent="CharacterTab/StatTab" index="0"]
+layout_mode = 2
+text = "10/30"
+label_settings = SubResource("LabelSettings_q643r")
+
+[node name="ProgressBackground" type="TextureRect" parent="CharacterTab/StatTab" index="1"]
+custom_minimum_size = Vector2(300, 8)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("4_mbs1w")
+expand_mode = 1
+stretch_mode = 1
+flip_h = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CharacterTab/StatTab/ProgressBackground" index="0"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="HealthBar" type="TextureRect" parent="CharacterTab/StatTab/ProgressBackground/HBoxContainer" index="0"]
+self_modulate = Color(1, 0.368627, 0.027451, 1)
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+texture = ExtResource("5_mc0ns")
+expand_mode = 2
+
+[node name="ShieldBar" type="TextureRect" parent="CharacterTab/StatTab/ProgressBackground/HBoxContainer" index="1"]
+self_modulate = Color(0.615686, 1, 1, 1)
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+texture = ExtResource("6_d6a4f")
+expand_mode = 2
+
+[node name="GuardBar" type="TextureRect" parent="CharacterTab/StatTab/ProgressBackground/HBoxContainer" index="2"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+texture = ExtResource("7_h02te")
+expand_mode = 2
+
+[node name="ShieldLabel" type="Label" parent="CharacterTab/StatTab" index="2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "3
+"
+label_settings = SubResource("LabelSettings_hk5uj")
+
+[node name="GuardLabel" type="Label" parent="CharacterTab/StatTab" index="3"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "20"
+label_settings = SubResource("LabelSettings_y308n")
+
+[node name="GridContainer" type="GridContainer" parent="CharacterTab" index="1"]
+layout_mode = 2
+theme_override_constants/h_separation = 10
+columns = 10

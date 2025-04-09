@@ -13,7 +13,7 @@ public partial class ManaUi : HBoxContainer
 	private List<TextureRect> spellManaIcons = new List<TextureRect>();
 	private CardManager cardManager;
 	private Tween mainTween = null;
-
+	private AudioStreamPlayer2D manaSound => GetNode<AudioStreamPlayer2D>("ManaSound");
 	private Label manaLabel => GetNode<Label>("BasicMana/ManaLabel");
 	private Label spellManaLabel => GetNode<Label>("SpellMana/ManaLabel");
 	private Label notEnoughManaLabel => GetNode<Label>("BasicMana/NotMana");
@@ -107,6 +107,8 @@ public partial class ManaUi : HBoxContainer
 	{
 		if (icons.Count == 0) return;
 
+		ManaSoundPlay(false);
+
 		var disappearTween = CreateTween();
 		disappearTween.SetParallel();
 
@@ -121,30 +123,34 @@ public partial class ManaUi : HBoxContainer
 		{
 			foreach (var icon in icons)
 				icon.Visible = false;
-		}));
+		}));		
 
 		await ToSignal(disappearTween, "finished");
+		await ToSignal(GetTree().CreateTimer(1f), "timeout");
 	}
 	private async Task AnimateManaAppear(List<TextureRect> icons)
 	{
 		if (icons.Count == 0) return;
 
 		foreach (var icon in icons)	{
-			icon.Scale = Vector2.Zero;
 			icon.Visible = true;
+			icon.Scale = Vector2.Zero;			
 		}
 		await ToSignal(GetTree(), "process_frame");
 
+		ManaSoundPlay(true);
 		var appearTween = CreateTween();
 		appearTween.SetParallel();		
 
 		foreach (var icon in icons)	{
+			icon.Scale = Vector2.Zero;
 			appearTween.TweenProperty(icon, "scale", Vector2.One, 0.55f)
 				.SetTrans(Tween.TransitionType.Bounce)
 				.SetEase(Tween.EaseType.Out);
 		}
 
 		await ToSignal(appearTween, "finished");
+		await ToSignal(GetTree().CreateTimer(0.5f), "timeout");
 	}
 
 
@@ -208,8 +214,6 @@ public partial class ManaUi : HBoxContainer
 				.SetEase(Tween.EaseType.InOut);
 		}
 	}
-
-
 	public void UnhoverCard(){
 		notEnoughManaLabel.Hide();		
 		UnhoverAllMana();	
@@ -246,6 +250,8 @@ public partial class ManaUi : HBoxContainer
 		// First, disable all current mana
 		List<TextureRect> allMana = new(manaIcons);
 		allMana.AddRange(spellManaIcons);
+		
+		manaLabel.Text = "0"; spellManaLabel.Text = "0";
 		await AnimateManaDisappear(allMana);
 
 		await ToSignal(GetTree(), "process_frame");
@@ -258,6 +264,19 @@ public partial class ManaUi : HBoxContainer
 		CleanTween();
 		await setSpellMana(spellMana);
 		await setMana(mana);		
+	}
+
+	private async void ManaSoundPlay(bool manaAppear) {
+		manaSound.Stop();
+		if (manaAppear) {
+			manaSound.Seek(0);
+			manaSound.Play();
+			await ToSignal(GetTree().CreateTimer(2.4f), "timeout");
+			manaSound.Stop();
+		} else {
+			manaSound.Seek(2);
+			manaSound.Play();
+		}
 	}
 
 	private void CleanTween() {

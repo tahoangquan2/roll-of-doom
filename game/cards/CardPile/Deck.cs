@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Godot;
 
 public partial class Deck : CardPile
@@ -16,8 +17,7 @@ public partial class Deck : CardPile
             deck.Add(card);
         }
         
-        CardCount.Text = deck.Count.ToString(); 
-        EmitSignal(nameof(DeckUpdated), deck.Count);     
+        emitDeckUpdated(deck.Count);   
     }
 
     public Card DrawCard(int index){
@@ -26,11 +26,10 @@ public partial class Deck : CardPile
         deck.RemoveAt(index);
         Card newCard=cardManager.createCard(card);
         newCard.Position = GlobalPosition;
-        EmitSignal(nameof(DeckUpdated), deck.Count); 
-        CardCount.Text = deck.Count.ToString(); 
+        emitDeckUpdated(deck.Count); 
         return newCard;
     }
-    public Godot.Collections.Array<Card> DrawCards(int amount){
+    public async Task<Godot.Collections.Array<Card>> DrawCards(int amount){
         Godot.Collections.Array<Card> drawnCards = new Godot.Collections.Array<Card>();
         for (int i = 0; i < amount; i++)
         {   
@@ -38,7 +37,7 @@ public partial class Deck : CardPile
             {
                 DiscardPile discardPile = GetParent().GetNodeOrNull<DiscardPile>(GlobalAccessPoint.discardPilePath);
 
-                discardPile.Restock();
+                await discardPile.Restock();
                 GD.Print("Deck is empty, restocking from discard pile");
                 if (deck.Count == 0) break;
             }
@@ -48,8 +47,7 @@ public partial class Deck : CardPile
             drawnCards.Add(newCard);
             newCard.Position = deckVisual.getTopCardPosition();            
         }
-        CardCount.Text = deck.Count.ToString(); 
-        EmitSignal(nameof(DeckUpdated), deck.Count); 
+        emitDeckUpdated(deck.Count);
         
         return drawnCards;
     }
