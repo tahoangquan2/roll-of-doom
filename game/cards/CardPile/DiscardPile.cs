@@ -32,23 +32,23 @@ public partial class DiscardPile : CardPile
 
 	public async Task Restock()
 	{
-		this.deck.Shuffle();
-		Deck deck = GetParent().GetNodeOrNull<Deck>(GlobalAccessPoint.deckPath);
+		deck.Shuffle();
+		Deck deckNode = GetParent().GetNodeOrNull<Deck>(GlobalAccessPoint.deckPath);
 
-		for (int i = 0; i < this.deck.Count; i++)			
-			deck.AddCard(this.deck[i]);
+		for (int i = 0; i < deck.Count; i++)			
+			deckNode.AddCard(deck[i]);
 
 		List<Card> cardsToDisplay = new List<Card>();
 
-		for (int i = 0; i < 7; i++) 
+		for (int i = 0; i < 5; i++) 
 		{			
-			Card card = cardManager.createCard(this.deck[0]);
+			Card card = cardManager.createCard(deck[0]);
 			card.ZIndex = 15;
 			cardsToDisplay.Add(card);
 			card.canBeHovered = false;
 			card.GlobalPosition = getTopCardPosition();
 			card.FlipCard(false);
-			card.TransformCard(deck.GlobalPosition, 0.0f, 0.15f);
+			card.TransformCard(deckNode.GlobalPosition, 0.0f, 0.25f);
 			await ToSignal(GetTree().CreateTimer(0.1f), "timeout"); // Delay between cards
 		}
 
@@ -57,9 +57,9 @@ public partial class DiscardPile : CardPile
 			card.QueueFree();
 		}
 		
-		this.deck.Clear();
-		CardCount.Text = this.deck.Count.ToString(); 
-		emitDeckUpdated(this.deck.Count);
+		deck.Clear();
+		CardCount.Text = deck.Count.ToString(); 
+		emitDeckUpdated(0);
 	}
 
 }

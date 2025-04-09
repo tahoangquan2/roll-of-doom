@@ -17,8 +17,7 @@ public partial class Deck : CardPile
             deck.Add(card);
         }
         
-        CardCount.Text = deck.Count.ToString(); 
-        EmitSignal(nameof(DeckUpdated), deck.Count);     
+        emitDeckUpdated(deck.Count);   
     }
 
     public Card DrawCard(int index){
@@ -27,8 +26,7 @@ public partial class Deck : CardPile
         deck.RemoveAt(index);
         Card newCard=cardManager.createCard(card);
         newCard.Position = GlobalPosition;
-        EmitSignal(nameof(DeckUpdated), deck.Count); 
-        CardCount.Text = deck.Count.ToString(); 
+        emitDeckUpdated(deck.Count); 
         return newCard;
     }
     public async Task<Godot.Collections.Array<Card>> DrawCards(int amount){
@@ -49,8 +47,7 @@ public partial class Deck : CardPile
             drawnCards.Add(newCard);
             newCard.Position = deckVisual.getTopCardPosition();            
         }
-        CardCount.Text = deck.Count.ToString(); 
-        EmitSignal(nameof(DeckUpdated), deck.Count); 
+        emitDeckUpdated(deck.Count);
         
         return drawnCards;
     }

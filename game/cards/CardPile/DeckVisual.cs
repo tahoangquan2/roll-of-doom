@@ -33,28 +33,31 @@ public partial class DeckVisual : Node2D
         }
     }
 
-    public void UpdateDeckVisual(int newSize)
+    public void UpdateDeckVisual(int newDeckSize)
     {
-        if (newSize == currentDeckSize) return;
-        while (newSize < currentDeckSize && currentDeckSize<GlobalVariables.maxStackSize)
+        int visualCount = Mathf.Min(newDeckSize, GlobalVariables.maxStackSize);
+        int currentVisualCount = Cardstack.GetChildCount();
+
+        // Remove excess card backs
+        for (int i = currentVisualCount - 1; i >= visualCount; i--)
         {
-            Cardstack.GetChild(Cardstack.GetChildCount() - 1).QueueFree();
-            currentDeckSize--;
+            Cardstack.GetChild(i).QueueFree();
         }
 
-        while (newSize > currentDeckSize && currentDeckSize < GlobalVariables.maxStackSize)
+        // Add new card backs
+        for (int i = currentVisualCount; i < visualCount; i++)
         {
             TextureRect cardBack = new TextureRect();
             cardBack.Texture = CardBackTexture;
             cardBack.StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered;
             cardBack.Size = new Vector2(138, 210);
-            cardBack.Position = new Vector2(currentDeckSize * offset.X, currentDeckSize * offset.Y);
+            cardBack.Position = new Vector2(i * offset.X, i * offset.Y);
             Cardstack.AddChild(cardBack);
-            currentDeckSize++;
         }
-        
-        currentDeckSize = newSize;
+
+        currentDeckSize = newDeckSize;
     }
+
 
     private void ClearDeckVisual()
     {

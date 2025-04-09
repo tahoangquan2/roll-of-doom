@@ -103,7 +103,7 @@ public partial class Card : Node2D
     private async Task<bool> EffectExecution(CardEffect effect, CardPlayZone target)
     {
         if (effect == null) return false;
-        bool result = effect.ApplyEffect(target);
+        bool result = await effect.ApplyEffect(target);
         
         await ToSignal(GetTree(), "process_frame"); // Allow processing between effects
         return result;

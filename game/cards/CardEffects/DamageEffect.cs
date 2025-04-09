@@ -1,15 +1,16 @@
+using System.Threading.Tasks;
 using Godot;
 public partial class DamageEffect : CardEffect
 {
-    public override bool ApplyEffect(Node2D target)
+    public override Task<bool> ApplyEffect(Node2D target)
     {
         if (target is Node2D playArea)
         {
             //playArea.AddChild(spellEffect);
             
 
-            return true;
+            return Task.FromResult(true);
         }
-        return false;
+        return Task.FromResult(false);
     }
 }
