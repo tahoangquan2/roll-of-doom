@@ -65,7 +65,28 @@ public partial class TurnManager : TextureButton
 
 	private async Task EnemyTurn()
 	{
-		//GD.Print("Enemy Turn");
-		await ToSignal(GetTree().CreateTimer(1), "timeout");
+		// group Node "Enemy Turn"
+		var groupNodes = GetTree().GetNodesInGroup("Enemy Turn");
+
+		//GD.Print($"Found {groupNodes.Count} nodes in group 'Enemy Turn'");
+		var tasks = new List<Task>();
+
+		foreach (var node in groupNodes)
+		{
+			// Try casting to Node and using reflection to call the method properly
+			if (node is Node n)			{
+				var method = n.GetType().GetMethod("EnemyTurn");
+				if (method != null )
+					if (method.ReturnType == typeof(Task)){
+						Task task = (Task)method.Invoke(n, null);
+						tasks.Add(task);
+					} else {
+						method.Invoke(n, null);
+					}
+			}
+		}
+
+		//GD.Print($"Waiting for {tasks.Count} tasks to complete...");
+		await Task.WhenAll(tasks);		
 	}
 }

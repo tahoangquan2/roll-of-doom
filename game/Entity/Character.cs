@@ -9,13 +9,15 @@ public partial class Character : CardPlayZone
     protected TextureRect HealthBar, GuardBar, ShieldBar, ProgressBackground;
     protected Label HealthLabel, GuardLabel, ShieldLabel;
     protected GridContainer BuffGrid;
+	private Node2D visual=> GetNode<Node2D>("Visual");
 
     public override void _Ready()
     {
         base._Ready();
         statInstance = baseStats.CreateInstance();
+		
         SetupStatVisuals();
-        UpdateStatsDisplay();
+        // UpdateStatsDisplay();
     }
 
     protected virtual void SetupStatVisuals()
@@ -31,6 +33,16 @@ public partial class Character : CardPlayZone
         ShieldLabel = GetNode<Label>("CharacterTab/StatTab/ShieldLabel");
 
         BuffGrid = GetNode<GridContainer>("CharacterTab/GridContainer");
+
+		if (statInstance.CharacterVisualScene != null){
+			Node2D characterVisual = statInstance.CharacterVisualScene.Instantiate<Node2D>();
+			visual.AddChild(characterVisual);
+		}
+
+		foreach (BuffUI buff in statInstance.buffs.Values)
+		{
+			BuffGrid.AddChild(buff);
+		}
     }
 
     public void AddBuff(EnumGlobal.BuffType type, int value)
@@ -86,7 +98,7 @@ public partial class Character : CardPlayZone
         ShieldLabel.Visible = shield > 0;
     }
 
-    public void CycleTurn()
+    public virtual void Cycle()
     {
         statInstance.Cycle();
         UpdateStatsDisplay();

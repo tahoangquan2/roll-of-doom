@@ -1,0 +1,48 @@
+[gd_scene load_steps=8 format=3 uid="uid://cc0jubtppjnmh"]
+
+[ext_resource type="PackedScene" uid="uid://ox4xdp3nbwyt" path="res://game/Entity/Character.tscn" id="1_grr03"]
+[ext_resource type="Script" path="res://game/Entity/enemies/EnemyChar.cs" id="2_meqtj"]
+[ext_resource type="FontFile" uid="uid://c1j227ygpp51v" path="res://assets/fonts/DragonHunter-9Ynxj.otf" id="2_x1c3o"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_51g4d"]
+resource_local_to_scene = true
+size = Vector2(117.5, 112.5)
+
+[sub_resource type="LabelSettings" id="LabelSettings_t8l5i"]
+resource_local_to_scene = true
+font = ExtResource("2_x1c3o")
+font_size = 24
+font_color = Color(0.741176, 0.105882, 0, 1)
+outline_size = 10
+outline_color = Color(0.0867833, 0.0893178, 0.0880518, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_hk8de"]
+resource_local_to_scene = true
+font = ExtResource("2_x1c3o")
+font_size = 24
+font_color = Color(0.298982, 0.649591, 0.790369, 1)
+outline_size = 10
+outline_color = Color(0.0867833, 0.0893178, 0.0880518, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_1jgfg"]
+resource_local_to_scene = true
+font = ExtResource("2_x1c3o")
+font_size = 24
+font_color = Color(0.819972, 0.787657, 0.742312, 1)
+outline_size = 10
+outline_color = Color(0.0867833, 0.0893178, 0.0880518, 1)
+
+[node name="Enemy" groups=["Enemy Turn"] instance=ExtResource("1_grr03")]
+script = ExtResource("2_meqtj")
+
+[node name="HitBox" parent="." index="0"]
+shape = SubResource("RectangleShape2D_51g4d")
+
+[node name="HealthLabel" parent="CharacterTab/StatTab" index="0"]
+label_settings = SubResource("LabelSettings_t8l5i")
+
+[node name="ShieldLabel" parent="CharacterTab/StatTab" index="2"]
+label_settings = SubResource("LabelSettings_hk8de")
+
+[node name="GuardLabel" parent="CharacterTab/StatTab" index="3"]
+label_settings = SubResource("LabelSettings_1jgfg")

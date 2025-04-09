@@ -12,6 +12,7 @@ public partial class Stats : Resource //  base class for character Stat. (Player
 	[Export] public int maxHealth = 30;
 
 	[Signal] public delegate void StatChangedEventHandler(); // for health, guard, shield change specifically
+	[Export] public PackedScene CharacterVisualScene;
 	public int currentHealth = 30;	
 	public int guard = 0;
 	public int shield = 0;

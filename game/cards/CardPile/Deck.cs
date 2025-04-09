@@ -16,6 +16,8 @@ public partial class Deck : CardPile
         {
             deck.Add(card);
         }
+
+        deck.Shuffle();
         
         emitDeckUpdated(deck.Count);   
     }
