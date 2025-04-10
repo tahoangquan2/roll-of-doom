@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Dynamic;
 
 public partial class Character : CardPlayZone
 {
@@ -8,16 +9,17 @@ public partial class Character : CardPlayZone
 
     protected TextureRect HealthBar, GuardBar, ShieldBar, ProgressBackground;
     protected Label HealthLabel, GuardLabel, ShieldLabel;
+    private int currentDisplayHealth, currentDisplayGuard, currentDisplayShield;
     protected GridContainer BuffGrid;
 	private Node2D visual=> GetNode<Node2D>("Visual");
 
     public override void _Ready()
     {
         base._Ready();
-        statInstance = baseStats.CreateInstance();
+        statInstance = baseStats.CreateInstance();       
+        GlobalVariables.allStats.Add(statInstance); 
 		
         SetupStatVisuals();
-        // UpdateStatsDisplay();
     }
 
     protected virtual void SetupStatVisuals()
@@ -34,6 +36,10 @@ public partial class Character : CardPlayZone
 
         BuffGrid = GetNode<GridContainer>("CharacterTab/GridContainer");
 
+        currentDisplayGuard = statInstance.guard;
+        currentDisplayHealth = statInstance.currentHealth;
+        currentDisplayShield = statInstance.shield;
+
 		if (statInstance.CharacterVisualScene != null){
 			Node2D characterVisual = statInstance.CharacterVisualScene.Instantiate<Node2D>();
 			visual.AddChild(characterVisual);
@@ -43,6 +49,8 @@ public partial class Character : CardPlayZone
 		{
 			BuffGrid.AddChild(buff);
 		}
+
+        statInstance.StatChanged += UpdateStatsDisplay;
     }
 
     public void AddBuff(EnumGlobal.BuffType type, int value)
@@ -60,7 +68,7 @@ public partial class Character : CardPlayZone
         }
     }
 
-    public void UpdateStatsDisplay()
+    public async void UpdateStatsDisplay()
     {
         float max = statInstance.maxHealth;
         float health = statInstance.currentHealth;
@@ -84,23 +92,42 @@ public partial class Character : CardPlayZone
             guardWidth = remainder * (guard / total);
         }
 
-        HealthBar.CustomMinimumSize = new Vector2(hpWidth, 0);
-        ShieldBar.CustomMinimumSize = new Vector2(shieldWidth, 0);
-        GuardBar.CustomMinimumSize = new Vector2(guardWidth, 0);
+        AnimateBarAndLabel( HealthBar, HealthLabel, currentDisplayHealth, health, hpWidth);
+        AnimateBarAndLabel( ShieldBar, ShieldLabel, currentDisplayShield, shield, shieldWidth);
+        AnimateBarAndLabel( GuardBar, GuardLabel, currentDisplayGuard, guard, guardWidth);
 
-        HealthLabel.Text = $"{health}/{max}";
-        GuardLabel.Text = $"{guard}";
-        ShieldLabel.Text = $"{shield}";
+        currentDisplayGuard = statInstance.guard;
+        currentDisplayHealth = statInstance.currentHealth;
+        currentDisplayShield = statInstance.shield;
+    }
+    private void AnimateBarAndLabel(TextureRect bar, Label label, float fromVal, float toVal, float width)
+    {
+        if (fromVal != toVal)
+        {
+            Tween tween = CreateTween();
+            bar.Visible = true;
+            label.Visible = true;
 
-        GuardBar.Visible = guard > 0;
-        ShieldBar.Visible = shield > 0;
-        GuardLabel.Visible = guard > 0;
-        ShieldLabel.Visible = shield > 0;
+            tween.TweenProperty(bar, "custom_minimum_size", new Vector2(width, 0), 0.5f)
+                .SetTrans(Tween.TransitionType.Sine)
+                .SetEase(Tween.EaseType.Out);
+
+            VisualHelper.LabelTween(label, (int)fromVal, (int)toVal, 0.5f,"",$"/{statInstance.maxHealth}");
+
+            tween.Chain().TweenCallback(Callable.From(() => {
+                bool shouldHide = toVal <= 0;
+                bar.Visible = !shouldHide;
+                label.Visible = !shouldHide;
+            }));
+        }
     }
 
     public virtual void Cycle()
     {
         statInstance.Cycle();
-        UpdateStatsDisplay();
+    }
+
+    public Stats GetStat() {
+        return statInstance;
     }
 }

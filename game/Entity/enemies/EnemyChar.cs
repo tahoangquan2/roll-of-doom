@@ -10,12 +10,7 @@ public partial class EnemyChar : Character
 	{
 		base._Ready();
 
-		// enemyStat.currentHealth = 25;
-		// enemyStat.guard = 50;
-		// enemyStat.shield = 5;
-
-		// // add a buff to the player stat
-		// AddBuff(EnumGlobal.BuffType.Dodge, 5);
+		enemyStat.SetupActions();
 
 		UpdateStatsDisplay();
 	}

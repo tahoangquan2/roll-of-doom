@@ -10,12 +10,21 @@ public partial class Stats : Resource //  base class for character Stat. (Player
 
 	[Export] public string name = "Character";
 	[Export] public int maxHealth = 30;
-
-	[Signal] public delegate void StatChangedEventHandler(); // for health, guard, shield change specifically
 	[Export] public PackedScene CharacterVisualScene;
+	[Signal] public delegate void StatChangedEventHandler(); // for health, guard, shield change specifically
 	public int currentHealth = 30;	
 	public int guard = 0;
 	public int shield = 0;
+
+	enum ActionType
+	{
+		Attack, // pass damage
+		Defend, // pass number
+		TakeDamage, // pass damage
+		Apply, // pass nothing
+		Remove,
+		Cycle,
+	}
 
 	public Dictionary<EnumGlobal.BuffType, BuffUI> buffs = new Dictionary<EnumGlobal.BuffType, BuffUI>();
 
@@ -24,17 +33,21 @@ public partial class Stats : Resource //  base class for character Stat. (Player
 		EmitSignal(nameof(StatChanged));
 	}
 	public void Add_guard(int value)	{
+		CheckForBuff(ActionType.Defend, ref value);
 		guard = Mathf.Clamp(guard + value, 0, 999);	
 		EmitSignal(nameof(StatChanged));
 	}
 
 	public void Add_shield(int value)	{
+		CheckForBuff(ActionType.Defend, ref value);
 		shield = Mathf.Clamp(shield + value, 0, 999);		
 		EmitSignal(nameof(StatChanged));
 	}
 
 	public int TakeDamage(int damage)	{
 		if (damage <= 0) return 0;
+		
+		CheckForBuff(ActionType.TakeDamage, ref damage);
 
 		int remainingDamage = damage;
 
@@ -60,7 +73,7 @@ public partial class Stats : Resource //  base class for character Stat. (Player
 	}
 
 
-	public void heal(int value)
+	public void heal(int value) // negative value, to by pass defensive buffs
 	{
 		currentHealth = Mathf.Clamp(currentHealth + value, 0, maxHealth);
 		EmitSignal(nameof(StatChanged));
@@ -77,30 +90,97 @@ public partial class Stats : Resource //  base class for character Stat. (Player
 
 	public virtual void Attack(Stats target, int damage)
 	{
+		if (target == null) return;
+
+		CheckForBuff(ActionType.Attack, ref damage);
+		
 		int remainingDamage = target.TakeDamage(damage);
+
 		if (remainingDamage > 0)
 		{
 			GD.Print($"{name} attacked {target.name} for {damage} damage. Remaining damage: {remainingDamage}");
 		}
-		else
-		{
-			GD.Print($"{name} attacked {target.name}, but no damage was dealt.");
-		}
 	}
 
+	public void AttackRandom(int damage)
+	{	var possibleTargets = GlobalVariables.allStats.FindAll(s => s != this);
+		if (possibleTargets.Count == 0) return;
+
+		int index = GlobalVariables.GetRandomNumber(0, possibleTargets.Count - 1);
+		Stats target = possibleTargets[index];
+
+		Attack(target, damage);
+	}
+
+	public void AttackAll(int damage){
+		foreach (var target in GlobalVariables.allStats) if (target!=this) Attack(target, damage);
+	}
+
+	private void CheckForBuff(ActionType actionType, ref int number)
+	{
+		var keysToRemove = new List<EnumGlobal.BuffType>();
+
+		foreach (var buffEntry in buffs)
+		{
+			var buff = buffEntry.Value;
+			var logic = buff._buffLogic;
+			int value = buff.ValueX;
+
+			switch (actionType)
+			{
+				case ActionType.TakeDamage:
+					logic?.OnTakeDamage(this, ref number, ref value);
+					break;
+				case ActionType.Attack:
+					logic?.OnAttack(this, ref number, ref value); 
+					break;
+				case ActionType.Defend:
+					logic?.OnDefend(this, ref number, ref value);
+					break;
+				case ActionType.Cycle:
+					logic?.OnCycle(this, ref value);
+					break;
+				case ActionType.Apply:
+					logic?.OnApply(this, ref value);
+					break;
+				case ActionType.Remove:
+					logic?.OnRemove(this, ref value);
+					break;
+				default:
+					break;
+			}
+
+			buff.UpdateValue(value);
+
+			if (value <= 0 && actionType!= ActionType.Remove)
+				keysToRemove.Add(buffEntry.Key);
+		}
+
+		foreach (var key in keysToRemove)
+		{
+			RemoveBuff(key);
+		}
+	}
 	public BuffUI ApplyBuff(EnumGlobal.BuffType type, int value) {
-		if (buffs.ContainsKey(type)) {
+		if (buffs.ContainsKey(type)) {			
+			buffs[type].AddValue(value);
+			CheckForBuff(ActionType.Apply, ref NAN);
 			return buffs[type];
 		} 
 
 		BuffUI buff = BuffDatabase.buffScene.Instantiate<BuffUI>();
 		buff.SetBuff(type, value);
 		buffs.Add(type, buff);
+
+		CheckForBuff(ActionType.Apply, ref NAN);
+		buff.UpdateValue(value);
+
 		return buff;		
 	}
 
 	public void RemoveBuff(EnumGlobal.BuffType type) {
-		if (buffs.ContainsKey(type)) {
+		if (buffs.ContainsKey(type)) {			
+			CheckForBuff(ActionType.Remove,ref NAN);
 			buffs[type].QueueFree();
 			buffs.Remove(type);
 		}
@@ -113,9 +193,11 @@ public partial class Stats : Resource //  base class for character Stat. (Player
 	public virtual  void Cycle() {
 		// remove guard 
 		guard = 0;
-
+		// Apply Buffs Effect on cycle
+		CheckForBuff(ActionType.Cycle, ref NAN);
 		// Update buffs
 		foreach (var buff in buffs) {
+			
 			var duration = buff.Value.Duration;
 			if (duration == EnumGlobal.BuffDuration.Diminishing) {
 				buff.Value.AddValue(-1);
@@ -126,9 +208,10 @@ public partial class Stats : Resource //  base class for character Stat. (Player
 				RemoveBuff(buff.Key);
 			}
 		}
+
+		EmitSignal(nameof(StatChanged));
 	}
-
-
+	private int NAN = 0;
 
 	//### **Stat**
 
