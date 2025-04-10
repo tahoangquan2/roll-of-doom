@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Dynamic;
 
-public partial class Character : CardPlayZone
+public partial class Character : CardPlayZone //important that player alway the first to be add to the scene tree 
 {
     [Export] public Stats baseStats;
     public Stats statInstance;
@@ -36,9 +36,9 @@ public partial class Character : CardPlayZone
 
         BuffGrid = GetNode<GridContainer>("CharacterTab/GridContainer");
 
-        currentDisplayGuard = statInstance.guard;
-        currentDisplayHealth = statInstance.currentHealth;
-        currentDisplayShield = statInstance.shield;
+        currentDisplayGuard = -1;
+        currentDisplayHealth = -1;
+        currentDisplayShield = -1;
 
 		if (statInstance.CharacterVisualScene != null){
 			Node2D characterVisual = statInstance.CharacterVisualScene.Instantiate<Node2D>();
@@ -68,7 +68,7 @@ public partial class Character : CardPlayZone
         }
     }
 
-    public async void UpdateStatsDisplay()
+    public void UpdateStatsDisplay()
     {
         float max = statInstance.maxHealth;
         float health = statInstance.currentHealth;
@@ -107,12 +107,17 @@ public partial class Character : CardPlayZone
             Tween tween = CreateTween();
             bar.Visible = true;
             label.Visible = true;
+            string suffix ="";
 
             tween.TweenProperty(bar, "custom_minimum_size", new Vector2(width, 0), 0.5f)
                 .SetTrans(Tween.TransitionType.Sine)
                 .SetEase(Tween.EaseType.Out);
 
-            VisualHelper.LabelTween(label, (int)fromVal, (int)toVal, 0.5f,"",$"/{statInstance.maxHealth}");
+            if (bar==HealthBar) {
+                suffix = $"/{statInstance.maxHealth}";
+            }
+
+            VisualHelper.LabelTween(label, (int)fromVal, (int)toVal, 0.5f,"",suffix);
 
             tween.Chain().TweenCallback(Callable.From(() => {
                 bool shouldHide = toVal <= 0;

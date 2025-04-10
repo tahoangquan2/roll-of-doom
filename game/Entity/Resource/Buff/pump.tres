@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="BuffData" load_steps=3 format=3 uid="uid://cq18626oqhr2r"]
+
+[ext_resource type="Texture2D" uid="uid://c6w68ls05cp6p" path="res://assets/sprites/buffs/pump.png" id="1_naght"]
+[ext_resource type="Script" path="res://game/Entity/Resource/BuffData.cs" id="2_gexel"]
+
+[resource]
+script = ExtResource("2_gexel")
+Type = 5
+Duration = 0
+icon = ExtResource("1_naght")
+description = "Increases attack damage by Value. Volatile."

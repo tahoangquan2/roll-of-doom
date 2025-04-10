@@ -26,7 +26,6 @@ public partial class BuffUI : TextureRect
 
 	public void UpdateValue(int value)
 	{
-		if (value==ValueX) return;
 		ValueX = value;
 		_buffValueLabel.Text = ValueX.ToString();
 	}

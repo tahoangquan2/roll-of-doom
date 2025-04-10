@@ -39,6 +39,7 @@ script = ExtResource("2_meqtj")
 shape = SubResource("RectangleShape2D_51g4d")
 
 [node name="HealthLabel" parent="CharacterTab/StatTab" index="0"]
+text = "10"
 label_settings = SubResource("LabelSettings_t8l5i")
 
 [node name="ShieldLabel" parent="CharacterTab/StatTab" index="2"]

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="BuffData" load_steps=3 format=3 uid="uid://3mnrlmhtos1j"]
+
+[ext_resource type="Texture2D" uid="uid://c6udcaipin6hd" path="res://assets/sprites/buffs/poison.png" id="1_hu6aj"]
+[ext_resource type="Script" path="res://game/Entity/Resource/BuffData.cs" id="2_ewa0w"]
+
+[resource]
+script = ExtResource("2_ewa0w")
+Type = 8
+Duration = 1
+icon = ExtResource("1_hu6aj")
+description = "Deals Value damage at the start of each turn, Diminishing."

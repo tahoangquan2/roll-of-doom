@@ -41,7 +41,8 @@ public partial class BuffDatabase : Node
             EnumGlobal.BuffType.Pump => new ArmedLogic(),
             EnumGlobal.BuffType.Vigilant => new FortifyLogic(),
             EnumGlobal.BuffType.Poisoned => new PoisonedLogic(),
-            
+            EnumGlobal.BuffType.Exhaust => new ExhaustLogic(),
+
             //EnumGlobal.BuffType.Burn => new BurnLogic(),
             //EnumGlobal.BuffType.Slow => new SlowLogic(),
             //EnumGlobal.BuffType.Critical => new CriticalLogic(),

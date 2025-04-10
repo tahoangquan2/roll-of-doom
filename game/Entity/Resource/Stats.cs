@@ -161,7 +161,7 @@ public partial class Stats : Resource //  base class for character Stat. (Player
 			RemoveBuff(key);
 		}
 	}
-	public BuffUI ApplyBuff(EnumGlobal.BuffType type, int value) {
+	public BuffUI ApplyBuff(EnumGlobal.BuffType type, int value) {		
 		if (buffs.ContainsKey(type)) {			
 			buffs[type].AddValue(value);
 			CheckForBuff(ActionType.Apply, ref NAN);
@@ -191,6 +191,7 @@ public partial class Stats : Resource //  base class for character Stat. (Player
 	}
 
 	public virtual  void Cycle() {
+		GD.Print($"{name} Cycle");
 		// remove guard 
 		guard = 0;
 		// Apply Buffs Effect on cycle

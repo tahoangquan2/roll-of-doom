@@ -11,7 +11,6 @@ public partial class PlayerChar : Character
 		GlobalVariables.playerStat = playerStat;
 		GlobalVariables.allStats.Add(playerStat);		
 
-		playerStat.spellMana = 2; // set to 0 after testing
 		playerStat.currentHealth = 25;
 		playerStat.guard = 50;
 		playerStat.shield = 5;

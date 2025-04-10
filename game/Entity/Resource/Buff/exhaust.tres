@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="BuffData" load_steps=3 format=3 uid="uid://ci8pd8uej0koc"]
+
+[ext_resource type="Texture2D" uid="uid://d2vpx0m3ae462" path="res://assets/sprites/buffs/Exhaust.png" id="1_slt7o"]
+[ext_resource type="Script" path="res://game/Entity/Resource/BuffData.cs" id="2_yn2e2"]
+
+[resource]
+script = ExtResource("2_yn2e2")
+Type = 6
+Duration = 1
+icon = ExtResource("1_slt7o")
+description = "Reduces damage dealt 30%, Diminishing. "

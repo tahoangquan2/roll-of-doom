@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="BuffData" load_steps=3 format=3 uid="uid://ccq4w5cq3nd2b"]
+
+[ext_resource type="Texture2D" uid="uid://bc4j1b2msxciq" path="res://assets/sprites/buffs/armed.png" id="1_q6fux"]
+[ext_resource type="Script" path="res://game/Entity/Resource/BuffData.cs" id="2_koixf"]
+
+[resource]
+script = ExtResource("2_koixf")
+Type = 3
+Duration = 2
+icon = ExtResource("1_q6fux")
+description = "Increases attack damage by Value"
