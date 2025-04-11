@@ -1,9 +1,13 @@
-[gd_scene load_steps=8 format=3 uid="uid://b6refw0j55huo"]
+[gd_scene load_steps=9 format=3 uid="uid://b6refw0j55huo"]
 
 [ext_resource type="PackedScene" uid="uid://ox4xdp3nbwyt" path="res://game/Entity/Character.tscn" id="1_yp07v"]
 [ext_resource type="Script" path="res://game/Entity/player/PlayerChar.cs" id="2_pqbwe"]
 [ext_resource type="Texture2D" uid="uid://cpydvk8mq66o5" path="res://assets/art/tile_0087.png" id="3_uled6"]
 [ext_resource type="FontFile" uid="uid://c1j227ygpp51v" path="res://assets/fonts/DragonHunter-9Ynxj.otf" id="4_bfdl0"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_emulc"]
+resource_local_to_scene = true
+size = Vector2(117.5, 112.5)
 
 [sub_resource type="LabelSettings" id="LabelSettings_cba8l"]
 resource_local_to_scene = true
@@ -13,7 +17,7 @@ font_color = Color(0.741176, 0.105882, 0, 1)
 outline_size = 10
 outline_color = Color(0.0867833, 0.0893178, 0.0880518, 1)
 
-[sub_resource type="LabelSettings" id="LabelSettings_3v61w"]
+[sub_resource type="LabelSettings" id="LabelSettings_7y24w"]
 resource_local_to_scene = true
 font = ExtResource("4_bfdl0")
 font_size = 24
@@ -21,7 +25,7 @@ font_color = Color(0.298982, 0.649591, 0.790369, 1)
 outline_size = 10
 outline_color = Color(0.0867833, 0.0893178, 0.0880518, 1)
 
-[sub_resource type="LabelSettings" id="LabelSettings_sx3i7"]
+[sub_resource type="LabelSettings" id="LabelSettings_od0vp"]
 resource_local_to_scene = true
 font = ExtResource("4_bfdl0")
 font_size = 24
@@ -31,7 +35,9 @@ outline_color = Color(0.0867833, 0.0893178, 0.0880518, 1)
 
 [node name="Player" instance=ExtResource("1_yp07v")]
 script = ExtResource("2_pqbwe")
-baseStats = null
+
+[node name="HitBox" parent="." index="0"]
+shape = SubResource("RectangleShape2D_emulc")
 
 [node name="Tile0087" type="Sprite2D" parent="Visual" index="0"]
 position = Vector2(0, 1.52588e-05)
@@ -41,8 +47,8 @@ texture = ExtResource("3_uled6")
 [node name="HealthLabel" parent="CharacterTab/StatTab" index="0"]
 label_settings = SubResource("LabelSettings_cba8l")
 
-[node name="ShieldLabel" parent="CharacterTab/StatTab" index="2"]
-label_settings = SubResource("LabelSettings_3v61w")
+[node name="ShieldLabel" parent="CharacterTab/StatTab/Defends" index="0"]
+label_settings = SubResource("LabelSettings_7y24w")
 
-[node name="GuardLabel" parent="CharacterTab/StatTab" index="3"]
-label_settings = SubResource("LabelSettings_sx3i7")
+[node name="GuardLabel" parent="CharacterTab/StatTab/Defends" index="1"]
+label_settings = SubResource("LabelSettings_od0vp")

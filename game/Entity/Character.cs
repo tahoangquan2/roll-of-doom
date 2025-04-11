@@ -31,8 +31,8 @@ public partial class Character : CardPlayZone //important that player alway the 
         ShieldBar = ProgressBackground.GetNode<TextureRect>("HBoxContainer/ShieldBar");
 
         HealthLabel = GetNode<Label>("CharacterTab/StatTab/HealthLabel");
-        GuardLabel = GetNode<Label>("CharacterTab/StatTab/GuardLabel");
-        ShieldLabel = GetNode<Label>("CharacterTab/StatTab/ShieldLabel");
+        GuardLabel = GetNode<Label>("CharacterTab/StatTab/Defends/GuardLabel");
+        ShieldLabel = GetNode<Label>("CharacterTab/StatTab/Defends/ShieldLabel");
 
         BuffGrid = GetNode<GridContainer>("CharacterTab/GridContainer");
 
@@ -102,29 +102,26 @@ public partial class Character : CardPlayZone //important that player alway the 
     }
     private void AnimateBarAndLabel(TextureRect bar, Label label, float fromVal, float toVal, float width)
     {
-        if (fromVal != toVal)
-        {
-            Tween tween = CreateTween();
-            bar.Visible = true;
-            label.Visible = true;
-            string suffix ="";
+        if (fromVal == toVal && fromVal==0) return;
+        Tween tween = CreateTween();
+        bar.Visible = true;
+        label.Visible = true;
+        string suffix ="";
 
-            tween.TweenProperty(bar, "custom_minimum_size", new Vector2(width, 0), 0.5f)
-                .SetTrans(Tween.TransitionType.Sine)
-                .SetEase(Tween.EaseType.Out);
+        tween.TweenProperty(bar, "custom_minimum_size", new Vector2(width, 0), 0.5f)
+            .SetTrans(Tween.TransitionType.Sine)
+            .SetEase(Tween.EaseType.Out);
 
-            if (bar==HealthBar) {
-                suffix = $"/{statInstance.maxHealth}";
-            }
+        if (bar==HealthBar) suffix = $"/{statInstance.maxHealth}";
+        
 
-            VisualHelper.LabelTween(label, (int)fromVal, (int)toVal, 0.5f,"",suffix);
+        VisualHelper.LabelTween(label, (int)fromVal, (int)toVal, 0.5f,"",suffix);
 
-            tween.Chain().TweenCallback(Callable.From(() => {
-                bool shouldHide = toVal <= 0;
-                bar.Visible = !shouldHide;
-                label.Visible = !shouldHide;
-            }));
-        }
+        tween.Chain().TweenCallback(Callable.From(() => {
+            bool shouldHide = toVal <= 0;
+            bar.Visible = !shouldHide;
+            label.Visible = !shouldHide;
+        }));        
     }
 
     public virtual void Cycle()

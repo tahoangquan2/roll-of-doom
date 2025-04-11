@@ -88,12 +88,14 @@ offset_top = 59.0
 offset_right = 208.0
 offset_bottom = 139.0
 
-[node name="StatTab" type="HBoxContainer" parent="CharacterTab" index="0"]
+[node name="StatTab" type="Control" parent="CharacterTab" index="0"]
 layout_mode = 2
-theme_override_constants/separation = 10
+size_flags_vertical = 3
 
 [node name="HealthLabel" type="Label" parent="CharacterTab/StatTab" index="0"]
 layout_mode = 2
+offset_right = 53.0
+offset_bottom = 27.0
 text = "10/30"
 label_settings = SubResource("LabelSettings_q643r")
 
@@ -101,6 +103,11 @@ label_settings = SubResource("LabelSettings_q643r")
 clip_contents = true
 custom_minimum_size = Vector2(300, 8)
 layout_mode = 2
+offset_left = 63.0
+offset_top = 9.0
+offset_right = 363.0
+offset_bottom = 17.0
+size_flags_horizontal = 6
 size_flags_vertical = 4
 texture = ExtResource("4_mbs1w")
 expand_mode = 1
@@ -121,6 +128,7 @@ theme_override_constants/separation = 0
 self_modulate = Color(1, 0.368627, 0.027451, 1)
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
+size_flags_horizontal = 0
 texture = ExtResource("5_mc0ns")
 expand_mode = 2
 
@@ -128,23 +136,32 @@ expand_mode = 2
 self_modulate = Color(0.615686, 1, 1, 1)
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
+size_flags_horizontal = 0
 texture = ExtResource("6_d6a4f")
 expand_mode = 2
 
 [node name="GuardBar" type="TextureRect" parent="CharacterTab/StatTab/ProgressBackground/HBoxContainer" index="2"]
 custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
+size_flags_horizontal = 0
 texture = ExtResource("7_h02te")
 expand_mode = 2
 
-[node name="ShieldLabel" type="Label" parent="CharacterTab/StatTab" index="2"]
+[node name="Defends" type="HBoxContainer" parent="CharacterTab/StatTab" index="2"]
+layout_mode = 2
+offset_left = 373.0
+offset_right = 419.0
+offset_bottom = 27.0
+theme_override_constants/separation = 10
+
+[node name="ShieldLabel" type="Label" parent="CharacterTab/StatTab/Defends" index="0"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "3
 "
 label_settings = SubResource("LabelSettings_hk5uj")
 
-[node name="GuardLabel" type="Label" parent="CharacterTab/StatTab" index="3"]
+[node name="GuardLabel" type="Label" parent="CharacterTab/StatTab/Defends" index="1"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "20"
@@ -152,6 +169,7 @@ label_settings = SubResource("LabelSettings_y308n")
 
 [node name="GridContainer" type="GridContainer" parent="CharacterTab" index="1"]
 layout_mode = 2
+size_flags_vertical = 3
 theme_override_constants/h_separation = 10
 columns = 10
 
