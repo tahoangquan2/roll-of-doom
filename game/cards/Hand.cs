@@ -8,7 +8,7 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
     private int cardRadius ;
     private float AngleLimit = 70;
     private float MaxCardSpreadAngle = 10;
-    [Export] public int MaxHandSize { get; set; }=10;
+    [Export] public int MaxHandSize { get; set; }=15;
      // max cards in hand
     private Godot.Collections.Array<Card> hand = new Godot.Collections.Array<Card>(); // Stores all cards
     private CardManager cardManager; // 
@@ -63,8 +63,7 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
         RepositionCards();
         return true;
     }
-    public Card RemoveCard(int index)
-    {
+    public Card RemoveCard(int index)    {
         if (index < 0 || index >= hand.Count)
             return null;
 
@@ -73,6 +72,13 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
 
         RepositionCards();
         return removingCard;
+    }
+    public Card RemoveCard(Card card)    {
+        int index = hand.IndexOf(card);
+        if (index != -1)
+            return RemoveCard(index);
+
+        return null;
     }
     private void RepositionCards()
     {
@@ -123,11 +129,15 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
         Godot.Collections.Array<Card> drawnCards = await deck.DrawCards(amount);  
         amount = drawnCards.Count;
         cardManager.Lock();      
-        for (int i = 0; i < amount; i++) if (drawnCards[i] != null) {            
+
+        for (int i = 0; i < amount; i++) if (drawnCards[i] != null) {     
+            Card drawnCard = drawnCards[i];    
             
-            if (AddCard(drawnCards[i])){
+            if (AddCard(drawnCard)){
                 cardManager.cardSound();
-                await drawnCards[i].FlipCard(true);
+                await drawnCard.FlipCard(true);
+
+                CardKeywordSystem.OnDraw(drawnCard, this);
             }
         }
         cardManager.Unlock();
@@ -282,18 +292,6 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
         return StartSelectionMode(numToSelect, EnumGlobal.HandSelectionPurpose.Discard);
     }
     int requiredSelectionCount = 0;
-    // public void _input(InputEvent @event){//action "Action" from input map, this is for testing
-    // if (@event is InputEventMouseMotion) return;
-    //     if (@event.IsActionPressed("Action"))
-    //     {
-    //         drawFromDeck(3);
-    //     }
-
-    //     if (@event.IsActionPressed("Action2"))
-    //     {
-    //         DiscardHand();
-    //     }
-    // }
     public void _on_button_pressed(){
         ExitSelectionMode();
         setHandRadius(750);
@@ -315,5 +313,18 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
     public void DrawFromDeckSimple(int amount)
     {
         _ = drawFromDeck(amount); // fire-and-forget
+    }
+
+    public void _input(InputEvent @event){//action "Action" from input map, this is for testing
+    if (@event is InputEventMouseMotion) return;
+        if (@event.IsActionPressed("Action"))
+        {
+            drawFromDeck(1);
+        }
+
+        if (@event.IsActionPressed("Action2"))
+        {
+            DiscardHand();
+        }
     }
 }

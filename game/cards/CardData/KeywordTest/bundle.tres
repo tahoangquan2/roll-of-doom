@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=3 format=3 uid="uid://dwuqsnecbsuib"]
+
+[ext_resource type="Script" path="res://game/cards/CardEffects/nothing.gd" id="1_swqtb"]
+[ext_resource type="Script" path="res://game/cards/CardData.cs" id="2_hpnqv"]
+
+[resource]
+script = ExtResource("2_hpnqv")
+CardName = "Bundled"
+Cost = 0
+CardType = 2
+Effects = []
+card_script = ExtResource("1_swqtb")
+Description = "This card has no description."
+ArtOffset = Vector2(0, 0)
+Keywords = [4]
+TargetMask = 2

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=3 format=3 uid="uid://1oftqn2h3y7q"]
+
+[ext_resource type="Script" path="res://game/cards/CardEffects/nothing.gd" id="1_qs36v"]
+[ext_resource type="Script" path="res://game/cards/CardData.cs" id="2_i7v3b"]
+
+[resource]
+script = ExtResource("2_i7v3b")
+CardName = "Magnetic"
+Cost = 0
+CardType = 2
+Effects = []
+card_script = ExtResource("1_qs36v")
+Description = "This card has no description."
+ArtOffset = Vector2(0, 0)
+Keywords = [9]
+TargetMask = 2

@@ -98,7 +98,7 @@ public partial class Stats : Resource //  base class for character Stat. (Player
 
 		if (remainingDamage > 0)
 		{
-			GD.Print($"{name} attacked {target.name} for {damage} damage. Remaining damage: {remainingDamage}");
+			//GD.Print($"{name} attacked {target.name} for {damage} damage. Remaining damage: {remainingDamage}");
 		}
 	}
 

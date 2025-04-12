@@ -17,6 +17,7 @@ public partial class MiddleScreenSelection : Control
 	public override void _Ready()
 	{
 		hboxContainer = GetNode<HBoxContainer>("Container");
+		
 		GlobalAccessPoint.GetCardManager().Lock(); // stop card interaction
 	}
 	public void InitializeSelection(

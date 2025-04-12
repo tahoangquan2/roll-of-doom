@@ -57,6 +57,11 @@ public partial class Card : Node2D
             shaderMaterial = mat;
         }
 
+        if (cardData.Keywords.Contains(EnumGlobal.CardKeywords.Auto))
+        {
+            canBeHovered = false; // Disable hover for auto cards
+        }
+
         // Connect card to CardManager
         parentManager = GetParent() as CardManager;
         parentManager.ConnectCardSignals(this);
@@ -193,9 +198,7 @@ public partial class Card : Node2D
         discardPile.AddCard(this);
     }
     public void EffectFinished() { 
-        if (cardData.Keywords.Contains(EnumGlobal.CardKeywords.Ephemeral)) 
-            KillCard();
-        else putToDiscardPile();
+        CardKeywordSystem.OnPlay(this); // Call the keyword system
     }
     public void obliterateCard() {       
         //GD.Print("Card obliterate "+cardData.CardName + " "+this);
