@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Godot;
 
 public partial class CardPlayZone : Area2D
@@ -25,11 +26,9 @@ public partial class CardPlayZone : Area2D
         GetTree().CurrentScene.GetNodeOrNull<CardManager>(GlobalAccessPoint.cardManagerPath).ConnectPlayZoneSignals(this);
     }
 
-    public void activeCard(Card card, Vector2 actionPoint)
+    public async Task activeCard(Card card, Vector2 actionPoint)
     {
-        GD.Print($"Card {card.cardData.CardName} {card} Played ");
-
-        card.ActivateEffects(this);
+        await card.ActivateEffects(this);
     }
 
     public EnumGlobal.enumCardTargetLayer GetPlayZoneType()

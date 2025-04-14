@@ -9,7 +9,7 @@ public partial class Card : Node2D
     public bool canBeMoved = true;
     [Signal] public delegate void CardHoveredEventHandler(Card card);
     [Signal] public delegate void CardUnhoveredEventHandler(Card card);
-
+    public bool continueAfterEffect = false;
     private Label costLbl;
     private Label nameLbl;
     //private Label descriptionLbl;
@@ -78,9 +78,10 @@ public partial class Card : Node2D
         return cardData.TargetMask == EnumGlobal.enumCardTargetLayer.None;
     }
 
-    public virtual async void ActivateEffects(CardPlayZone target)
+    public async Task ActivateEffects(CardPlayZone target)
     {
         if (cardData == null || !canActivate) return;
+        GD.Print("Card activate effects "+cardData.CardName + " "+this);
 
         if (cardData.card_script!=null)
         {            
@@ -195,7 +196,8 @@ public partial class Card : Node2D
         canBeHovered = false;
         discardPile.AddCard(this);
     }
-    public void EffectFinished() { 
+    public void EffectFinished() {  if (continueAfterEffect) return;
+        GD.Print("Card effect finished "+cardData.CardName + " "+this);
         CardKeywordSystem.OnPlay(this); // Call the keyword system
     }
     public void obliterateCard() {       

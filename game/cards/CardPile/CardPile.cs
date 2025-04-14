@@ -80,8 +80,9 @@ public partial class CardPile : Node2D
         return -1;
     }   
     virtual public void ShuffleIntoDeck(CardData card)    {
-        deck.Insert(GD.RandRange(0, deck.Count), card);
+        deck.Insert(GD.RandRange(0, deck.Count-1), card);
         CardCount.Text = deck.Count.ToString(); 
+        GD.Print("Shuffling into deck: " + card.CardName);
         emitDeckUpdated(deck.Count);
     }
     public async Task AddCards(Godot.Collections.Array<Card> cards)	{ 
@@ -92,6 +93,7 @@ public partial class CardPile : Node2D
 	}
 
     public async Task AddCard(Card card)    {
+        GD.Print("Adding card to pile: " + card.cardData.CardName);
         ShuffleIntoDeck(card.GetCardData());
 
 		card.TransformCard(getTopCardPosition(),0.0f,0.15f);

@@ -164,13 +164,14 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
             ApplySelectionEffect();
         }
     }
-    private void ApplySelectionEffect()    {
+    private async void ApplySelectionEffect()    {
         switch (currentPurpose)
         {
             case EnumGlobal.HandSelectionPurpose.Discard:
                 foreach (Card card in selectedCards){   
                     RemoveCard(hand.IndexOf(card));
-                    card.ActivateEffects(GlobalAccessPoint.GetCardActiveZone()); 
+                    await CardKeywordSystem.OnDiscardOrForget(card);
+                    card.putToDiscardPile();
                 }
                 selectedCards.Clear();
                 break;
@@ -277,7 +278,7 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
     private bool StartSelectionMode(int numToSelect, EnumGlobal.HandSelectionPurpose purpose){
         if (hand.Count < numToSelect) return false;
         selectionFilter.Visible = true;
-
+        
         cardManager.selected_card = null;
         setHandRadius(900);
 
