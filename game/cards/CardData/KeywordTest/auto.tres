@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=3 format=3 uid="uid://irkv4jc82imh"]
+
+[ext_resource type="Script" path="res://game/cards/CardEffects/nothing.gd" id="1_hbkly"]
+[ext_resource type="Script" path="res://game/cards/CardData.cs" id="2_rtgch"]
+
+[resource]
+script = ExtResource("2_rtgch")
+CardName = "Auto"
+Cost = 0
+CardType = 2
+Effects = []
+card_script = ExtResource("1_hbkly")
+Description = "This card has no description."
+ArtOffset = Vector2(0, 0)
+Keywords = [5]
+TargetMask = 2

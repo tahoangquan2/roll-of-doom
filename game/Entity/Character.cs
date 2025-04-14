@@ -1,21 +1,25 @@
 using Godot;
 using System;
+using System.Dynamic;
 
-public partial class Character : CardPlayZone
+public partial class Character : CardPlayZone //important that player alway the first to be add to the scene tree 
 {
     [Export] public Stats baseStats;
     public Stats statInstance;
 
     protected TextureRect HealthBar, GuardBar, ShieldBar, ProgressBackground;
     protected Label HealthLabel, GuardLabel, ShieldLabel;
+    private int currentDisplayHealth, currentDisplayGuard, currentDisplayShield;
     protected GridContainer BuffGrid;
+	private Node2D visual=> GetNode<Node2D>("Visual");
 
     public override void _Ready()
     {
         base._Ready();
-        statInstance = baseStats.CreateInstance();
+        statInstance = baseStats.CreateInstance();       
+        GlobalVariables.allStats.Add(statInstance); 
+		
         SetupStatVisuals();
-        UpdateStatsDisplay();
     }
 
     protected virtual void SetupStatVisuals()
@@ -27,10 +31,26 @@ public partial class Character : CardPlayZone
         ShieldBar = ProgressBackground.GetNode<TextureRect>("HBoxContainer/ShieldBar");
 
         HealthLabel = GetNode<Label>("CharacterTab/StatTab/HealthLabel");
-        GuardLabel = GetNode<Label>("CharacterTab/StatTab/GuardLabel");
-        ShieldLabel = GetNode<Label>("CharacterTab/StatTab/ShieldLabel");
+        GuardLabel = GetNode<Label>("CharacterTab/StatTab/Defends/GuardLabel");
+        ShieldLabel = GetNode<Label>("CharacterTab/StatTab/Defends/ShieldLabel");
 
         BuffGrid = GetNode<GridContainer>("CharacterTab/GridContainer");
+
+        currentDisplayGuard = -1;
+        currentDisplayHealth = -1;
+        currentDisplayShield = -1;
+
+		if (statInstance.CharacterVisualScene != null){
+			Node2D characterVisual = statInstance.CharacterVisualScene.Instantiate<Node2D>();
+			visual.AddChild(characterVisual);
+		}
+
+		foreach (BuffUI buff in statInstance.buffs.Values)
+		{
+			BuffGrid.AddChild(buff);
+		}
+
+        statInstance.StatChanged += UpdateStatsDisplay;
     }
 
     public void AddBuff(EnumGlobal.BuffType type, int value)
@@ -72,23 +92,44 @@ public partial class Character : CardPlayZone
             guardWidth = remainder * (guard / total);
         }
 
-        HealthBar.CustomMinimumSize = new Vector2(hpWidth, 0);
-        ShieldBar.CustomMinimumSize = new Vector2(shieldWidth, 0);
-        GuardBar.CustomMinimumSize = new Vector2(guardWidth, 0);
+        AnimateBarAndLabel( HealthBar, HealthLabel, currentDisplayHealth, health, hpWidth);
+        AnimateBarAndLabel( ShieldBar, ShieldLabel, currentDisplayShield, shield, shieldWidth);
+        AnimateBarAndLabel( GuardBar, GuardLabel, currentDisplayGuard, guard, guardWidth);
 
-        HealthLabel.Text = $"{health}/{max}";
-        GuardLabel.Text = $"{guard}";
-        ShieldLabel.Text = $"{shield}";
+        currentDisplayGuard = statInstance.guard;
+        currentDisplayHealth = statInstance.currentHealth;
+        currentDisplayShield = statInstance.shield;
+    }
+    private void AnimateBarAndLabel(TextureRect bar, Label label, float fromVal, float toVal, float width)
+    {
+        if (fromVal == toVal && fromVal==0) return;
+        Tween tween = CreateTween();
+        bar.Visible = true;
+        label.Visible = true;
+        string suffix ="";
 
-        GuardBar.Visible = guard > 0;
-        ShieldBar.Visible = shield > 0;
-        GuardLabel.Visible = guard > 0;
-        ShieldLabel.Visible = shield > 0;
+        tween.TweenProperty(bar, "custom_minimum_size", new Vector2(width, 0), 0.5f)
+            .SetTrans(Tween.TransitionType.Sine)
+            .SetEase(Tween.EaseType.Out);
+
+        if (bar==HealthBar) suffix = $"/{statInstance.maxHealth}";
+        
+
+        VisualHelper.LabelTween(label, (int)fromVal, (int)toVal, 0.5f,"",suffix);
+
+        tween.Chain().TweenCallback(Callable.From(() => {
+            bool shouldHide = toVal <= 0;
+            bar.Visible = !shouldHide;
+            label.Visible = !shouldHide;
+        }));        
     }
 
-    public void CycleTurn()
+    public virtual void Cycle()
     {
         statInstance.Cycle();
-        UpdateStatsDisplay();
+    }
+
+    public Stats GetStat() {
+        return statInstance;
     }
 }

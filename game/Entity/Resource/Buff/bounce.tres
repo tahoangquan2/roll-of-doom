@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="BuffData" load_steps=3 format=3 uid="uid://cwlpc5w7vmvqm"]
+
+[ext_resource type="Texture2D" uid="uid://bygwcylkmxko6" path="res://assets/sprites/buffs/bounce.png" id="1_wi7r2"]
+[ext_resource type="Script" path="res://game/Entity/Resource/BuffData.cs" id="2_2y6lb"]
+
+[resource]
+script = ExtResource("2_2y6lb")
+Type = 1
+Duration = 2
+icon = ExtResource("1_wi7r2")
+description = "Returns a X damage to a enemy random then dissapear"

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=3 format=3 uid="uid://7xy2y4nw1yvl"]
+
+[ext_resource type="Script" path="res://game/cards/CardEffects/nothing.gd" id="1_0dodj"]
+[ext_resource type="Script" path="res://game/cards/CardData.cs" id="2_o0r10"]
+
+[resource]
+script = ExtResource("2_o0r10")
+CardName = "Overwork"
+Cost = 0
+CardType = 2
+Effects = []
+card_script = ExtResource("1_0dodj")
+Description = "This card has no description."
+ArtOffset = Vector2(0, 0)
+Keywords = [12]
+TargetMask = 2

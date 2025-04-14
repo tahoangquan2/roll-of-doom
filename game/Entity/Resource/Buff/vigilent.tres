@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="BuffData" load_steps=3 format=3 uid="uid://j43nuh588hnq"]
+
+[ext_resource type="Texture2D" uid="uid://w61n0pb6cfwe" path="res://assets/sprites/buffs/vigilant.png" id="1_3g52p"]
+[ext_resource type="Script" path="res://game/Entity/Resource/BuffData.cs" id="1_or1br"]
+
+[resource]
+script = ExtResource("1_or1br")
+Type = 4
+Duration = 0
+icon = ExtResource("1_3g52p")
+description = "Increases Guard or Shield gain by Value. Volatile."

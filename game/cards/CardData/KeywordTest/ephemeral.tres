@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=3 format=3 uid="uid://cx1nuhwbsr5wy"]
+
+[ext_resource type="Script" path="res://game/cards/CardEffects/nothing.gd" id="1_uk3b2"]
+[ext_resource type="Script" path="res://game/cards/CardData.cs" id="2_feywk"]
+
+[resource]
+script = ExtResource("2_feywk")
+CardName = "Ephemeral"
+Cost = 0
+CardType = 2
+Effects = []
+card_script = ExtResource("1_uk3b2")
+Description = "This card has no description."
+ArtOffset = Vector2(0, 0)
+Keywords = [3]
+TargetMask = 2

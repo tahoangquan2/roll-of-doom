@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="BuffData" load_steps=3 format=3 uid="uid://c754nda5irsaw"]
+
+[ext_resource type="Texture2D" uid="uid://dfennqiedmgh5" path="res://assets/sprites/buffs/fortify.png" id="1_p4gqv"]
+[ext_resource type="Script" path="res://game/Entity/Resource/BuffData.cs" id="2_emlob"]
+
+[resource]
+script = ExtResource("2_emlob")
+Type = 2
+Duration = 2
+icon = ExtResource("1_p4gqv")
+description = "Increases Guard or Shield gain by Value."

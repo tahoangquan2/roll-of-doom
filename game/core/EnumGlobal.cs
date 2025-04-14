@@ -36,6 +36,8 @@ public partial class EnumGlobal : Node
         None,      // Default (no selection),
         Choose, // Selecting cards for a specific purpose
         Discard,   // Selecting cards to discard
+        Forget,   // Selecting cards to forget
+        Shuffle,  // Selecting cards to shuffle
         Duplicate, // Selecting a card to duplicate
         Upgrade,    // Selecting a card to upgrade
         

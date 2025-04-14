@@ -9,8 +9,8 @@ public partial class DeckManipulationEffect : CardEffect
 
     public override Task<bool> ApplyEffect(Node2D target)
     {
-        Hand hand = GlobalAccessPoint.GetHand();
-        Deck deck = GlobalAccessPoint.GetDeck();
+        Hand hand = target.GetTree().CurrentScene.GetNode<Hand>(GlobalAccessPoint.handPath);
+        Deck deck = target.GetTree().CurrentScene.GetNode<Deck>(GlobalAccessPoint.deckPath);
         GD.Print(hand);
         GD.Print(this,$" Applying deck manipulation effect: {DeckEffectType} to {target.Name}.");
         

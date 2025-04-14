@@ -11,7 +11,7 @@ public partial class CardManager : Node2D
 	private Hand hand=null;
 	private CardArc cardArc=null;
 	private PlayerStat playerStat;
-	private bool Locked =false; // if true, no card can be selected or dragged
+	private int Locked =0; 
 	[Signal] public delegate void CardPushupEventHandler(Card card,bool isHovered);
 	[Signal] public delegate void CardUnhandEventHandler(Card card);
 	[Signal] public delegate void CardSelectEventHandler(CardData card);
@@ -19,7 +19,7 @@ public partial class CardManager : Node2D
 	public CardState.State currentCardState = CardState.State.Idle;
 	private Dictionary<CardState.State, CardState> cardStates = new Dictionary<CardState.State, CardState>();
 	public override void _Input(InputEvent @event)	{	
-		if (Locked) return;
+		if (Locked>0) return;
 		if (hand is not null && hand.isSelecting) {
 			HandleSelectionInput(@event);
 			return;			
@@ -123,19 +123,19 @@ public partial class CardManager : Node2D
 		if (card == CardState.card) CardState.card = null;
 	}
 	public void cardSound() {audioPlayer.Play();}
-	public void Lock() {Locked = true;GD.Print("Locked");}
-	public void Unlock() {Locked = false;}
-	public bool IsLocked() {return Locked;}
+	public void Lock() {Locked++;GD.Print("Locked");}
+	public void Unlock() {Locked--;}
+	public bool IsLocked() {return Locked>0;}
 	
 	// signals for card and playzone
 	public void ConnectCardSignals(Card card)
 	{card.CardHovered += _on_card_hovered;   card.CardUnhovered += _on_card_unhovered;}
 	public void _on_card_hovered(Card card)
-	{	if (Locked) return;
+	{	if (Locked>0) return;
 		cardStates[currentCardState]._on_card_hovered(card);
 	}
 	public void _on_card_unhovered(Card card)
-	{	if (Locked) return;
+	{	if (Locked>0) return;
 		cardStates[currentCardState]._on_card_unhovered(card);
 	}
 	

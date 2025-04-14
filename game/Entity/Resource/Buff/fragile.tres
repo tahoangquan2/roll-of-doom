@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="BuffData" load_steps=3 format=3 uid="uid://daa7e7go6g2wf"]
+
+[ext_resource type="Texture2D" uid="uid://cfjo06kjufcw5" path="res://assets/sprites/buffs/fragile.png" id="1_fjwgy"]
+[ext_resource type="Script" path="res://game/Entity/Resource/BuffData.cs" id="2_3rif5"]
+
+[resource]
+script = ExtResource("2_3rif5")
+Type = 7
+Duration = 1
+icon = ExtResource("1_fjwgy")
+description = "Increases damage taken 30%, Diminishing."

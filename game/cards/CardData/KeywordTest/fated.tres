@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=3 format=3 uid="uid://pdffn5h6ia73"]
+
+[ext_resource type="Script" path="res://game/cards/CardEffects/nothing.gd" id="1_c0axi"]
+[ext_resource type="Script" path="res://game/cards/CardData.cs" id="2_2nqo8"]
+
+[resource]
+script = ExtResource("2_2nqo8")
+CardName = "Fated"
+Cost = 0
+CardType = 2
+Effects = []
+card_script = ExtResource("1_c0axi")
+Description = "This card has no description."
+ArtOffset = Vector2(0, 0)
+Keywords = [8]
+TargetMask = 2
