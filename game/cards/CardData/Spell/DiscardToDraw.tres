@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="CardData" load_steps=4 format=3 uid="uid://b3j86o0lhj5qh"]
 
 [ext_resource type="Texture2D" uid="uid://dkuww1fnvfdd7" path="res://assets/cards/Details/Backgrounds/Fire/SpellCardBackground15.png" id="1_7wmnb"]
-[ext_resource type="Script" path="res://game/cards/CardEffects/draw_and_discard.gd" id="2_awx6e"]
-[ext_resource type="Script" path="res://game/cards/CardData.cs" id="3_y7w76"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/cardScripts/draw_and_discard.gd" id="2_ubm06"]
+[ext_resource type="Script" path="res://game/cards/CardData/CardData.cs" id="3_y7w76"]
 
 [resource]
 script = ExtResource("3_y7w76")
@@ -10,7 +10,7 @@ CardName = "Flame Offering"
 Cost = 1
 CardType = 2
 Effects = []
-card_script = ExtResource("2_awx6e")
+card_script = ExtResource("2_ubm06")
 Description = "Discard 1 to draw 2."
 CardArt = ExtResource("1_7wmnb")
 ArtOffset = Vector2(0, 0)

@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="CardData" load_steps=3 format=3 uid="uid://c11ti2itu0gni"]
 
-[ext_resource type="Script" path="res://game/cards/CardEffects/nothing.gd" id="1_cuccd"]
-[ext_resource type="Script" path="res://game/cards/CardData.cs" id="2_dl1yx"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/cardScripts/nothing.gd" id="1_cuccd"]
+[ext_resource type="Script" path="res://game/cards/CardData/CardData.cs" id="2_dl1yx"]
 
 [resource]
 script = ExtResource("2_dl1yx")

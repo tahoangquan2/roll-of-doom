@@ -18,6 +18,8 @@ public partial class Character : CardPlayZone //important that player alway the 
         base._Ready();
         statInstance = baseStats.CreateInstance();       
         GlobalVariables.allStats.Add(statInstance); 
+
+        statInstance.BuffChanged += AddBuff;
 		
         SetupStatVisuals();
     }
@@ -53,18 +55,10 @@ public partial class Character : CardPlayZone //important that player alway the 
         statInstance.StatChanged += UpdateStatsDisplay;
     }
 
-    public void AddBuff(EnumGlobal.BuffType type, int value)
+    public void AddBuff(BuffUI buffUI,bool alreadyExists)
     {
-        bool alreadyExists = statInstance.BuffExists(type);
-        BuffUI buff = statInstance.ApplyBuff(type, value);
-
-        if (!alreadyExists)
-        {
-            BuffGrid.AddChild(buff);
-        }
-        else
-        {
-            buff.AddValue(value);
+        if (!alreadyExists) {
+            BuffGrid.AddChild(buffUI);
         }
     }
 

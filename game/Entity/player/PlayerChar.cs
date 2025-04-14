@@ -16,7 +16,10 @@ public partial class PlayerChar : Character
 		playerStat.shield = 5;
 
 		// add a buff to the player stat
-		AddBuff(EnumGlobal.BuffType.Dodge, 5);
+		playerStat.ApplyBuff(EnumGlobal.BuffType.Fragile, 1);playerStat.ApplyBuff(EnumGlobal.BuffType.Fragile, 5);
+		playerStat.ApplyBuff(EnumGlobal.BuffType.Fragile, 10);
+		playerStat.ApplyBuff(EnumGlobal.BuffType.Dodge, 10);
+		playerStat.ApplyBuff(EnumGlobal.BuffType.Pump,10);
 		
 		UpdateStatsDisplay();
 	}

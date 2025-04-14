@@ -12,10 +12,9 @@ public partial class EnemyChar : Character
 
 		enemyStat.SetupActions();
 
-		//AddBuff(EnumGlobal.BuffType.Exhaust,10);
-		//AddBuff(EnumGlobal.BuffType.Fragile,10);
-
-		//AddBuff(EnumGlobal.BuffType.Poisoned,10);
+		statInstance.ApplyBuff(EnumGlobal.BuffType.Fragile, 10);
+		statInstance.ApplyBuff(EnumGlobal.BuffType.Poisoned, 10);
+		statInstance.ApplyBuff(EnumGlobal.BuffType.Exhaust, 10);
 
 		UpdateStatsDisplay();
 	}

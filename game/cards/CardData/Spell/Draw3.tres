@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="CardData" load_steps=4 format=3 uid="uid://cl3hr86rfwxnh"]
 
-[ext_resource type="Script" path="res://game/cards/CardData.cs" id="1_57pie"]
+[ext_resource type="Script" path="res://game/cards/CardData/CardData.cs" id="1_57pie"]
 [ext_resource type="Texture2D" uid="uid://ba043na0yb5a" path="res://assets/cards/Details/Backgrounds/Water/BackgroundCard67.png" id="1_xvu2h"]
-[ext_resource type="Script" path="res://game/cards/CardEffects/draw3.gd" id="2_u4rlj"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/cardScripts/draw3.gd" id="2_u4rlj"]
 
 [resource]
 script = ExtResource("1_57pie")

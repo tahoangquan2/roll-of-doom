@@ -7,11 +7,11 @@ using System.Collections.Generic;
 
 public partial class Stats : Resource //  base class for character Stat. (Player or Enemy)
 {	
-
 	[Export] public string name = "Character";
 	[Export] public int maxHealth = 30;
 	[Export] public PackedScene CharacterVisualScene;
 	[Signal] public delegate void StatChangedEventHandler(); // for health, guard, shield change specifically
+	[Signal] public delegate void BuffChangedEventHandler(BuffUI buffUI,bool alreadyExists); // for buff change specifically
 	public int currentHealth = 30;	
 	public int guard = 0;
 	public int shield = 0;
@@ -37,13 +37,11 @@ public partial class Stats : Resource //  base class for character Stat. (Player
 		guard = Mathf.Clamp(guard + value, 0, 999);	
 		EmitSignal(nameof(StatChanged));
 	}
-
 	public void Add_shield(int value)	{
 		CheckForBuff(ActionType.Defend, ref value);
 		shield = Mathf.Clamp(shield + value, 0, 999);		
 		EmitSignal(nameof(StatChanged));
 	}
-
 	public int TakeDamage(int damage)	{
 		if (damage <= 0) return 0;
 		
@@ -71,8 +69,6 @@ public partial class Stats : Resource //  base class for character Stat. (Player
 
 		return remainingDamage; // Return actual HP loss
 	}
-
-
 	public void heal(int value) // negative value, to by pass defensive buffs
 	{
 		currentHealth = Mathf.Clamp(currentHealth + value, 0, maxHealth);
@@ -101,7 +97,6 @@ public partial class Stats : Resource //  base class for character Stat. (Player
 			//GD.Print($"{name} attacked {target.name} for {damage} damage. Remaining damage: {remainingDamage}");
 		}
 	}
-
 	public void AttackRandom(int damage)
 	{	var possibleTargets = GlobalVariables.allStats.FindAll(s => s != this);
 		if (possibleTargets.Count == 0) return;
@@ -111,7 +106,6 @@ public partial class Stats : Resource //  base class for character Stat. (Player
 
 		Attack(target, damage);
 	}
-
 	public void AttackAll(int damage){
 		foreach (var target in GlobalVariables.allStats) if (target!=this) Attack(target, damage);
 	}
@@ -161,11 +155,12 @@ public partial class Stats : Resource //  base class for character Stat. (Player
 			RemoveBuff(key);
 		}
 	}
-	public BuffUI ApplyBuff(EnumGlobal.BuffType type, int value) {		
+	public void ApplyBuff(EnumGlobal.BuffType type, int value) {		
 		if (buffs.ContainsKey(type)) {			
 			buffs[type].AddValue(value);
 			CheckForBuff(ActionType.Apply, ref NAN);
-			return buffs[type];
+			EmitSignal(nameof(BuffChanged), buffs[type],true);
+			return;
 		} 
 
 		BuffUI buff = BuffDatabase.buffScene.Instantiate<BuffUI>();
@@ -175,19 +170,14 @@ public partial class Stats : Resource //  base class for character Stat. (Player
 		CheckForBuff(ActionType.Apply, ref NAN);
 		buff.UpdateValue(value);
 
-		return buff;		
+		EmitSignal(nameof(BuffChanged), buff,false);
 	}
-
 	public void RemoveBuff(EnumGlobal.BuffType type) {
 		if (buffs.ContainsKey(type)) {			
 			CheckForBuff(ActionType.Remove,ref NAN);
 			buffs[type].QueueFree();
 			buffs.Remove(type);
 		}
-	}
-
-	public bool BuffExists(EnumGlobal.BuffType type) {
-		return buffs.ContainsKey(type);
 	}
 
 	public virtual  void Cycle() {
@@ -213,6 +203,13 @@ public partial class Stats : Resource //  base class for character Stat. (Player
 		EmitSignal(nameof(StatChanged));
 	}
 	private int NAN = 0;
+
+	public int GetBuffValue(EnumGlobal.BuffType type) {
+		if (buffs.ContainsKey(type)) {
+			return buffs[type].GetValue();
+		}
+		return 0;
+	}
 
 	//### **Stat**
 

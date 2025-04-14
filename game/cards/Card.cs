@@ -1,5 +1,7 @@
 using Godot;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Linq;
 
 public partial class Card : Node2D
 {
@@ -81,7 +83,6 @@ public partial class Card : Node2D
     public async Task ActivateEffects(CardPlayZone target)
     {
         if (cardData == null || !canActivate) return;
-        GD.Print("Card activate effects "+cardData.CardName + " "+this);
 
         if (cardData.card_script!=null)
         {            
@@ -92,14 +93,24 @@ public partial class Card : Node2D
         }
         else if (cardData.Effects != null)
         {
-            foreach (var effect in cardData.Effects)
+            foreach (var effectLayer in cardData.Effects)
             {
-                if (effect != null)
+                if (effectLayer == null) continue;
+
+                var tasks = new List<Task<bool>>();
+                foreach (var effect in effectLayer.LayerEffects)                {
+                    if (effect != null) tasks.Add(effect.ApplyEffect(target));
+                }
+
+                var results = await Task.WhenAll(tasks);
+
+                if (results.Any(success => !success))
                 {
-                    bool effectFinished = await EffectExecution(effect, target);
-                    if (!effectFinished) break; // Stop if effect fails
+                    GD.PrintErr("Effect Layer failed — interrupting.");
+                    break;
                 }
             }
+            
             await ToSignal(GetTree(), "process_frame"); // Ensure frame update before deletion           
             EffectFinished();
         }        
@@ -197,7 +208,7 @@ public partial class Card : Node2D
         discardPile.AddCard(this);
     }
     public void EffectFinished() {  if (continueAfterEffect) return;
-        GD.Print("Card effect finished "+cardData.CardName + " "+this);
+        //GD.Print("Card effect finished "+cardData.CardName + " "+this);
         CardKeywordSystem.OnPlay(this); // Call the keyword system
     }
     public void obliterateCard() {       

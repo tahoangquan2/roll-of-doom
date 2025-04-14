@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="CardData" load_steps=4 format=3 uid="uid://lpydnjvdtqrq"]
 
 [ext_resource type="Texture2D" uid="uid://cd4axavwjcmmp" path="res://assets/cards/Details/Backgrounds/Water/BackgroundCard61.png" id="1_onrpw"]
-[ext_resource type="Script" path="res://game/cards/CardEffects/shuffle_hand_draw.gd" id="2_t7ot3"]
-[ext_resource type="Script" path="res://game/cards/CardData.cs" id="3_ej7q6"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/cardScripts/shuffle_hand_draw.gd" id="2_t7ot3"]
+[ext_resource type="Script" path="res://game/cards/CardData/CardData.cs" id="3_ej7q6"]
 
 [resource]
 resource_local_to_scene = true

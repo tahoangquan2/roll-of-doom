@@ -35,4 +35,8 @@ public partial class BuffUI : TextureRect
 		ValueX += value;
 		UpdateValue(ValueX);
 	}
+
+	public int GetValue()	{
+		return ValueX;
+	}
 }
