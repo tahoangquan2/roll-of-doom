@@ -99,7 +99,6 @@ public partial class Card : Node2D
                     if (!effectFinished) break; // Stop if effect fails
                 }
             }
-
             await ToSignal(GetTree(), "process_frame"); // Ensure frame update before deletion           
             EffectFinished();
         }        
@@ -120,6 +119,8 @@ public partial class Card : Node2D
 
 		costLbl.Text = cardData.Cost.ToString();
 		nameLbl.Text = cardData.CardName;
+        // a default texture for the card
+        //if (cardData.CardArt == null) CardArt.Texture = CardGlobal.GetCardArtTextureDefault(); else 
         CardArt.Texture = cardData.CardArt;
         switch (cardData.CardType)
         {
@@ -172,18 +173,15 @@ public partial class Card : Node2D
         parentManager.EmitSignal(nameof(CardManager.CardSelect), cardData);
     }
 
-    public async void BurnCard() 
-    { 
-        canBeHovered = false; 
+    public async void BurnCard()    {   
         await AnimateAndDestroy(CardGlobal.GetBurnMaterial(), "card_dissolve_or_burn");
     }
-    public async void KillCard() 
-    { 
-        canBeHovered = false; 
+    public async void KillCard()    {        
         await AnimateAndDestroy(CardGlobal.GetDissolveMaterial(), "card_dissolve_or_burn");
     }
     private async Task AnimateAndDestroy(ShaderMaterial material, string animationName)
-    {
+    {   CardKeywordSystem.OnDiscardOrForget(this);  
+        canBeHovered = false; 
         EmitSignal(nameof(CardUnhovered), this);
 
         display.Material = material; animPlayer.SpeedScale = (float)GD.RandRange(0.95f, 1.0f);

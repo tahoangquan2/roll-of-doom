@@ -3,7 +3,7 @@ using Godot;
 
 public static class PileKeywordSystem
 {
-    public static void OnRestock(Godot.Collections.Array<CardData> discardPile, Deck deck, Hand hand)
+    public static void OnRestock(Godot.Collections.Array<CardData> discardPile, Deck deck, Hand hand,CardManager cardManager)
     {
         List<CardData> moved = new List<CardData>();
 
@@ -11,8 +11,9 @@ public static class PileKeywordSystem
         {
             if (cardData.Keywords.Contains(EnumGlobal.CardKeywords.Magnetic))
             {
-                //Card card = deck.cardManager.createCard(cardData);
-                //hand.AddCard(card);
+                Card card = cardManager.createCard(cardData);
+                card.GlobalPosition = deck.GlobalPosition;
+                hand.AddCard(card);
                 moved.Add(cardData);
             }
         }
@@ -21,22 +22,13 @@ public static class PileKeywordSystem
         foreach (var cd in moved) discardPile.Remove(cd);
     }
 
-    public static void OnDiscardOrForget(CardData cardData)
-    {
-        if (cardData.Keywords.Contains(EnumGlobal.CardKeywords.Overwork))
-		{
-			// Handle Overwork logic here
-            GD.Print($"{cardData.CardName} Overworked!");
-        }
-    }
-
-	public static void OnGameStart(Deck deck, Hand hand)
+	public static void OnGameStart(Deck deck, Hand hand,CardManager cardManager)
 	{
 		foreach (var cardData in deck.deck)
 		{
 			if (cardData.Keywords.Contains(EnumGlobal.CardKeywords.Fated))
 			{
-				// Handle Magnetic logic here
+				
 				GD.Print($"{cardData.CardName} is Fated!");
 			}
 		}

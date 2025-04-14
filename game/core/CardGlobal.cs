@@ -12,6 +12,8 @@ public partial class CardGlobal : Node
     private static ShaderMaterial[] dissolveMaterials = null;
     private static ShaderMaterial[] burnMaterials = null;
 
+    private static Texture2D cardArtTexturesDefault = null;
+
     	// make a function that raycasts and return object with passed in parameters
 	public static Godot.Collections.Array<Godot.Collections.Dictionary> RaycastCheckForObjects(Node2D node, Vector2 position, int collisionMask)
     {
@@ -37,8 +39,13 @@ public partial class CardGlobal : Node
     {
         GetDissolveMaterial();
         GetBurnMaterial();
+        cardArtTexturesDefault = GD.Load<Texture2D>("res://assets/cards/Details/Backgrounds/Creature/BackgroundCard1.png");
     }
 
+    public static Texture2D GetCardArtTextureDefault()
+    {
+        return cardArtTexturesDefault;
+    }
     public static ShaderMaterial GetDissolveMaterial()
     {
         if (dissolveMaterials == null)

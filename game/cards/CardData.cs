@@ -12,7 +12,7 @@ public partial class CardData : Resource
     [Export] public Script card_script { get; set; } = null; // Store script instance
     [Export] public string Description { get; set; }
     // card art, and art offset
-    [Export] public Texture2D CardArt { get; set; }
+    [Export] public Texture2D CardArt { get; set; } = null;
     [Export] public Vector2 ArtOffset { get; set; }
     [Export] public Array<EnumGlobal.CardKeywords> Keywords { get; set; } = new Array<EnumGlobal.CardKeywords>();
     [Export] public EnumGlobal.enumCardTargetLayer TargetMask { get; set; } = EnumGlobal.enumCardTargetLayer.None;    

@@ -1,18 +1,22 @@
-[gd_resource type="Resource" script_class="PlayerStat" load_steps=8 format=3 uid="uid://cgwvkxpa73d5n"]
+[gd_resource type="Resource" script_class="PlayerStat" load_steps=12 format=3 uid="uid://cgwvkxpa73d5n"]
 
 [ext_resource type="Script" path="res://game/Entity/Resource/PlayerStat.cs" id="1_bvnqj"]
-[ext_resource type="Resource" uid="uid://b3j86o0lhj5qh" path="res://game/cards/CardData/Spell/DiscardToDraw.tres" id="2_dw231"]
-[ext_resource type="Resource" uid="uid://cl3hr86rfwxnh" path="res://game/cards/CardData/Spell/Draw3.tres" id="3_1ptd5"]
-[ext_resource type="Resource" uid="uid://c6va1gi6puixe" path="res://game/cards/CardData/Spell/Obliterate.tres" id="4_3hqqt"]
-[ext_resource type="Resource" uid="uid://lpydnjvdtqrq" path="res://game/cards/CardData/Spell/ReShuffleHand.tres" id="5_bwxff"]
-[ext_resource type="Resource" uid="uid://pkewwh5ghl7j" path="res://game/cards/CardData/Spell/DuplicateCard.tres" id="6_3ta17"]
+[ext_resource type="Resource" uid="uid://b3j86o0lhj5qh" path="res://game/cards/CardData/Spell/DiscardToDraw.tres" id="2_x10bk"]
+[ext_resource type="Resource" uid="uid://irkv4jc82imh" path="res://game/cards/CardData/KeywordTest/auto.tres" id="4_7opok"]
+[ext_resource type="Resource" uid="uid://pdffn5h6ia73" path="res://game/cards/CardData/KeywordTest/fated.tres" id="5_7kvj7"]
+[ext_resource type="Resource" uid="uid://culc0guke43l7" path="res://game/cards/CardData/KeywordTest/needy.tres" id="6_n1oa2"]
 [ext_resource type="Resource" uid="uid://dwuqsnecbsuib" path="res://game/cards/CardData/KeywordTest/bundle.tres" id="7_0ass1"]
+[ext_resource type="Resource" uid="uid://dgf334fyc5c7d" path="res://game/cards/CardData/KeywordTest/Enternaltres.tres" id="7_2f81v"]
+[ext_resource type="Resource" uid="uid://1oftqn2h3y7q" path="res://game/cards/CardData/KeywordTest/Magnetic.tres" id="8_jcu3u"]
+[ext_resource type="Resource" uid="uid://7xy2y4nw1yvl" path="res://game/cards/CardData/KeywordTest/overwork.tres" id="9_sm5jp"]
+[ext_resource type="Resource" uid="uid://cx1nuhwbsr5wy" path="res://game/cards/CardData/KeywordTest/ephemeral.tres" id="10_eirkn"]
+[ext_resource type="Resource" uid="uid://b1sje4sr284xk" path="res://game/cards/CardData/KeywordTest/unplayable.tres" id="11_05fiw"]
 
 [resource]
 script = ExtResource("1_bvnqj")
 capSpellMana = 2
 baseMana = 4
-startingDeck = [ExtResource("7_0ass1"), ExtResource("2_dw231"), ExtResource("3_1ptd5"), ExtResource("4_3hqqt"), ExtResource("5_bwxff"), ExtResource("6_3ta17"), ExtResource("7_0ass1")]
+startingDeck = [ExtResource("2_x10bk"), ExtResource("7_0ass1"), ExtResource("4_7opok"), ExtResource("5_7kvj7"), ExtResource("6_n1oa2"), ExtResource("7_2f81v"), ExtResource("8_jcu3u"), ExtResource("9_sm5jp"), ExtResource("10_eirkn"), ExtResource("11_05fiw")]
 cardDrawPerTurn = 4
 gold = 10
 name = "Warrior"

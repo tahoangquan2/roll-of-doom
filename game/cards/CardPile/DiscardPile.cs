@@ -10,39 +10,23 @@ public partial class DiscardPile : CardPile
         base._Ready();
         cardManager = GetTree().CurrentScene.GetNodeOrNull<CardManager>(GlobalAccessPoint.cardManagerPath);        
     }
-
-	public async Task AddCard(Card card)    {
-		deck.Add(card.GetCardData());
-		CardCount.Text = deck.Count.ToString(); 
-
-		card.TransformCard(getTopCardPosition(),0.0f,0.15f);
-		card.canBeHovered = false;
-		await card.FlipCard(false);
-		card.obliterateCard();
-
-		emitDeckUpdated(deck.Count);
-	}
-
-	public async Task AddCards(Godot.Collections.Array<Card> cards)	{ 
-		foreach (Card card in cards) { // wait 0.05 seconds for each card to be added
-			await ToSignal(GetTree().CreateTimer(0.05f), "timeout");
-			AddCard(card);
-		}
-	}
-
 	public async Task Restock()
 	{
 		deck.Shuffle();
 		Deck deckNode = GetParent().GetNodeOrNull<Deck>(GlobalAccessPoint.deckPath);
+		Hand hand = GetParent().GetNodeOrNull<Hand>(GlobalAccessPoint.handPath);
+		cardManager = GetTree().CurrentScene.GetNodeOrNull<CardManager>(GlobalAccessPoint.cardManagerPath);
+
+		PileKeywordSystem.OnRestock(deck, deckNode, hand,cardManager);
 
 		for (int i = 0; i < deck.Count; i++)			
 			deckNode.AddCard(deck[i]);
 
 		List<Card> cardsToDisplay = new List<Card>();
-
+		if (deck.Count!= 0) 
 		for (int i = 0; i < 5; i++) 
 		{			
-			Card card = cardManager.createCard(deck[0]);
+			Card card = cardManager.createCard(new CardData());
 			card.ZIndex = 15;
 			cardsToDisplay.Add(card);
 			card.canBeHovered = false;
@@ -52,10 +36,7 @@ public partial class DiscardPile : CardPile
 			await ToSignal(GetTree().CreateTimer(0.1f), "timeout"); // Delay between cards
 		}
 
-		foreach (Card card in cardsToDisplay) 
-		{
-			card.QueueFree();
-		}
+		foreach (Card card in cardsToDisplay) card.QueueFree();
 		
 		deck.Clear();
 		CardCount.Text = deck.Count.ToString(); 

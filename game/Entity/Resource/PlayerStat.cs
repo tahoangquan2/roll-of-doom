@@ -34,6 +34,7 @@ public partial class PlayerStat : Stats
 
 	public bool RequestPlayCard(CardData card)	{
 		if (hasInfiniteMana) return true;
+		if (card.Keywords.Contains(EnumGlobal.CardKeywords.Unplayable)) return false;
 		bool result = true;
 		int cost = card.Cost;
 		if (card.CardType == EnumGlobal.enumCardType.Spell){

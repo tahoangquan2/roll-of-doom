@@ -1,5 +1,6 @@
 using System;
 using Godot;
+using System.Threading.Tasks;
 
 public partial class CardPile : Node2D
 {
@@ -83,17 +84,21 @@ public partial class CardPile : Node2D
         CardCount.Text = deck.Count.ToString(); 
         emitDeckUpdated(deck.Count);
     }
-    public async void ShuffleCardIntoDeck(Godot.Collections.Array<Card> cards)    {
-        foreach (Card card in cards)
-        {
-            deck.Insert(GD.RandRange(0, deck.Count), card.GetCardData());   
-            card.canBeHovered = false;
-            card.TransformCard(getTopCardPosition(), 0, 0.15f);            
-            await card.FlipCard(false);
-            card.obliterateCard();
-            emitDeckUpdated(deck.Count);               
-        }
-    }
+    public async Task AddCards(Godot.Collections.Array<Card> cards)	{ 
+		foreach (Card card in cards) { // wait 0.05 seconds for each card to be added
+			await ToSignal(GetTree().CreateTimer(0.05f), "timeout");
+			AddCard(card);
+		}
+	}
+
+    public async Task AddCard(Card card)    {
+        ShuffleIntoDeck(card.GetCardData());
+
+		card.TransformCard(getTopCardPosition(),0.0f,0.15f);
+		card.canBeHovered = false;
+		await card.FlipCard(false);
+		card.obliterateCard();
+	}
 
     protected Vector2 getTopCardPosition()
     {

@@ -11,9 +11,17 @@ public partial class Deck : CardPile
         cardCountOffset = new Vector2(20, -50);
         base._Ready();
         cardManager = GetTree().CurrentScene.GetNodeOrNull<CardManager>(GlobalAccessPoint.cardManagerPath);
+        Hand hand = GetParent().GetNodeOrNull<Hand>(GlobalAccessPoint.handPath);
 
-        foreach (CardData card in GlobalVariables.playerStat.startingDeck)
-        {
+        foreach (CardData card in GlobalVariables.playerStat.startingDeck)        {
+            if (card == null) continue;
+            if (card.Keywords.Contains(EnumGlobal.CardKeywords.Fated))            {
+                Card cardNode=cardManager.createCard(card);   
+                cardNode.Position = deckVisual.getTopCardPosition();    
+                hand.AddCard(cardNode);         
+                GD.Print($"{card.CardName} is Fated!");
+                continue;
+            }
             deck.Add(card);
         }
 
