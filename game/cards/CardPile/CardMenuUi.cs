@@ -3,7 +3,7 @@ using Godot;
 public partial class CardMenuUi : CenterContainer
 {
 	// Called when the node enters the scene tree for the first time.
-	private CardData cardData;
+	public CardData cardData{ get; private set; } = null;
 	private Sprite2D cardArt => GetNode<Sprite2D>("CardVisual/CardArt");
 	private Label cardName => GetNode<Label>("CardVisual/CardName");
 
@@ -13,7 +13,15 @@ public partial class CardMenuUi : CenterContainer
 
 	private CardManager cardManager=null;
 
-	Button button => GetNode<Button>("CardVisual/Button");
+		private bool isSelected = false;
+		public bool IsSelected => isSelected;
+
+	public void ToggleSelection()
+	{
+		isSelected = !isSelected;
+	}
+
+	public Button button => GetNode<Button>("CardVisual/Button");
 
 	//set card data
 	public void SetCardData(CardData cardData)
@@ -21,11 +29,6 @@ public partial class CardMenuUi : CenterContainer
 		this.cardData = cardData;
 		UpdateGraphics();
 		cardManager = GetTree().CurrentScene.GetNodeOrNull<CardManager>(GlobalAccessPoint.cardManagerPath);
-	}
-
-	public void SetFunctionForButtonPressed(Callable onSelection)
-	{
-		button.Connect("pressed", onSelection);
 	}
 
 	private void UpdateGraphics()

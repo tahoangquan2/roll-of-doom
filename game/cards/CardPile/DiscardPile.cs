@@ -8,7 +8,9 @@ public partial class DiscardPile : CardPile
     public override void _Ready() { 
         cardCountOffset = new Vector2(20, -50);
         base._Ready();
-        cardManager = GetTree().CurrentScene.GetNodeOrNull<CardManager>(GlobalAccessPoint.cardManagerPath);        
+        cardManager = GetTree().CurrentScene.GetNodeOrNull<CardManager>(GlobalAccessPoint.cardManagerPath);      
+		//get second child and call setTitle("Discard Pile") force call
+		GetChild(1).CallDeferred("setTitle", "Discard Pile");
     }
 	public async Task Restock()
 	{

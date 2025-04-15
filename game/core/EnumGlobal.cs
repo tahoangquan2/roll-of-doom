@@ -25,7 +25,7 @@ public enum enumCardEffect
     GainShield, GainGuard,
     GainMana, GainSpellMana,
     ApplyBuff, ApplyDebuff, ConditionalEffect,
-    Draw, Discard, Forget, Restock,
+    Draw, Discard, Forget, Restock, DiscardUpTo,
     EndTurn, ShuffleHandtoDeck, ShuffleDeck, DiscardHand
 }
     public enum enumNonTargetedEffect
@@ -44,7 +44,8 @@ public enum enumCardEffect
 
         EndTurn = enumCardEffect.EndTurn,
         Draw=enumCardEffect.Draw,
-        Discard=enumCardEffect.Discard,
+        Discard=enumCardEffect.Discard,  // must discard the amount
+        DiscardUpTo=enumCardEffect.DiscardUpTo, // discard up to X cards
         Forget=enumCardEffect.Forget,
         ShuffleDeck=enumCardEffect.ShuffleDeck,
         DiscardHand=enumCardEffect.DiscardHand,
@@ -52,7 +53,7 @@ public enum enumCardEffect
         ShuffleHandtoDeck=enumCardEffect.ShuffleHandtoDeck, 
     }
 
-    public enum HandSelectionPurpose
+    public enum PileSelectionPurpose
     {
         None,      // Default (no selection),
         Choose, // Selecting cards for a specific purpose

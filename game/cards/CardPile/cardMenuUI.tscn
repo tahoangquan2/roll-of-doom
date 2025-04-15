@@ -28,6 +28,7 @@ shadow_size = 0
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1gj62"]
 
 [node name="CenterContainer" type="CenterContainer"]
+z_index = 15
 custom_minimum_size = Vector2(138, 300)
 offset_right = 138.0
 offset_bottom = 300.0

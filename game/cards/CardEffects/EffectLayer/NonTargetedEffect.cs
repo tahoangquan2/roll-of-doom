@@ -52,10 +52,13 @@ public partial class NonTargetedEffect : CardEffect
             //     await hand.drawFromDeck(Amount);
             //     break;
 
-            // case EnumGlobal.enumNonTargetedEffect.Discard:
-            //     if (!hand.startDiscard(Amount))
-            //         return false;
-            //     break;
+            case EnumGlobal.enumNonTargetedEffect.Discard:
+                hand.StartDiscard(Amount,Amount);
+                break;
+
+            case EnumGlobal.enumNonTargetedEffect.DiscardUpTo:
+                hand.StartDiscard(0,Amount);
+                break;
 
             // case EnumGlobal.enumNonTargetedEffect.Forget:
             //     await hand.PutHandIntoDiscardPile(); // or your forget mechanic
