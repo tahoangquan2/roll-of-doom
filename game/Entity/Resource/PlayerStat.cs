@@ -57,6 +57,15 @@ public partial class PlayerStat : Stats
 		return result;
 	}
 
+	public void GainMana(int amount)	{
+		mana += amount;
+		EmitSignal(nameof(ManaChanged));
+	}
+	public void GainSpellMana(int amount)	{
+		spellMana += amount;
+		EmitSignal(nameof(ManaChanged));
+	}
+
 
 	public override PlayerStat CreateInstance()
 	{

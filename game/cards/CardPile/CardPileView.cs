@@ -14,15 +14,9 @@ public partial class CardPileView : Control
 
 	private List<CardData> cardPile;
 
-	[Export] public string Title
-	{
-		get => title.Text;
-		set => title.Text = value;
-	}
+	[Export] public string Title {get => title.Text;set => title.Text = value;}
 
-	enum SortType	{
-		Alphabetical,Cost,Type
-	}
+	enum SortType	{Alphabetical,Cost,Type}
 
 	private SortType sortType = SortType.Alphabetical;
 

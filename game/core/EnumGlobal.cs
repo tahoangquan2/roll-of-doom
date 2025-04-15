@@ -28,14 +28,6 @@ public enum enumCardEffect
     Draw, Discard, Forget, Restock,
     EndTurn, ShuffleHandtoDeck, ShuffleDeck, DiscardHand
 }
-
-    public enum enumTargertedEffect
-    {
-        DirectDamage = enumCardEffect.DirectDamage,
-        CheckEnemyStat = enumCardEffect.CheckEnemyStat,
-        ApplyDebuff = enumCardEffect.ApplyDebuff, // apply debuff to an enemy
-    }
-
     public enum enumNonTargetedEffect
     {
         DealAoE = enumCardEffect.DealAoE,
@@ -45,10 +37,10 @@ public enum enumCardEffect
         GainGuard = enumCardEffect.GainGuard,
         GainMana = enumCardEffect.GainMana,
         GainSpellMana = enumCardEffect.GainSpellMana,
-        ApplyBuff = enumCardEffect.ApplyBuff,     // apply buff to self
-        ApplyDebuff = enumCardEffect.ApplyDebuff, // apply debuff to all enemies
+        //these are inherited from enumNonTargetedEffect
+        //ApplyBuff = enumCardEffect.ApplyBuff,     // apply buff to self  
+        //ApplyDebuff = enumCardEffect.ApplyDebuff, // apply debuff to all enemies
         Heal = enumCardEffect.Heal,
-
 
         EndTurn = enumCardEffect.EndTurn,
         Draw=enumCardEffect.Draw,

@@ -17,7 +17,7 @@ public partial class StatCheckEffect : AttackSingleEffect
         if (target is not EnemyChar enemy) return Task.FromResult(false);
 
         var stat = enemy.statInstance;
-		int value = 0 ;
+		int value;
 
 		switch (statCheckType)
 		{

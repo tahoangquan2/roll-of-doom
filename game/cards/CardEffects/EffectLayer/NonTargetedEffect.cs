@@ -36,23 +36,13 @@ public partial class NonTargetedEffect : CardEffect
                 playerStat.Add_guard(Amount);
                 break;
 
-            // case EnumGlobal.enumNonTargetedEffect.GainMana:
-            //     playerStat.AddMana(Amount);
-            //     break;
+            case EnumGlobal.enumNonTargetedEffect.GainMana:
+                playerStat.GainMana(Amount);
+                break;
 
-            // case EnumGlobal.enumNonTargetedEffect.GainSpellMana:
-            //     playerStat.AddSpellMana(Amount);
-            //     break;
-
-            // case EnumGlobal.enumNonTargetedEffect.ApplyBuff:
-            //     playerStat.ApplyBuff(Buff, Amount, EnumGlobal.BuffDuration.Diminishing); // Optional: make duration configurable
-            //     break;
-
-            // case EnumGlobal.enumNonTargetedEffect.ApplyDebuff:
-            //     foreach (var enemy in GlobalVariables.allStats)
-            //         if (enemy != playerStat)
-            //             enemy.ApplyDebuff(Buff, Amount, EnumGlobal.BuffDuration.Diminishing);
-            //     break;
+            case EnumGlobal.enumNonTargetedEffect.GainSpellMana:
+                playerStat.GainSpellMana(Amount);
+                break;
 
             // case EnumGlobal.enumNonTargetedEffect.Heal:
             //     playerStat.Heal(Amount);
