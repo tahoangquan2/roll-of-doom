@@ -6,17 +6,18 @@ public partial class NonTargetedEffect : CardEffect
     [Export] public EnumGlobal.enumNonTargetedEffect nonTargetedEffectType;
     [Export] public int Amount = 1;
 
-    public override Task<bool> ApplyEffect(Node2D target)
+    public override async Task<bool> ApplyEffect(Node2D target)
     {
         Hand hand = target.GetTree().CurrentScene.GetNode<Hand>(GlobalAccessPoint.handPath);
         Deck deck = target.GetTree().CurrentScene.GetNode<Deck>(GlobalAccessPoint.deckPath);
         PlayerStat playerStat= GlobalVariables.playerStat;
-        GD.Print(hand);
-        GD.Print(deck);
+
+        bool result = true;
 
         switch (nonTargetedEffectType)
         {
             case EnumGlobal.enumNonTargetedEffect.DealAoE:
+                GD.Print("attack all");
                 playerStat.AttackAll(Amount);
                 break;
 
@@ -44,20 +45,20 @@ public partial class NonTargetedEffect : CardEffect
                 playerStat.GainSpellMana(Amount);
                 break;
 
-            // case EnumGlobal.enumNonTargetedEffect.Heal:
-            //     playerStat.Heal(Amount);
-            //     break;
+            case EnumGlobal.enumNonTargetedEffect.Heal:
+                playerStat.heal(Amount);
+                break;
 
-            // case EnumGlobal.enumNonTargetedEffect.Draw:
-            //     await hand.drawFromDeck(Amount);
-            //     break;
+            case EnumGlobal.enumNonTargetedEffect.Draw:
+                await hand.drawFromDeck(Amount);
+                break;
 
             case EnumGlobal.enumNonTargetedEffect.Discard:
-                hand.StartDiscard(Amount,Amount);
+                result = await hand.StartDiscard(Amount,Amount);
                 break;
 
             case EnumGlobal.enumNonTargetedEffect.DiscardUpTo:
-                hand.StartDiscard(0,Amount);
+                result = await hand.StartDiscard(0,Amount);
                 break;
 
             // case EnumGlobal.enumNonTargetedEffect.Forget:
@@ -83,10 +84,12 @@ public partial class NonTargetedEffect : CardEffect
             // case EnumGlobal.enumNonTargetedEffect.EndTurn:
             //     GlobalVariables.TurnManager?.EndTurn(); // defensive
             //     break;
-        }
-        
+            default:
+                GD.PrintErr("NonTargetedEffect: Unknown effect type.");
+                return false;
+        }        
 
-        return Task.FromResult(true);
+        return result;
     }
 
     //     public enum enumNonTargetedEffect

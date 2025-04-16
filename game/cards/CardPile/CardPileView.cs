@@ -32,8 +32,7 @@ public partial class CardPileView : Control
 	{
 		var tmpCardPile = sortPile(sortType,new List<CardData>(cardPile));
 
-		if (tmpCardPile==this.cardPile)
-			return;
+		if (tmpCardPile==this.cardPile) return;
 
 		this.cardPile = tmpCardPile;
 
@@ -145,14 +144,13 @@ public partial class CardPileView : Control
 		} else{
 			Visible = false;        
 		}
-
-		isSelectable = false;
+				
 		var selected = new Godot.Collections.Array<CardData>();
 		foreach (var cardUI in selectedCards)
 			selected.Add(cardUI.cardData);
 
-		onSelectionConfirmed.Call(selected);
-		
+		if (isSelectable) onSelectionConfirmed.Call(selected);		
+		isSelectable = false;
 	}
 
 	public void _on_sort_type_pressed()

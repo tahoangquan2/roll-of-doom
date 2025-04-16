@@ -17,8 +17,8 @@
 script = ExtResource("1_bvnqj")
 capSpellMana = 2
 baseMana = 4
-startingDeck = [ExtResource("2_x10bk"), ExtResource("7_0ass1"), ExtResource("4_7opok"), ExtResource("5_7kvj7"), ExtResource("6_n1oa2"), ExtResource("7_2f81v"), ExtResource("8_jcu3u"), ExtResource("9_sm5jp"), ExtResource("10_eirkn"), ExtResource("11_05fiw"), ExtResource("12_ie012"), ExtResource("12_ie012")]
-cardDrawPerTurn = 4
+startingDeck = [ExtResource("2_x10bk"), ExtResource("7_0ass1"), ExtResource("4_7opok"), ExtResource("5_7kvj7"), ExtResource("6_n1oa2"), ExtResource("7_2f81v"), ExtResource("8_jcu3u"), ExtResource("9_sm5jp"), ExtResource("10_eirkn"), ExtResource("11_05fiw"), ExtResource("12_ie012"), ExtResource("12_ie012"), ExtResource("5_7kvj7")]
+cardDrawPerTurn = 0
 gold = 10
 name = "Warrior"
 maxHealth = 30

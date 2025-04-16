@@ -70,18 +70,19 @@ public partial class Character : CardPlayZone //important that player alway the 
         float guard = statInstance.guard;
         float barSize = ProgressBackground.Size.X;
 
-        float hpWidth = barSize * (health / max);
-        float shieldWidth, guardWidth;
+        float hpWidth,shieldWidth, guardWidth;
 
         if (health + shield + guard <= max)
         {
+            hpWidth = barSize * (health / max);
             shieldWidth = barSize * (shield / max);
             guardWidth = barSize * (guard / max);
         }
         else
         {
-            float remainder = Mathf.Max(0, barSize - hpWidth);
-            float total = shield + guard;
+            float remainder =  barSize ;
+            float total = shield + guard+ health;
+            hpWidth = barSize * (health / total);
             shieldWidth = remainder * (shield / total);
             guardWidth = remainder * (guard / total);
         }

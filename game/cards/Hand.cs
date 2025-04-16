@@ -19,6 +19,7 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
     private Control selectionFilter;
     private Godot.Collections.Array<Card> selectedCards = new Godot.Collections.Array<Card>();
     private CollisionShape2D collisionShape;
+    private TaskCompletionSource<bool> discardCompletionSource;
 
     [Signal] public delegate void ActionCompletedEventHandler(Godot.Collections.Array<Card> selectedCards);
     [Signal] public delegate void ActionCancelledEventHandler();
@@ -133,13 +134,13 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
         Card drawnCard = deck.DrawCard(index);
         if (drawnCard != null) {AddCard(drawnCard);cardManager.cardSound();}
     }
-
+    
     public async Task<bool> StartDiscard(int minSelection = 0, int maxSelection = 1)
     {
         if (hand.Count < minSelection) return false;
 
         var dataPile = new Godot.Collections.Array<CardData>();
-        foreach (Card card in hand) {dataPile.Add(card.cardData);GD.Print(card.cardData);}
+        foreach (Card card in hand) dataPile.Add(card.cardData);
 
         var selected = await GlobalAccessPoint.GetPlayer().StartSelectionMode(
             dataPile,
@@ -161,13 +162,14 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
         foreach (Card card in selectedCards)
         {
             RemoveCard(hand.IndexOf(card));
-            card.BurnCard();
-        }
-        
+            card.putToDiscardPile();
+        }        
 
         // Apply your discard logic here, using the selected cards
         return true;
     }
+
+    public 
 
 
     // private async void ApplySelectionEffect()    {

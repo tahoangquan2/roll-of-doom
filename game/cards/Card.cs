@@ -32,7 +32,7 @@ public partial class Card : Node2D
     }
     public void SetupCard(CardData cardData)
     {
-        this.cardData = cardData;
+        this.cardData = cardData.Duplicate() as CardData; 
         UpdateGraphics();
     }
 
@@ -114,15 +114,6 @@ public partial class Card : Node2D
             await ToSignal(GetTree(), "process_frame"); // Ensure frame update before deletion           
             EffectFinished();
         }        
-    }
-
-    private async Task<bool> EffectExecution(CardEffect effect, CardPlayZone target)
-    {
-        if (effect == null) return false;
-        bool result = await effect.ApplyEffect(target);
-        
-        await ToSignal(GetTree(), "process_frame"); // Allow processing between effects
-        return result;
     }
 
     private void UpdateGraphics()
