@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://cayqj43ene72e"]
+[gd_scene load_steps=14 format=3 uid="uid://cayqj43ene72e"]
 
 [ext_resource type="Texture2D" uid="uid://bmbag5t453hnh" path="res://assets/sprites/scroll-0.png.png" id="1_h15bj"]
 [ext_resource type="Texture2D" uid="uid://bcdeba4qnlm5q" path="res://assets/sprites/scroll.png" id="1_o6les"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://62t6ctia6pme" path="res://assets/cards/mana_slot.png" id="4_a8ur7"]
 [ext_resource type="Texture2D" uid="uid://b7kiid3ln6ec4" path="res://assets/cards/Details/Backgrounds/Creature/BackgroundCard1.png" id="5_s4kvo"]
 [ext_resource type="Texture2D" uid="uid://djc8w4snelyh8" path="res://assets/cards/UI board Medium  parchment.png" id="6_nbf07"]
+[ext_resource type="PackedScene" uid="uid://cnkeucb0d4od3" path="res://game/gui/side_menu_label.tscn" id="8_ax430"]
 
 [sub_resource type="Animation" id="Animation_vfdq0"]
 resource_name = "RESET"
@@ -80,12 +81,12 @@ stretch_mode = 4
 
 [node name="SideMenu" type="Control" parent="Control/Scooll"]
 clip_contents = true
-custom_minimum_size = Vector2(400, 0)
+custom_minimum_size = Vector2(380, 0)
 layout_mode = 1
-anchor_right = 0.37
+anchor_left = 0.019
+anchor_right = 0.3
 anchor_bottom = 1.0
-offset_left = 9.0
-offset_right = -25.636
+offset_right = -9.14215
 offset_bottom = -0.440002
 grow_vertical = 2
 script = ExtResource("1_r0w7c")
@@ -95,24 +96,27 @@ libraries = {
 "": SubResource("AnimationLibrary_sqb3f")
 }
 
-[node name="CardInfoPage" type="VBoxContainer" parent="Control/Scooll/SideMenu"]
-clip_contents = true
-custom_minimum_size = Vector2(288, 0)
+[node name="ScrollContainer" type="ScrollContainer" parent="Control/Scooll/SideMenu"]
 layout_mode = 1
-anchors_preset = -1
-anchor_left = 1.0
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -314.0
-offset_top = 99.0
-offset_right = -16.0
-offset_bottom = -99.0
-grow_horizontal = 0
+offset_left = 71.0
+offset_top = 96.0
+offset_bottom = -94.0
+grow_horizontal = 2
 grow_vertical = 2
-size_flags_horizontal = 8
-theme_override_constants/separation = 0
+horizontal_scroll_mode = 0
 
-[node name="TypeLabel" type="Label" parent="Control/Scooll/SideMenu/CardInfoPage"]
+[node name="CardInfoPage" type="VBoxContainer" parent="Control/Scooll/SideMenu/ScrollContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 20
+
+[node name="TypeLabel" type="Label" parent="Control/Scooll/SideMenu/ScrollContainer/CardInfoPage"]
 custom_minimum_size = Vector2(0, 54)
 layout_mode = 2
 text = "Tower Card"
@@ -121,7 +125,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="NameLabel" type="Label" parent="Control/Scooll/SideMenu/CardInfoPage"]
+[node name="NameLabel" type="Label" parent="Control/Scooll/SideMenu/ScrollContainer/CardInfoPage"]
 clip_contents = true
 custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
@@ -130,13 +134,13 @@ label_settings = ExtResource("3_i54ew")
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="Cost" type="HBoxContainer" parent="Control/Scooll/SideMenu/CardInfoPage"]
+[node name="Cost" type="HBoxContainer" parent="Control/Scooll/SideMenu/ScrollContainer/CardInfoPage"]
 custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
 
-[node name="CostLabel" type="Label" parent="Control/Scooll/SideMenu/CardInfoPage/Cost"]
+[node name="CostLabel" type="Label" parent="Control/Scooll/SideMenu/ScrollContainer/CardInfoPage/Cost"]
 layout_direction = 2
 layout_mode = 2
 size_flags_horizontal = 2
@@ -144,7 +148,7 @@ text = "Card Cost: 40 "
 label_settings = ExtResource("3_i54ew")
 vertical_alignment = 1
 
-[node name="Mana" type="TextureRect" parent="Control/Scooll/SideMenu/CardInfoPage/Cost"]
+[node name="Mana" type="TextureRect" parent="Control/Scooll/SideMenu/ScrollContainer/CardInfoPage/Cost"]
 custom_minimum_size = Vector2(26, 26)
 layout_direction = 3
 layout_mode = 2
@@ -154,13 +158,13 @@ texture = ExtResource("4_a8ur7")
 expand_mode = 2
 stretch_mode = 4
 
-[node name="OutlineRect" type="TextureRect" parent="Control/Scooll/SideMenu/CardInfoPage"]
+[node name="OutlineRect" type="TextureRect" parent="Control/Scooll/SideMenu/ScrollContainer/CardInfoPage"]
 custom_minimum_size = Vector2(0, 240)
 layout_mode = 2
 texture = ExtResource("6_nbf07")
 stretch_mode = 3
 
-[node name="TextureRect" type="TextureRect" parent="Control/Scooll/SideMenu/CardInfoPage/OutlineRect"]
+[node name="TextureRect" type="TextureRect" parent="Control/Scooll/SideMenu/ScrollContainer/CardInfoPage/OutlineRect"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 1
 anchors_preset = 8
@@ -177,27 +181,24 @@ grow_vertical = 2
 texture = ExtResource("5_s4kvo")
 stretch_mode = 3
 
-[node name="EffectLabel" type="Label" parent="Control/Scooll/SideMenu/CardInfoPage"]
+[node name="EffectLabel" type="Label" parent="Control/Scooll/SideMenu/ScrollContainer/CardInfoPage"]
 clip_contents = true
 custom_minimum_size = Vector2(200, 24)
 layout_mode = 2
-text = "Effect : Deploy a Wizard Tower THis is test THis is test
-THis is test"
+text = "Effect : Deploy a Wizard Tower THis is test THis is test"
 label_settings = ExtResource("3_i54ew")
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="Control/Scooll/SideMenu"]
-visible = false
-custom_minimum_size = Vector2(200, 0)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("5_s4kvo")
-stretch_mode = 1
+[node name="Keywords" type="VBoxContainer" parent="Control/Scooll/SideMenu/ScrollContainer/CardInfoPage"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="SideMenuLabel" parent="Control/Scooll/SideMenu/ScrollContainer/CardInfoPage/Keywords" instance=ExtResource("8_ax430")]
+layout_mode = 2
+
+[node name="SideMenuLabel2" parent="Control/Scooll/SideMenu/ScrollContainer/CardInfoPage/Keywords" instance=ExtResource("8_ax430")]
+layout_mode = 2
 
 [node name="Scroll" type="Sprite2D" parent="Control"]
 visible = false

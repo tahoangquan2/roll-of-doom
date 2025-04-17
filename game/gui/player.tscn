@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://ci580fctofejp"]
+[gd_scene load_steps=10 format=3 uid="uid://ci580fctofejp"]
 
 [ext_resource type="Script" path="res://game/gui/Player.cs" id="1_w7j82"]
 [ext_resource type="PackedScene" uid="uid://cayqj43ene72e" path="res://game/gui/side_menu.tscn" id="2_r37qf"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://ccji4npxsbalg" path="res://assets/sprites/UI/Button/Rect/EndturnBTN.png" id="4_61h2b"]
 [ext_resource type="Script" path="res://game/gui/TurnManager.cs" id="5_7pgvh"]
 [ext_resource type="Texture2D" uid="uid://dvwl6l0mn5rhf" path="res://assets/sprites/UI/Button/Rect/Hover.png" id="5_s4k1u"]
+[ext_resource type="PackedScene" uid="uid://s8umrbxvw1sf" path="res://game/cards/CardPile/card_pile_view.tscn" id="6_8x6b3"]
 [ext_resource type="Texture2D" uid="uid://cgainvjk1awhn" path="res://assets/sprites/UI/Button/Rect/EndturnBTN_Hover.png" id="6_khp78"]
 
 [node name="Player" type="CanvasLayer"]
@@ -42,6 +43,17 @@ texture_normal = ExtResource("4_61h2b")
 texture_pressed = ExtResource("5_s4k1u")
 texture_hover = ExtResource("6_khp78")
 script = ExtResource("5_7pgvh")
+
+[node name="CardPileView" parent="." instance=ExtResource("6_8x6b3")]
+visible = false
+z_index = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_right = 1920.0
+offset_bottom = 1080.0
+grow_horizontal = 1
+grow_vertical = 1
 
 [node name="MainControl" parent="." instance=ExtResource("2_r37qf")]
 mouse_filter = 2

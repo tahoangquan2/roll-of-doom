@@ -27,8 +27,7 @@ public static class PileKeywordSystem
 		foreach (var cardData in deck.deck)
 		{
 			if (cardData.Keywords.Contains(EnumGlobal.CardKeywords.Fated))
-			{
-				
+			{				
 				GD.Print($"{cardData.CardName} is Fated!");
 			}
 		}

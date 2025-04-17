@@ -57,8 +57,7 @@ public partial class LevelMap : Control
 			{
 				Rooms[i,j]=(MapNode) packedRoom.Instantiate();
 				Rooms[i,j].setUp(i,j);
-				mapBackground.AddChild(Rooms[i,j]);
-				// set position of the button based on the size of the map background					
+				mapBackground.AddChild(Rooms[i,j]);				
 			}
 		}
 
@@ -182,4 +181,14 @@ public partial class LevelMap : Control
 		camera.LimitTop = -100;
 		camera.LimitBottom = (int)(mapBackground.Size.Y+mapPosition.Y+200);
 	}
+
+	// check for input to reload the map
+	public override void _Input(InputEvent @event)
+	{
+		if (@event.IsActionPressed("ui_filedialog_refresh"))
+		{
+			GetTree().ReloadCurrentScene();			
+		}
+	}
+		
 }

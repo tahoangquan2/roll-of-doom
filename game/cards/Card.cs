@@ -1,5 +1,7 @@
 using Godot;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Linq;
 
 public partial class Card : Node2D
 {
@@ -9,7 +11,7 @@ public partial class Card : Node2D
     public bool canBeMoved = true;
     [Signal] public delegate void CardHoveredEventHandler(Card card);
     [Signal] public delegate void CardUnhoveredEventHandler(Card card);
-
+    public bool continueAfterEffect = false;
     private Label costLbl;
     private Label nameLbl;
     //private Label descriptionLbl;
@@ -30,7 +32,7 @@ public partial class Card : Node2D
     }
     public void SetupCard(CardData cardData)
     {
-        this.cardData = cardData;
+        this.cardData = cardData.Duplicate() as CardData; 
         UpdateGraphics();
     }
 
@@ -50,23 +52,13 @@ public partial class Card : Node2D
         shaderDisplay.UseParentMaterial = false;
         display = GetNode<Control>("Control");
         animPlayer = GetNode<AnimationPlayer>("AnimationPlayer");     
+        
+        if (shaderDisplay.Material is ShaderMaterial mat) shaderMaterial = mat;// Apply the shader material
 
-        // Apply the shader material
-        if (shaderDisplay.Material is ShaderMaterial mat)
-        {
-            shaderMaterial = mat;
-        }
+        if (cardData.Keywords.Contains(EnumGlobal.CardKeywords.Auto)) canBeHovered = false; // Disable hover for auto cards
 
-        if (cardData.Keywords.Contains(EnumGlobal.CardKeywords.Auto))
-        {
-            canBeHovered = false; // Disable hover for auto cards
-        }
-
-        // Connect card to CardManager
         parentManager = GetParent() as CardManager;
         parentManager.ConnectCardSignals(this);
-
-        // Deck and DiscardPile
         deck = GetTree().CurrentScene.GetNodeOrNull<Deck>(GlobalAccessPoint.deckPath);
         discardPile = GetTree().CurrentScene.GetNodeOrNull<DiscardPile>(GlobalAccessPoint.discardPilePath);
 
@@ -78,7 +70,7 @@ public partial class Card : Node2D
         return cardData.TargetMask == EnumGlobal.enumCardTargetLayer.None;
     }
 
-    public virtual async void ActivateEffects(CardPlayZone target)
+    public async Task ActivateEffects(CardPlayZone target)
     {
         if (cardData == null || !canActivate) return;
 
@@ -91,26 +83,27 @@ public partial class Card : Node2D
         }
         else if (cardData.Effects != null)
         {
-            foreach (var effect in cardData.Effects)
+            foreach (var effectLayer in cardData.Effects)
             {
-                if (effect != null)
+                if (effectLayer == null) continue;
+
+                var tasks = new List<Task<bool>>();
+                foreach (var effect in effectLayer.LayerEffects)                {
+                    if (effect != null) tasks.Add(effect.ApplyEffect(target));
+                }
+
+                var results = await Task.WhenAll(tasks);
+
+                if (results.Any(success => !success))
                 {
-                    bool effectFinished = await EffectExecution(effect, target);
-                    if (!effectFinished) break; // Stop if effect fails
+                    GD.PrintErr("Effect Layer failed — interrupting.");
+                    break;
                 }
             }
+            
             await ToSignal(GetTree(), "process_frame"); // Ensure frame update before deletion           
             EffectFinished();
         }        
-    }
-
-    private async Task<bool> EffectExecution(CardEffect effect, CardPlayZone target)
-    {
-        if (effect == null) return false;
-        bool result = await effect.ApplyEffect(target);
-        
-        await ToSignal(GetTree(), "process_frame"); // Allow processing between effects
-        return result;
     }
 
     private void UpdateGraphics()
@@ -195,7 +188,8 @@ public partial class Card : Node2D
         canBeHovered = false;
         discardPile.AddCard(this);
     }
-    public void EffectFinished() { 
+    public void EffectFinished() {  if (continueAfterEffect) return;
+        //GD.Print("Card effect finished "+cardData.CardName + " "+this);
         CardKeywordSystem.OnPlay(this); // Call the keyword system
     }
     public void obliterateCard() {       

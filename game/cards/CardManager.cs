@@ -20,10 +20,6 @@ public partial class CardManager : Node2D
 	private Dictionary<CardState.State, CardState> cardStates = new Dictionary<CardState.State, CardState>();
 	public override void _Input(InputEvent @event)	{	
 		if (Locked>0) return;
-		if (hand is not null && hand.isSelecting) {
-			HandleSelectionInput(@event);
-			return;			
-		}		
 
 		cardStates[currentCardState].HandleInput(@event);	
 		GetNode<Label>("Label").Text = currentCardState.ToString();	
@@ -39,16 +35,11 @@ public partial class CardManager : Node2D
 		currentCardState = to;	
 		cardStates[to].EnterState(card);			
 	}
-	private void HandleSelectionInput(InputEvent @event)
-	{
-		if (@event is InputEventMouseButton mouseButton)
-		{
-			if (mouseButton.ButtonIndex == MouseButton.Left && mouseButton.Pressed)
-			{
-				Card card = CardState.RaycastCheckForCard();
-				if (card != null) hand.SelectCard(card);
-			}
-		}
+	public void StartCardSelection(EnumGlobal.PileSelectionPurpose purpose){
+		if (purpose == EnumGlobal.PileSelectionPurpose.None) return;
+		Lock();
+		if (hand == null) hand = GetTree().CurrentScene.GetNodeOrNull<Hand>(GlobalAccessPoint.handPath);
+		//hand.SetCardSelection(purpose);
 	}
 	public override void _Ready() 
 	{	audioPlayer = GetNode<AudioStreamPlayer2D>("AudioPlayer");

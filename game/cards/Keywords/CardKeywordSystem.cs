@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Godot;
 public static class CardKeywordSystem
 {
@@ -49,17 +50,17 @@ public static class CardKeywordSystem
         }
 
         // Default behavior: discard
+        GD.Print($"[Default] {data.CardName} is discarded after use.");
         card.putToDiscardPile();
     }
 
-     public static void OnDiscardOrForget(Card card) // WIP
+    public static async Task OnDiscardOrForget(Card card) 
     {
         CardData cardData = card.cardData;
         if (cardData.Keywords.Contains(EnumGlobal.CardKeywords.Overwork))
 		{
-            card.ActivateEffects(GlobalAccessPoint.GetCardActiveZone()); 
-			// Handle Overwork logic here
-            GD.Print($"{cardData.CardName} Overworked!");
+            card.continueAfterEffect = true; // Disable killing the card
+            await card.ActivateEffects(GlobalAccessPoint.GetCardActiveZone()); 
         }
     }
 }

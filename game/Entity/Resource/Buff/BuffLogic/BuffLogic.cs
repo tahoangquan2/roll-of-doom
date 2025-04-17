@@ -6,4 +6,5 @@ public abstract class BuffLogic
     public virtual void OnApply(Stats target, ref int value) { }
     public virtual void OnRemove(Stats target, ref int value) { }
     public virtual void OnDefend(Stats target, ref int number, ref int value) { }
+    public virtual void OnDeath(Stats target, ref int value) { }
 }

@@ -1,9 +1,10 @@
+using System;
 using System.Threading.Tasks;
 using Godot;
 
 public partial class Deck : CardPile
 { 
-    private DeckVisual deckVisual => GetNode<DeckVisual>("DeckVisual");
+    private DeckVisual deckVisual => GetNode<DeckVisual>("DeckVisual");    
     
     // when the decksize is updated cardcount is updated
 
@@ -61,5 +62,27 @@ public partial class Deck : CardPile
         
         return drawnCards;
     }
-  
+
+
+    public async Task<bool> Scry(int amount)
+    {
+        if (deck.Count == 0) return false;
+        var selected = await GlobalAccessPoint.GetPlayer().StartSelectionMode(
+            deck, EnumGlobal.PileSelectionPurpose.Scry, 0, amount
+        );
+        
+        Godot.Collections.Array<Card> selectedCards = new Godot.Collections.Array<Card>();
+        foreach (var cardData in selected) {
+            deck.Remove(cardData);      
+            Card card = cardManager.createCard(cardData);
+            card.Position = deckVisual.getTopCardPosition();
+            selectedCards.Add(card);
+        }
+        await GlobalAccessPoint.GetDiscardPile().AddCards(selectedCards);
+        
+        emitDeckUpdated(deck.Count);
+        
+        return true;
+        
+    }
 }

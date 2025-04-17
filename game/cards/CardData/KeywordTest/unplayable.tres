@@ -1,15 +1,15 @@
 [gd_resource type="Resource" script_class="CardData" load_steps=3 format=3 uid="uid://b1sje4sr284xk"]
 
-[ext_resource type="Script" path="res://game/cards/CardEffects/nothing.gd" id="1_xnymm"]
-[ext_resource type="Script" path="res://game/cards/CardData.cs" id="2_le5ft"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/cardScripts/nothing.gd" id="1_qcidx"]
+[ext_resource type="Script" path="res://game/cards/CardData/CardData.cs" id="2_le5ft"]
 
 [resource]
 script = ExtResource("2_le5ft")
 CardName = "Unplayable"
 Cost = 0
 CardType = 2
-Effects = []
-card_script = ExtResource("1_xnymm")
+Effects = [null]
+card_script = ExtResource("1_qcidx")
 Description = "This card has no description."
 ArtOffset = Vector2(0, 0)
 Keywords = [1]

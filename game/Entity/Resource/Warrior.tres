@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="PlayerStat" load_steps=12 format=3 uid="uid://cgwvkxpa73d5n"]
+[gd_resource type="Resource" script_class="PlayerStat" load_steps=15 format=3 uid="uid://cgwvkxpa73d5n"]
 
 [ext_resource type="Script" path="res://game/Entity/Resource/PlayerStat.cs" id="1_bvnqj"]
 [ext_resource type="Resource" uid="uid://b3j86o0lhj5qh" path="res://game/cards/CardData/Spell/DiscardToDraw.tres" id="2_x10bk"]
@@ -11,13 +11,16 @@
 [ext_resource type="Resource" uid="uid://7xy2y4nw1yvl" path="res://game/cards/CardData/KeywordTest/overwork.tres" id="9_sm5jp"]
 [ext_resource type="Resource" uid="uid://cx1nuhwbsr5wy" path="res://game/cards/CardData/KeywordTest/ephemeral.tres" id="10_eirkn"]
 [ext_resource type="Resource" uid="uid://b1sje4sr284xk" path="res://game/cards/CardData/KeywordTest/unplayable.tres" id="11_05fiw"]
+[ext_resource type="Resource" uid="uid://da7p1qmgasjy5" path="res://game/cards/CardData/Warrior/Deal5.tres" id="12_ie012"]
+[ext_resource type="Resource" uid="uid://dg5uiwq3uc8bs" path="res://game/cards/CardData/Spell/PredictToDraw.tres" id="13_flwjq"]
+[ext_resource type="Resource" uid="uid://bs54jxoqbiqke" path="res://game/cards/CardData/Warrior/Deal10.tres" id="13_jp3nd"]
 
 [resource]
 script = ExtResource("1_bvnqj")
 capSpellMana = 2
 baseMana = 4
-startingDeck = [ExtResource("2_x10bk"), ExtResource("7_0ass1"), ExtResource("4_7opok"), ExtResource("5_7kvj7"), ExtResource("6_n1oa2"), ExtResource("7_2f81v"), ExtResource("8_jcu3u"), ExtResource("9_sm5jp"), ExtResource("10_eirkn"), ExtResource("11_05fiw")]
-cardDrawPerTurn = 4
+startingDeck = [ExtResource("2_x10bk"), ExtResource("7_0ass1"), ExtResource("4_7opok"), ExtResource("5_7kvj7"), ExtResource("6_n1oa2"), ExtResource("7_2f81v"), ExtResource("8_jcu3u"), ExtResource("9_sm5jp"), ExtResource("10_eirkn"), ExtResource("11_05fiw"), ExtResource("12_ie012"), ExtResource("13_jp3nd"), ExtResource("5_7kvj7"), ExtResource("13_flwjq")]
+cardDrawPerTurn = 5
 gold = 10
 name = "Warrior"
 maxHealth = 30

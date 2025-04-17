@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 public partial class Hand : Area2D // card are in cardmanager this is the hand just for display and interaction cards are not children of hand
 {
@@ -18,23 +19,14 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
     private Player player;
     private Control selectionFilter;
     private Godot.Collections.Array<Card> selectedCards = new Godot.Collections.Array<Card>();
-    public bool isSelecting = false;
     private CollisionShape2D collisionShape;
+    private TaskCompletionSource<bool> discardCompletionSource;
 
     [Signal] public delegate void ActionCompletedEventHandler(Godot.Collections.Array<Card> selectedCards);
     [Signal] public delegate void ActionCancelledEventHandler();
     [Signal] public delegate void FinishedDrawingEventHandler(Godot.Collections.Array<Card> drawnCards);
-
-    EnumGlobal.HandSelectionPurpose currentPurpose = EnumGlobal.HandSelectionPurpose.None;
     public override void _Ready() {
         collisionShape = GetNode<CollisionShape2D>("CollisionShape2D");
-        selectionFilter = GetNode<Control>("SelectionFilter");
-
-        RemoveChild(selectionFilter);
-
-        Node Parent = GetParent();
-        Parent.CallDeferred("add_child", selectionFilter);
-        Parent.CallDeferred("move_child", selectionFilter, 1);
 
         cardRadius = HandRadius-200;
 
@@ -143,67 +135,45 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
         Card drawnCard = deck.DrawCard(index);
         if (drawnCard != null) {AddCard(drawnCard);cardManager.cardSound();}
     }
-    public void SelectCard(Card card)    {
-        if (!isSelecting) return;
 
-        if (card == null || !hand.Contains(card)) return;
+    private async Task<bool> HandleCardSelection(EnumGlobal.PileSelectionPurpose purpose,int minSelection,int maxSelection,Action<List<Card>> handleCardActions){
+        if (hand.Count < minSelection) return false;
 
-        if (selectedCards.Contains(card))
-        {
-            selectedCards.Remove(card);
-            _on_card_pushup(card,false);
-        }
-        else if (selectedCards.Count < requiredSelectionCount)
-        {
-            selectedCards.Add(card);
-            _on_card_pushup(card,true);
-        }
+        var dataPile = new Godot.Collections.Array<CardData>();
+        foreach (Card card in hand) dataPile.Add(card.cardData);
 
-        if (selectedCards.Count == requiredSelectionCount)
-        {
-            ApplySelectionEffect();
-        }
+        var selected = await GlobalAccessPoint.GetPlayer().StartSelectionMode(
+            dataPile, purpose, minSelection, maxSelection
+        );
+
+        var selectedCards = new List<Card>();
+        foreach (Card card in hand)
+            if (selected.Contains(card.cardData))
+                selectedCards.Add(card);
+
+        handleCardActions?.Invoke(selectedCards);
+
+        return true;
     }
-    private void ApplySelectionEffect()    {
-        switch (currentPurpose)
-        {
-            case EnumGlobal.HandSelectionPurpose.Discard:
-                foreach (Card card in selectedCards){   
-                    RemoveCard(hand.IndexOf(card));
-                    card.ActivateEffects(GlobalAccessPoint.GetCardActiveZone()); 
-                }
-                selectedCards.Clear();
-                break;
 
-            case EnumGlobal.HandSelectionPurpose.Forget:
-                foreach (Card card in selectedCards){
-                    RemoveCard(hand.IndexOf(card));
-                    card.BurnCard();
-                }
-                selectedCards.Clear();
-                break;
 
-            case EnumGlobal.HandSelectionPurpose.Duplicate:
-                foreach (Card card in selectedCards){
-                    Card duplicate = cardManager.createCard(card.cardData);
-                    AddCard(duplicate);
-                }
-                break;
+    public Task<bool> StartDiscard(int min = 1, int max = 1) =>
+	HandleCardSelection(EnumGlobal.PileSelectionPurpose.Discard, min, max, selected => {
+		foreach (var card in selected)	{
+			RemoveCard(hand.IndexOf(card));
+			//_ = CardKeywordSystem.OnDiscardOrForget(card);
+			card.putToDiscardPile();
+		}
+	});
 
-            case EnumGlobal.HandSelectionPurpose.Shuffle:
-                foreach (Card card in selectedCards){                    
-                    deck.AddCard(card.cardData);
-                    RemoveCard(hand.IndexOf(card));
-                }
-                break;
+    public Task<bool> StartForget(int min = 1, int max = 1) =>
+	HandleCardSelection(EnumGlobal.PileSelectionPurpose.Forget, min, max, selected => {
+		foreach (var card in selected)	{
+			RemoveCard(hand.IndexOf(card));
+			card.BurnCard();
+		}
+	});
 
-            default:                
-                break;
-        }
-        EmitSignal(nameof(ActionCompleted), selectedCards);
-        selectedCards.Clear();
-        ExitSelectionMode();
-    }
     public void DiscardHand(){
         foreach (Card card in hand)
         {
@@ -212,7 +182,6 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
         hand.Clear();
     }
     public async void ShuffleFromHandtoDeck(Godot.Collections.Array<int> indexes){ // list of indexes
-        if (isSelecting) return;
         foreach (int index in indexes){
             if (index >= 0 && index < hand.Count){
                 deck.ShuffleIntoDeck(hand[index].cardData);
@@ -237,8 +206,6 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
         }
     }
     public void ShuffleHandtoDeck(){ 
-        if (isSelecting) return;
-
         Godot.Collections.Array<int> indexes = new Godot.Collections.Array<int>();
         for (int i = 0;i<hand.Count;i++) indexes.Add(i);
         ShuffleFromHandtoDeck(new Godot.Collections.Array<int>(indexes));
@@ -268,40 +235,13 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
     public void _on_mouse_exited()
     {   setHandRadius(800);}    
     private void setHandRadius(int radius){
-        if (cardManager.selected_card != null || isSelecting) return;
+        if (cardManager.selected_card != null ) return;
         HandRadius = radius;cardRadius = HandRadius-200;
         if (collisionShape.Shape is CircleShape2D circle)
             circle.Radius = HandRadius;
         RepositionCards();
     }
-    private bool StartSelectionMode(int numToSelect, EnumGlobal.HandSelectionPurpose purpose){
-        if (hand.Count < numToSelect) return false;
-        selectionFilter.Visible = true;
-
-        cardManager.selected_card = null;
-        setHandRadius(900);
-
-        isSelecting= true;
-        requiredSelectionCount = numToSelect;
-        currentPurpose = purpose;
-        selectedCards.Clear();
-        return true;
-    }
-    private void ExitSelectionMode(){
-        selectionFilter.Visible = false;
-        isSelecting = false;
-        selectedCards.Clear();
-        currentPurpose = EnumGlobal.HandSelectionPurpose.None;
-        EmitSignal(nameof(ActionCancelled));
-    }
-    public bool startDiscard(int numToSelect){
-        return StartSelectionMode(numToSelect, EnumGlobal.HandSelectionPurpose.Discard);
-    }
     int requiredSelectionCount = 0;
-    public void _on_button_pressed(){
-        ExitSelectionMode();
-        setHandRadius(750);
-    }
     public int GetHandSize(){
         return hand.Count;
     }
@@ -324,7 +264,5 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
         await drawFromDeck(playerStat.cardDrawPerTurn);        
     }
     public void DrawFromDeckSimple(int amount)    {
-        _ = drawFromDeck(amount);} // fire-and-forget
-    
-    
+        _ = drawFromDeck(amount);} // fire-and-forget    
 }

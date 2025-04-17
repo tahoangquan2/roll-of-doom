@@ -23,7 +23,7 @@ public class ConditionalAction : EnemyActionBase
     {
         if (Triggered) return;
         Triggered = true;
-        GD.Print($"{enemy.name} uses CONDITIONAL action: {Name}");
+        //GD.Print($"{enemy.name} uses CONDITIONAL action: {Name}");
         effect(enemy, target);
     }
 }

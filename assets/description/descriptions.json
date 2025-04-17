@@ -1,0 +1,30 @@
+{
+	"Keywords": {
+	  "Keep": "The card does not go to the discard pile at Cycle.",
+	  "Ephemeral": "When played, the card is Forgotten.",
+	  "Bundled": "When drawn, draw an additional card.",
+	  "Auto": "When drawn, activates without costing mana.",
+	  "Aura": "While in hand, grants an ongoing effect.",
+	  "Eternal": "Cannot be Discarded or Forgotten; only playable once per turn.",
+	  "Fated": "Always starts in your opening hand.",
+	  "Magnetic": "When Restocked, automatically moves to your hand.",
+	  "Status": "A temporary card that weakens you (e.g., burn, wound, curse).",
+	  "Precise": "Cannot be Dodged.",
+	  "Overwork": "Effect activates when the card is Discarded or Forgotten.",
+	  "Unplayable": "The card cannot be played.",
+	  "Needy": "When Cycled while in hand, the card is Forgotten."
+	},
+	"Buffs": {
+	  "Armed": "Increases attack damage by X.",
+	  "Fortify": "Increases Guard or Shield gain by X.",
+	  "Vigilant": "Increases Guard or Shield gain by X., Volatile.",
+	  "Pump": "Increases attack damage by X, Volatile.",
+	  "Bounce": "Returns a X damage to a enemy random then dissapears.",
+	  "Exhaust": "Reduces damage dealt 30%, Diminishing.",
+	  "Fragile": "Increases damage taken 30%, Diminishing.",
+	  "Poisoned": "Deals X damage at the start of each turn, Diminishing.",
+	  "Diminishing": "Drops 1 value at the start of their turn.",
+	  "Volatile": "Disappears at the start of their turn."
+	}
+  }
+  

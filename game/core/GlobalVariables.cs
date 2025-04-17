@@ -8,7 +8,9 @@ public partial class GlobalVariables : Node
     public static GlobalVariables gv;
     public static PlayerStat playerStat;   
     public static List<Stats> allStats= new List<Stats>(); 
-    public static BuffDatabase buffDatabase;
+    public static List<Character> allCharacters= new List<Character>();
+    public static Dictionary<Stats,Character> allCharacterStats = new Dictionary<Stats,Character>();
+    public static BuffDatabase buffDatabase;    
 
     // get random number with range
     public static int GetRandomNumber(int min, int max)

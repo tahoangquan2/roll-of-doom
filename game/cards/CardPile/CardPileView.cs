@@ -5,40 +5,76 @@ using System.Collections.Generic;
 public partial class CardPileView : Control
 {
 	private PackedScene cardUI = GD.Load<PackedScene>("res://game/cards/CardPile/cardMenuUI.tscn");
-
 	private GridContainer gridContainer => GetNode<GridContainer>("NinePatchRect/ScrollContainer/GridContainer");
-
 	private Label title => GetNode<Label>("NinePatchRect/Title");
-
 	private Button SortTypeLabel => GetNode<Button>("NinePatchRect/SortType");
-
 	private List<CardData> cardPile;
+	private Button confirmButton => GetNode<Button>("SelectionFilter/Button");
 
-	[Export] public string Title
-	{
-		get => title.Text;
-		set => title.Text = value;
-	}
 
-	enum SortType	{
-		Alphabetical,Cost,Type
-	}
+	private List<CardMenuUi> selectedCards = new();
+	public int maxSelection = 0;
+	public int minSelection = 0; // if min is not met confirm button can not be pressed
+	private Callable onSelectionConfirmed;
+	private bool isSelectable = false;
+
+
+
+
+	[Export] public string Title {get => title.Text;set => title.Text = value;}
+
+	enum SortType	{Alphabetical,Cost,Type}
 
 	private SortType sortType = SortType.Alphabetical;
-
-	private Callable onItemChosenGD;
+	private Callable onItemChosenGD;	
 
 	public void SetCardPile(Godot.Collections.Array<CardData> cardPile)
 	{
 		var tmpCardPile = sortPile(sortType,new List<CardData>(cardPile));
 
-		if (tmpCardPile==this.cardPile)
-			return;
+		if (tmpCardPile==this.cardPile) return;
 
 		this.cardPile = tmpCardPile;
 
 		resetView();
 	}
+
+	public void SetSelectableCardPile(Godot.Collections.Array<CardData> cardPile, int minSelect, int maxSelect, Callable onConfirm)
+	{	
+		Visible = true;
+		isSelectable = true;
+		
+		onSelectionConfirmed = onConfirm;
+		SetCardPile(cardPile);
+		minSelection = minSelect;
+		maxSelection = Math.Min(maxSelect, cardPile.Count);
+		confirmButton.Disabled = true;
+		confirmButton.Visible = true;
+	}
+
+	private void HandleCardToggle(CardMenuUi cardUI)
+	{
+		if (selectedCards.Contains(cardUI))
+		{
+			cardUI.ToggleSelection();
+			selectedCards.Remove(cardUI);
+		}
+		else
+		{
+			if (selectedCards.Count >= maxSelection)
+			{
+				var oldest = selectedCards[0];
+				oldest.ToggleSelection();
+				selectedCards.RemoveAt(0);
+			}
+
+			cardUI.ToggleSelection();
+			selectedCards.Add(cardUI);
+		}
+
+		confirmButton.Disabled = selectedCards.Count < minSelection;
+	}
+
 
 	private void resetView()
 	{
@@ -52,7 +88,8 @@ public partial class CardPileView : Control
 			CardMenuUi cardInstance = (CardMenuUi)cardUI.Instantiate();
 			gridContainer.AddChild(cardInstance);
 			cardInstance.SetCardData(card);	
-			cardInstance.SetFunctionForButtonPressed(onItemChosenGD);		
+
+			if (isSelectable) cardInstance.button.Pressed += () => HandleCardToggle(cardInstance);
 		}
 	}
 
@@ -97,12 +134,23 @@ public partial class CardPileView : Control
 	}
 	
 	public void _on_button_pressed()
-	{
+	{	
+		GD.Print("CardPileView: confirm button pressed");
 		var parentControl = GetParent();
+		
 		if (parentControl.HasMethod("_on_button_toggled"))
 		{
 			parentControl.Call("_on_button_toggled",false);
+		} else{
+			Visible = false;        
 		}
+				
+		var selected = new Godot.Collections.Array<CardData>();
+		foreach (var cardUI in selectedCards)
+			selected.Add(cardUI.cardData);
+
+		if (isSelectable) onSelectionConfirmed.Call(selected);		
+		isSelectable = false;
 	}
 
 	public void _on_sort_type_pressed()

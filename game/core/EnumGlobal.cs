@@ -17,21 +17,44 @@ public partial class EnumGlobal : Node
         Self=5,
     }
 
-    public enum enumCardEffect
-    {   DirectDamage,    // Deals direct damage to enemies 
-        // Card Management (Deck Manipulation)
-        Draw,            // Draws one or more cards (e.g., Draw New Card, Triple Draw)
-        ShuffleDeck,     // Shuffles all cards in the deck (e.g., Shuffle Deck)
-        DiscardHand,     // Discards all cards in the hand (e.g., Hand Wipe)
-    }
-    public enum enumDeckEffect
+public enum enumCardEffect
+{
+    DirectDamage, DealAoE, DealRandom,
+    CheckEnemyStat, CheckSelfStat,
+    Heal,
+    GainShield, GainGuard,
+    GainMana, GainSpellMana,
+    ApplyBuff, ApplyDebuff, ConditionalEffect,
+    Draw, Discard, Forget, Restock, DiscardUpTo,Scry,
+    EndTurn, ShuffleHandtoDeck, ShuffleDeck, DiscardHand
+}
+    public enum enumNonTargetedEffect
     {
+        DealAoE = enumCardEffect.DealAoE,
+        DealRandom = enumCardEffect.DealRandom,
+        CheckSelfStat = enumCardEffect.CheckSelfStat,
+        GainShield = enumCardEffect.GainShield,
+        GainGuard = enumCardEffect.GainGuard,
+        GainMana = enumCardEffect.GainMana,
+        GainSpellMana = enumCardEffect.GainSpellMana,
+        //these are inherited from enumNonTargetedEffect
+        //ApplyBuff = enumCardEffect.ApplyBuff,     // apply buff to self  
+        //ApplyDebuff = enumCardEffect.ApplyDebuff, // apply debuff to all enemies
+        Heal = enumCardEffect.Heal,
+
+        EndTurn = enumCardEffect.EndTurn,
         Draw=enumCardEffect.Draw,
+        Discard=enumCardEffect.Discard,  // must discard the amount
+        DiscardUpTo=enumCardEffect.DiscardUpTo, // discard up to X cards
+        Forget=enumCardEffect.Forget,
         ShuffleDeck=enumCardEffect.ShuffleDeck,
-        DiscardHand=enumCardEffect.DiscardHand
+        DiscardHand=enumCardEffect.DiscardHand,
+        Restock=enumCardEffect.Restock,
+        ShuffleHandtoDeck=enumCardEffect.ShuffleHandtoDeck, 
+        Scry=enumCardEffect.Scry,
     }
 
-    public enum HandSelectionPurpose
+    public enum PileSelectionPurpose
     {
         None,      // Default (no selection),
         Choose, // Selecting cards for a specific purpose
@@ -40,9 +63,8 @@ public partial class EnumGlobal : Node
         Shuffle,  // Selecting cards to shuffle
         Duplicate, // Selecting a card to duplicate
         Upgrade,    // Selecting a card to upgrade
-        
+        Scry
     }
-
 public enum CardKeywords
 {
     // The card does not got to discard pile at Cycle.
@@ -94,6 +116,14 @@ public enum CardKeywords
         Diminishing, // Loses 1 value at Cycle
         Permanent
 	}	
+
+    public enum Charms
+    {
+        None,
+        Attack,
+        Defense,
+        Spell,
+    }
 
 
 

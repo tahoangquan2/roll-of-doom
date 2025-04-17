@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="CardData" load_steps=4 format=3 uid="uid://c6va1gi6puixe"]
 
 [ext_resource type="Texture2D" uid="uid://crbutn8eh1p7o" path="res://assets/cards/Details/Backgrounds/Fire/SpellCardBackground7.png" id="1_2guo8"]
-[ext_resource type="Script" path="res://game/cards/CardEffects/thanos.gd" id="2_g1fw6"]
-[ext_resource type="Script" path="res://game/cards/CardData.cs" id="3_t21th"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/cardScripts/thanos.gd" id="2_g1fw6"]
+[ext_resource type="Script" path="res://game/cards/CardData/CardData.cs" id="3_t21th"]
 
 [resource]
 script = ExtResource("3_t21th")

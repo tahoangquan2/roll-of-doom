@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using Godot;
 public partial class MapNode : TextureButton
 {
@@ -117,7 +118,7 @@ public partial class MapNode : TextureButton
     }
     
     //_on_toggled
-    public void _on_toggled(bool toggled_on)
+    public async Task _on_toggled(bool toggled_on)
     {
         //animation player
         if (toggled_on){
@@ -139,6 +140,15 @@ public partial class MapNode : TextureButton
                 }
                 parentRoom.toggleLines(false);
             }
+
+            //wait for 0.5 seconds
+            await ToSignal(GetTree().CreateTimer(2.5f), "timeout");
+
+            var battlePacked = GD.Load<PackedScene>("res://game/Main.tscn");
+            var battle = battlePacked.Instantiate();
+            Visible = false;
+            var root = GetTree().Root;
+            root.AddChild(battle);
         }
     }
 
