@@ -81,7 +81,7 @@ public partial class PlayerStat : Stats
 		newStat.spellMana = 0;
 
 		newStat.startingDeck = new Array<CardData>();
-		foreach (CardData card in startingDeck)	{
+		foreach (CardData card in startingDeck)	if (card != null) {
 			CardData newCard = card.Duplicate() as CardData;
 			newStat.startingDeck.Add(newCard);
 		}				

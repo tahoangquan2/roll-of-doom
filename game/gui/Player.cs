@@ -28,16 +28,6 @@ public partial class Player : CanvasLayer
 
 	private TaskCompletionSource<Godot.Collections.Array<CardData>> selectionCompletionSource;
 
-	// public void StartSelectionMode(Godot.Collections.Array<CardData> cardPile,EnumGlobal.PileSelectionPurpose purpose, int minSelection, int maxSelection,Callable onConfirm)
-	// {
-	// 	GlobalAccessPoint.GetCardPileView().SetSelectableCardPile(
-	// 		cardPile,			
-	// 		minSelection,
-	// 		maxSelection, 
-	// 		onConfirm
-	// 		);
-	// }
-
 	public Task<Godot.Collections.Array<CardData>> StartSelectionMode(
 		Godot.Collections.Array<CardData> cardPile,
 		EnumGlobal.PileSelectionPurpose purpose,
@@ -48,20 +38,30 @@ public partial class Player : CanvasLayer
 
 		CardPileView cardPileView = GlobalAccessPoint.GetCardPileView();
 
+		string prefix;
+		if (minSelection == maxSelection){
+			prefix = "Choose " + minSelection + " card(s)";
+		} else {
+			prefix = "Choose " + minSelection + " to " + maxSelection + " card(s)";
+		}
+
 		//base on purpose cardpileview set title
 		switch (purpose)
 		{
 			case EnumGlobal.PileSelectionPurpose.Shuffle:
-				cardPileView.Title = "";
+				cardPileView.Title = prefix+" to shuffle into draw pile";
 				break;
 			case EnumGlobal.PileSelectionPurpose.Discard:
-				cardPileView.Title = "Choose card(s) to discard";
+				cardPileView.Title = prefix+" to discard";
 				break;
 			case EnumGlobal.PileSelectionPurpose.Forget:
-				cardPileView.Title = "Choose card(s) to forget";
+				cardPileView.Title = prefix+" to forget";
 				break;
 			case EnumGlobal.PileSelectionPurpose.Duplicate:
-				cardPileView.Title = "Choose card(s) to duplicate";
+				cardPileView.Title = prefix+" to duplicate";
+				break;
+			case EnumGlobal.PileSelectionPurpose.Scry:
+				cardPileView.Title = "Scry up to " + maxSelection + " card(s)";
 				break;
 			default:
 				throw new ArgumentOutOfRangeException(nameof(purpose), purpose, null);
@@ -75,13 +75,8 @@ public partial class Player : CanvasLayer
 			{
 				selectionCompletionSource.TrySetResult(selected);
 			})
-		);
-
-		
+		);		
 
 		return selectionCompletionSource.Task;
 	}
-
-
-
 }

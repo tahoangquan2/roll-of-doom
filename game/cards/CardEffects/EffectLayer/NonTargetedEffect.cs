@@ -17,7 +17,6 @@ public partial class NonTargetedEffect : CardEffect
         switch (nonTargetedEffectType)
         {
             case EnumGlobal.enumNonTargetedEffect.DealAoE:
-                GD.Print("attack all");
                 playerStat.AttackAll(Amount);
                 break;
 
@@ -61,21 +60,24 @@ public partial class NonTargetedEffect : CardEffect
                 result = await hand.StartDiscard(0,Amount);
                 break;
 
-            // case EnumGlobal.enumNonTargetedEffect.Forget:
-            //     await hand.PutHandIntoDiscardPile(); // or your forget mechanic
-            //     break;
+            case EnumGlobal.enumNonTargetedEffect.Forget:
+                result = await hand.StartForget(Amount);
+                break;
 
-            // case EnumGlobal.enumNonTargetedEffect.ShuffleDeck:
-            //     deck.ShuffleDeck();
-            //     break;
+            case EnumGlobal.enumNonTargetedEffect.ShuffleDeck:
+                deck.ShuffleDeck();
+                break;
 
-            // case EnumGlobal.enumNonTargetedEffect.DiscardHand:
-            //     hand.DiscardHand();
-            //     break;
+            case EnumGlobal.enumNonTargetedEffect.DiscardHand:
+                hand.DiscardHand();
+                break;
+            case EnumGlobal.enumNonTargetedEffect.Scry:
+                await deck.Scry(Amount);
+                break;
 
-            // case EnumGlobal.enumNonTargetedEffect.Restock:
-            //     await discard.Restock();
-            //     break;
+            case EnumGlobal.enumNonTargetedEffect.Restock:
+                //await discard.Restock();
+                break;
 
             // case EnumGlobal.enumNonTargetedEffect.ShuffleHandtoDeck:
             //     hand.ShuffleHandtoDeck();

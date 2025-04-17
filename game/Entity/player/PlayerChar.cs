@@ -19,7 +19,15 @@ public partial class PlayerChar : Character
 		playerStat.ApplyBuff(EnumGlobal.BuffType.Fragile, 1);playerStat.ApplyBuff(EnumGlobal.BuffType.Fragile, 5);
 		playerStat.ApplyBuff(EnumGlobal.BuffType.Fragile, 10);
 		playerStat.ApplyBuff(EnumGlobal.BuffType.Dodge, 10);
-		playerStat.ApplyBuff(EnumGlobal.BuffType.Pump,10);
+		playerStat.ApplyBuff(EnumGlobal.BuffType.Pump, 10);
+
+		//every buff in the buff database
+
+		playerStat.ApplyBuff(EnumGlobal.BuffType.Fortify, 10);
+		playerStat.ApplyBuff(EnumGlobal.BuffType.Bounce, 10);
+		playerStat.ApplyBuff(EnumGlobal.BuffType.Armed, 10);
+		playerStat.ApplyBuff(EnumGlobal.BuffType.Vigilant, 10);
+		playerStat.ApplyBuff(EnumGlobal.BuffType.Fortify, 1);
 		
 		UpdateStatsDisplay();
 	}

@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class BuffUI : TextureRect
+public partial class BuffUI : Button
 {
 	public EnumGlobal.BuffType Type;
 	public EnumGlobal.BuffDuration Duration{ get; private set; }
@@ -18,7 +18,7 @@ public partial class BuffUI : TextureRect
 		ValueX = value;
 		
 		_buffValueLabel = GetNode<Label>("Value");
-		Texture = BuffDatabase.GetBuffData(type).icon;
+		Icon = BuffDatabase.GetBuffData(type).icon;
 		Duration = BuffDatabase.GetBuffData(type).Duration;
 		_buffLogic = BuffDatabase.GetLogicForBuff(type);
 		UpdateValue(value);
@@ -38,5 +38,10 @@ public partial class BuffUI : TextureRect
 
 	public int GetValue()	{
 		return ValueX;
+	}
+
+	public void _on_pressed()
+	{
+		
 	}
 }

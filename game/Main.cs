@@ -7,7 +7,7 @@ public partial class Main : Node2D
 	public override void _Ready()
 	{
 		GlobalAccessPoint.Instance.UpdateReferences();
-		//activate garbage collector
+		GD.Print("Main _Ready");
 		GC.Collect();
 		fpsLabel = GetNode<Label>("FPS");
 	}

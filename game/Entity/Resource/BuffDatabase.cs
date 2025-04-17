@@ -19,7 +19,7 @@ public partial class BuffDatabase : Node
 				if (buffData != null)
 				{
 					buffMap[buffData.Type] = buffData;
-					//GD.Print($"Loaded Buff: {buffData.Type} - {buffData.description}");
+					GD.Print($"Loaded Buff: {buffData.Type} - {buffData.description}");
 				}
 			}
         }
@@ -42,6 +42,7 @@ public partial class BuffDatabase : Node
             EnumGlobal.BuffType.Vigilant => new FortifyLogic(),
             EnumGlobal.BuffType.Poisoned => new PoisonedLogic(),
             EnumGlobal.BuffType.Exhaust => new ExhaustLogic(),
+            EnumGlobal.BuffType.Bounce => new BounceLogic(),
 
             //EnumGlobal.BuffType.Burn => new BurnLogic(),
             //EnumGlobal.BuffType.Slow => new SlowLogic(),

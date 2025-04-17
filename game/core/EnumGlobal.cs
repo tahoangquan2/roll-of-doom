@@ -25,7 +25,7 @@ public enum enumCardEffect
     GainShield, GainGuard,
     GainMana, GainSpellMana,
     ApplyBuff, ApplyDebuff, ConditionalEffect,
-    Draw, Discard, Forget, Restock, DiscardUpTo,
+    Draw, Discard, Forget, Restock, DiscardUpTo,Scry,
     EndTurn, ShuffleHandtoDeck, ShuffleDeck, DiscardHand
 }
     public enum enumNonTargetedEffect
@@ -51,6 +51,7 @@ public enum enumCardEffect
         DiscardHand=enumCardEffect.DiscardHand,
         Restock=enumCardEffect.Restock,
         ShuffleHandtoDeck=enumCardEffect.ShuffleHandtoDeck, 
+        Scry=enumCardEffect.Scry,
     }
 
     public enum PileSelectionPurpose
@@ -62,6 +63,7 @@ public enum enumCardEffect
         Shuffle,  // Selecting cards to shuffle
         Duplicate, // Selecting a card to duplicate
         Upgrade,    // Selecting a card to upgrade
+        Scry
     }
 public enum CardKeywords
 {

@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 public partial class Hand : Area2D // card are in cardmanager this is the hand just for display and interaction cards are not children of hand
 {
@@ -134,85 +135,45 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
         Card drawnCard = deck.DrawCard(index);
         if (drawnCard != null) {AddCard(drawnCard);cardManager.cardSound();}
     }
-    
-    public async Task<bool> StartDiscard(int minSelection = 0, int maxSelection = 1)
-    {
+
+    private async Task<bool> HandleCardSelection(EnumGlobal.PileSelectionPurpose purpose,int minSelection,int maxSelection,Action<List<Card>> handleCardActions){
         if (hand.Count < minSelection) return false;
 
         var dataPile = new Godot.Collections.Array<CardData>();
         foreach (Card card in hand) dataPile.Add(card.cardData);
 
         var selected = await GlobalAccessPoint.GetPlayer().StartSelectionMode(
-            dataPile,
-            EnumGlobal.PileSelectionPurpose.Discard,
-            minSelection,
-            maxSelection
+            dataPile, purpose, minSelection, maxSelection
         );
- 
-        //scan for selected cards in hand
-        Godot.Collections.Array<Card> selectedCards = new Godot.Collections.Array<Card>();
-        foreach (Card card in hand) // each card in hand can match 1 card in selected
-            foreach (CardData data in selected)
-                if (card.cardData == data) {
-                    selectedCards.Add(card);
-                    selected.Remove(data);
-                    break;
-                }
 
-        foreach (Card card in selectedCards)
-        {
-            RemoveCard(hand.IndexOf(card));
-            card.putToDiscardPile();
-        }        
+        var selectedCards = new List<Card>();
+        foreach (Card card in hand)
+            if (selected.Contains(card.cardData))
+                selectedCards.Add(card);
 
-        // Apply your discard logic here, using the selected cards
+        handleCardActions?.Invoke(selectedCards);
+
         return true;
     }
 
-    public 
 
+    public Task<bool> StartDiscard(int min = 1, int max = 1) =>
+	HandleCardSelection(EnumGlobal.PileSelectionPurpose.Discard, min, max, selected => {
+		foreach (var card in selected)	{
+			RemoveCard(hand.IndexOf(card));
+			//_ = CardKeywordSystem.OnDiscardOrForget(card);
+			card.putToDiscardPile();
+		}
+	});
 
-    // private async void ApplySelectionEffect()    {
-    //     switch (currentPurpose)
-    //     {
-    //         case EnumGlobal.HandSelectionPurpose.Discard:
-    //             foreach (Card card in selectedCards){   
-    //                 RemoveCard(hand.IndexOf(card));
-    //                 await CardKeywordSystem.OnDiscardOrForget(card);
-    //                 card.putToDiscardPile();
-    //             }
-    //             selectedCards.Clear();
-    //             break;
+    public Task<bool> StartForget(int min = 1, int max = 1) =>
+	HandleCardSelection(EnumGlobal.PileSelectionPurpose.Forget, min, max, selected => {
+		foreach (var card in selected)	{
+			RemoveCard(hand.IndexOf(card));
+			card.BurnCard();
+		}
+	});
 
-    //         case EnumGlobal.HandSelectionPurpose.Forget:
-    //             foreach (Card card in selectedCards){
-    //                 RemoveCard(hand.IndexOf(card));
-    //                 card.BurnCard();
-    //             }
-    //             selectedCards.Clear();
-    //             break;
-
-    //         case EnumGlobal.HandSelectionPurpose.Duplicate:
-    //             foreach (Card card in selectedCards){
-    //                 Card duplicate = cardManager.createCard(card.cardData);
-    //                 AddCard(duplicate);
-    //             }
-    //             break;
-
-    //         case EnumGlobal.HandSelectionPurpose.Shuffle:
-    //             foreach (Card card in selectedCards){                    
-    //                 deck.AddCard(card.cardData);
-    //                 RemoveCard(hand.IndexOf(card));
-    //             }
-    //             break;
-
-    //         default:                
-    //             break;
-    //     }
-    //     EmitSignal(nameof(ActionCompleted), selectedCards);
-    //     selectedCards.Clear();
-    //     ExitSelectionMode();
-    // }
     public void DiscardHand(){
         foreach (Card card in hand)
         {

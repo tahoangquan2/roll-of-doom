@@ -11,7 +11,9 @@ public partial class Character : CardPlayZone //important that player alway the 
     protected Label HealthLabel, GuardLabel, ShieldLabel;
     private int currentDisplayHealth, currentDisplayGuard, currentDisplayShield;
     protected GridContainer BuffGrid;
-	private Node2D visual=> GetNode<Node2D>("Visual");
+	public Node2D visual=> GetNode<Node2D>("Visual");
+    private AnimationPlayer animationPlayer => GetNode<AnimationPlayer>("AnimationPlayer");
+    [Signal] public delegate void BuffUIClickedEventHandler(BuffUI buffUI);
 
     public override void _Ready()
     {
@@ -22,6 +24,8 @@ public partial class Character : CardPlayZone //important that player alway the 
         statInstance.BuffChanged += AddBuff;
 		
         SetupStatVisuals();
+        GlobalVariables.allCharacters.Add(this);    
+        GlobalVariables.allCharacterStats.Add(statInstance,this);
     }
 
     protected virtual void SetupStatVisuals()
@@ -47,23 +51,23 @@ public partial class Character : CardPlayZone //important that player alway the 
 			visual.AddChild(characterVisual);
 		}
 
-		foreach (BuffUI buff in statInstance.buffs.Values)
-		{
-			BuffGrid.AddChild(buff);
-		}
-
         statInstance.StatChanged += UpdateStatsDisplay;
+
+        statInstance.AttackAni += AttackAnimation;
+
     }
 
     public void AddBuff(BuffUI buffUI,bool alreadyExists)
     {
         if (!alreadyExists) {
+            buffUI.Pressed+= () => EmitSignal(nameof(BuffUIClicked), buffUI);
             BuffGrid.AddChild(buffUI);
         }
     }
 
     public void UpdateStatsDisplay()
-    {
+    {           
+        if (statInstance.currentHealth<currentDisplayHealth) animationPlayer.Play("Hurt");
         float max = statInstance.maxHealth;
         float health = statInstance.currentHealth;
         float shield = statInstance.shield;
@@ -94,6 +98,8 @@ public partial class Character : CardPlayZone //important that player alway the 
         currentDisplayGuard = statInstance.guard;
         currentDisplayHealth = statInstance.currentHealth;
         currentDisplayShield = statInstance.shield;
+
+        if (statInstance.currentHealth <= 0) Die(); 
     }
     private void AnimateBarAndLabel(TextureRect bar, Label label, float fromVal, float toVal, float width)
     {
@@ -126,5 +132,28 @@ public partial class Character : CardPlayZone //important that player alway the 
 
     public Stats GetStat() {
         return statInstance;
+    }
+
+    public async void Die()
+    {
+        statInstance.Die();
+        GlobalVariables.allCharacters.Remove(this);             
+        animationPlayer.Play("Die");
+    }
+
+    public async void AttackAnimation(Stats target)    {
+        // tween position of the character to the target position
+        Character targetCharacter = GlobalVariables.allCharacterStats[target];
+        Vector2 startPos = visual.GlobalPosition;
+        Vector2 attackPos = targetCharacter.visual.GlobalPosition + new Vector2(0, -50); // move up 50 pixels
+
+        Tween tween = CreateTween();
+        tween.TweenProperty(visual, "global_position", attackPos, 0.3f)
+            .SetTrans(Tween.TransitionType.Sine)
+            .SetEase(Tween.EaseType.Out);
+
+        tween.Chain().TweenProperty(visual, "global_position", startPos, 0.3f)
+            .SetTrans(Tween.TransitionType.Sine)
+            .SetEase(Tween.EaseType.Out);
     }
 }

@@ -52,23 +52,13 @@ public partial class Card : Node2D
         shaderDisplay.UseParentMaterial = false;
         display = GetNode<Control>("Control");
         animPlayer = GetNode<AnimationPlayer>("AnimationPlayer");     
+        
+        if (shaderDisplay.Material is ShaderMaterial mat) shaderMaterial = mat;// Apply the shader material
 
-        // Apply the shader material
-        if (shaderDisplay.Material is ShaderMaterial mat)
-        {
-            shaderMaterial = mat;
-        }
+        if (cardData.Keywords.Contains(EnumGlobal.CardKeywords.Auto)) canBeHovered = false; // Disable hover for auto cards
 
-        if (cardData.Keywords.Contains(EnumGlobal.CardKeywords.Auto))
-        {
-            canBeHovered = false; // Disable hover for auto cards
-        }
-
-        // Connect card to CardManager
         parentManager = GetParent() as CardManager;
         parentManager.ConnectCardSignals(this);
-
-        // Deck and DiscardPile
         deck = GetTree().CurrentScene.GetNodeOrNull<Deck>(GlobalAccessPoint.deckPath);
         discardPile = GetTree().CurrentScene.GetNodeOrNull<DiscardPile>(GlobalAccessPoint.discardPilePath);
 
