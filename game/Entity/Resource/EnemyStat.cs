@@ -13,21 +13,6 @@ public partial class EnemyStat : Stats // additional enemy Actions
     private List<WeightedAction> WeightedActions = new();
     private Random random = new();
 
-    public void SetupActions() // for testing
-    {
-        GD.Print("Setting up actions");
-        // Conditional: only if target HP is below 50%
-
-        // conditionalActions.Add(new ConditionalAction(
-        //     "Execute",
-        //     (enemy, target) => target.currentHealth < target.maxHealth / 2,
-        //     (enemy, target) => target.TakeDamage(15)
-        // ));
-
-        // Random weighted actions
-        WeightedActions.Add(new WeightedAction("Strike", 5, (from, to) => Attack(to, 5)));
-        //WeightedActions.Add(new WeightedAction("Defend", 2, (from, to) => Add_shield(8)));
-        //WeightedActions.Add(new WeightedAction("Weaken", 1, (from, to) => ApplyBuff(EnumGlobal.BuffType.Exhaust, 1)));
     [Export] public float scaleFactor = 1.0f;
 
     public void SetupActionsForType(EnumGlobal.EnemyType type)

@@ -138,6 +138,15 @@ public enum CardKeywords
         GameOver
     }
 
+    public enum EnemyType
+    {
+        Orc,
+        Goblin,
+        Skeleton,
+        Slime,
+        Krab
+    }
+
     public enum RoomType
     {
         Start,

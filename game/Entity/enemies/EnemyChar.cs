@@ -10,7 +10,7 @@ public partial class EnemyChar : Character
 	{
 		base._Ready();
 
-		enemyStat.SetupActions();
+		enemyStat.SetupActionsForType(enemyStat.enemyType);
 
 		UpdateStatsDisplay();
 	}

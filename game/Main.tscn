@@ -20,7 +20,7 @@ size = Vector2(1825, 654)
 
 [sub_resource type="Resource" id="Resource_kdwbt"]
 script = ExtResource("7_vkoi3")
-enemyType = 3
+enemyType = 4
 scaleFactor = 1.2
 name = "Krab"
 maxHealth = 30
@@ -28,7 +28,7 @@ CharacterVisualScene = ExtResource("6_kgv3j")
 
 [sub_resource type="Resource" id="Resource_qi3tw"]
 script = ExtResource("7_vkoi3")
-enemyType = 2
+enemyType = 0
 scaleFactor = 1.0
 name = "Orc"
 maxHealth = 30
@@ -62,7 +62,6 @@ baseStats = ExtResource("11_imauu")
 
 [node name="Enemy3" parent="EntityLayer" instance=ExtResource("5_rnswb")]
 position = Vector2(1459, 423)
-baseStats = SubResource("Resource_qi3tw")
 baseStats = SubResource("Resource_kdwbt")
 playZoneType = 3
 
