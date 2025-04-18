@@ -4,9 +4,9 @@ using System;
 public class WeightedAction : EnemyActionBase
 {
     public int Weight { get; set; }
-    private Action<Stats, Stats> effect;
+    private Action<EnemyStat, Stats> effect;
 
-    public WeightedAction(string name, int weight, Action<Stats, Stats> effect)
+    public WeightedAction(string name, int weight, Action<EnemyStat, Stats> effect)
     {
         Name = name;
         Weight = weight;
@@ -18,7 +18,7 @@ public class WeightedAction : EnemyActionBase
         return true;
     }
 
-    public override void Execute(Stats enemy, Stats target)
+    public override void Execute(EnemyStat enemy, Stats target)
     {
         GD.Print($"{enemy.name} uses Random action: {Name}");
         effect(enemy, target);

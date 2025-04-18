@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 public partial class EnemyStat : Stats // additional enemy Actions 
 {
+    [Export] public EnumGlobal.EnemyType enemyType; // Add this at the top of the class
 	private List<ConditionalAction> conditionalActions = new();
     private List<WeightedAction> WeightedActions = new();
     private Random random = new();
@@ -27,14 +28,21 @@ public partial class EnemyStat : Stats // additional enemy Actions
         WeightedActions.Add(new WeightedAction("Strike", 5, (from, to) => Attack(to, 5)));
         //WeightedActions.Add(new WeightedAction("Defend", 2, (from, to) => Add_shield(8)));
         //WeightedActions.Add(new WeightedAction("Weaken", 1, (from, to) => ApplyBuff(EnumGlobal.BuffType.Exhaust, 1)));
+    [Export] public float scaleFactor = 1.0f;
+
+    public void SetupActionsForType(EnumGlobal.EnemyType type)
+    {
+        enemyType = type;
+        EnemyActionLibrary.SetupActionsForType(type, ref WeightedActions, ref conditionalActions);
+        
     }
 
     public void TakeTurn(Stats target)
     {
-        GD.Print($"{name} is taking its turn.");
-        // Check conditionals first
+        // cooldown for conditionals
         foreach (var action in conditionalActions)
         {
+            action.coolDown();
             if (action.ShouldTrigger(this, target))
             {
                 action.Execute(this, target);
@@ -52,7 +60,6 @@ public partial class EnemyStat : Stats // additional enemy Actions
         int cumulative = 0;
         foreach (var action in WeightedActions)
         {
-            GD.Print($"Action: {action.Name}, Weight: {action.Weight}");
             cumulative += action.Weight;
             if (roll < cumulative)
             {

@@ -6,7 +6,7 @@
 
 [sub_resource type="Resource" id="Resource_u1ejk"]
 script = ExtResource("1_ylnjg")
-Amount = 50
+Amount = 10
 IsPrecise = false
 
 [sub_resource type="Resource" id="Resource_6488g"]
