@@ -13,13 +13,15 @@ public class ConditionalAction : EnemyActionBase
 
 
     public ConditionalAction(string name, Func<Stats, Stats, bool> condition, 
-        List<Action<EnemyStat, Stats>> effect, int coolDown = 99 // default to 99, meaning only once per battle
-    )
+        List<Action<EnemyStat, Stats>> effect,EnumGlobal.IntentType intentType, 
+        int coolDown = 99, string description = ""  )    
     {
         Name = name;
         this.condition = condition;
         this.effect = effect;
         baseCooldown = coolDown;
+        this.description = description;
+        this.intentType = intentType;
     }
 
     public void coolDown(){
@@ -37,7 +39,6 @@ public class ConditionalAction : EnemyActionBase
     {
         if (Triggered) return;
         Triggered = true;
-        GD.Print($"{enemy.name} uses CONDITIONAL action: {Name}");
         // Execute all effects in the list
         foreach (var singleEffect in effect)
         {

@@ -2,10 +2,9 @@
 
 [ext_resource type="Script" path="res://game/Entity/Resource/PlayerStat.cs" id="1_bvnqj"]
 [ext_resource type="Resource" uid="uid://b3j86o0lhj5qh" path="res://game/cards/CardData/Spell/DiscardToDraw.tres" id="2_x10bk"]
+[ext_resource type="Resource" uid="uid://cl3hr86rfwxnh" path="res://game/cards/CardData/Spell/Draw3.tres" id="3_ft68j"]
 [ext_resource type="Resource" uid="uid://irkv4jc82imh" path="res://game/cards/CardData/KeywordTest/auto.tres" id="4_7opok"]
-[ext_resource type="Resource" uid="uid://pdffn5h6ia73" path="res://game/cards/CardData/KeywordTest/fated.tres" id="5_7kvj7"]
 [ext_resource type="Resource" uid="uid://culc0guke43l7" path="res://game/cards/CardData/KeywordTest/needy.tres" id="6_n1oa2"]
-[ext_resource type="Resource" uid="uid://dwuqsnecbsuib" path="res://game/cards/CardData/KeywordTest/bundle.tres" id="7_0ass1"]
 [ext_resource type="Resource" uid="uid://dgf334fyc5c7d" path="res://game/cards/CardData/KeywordTest/Enternaltres.tres" id="7_2f81v"]
 [ext_resource type="Resource" uid="uid://1oftqn2h3y7q" path="res://game/cards/CardData/KeywordTest/Magnetic.tres" id="8_jcu3u"]
 [ext_resource type="Resource" uid="uid://7xy2y4nw1yvl" path="res://game/cards/CardData/KeywordTest/overwork.tres" id="9_sm5jp"]
@@ -14,12 +13,13 @@
 [ext_resource type="Resource" uid="uid://da7p1qmgasjy5" path="res://game/cards/CardData/Warrior/Deal5.tres" id="12_ie012"]
 [ext_resource type="Resource" uid="uid://dg5uiwq3uc8bs" path="res://game/cards/CardData/Spell/PredictToDraw.tres" id="13_flwjq"]
 [ext_resource type="Resource" uid="uid://bs54jxoqbiqke" path="res://game/cards/CardData/Warrior/Deal10.tres" id="13_jp3nd"]
+[ext_resource type="Resource" uid="uid://mmcauup27px2" path="res://game/cards/CardData/Spell/HeavenBurn.tres" id="14_t4c4c"]
 
 [resource]
 script = ExtResource("1_bvnqj")
 capSpellMana = 2
 baseMana = 4
-startingDeck = [ExtResource("2_x10bk"), ExtResource("7_0ass1"), ExtResource("4_7opok"), ExtResource("5_7kvj7"), ExtResource("6_n1oa2"), ExtResource("7_2f81v"), ExtResource("8_jcu3u"), ExtResource("9_sm5jp"), ExtResource("10_eirkn"), ExtResource("11_05fiw"), ExtResource("12_ie012"), ExtResource("13_jp3nd"), ExtResource("5_7kvj7"), ExtResource("13_flwjq")]
+startingDeck = [ExtResource("2_x10bk"), ExtResource("3_ft68j"), ExtResource("4_7opok"), ExtResource("6_n1oa2"), ExtResource("7_2f81v"), ExtResource("8_jcu3u"), ExtResource("9_sm5jp"), ExtResource("10_eirkn"), ExtResource("11_05fiw"), ExtResource("12_ie012"), ExtResource("13_jp3nd"), ExtResource("13_flwjq"), ExtResource("14_t4c4c")]
 cardDrawPerTurn = 5
 gold = 10
 name = "Warrior"

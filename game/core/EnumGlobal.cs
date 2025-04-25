@@ -2,19 +2,12 @@ using Godot;
 
 public partial class EnumGlobal : Node
 {
-    public enum enumCardType
-    {
-        Attack,
-        Defense,
-        Spell,
+    public enum enumCardType{
+        Attack,Defense,Spell,
     }
 
-    public enum enumCardTargetLayer
-    {
-        None=2,
-        Enemy=3, 
-        Ally=4,
-        Self=5,
+    public enum enumCardTargetLayer{
+        None=2,Enemy=3, Ally=4,Self=5,
     }
 
 public enum enumCardEffect
@@ -37,9 +30,6 @@ public enum enumCardEffect
         GainGuard = enumCardEffect.GainGuard,
         GainMana = enumCardEffect.GainMana,
         GainSpellMana = enumCardEffect.GainSpellMana,
-        //these are inherited from enumNonTargetedEffect
-        //ApplyBuff = enumCardEffect.ApplyBuff,     // apply buff to self  
-        //ApplyDebuff = enumCardEffect.ApplyDebuff, // apply debuff to all enemies
         Heal = enumCardEffect.Heal,
 
         EndTurn = enumCardEffect.EndTurn,
@@ -117,14 +107,13 @@ public enum CardKeywords
         Permanent
 	}	
 
-    public enum Charms
+    public enum IntentType    // enemy intent
     {
-        None,
-        Attack,
-        Defense,
-        Spell,
+        Attack, AttackPrecise,
+        Defend,Heal,
+        Buff,Debuff,
+        Special,
     }
-
 
 
     public enum State

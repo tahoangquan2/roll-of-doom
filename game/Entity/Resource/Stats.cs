@@ -93,8 +93,9 @@ public partial class Stats : Resource //  base class for character Stat. (Player
 
 		Attack(target,damage,IsPrecise);
 	}
-	public void AttackAll(int damage,bool IsPrecise=false){
-		foreach (var target in GlobalVariables.allStats) if (target!=this) Attack(target, damage,IsPrecise);
+	public void AttackAll(int damage,bool IsPrecise=false){ 
+		var possibleTargets = GlobalVariables.allStats.FindAll(s => s != this);
+		foreach (Stats target in possibleTargets) Attack(target, damage,IsPrecise);
 	}
 
 	private void CheckForBuff(ActionType actionType, ref int number)

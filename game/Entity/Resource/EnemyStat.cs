@@ -13,24 +13,42 @@ public partial class EnemyStat : Stats // additional enemy Actions
     private List<WeightedAction> WeightedActions = new();
     private Random random = new();
 
+    public List<EnemyActionBase> intentedAction = new(); 
+    // after enemy turn, enemy will pick an action 
+    // at start of enemy turn, enemy will perform an action from this list
+    [Signal] public delegate void ActionPickedEventHandler();
+
     [Export] public float scaleFactor = 1.0f;
 
     public void SetupActionsForType(EnumGlobal.EnemyType type)
     {
         enemyType = type;
         EnemyActionLibrary.SetupActionsForType(type, ref WeightedActions, ref conditionalActions);
-        
+
+        //sort the actions by weight
+        WeightedActions.Sort((a, b) => b.Weight.CompareTo(a.Weight));
     }
 
-    public void TakeTurn(Stats target)
+    private void TakeTurn(Stats target)
     {
-        // cooldown for conditionals
+        foreach (var action in intentedAction)
+        {
+            action.Execute(this, target);
+        }
+        intentedAction.Clear();
+        PickAction(target);
+    }
+
+    public void PickAction(Stats target)
+    {
+        GD.Print("Picking Action");
         foreach (var action in conditionalActions)
         {
             action.coolDown();
             if (action.ShouldTrigger(this, target))
             {
-                action.Execute(this, target);
+                intentedAction.Add(action);
+                EmitSignal(nameof(ActionPicked));
                 return;
             }
         }
@@ -40,15 +58,14 @@ public partial class EnemyStat : Stats // additional enemy Actions
         foreach (var a in WeightedActions) totalWeight += a.Weight;
         int roll = random.Next(totalWeight);
 
-        GD.Print($"Weighted Actions: {WeightedActions.Count}, Roll: {roll}, Total Weight: {totalWeight}");
-
         int cumulative = 0;
         foreach (var action in WeightedActions)
         {
             cumulative += action.Weight;
             if (roll < cumulative)
             {
-                action.Execute(this, target);
+                intentedAction.Add(action);
+                EmitSignal(nameof(ActionPicked));
                 return;
             }
         }
