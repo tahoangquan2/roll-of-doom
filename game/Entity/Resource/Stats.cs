@@ -33,7 +33,7 @@ public partial class Stats : Resource //  base class for character Stat. (Player
 		shield = Mathf.Clamp(shield + value, 0, 999);		
 		EmitSignal(nameof(StatChanged));
 	}
-	public int TakeDamage(int damage,bool IsPrecise=false)	{
+	public virtual int TakeDamage(int damage,bool IsPrecise=false)	{
 		if (damage <= 0) return 0;
 		int tmp = damage;
 		CheckForBuff(ActionType.TakeDamage, ref damage);
@@ -59,13 +59,12 @@ public partial class Stats : Resource //  base class for character Stat. (Player
 
 		return remainingDamage; // Return actual HP loss
 	}
-	public void heal(int value) // negative value to damage by pass defensive buffs
+	public virtual void heal(int value) // negative value to damage by pass defensive buffs
 	{
 		currentHealth = Mathf.Clamp(currentHealth + value, 0, maxHealth);		
 		EmitSignal(nameof(StatChanged));
 		if (currentHealth <= 0) Die();
 	}
-
 	public virtual Stats CreateInstance()
 	{
 		Stats newStat = Duplicate() as Stats;

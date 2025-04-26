@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="EnemyStat" load_steps=3 format=3 uid="uid://c3k60cxmcntnw"]
+
+[ext_resource type="PackedScene" uid="uid://v17bo6yas84r" path="res://game/Entity/enemies/visual/spiderVisual.tscn" id="1_y2h1o"]
+[ext_resource type="Script" path="res://game/Entity/Resource/EnemyStat.cs" id="2_1ncg2"]
+
+[resource]
+script = ExtResource("2_1ncg2")
+enemyType = 3
+scaleFactor = 1.0
+name = "Spider"
+maxHealth = 25
+CharacterVisualScene = ExtResource("1_y2h1o")

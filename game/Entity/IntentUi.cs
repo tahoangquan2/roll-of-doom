@@ -1,30 +1,37 @@
+using System.Collections.Generic;
 using Godot;
 
 public partial class IntentUi : Button
 {
 	public EnumGlobal.IntentType intentType;
-	public int value{get; private set;} = 0;
 
 	private Label _intentValueLabel ;
+
+	public EnemyActionBase enemyAction;
 	
 	public void SetIntent(EnemyActionBase enemyAction)	{
 		Icon = GlobalVariables.intentTextures[(int)enemyAction.intentType];
 		
 		intentType = enemyAction.intentType;
-		value = enemyAction.value;
+		this.enemyAction = enemyAction;
 		
-		//_intentValueLabel = GetNode<Label>("Value");
-		UpdateValue(value);
+		_intentValueLabel = GetNode<Label>("Value");
+		UpdateValue(enemyAction.Values);
 	}
 
-	public void UpdateValue(int value)
+	public void UpdateValue(List<int> values)
 	{
-		if (value == 0) {
-			//_intentValueLabel.Visible = false;
+		if (values.Count == 0) {
+			_intentValueLabel.Visible = false;
 			return;
 		}
-		//_intentValueLabel.Visible = true;
-		this.value = value;
-		//_intentValueLabel.Text = value.ToString();
+		_intentValueLabel.Visible = true;
+		string valueText = "";
+		for (int i = 0; i < values.Count; i++)
+		{
+			if (i > 0) valueText += " , ";
+			valueText += values[i].ToString();
+		}
+		_intentValueLabel.Text = valueText;
 	}
 }

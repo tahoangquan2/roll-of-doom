@@ -1,9 +1,9 @@
-using System;
+using System.Collections.Generic;
 
 public abstract class EnemyActionBase
 {
     public string Name;
-    public int value;
+    public List<int> Values { get; set; } = new();
     public string description;
     public EnumGlobal.IntentType intentType=0;
     

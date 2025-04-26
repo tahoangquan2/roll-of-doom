@@ -45,8 +45,10 @@ public partial class SideMenu : Control
 
 		if (cardManager != null) cardManager.CardSelect += OnCardSelect;
 
-		foreach (Character character in GlobalVariables.allCharacters)
+		foreach (Character character in GlobalVariables.allCharacters){
 			character.BuffUIClicked += OnBuffUIClicked;
+			character.IntentClicked += OnIntentClicked;
+		}
 
 		LoadDescriptions();
 	}
@@ -103,6 +105,27 @@ public partial class SideMenu : Control
 		string durationKey = buffUI.Duration.ToString();
 		if (buffDescriptions.TryGetValue(durationKey, out var durationDesc))
 			AddDescriptionLabel(durationKey, durationDesc);
+	}
+
+	private void OnIntentClicked(IntentUi intentUi)
+	{
+		foreach (Control control in controlOfCards) control.Visible = false;
+
+		string intentName = intentUi.enemyAction.Name;
+		GD.Print(intentUi.enemyAction.Name);
+		GD.Print(intentUi.enemyAction.Values.Count);
+		string value = "";
+		for (int i = 0; i < intentUi.enemyAction.Values.Count; i++)
+		{
+			if (i > 0) value += " , ";
+			value += intentUi.enemyAction.Values[i].ToString();
+		}
+
+		CardTypeLabel.Text = $"{intentName}";
+		if (value!= "") CardTypeLabel.Text += $" x {value}";
+		cleanKeywords();
+		
+		AddDescriptionLabel( intentUi.enemyAction.Name, intentUi.enemyAction.description);
 	}
 
 

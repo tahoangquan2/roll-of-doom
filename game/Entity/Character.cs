@@ -14,6 +14,7 @@ public partial class Character : CardPlayZone //important that player alway the 
 	public Node2D visual=> GetNode<Node2D>("Visual");
     private AnimationPlayer animationPlayer => GetNode<AnimationPlayer>("AnimationPlayer");
     [Signal] public delegate void BuffUIClickedEventHandler(BuffUI buffUI);
+    [Signal] public delegate void IntentClickedEventHandler(IntentUi intentUi);
 
     public override void _Ready()
     {
@@ -54,6 +55,8 @@ public partial class Character : CardPlayZone //important that player alway the 
         statInstance.StatChanged += UpdateStatsDisplay;
 
         statInstance.AttackAni += AttackAnimation;
+
+        statInstance.SetHealth(statInstance.maxHealth); // set health to max health at start
 
     }
 

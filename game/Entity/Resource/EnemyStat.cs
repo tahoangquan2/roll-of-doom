@@ -19,6 +19,8 @@ public partial class EnemyStat : Stats // additional enemy Actions
     [Signal] public delegate void ActionPickedEventHandler();
 
     [Export] public float scaleFactor = 1.0f;
+    public float scaleFactorAttack = 1.0f;
+	public float scaleFactorDefend = 1.0f;
 
     public void SetupActionsForType(EnumGlobal.EnemyType type)
     {
@@ -31,17 +33,37 @@ public partial class EnemyStat : Stats // additional enemy Actions
 
     private void TakeTurn(Stats target)
     {
-        foreach (var action in intentedAction)
-        {
+        foreach (var action in intentedAction)        {
             action.Execute(this, target);
-        }
-        intentedAction.Clear();
+        }        
         PickAction(target);
     }
+    // check for conditionals // health change
+    private void Conditionals(Stats target)    {   
+        foreach (var action in conditionalActions)
+        {
+            if (action.ShouldTrigger(this, target)) {  
+                intentedAction.Clear();
+                intentedAction.Add(action);
+                EmitSignal(nameof(ActionPicked));
+                return;
+            }
+        }
+    }
 
-    public void PickAction(Stats target)
-    {
-        GD.Print("Picking Action");
+    //override take damage to check for conditionals
+    public override int TakeDamage(int damage, bool IsPrecise = false)    {
+        int actualDamage = base.TakeDamage(damage, IsPrecise);
+        Conditionals(GlobalVariables.playerStat);
+        return actualDamage;
+    }
+    public override void heal(int value)    {
+        base.heal(value);
+        Conditionals(GlobalVariables.playerStat);
+    }    
+
+    public void PickAction(Stats target)    {
+        intentedAction.Clear();
         foreach (var action in conditionalActions)
         {
             action.coolDown();

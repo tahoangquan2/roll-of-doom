@@ -14,6 +14,7 @@ public class ConditionalAction : EnemyActionBase
 
     public ConditionalAction(string name, Func<Stats, Stats, bool> condition, 
         List<Action<EnemyStat, Stats>> effect,EnumGlobal.IntentType intentType, 
+        List<int> values,
         int coolDown = 99, string description = ""  )    
     {
         Name = name;
@@ -22,6 +23,7 @@ public class ConditionalAction : EnemyActionBase
         baseCooldown = coolDown;
         this.description = description;
         this.intentType = intentType;
+        Values = values;
     }
 
     public void coolDown(){

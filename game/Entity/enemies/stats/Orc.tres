@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="EnemyStat" load_steps=3 format=3 uid="uid://d36ypc8q1on74"]
+
+[ext_resource type="PackedScene" uid="uid://cxqmgosx647om" path="res://game/Entity/enemies/visual/orcVisual.tscn" id="1_etr4n"]
+[ext_resource type="Script" path="res://game/Entity/Resource/EnemyStat.cs" id="2_p43ia"]
+
+[resource]
+script = ExtResource("2_p43ia")
+enemyType = 0
+scaleFactor = 1.0
+name = "Orc"
+maxHealth = 30
+CharacterVisualScene = ExtResource("1_etr4n")

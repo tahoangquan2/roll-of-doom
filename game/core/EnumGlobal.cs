@@ -129,11 +129,15 @@ public enum CardKeywords
 
     public enum EnemyType
     {
-        Orc,
-        Goblin,
-        Skeleton,
-        Slime,
-        Krab
+        Orc, // done
+        Rat, //done
+        Rat2,   // done
+        Spider, // done
+        Ghost, 
+        Ghost2,
+        Krab, // done
+        Necromancer,
+        Bat
     }
 
     public enum RoomType

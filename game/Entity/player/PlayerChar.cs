@@ -10,15 +10,6 @@ public partial class PlayerChar : Character
 		GlobalVariables.allStats.Clear();
 		GlobalVariables.playerStat = playerStat;
 		GlobalVariables.allStats.Add(playerStat);		
-
-		playerStat.currentHealth = 25;
-		playerStat.guard = 50;
-		playerStat.shield = 5;
-
-		// add a buff to the player stat
-		playerStat.ApplyBuff(EnumGlobal.BuffType.Fragile, 1);playerStat.ApplyBuff(EnumGlobal.BuffType.Fragile, 5);
-		playerStat.ApplyBuff(EnumGlobal.BuffType.Fragile, 10);
-		playerStat.ApplyBuff(EnumGlobal.BuffType.Dodge, 10);
 		
 		UpdateStatsDisplay();
 	}
