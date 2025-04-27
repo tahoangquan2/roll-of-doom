@@ -25,7 +25,7 @@ public partial class Hand : Area2D // card are in cardmanager this is the hand j
     [Signal] public delegate void ActionCompletedEventHandler(Godot.Collections.Array<Card> selectedCards);
     [Signal] public delegate void ActionCancelledEventHandler();
     [Signal] public delegate void FinishedDrawingEventHandler(Godot.Collections.Array<Card> drawnCards);
-    public override void _Ready() {
+    public void GameStart() {
         collisionShape = GetNode<CollisionShape2D>("CollisionShape2D");
 
         cardRadius = HandRadius-200;

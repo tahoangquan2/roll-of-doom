@@ -147,8 +147,8 @@ public partial class MapNode : TextureButton
             var battlePacked = GD.Load<PackedScene>("res://game/Main.tscn");
             var battle = battlePacked.Instantiate();
             Visible = false;
-            var root = GetTree().Root;
-            root.AddChild(battle);
+            GetTree().ChangeSceneToPacked(battlePacked);
+            
         }
     }
 

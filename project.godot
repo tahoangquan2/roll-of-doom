@@ -42,6 +42,7 @@ project/assembly_name="Roll of Doom"
 [global_group]
 
 "Update on Cycle"="At every Cycle call Cycle function"
+GameStart=""
 
 [input]
 

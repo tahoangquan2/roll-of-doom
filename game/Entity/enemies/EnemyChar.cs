@@ -5,36 +5,36 @@ using System.Threading.Tasks;
 public partial class EnemyChar : Character
 {
 	// Called when the node enters the scene tree for the first time.
-	EnemyStat enemyStat => statInstance as EnemyStat;
-	HBoxContainer _actionGrid => GetNode<HBoxContainer>("IntendContainer");
-	private PackedScene intentUiScene = GD.Load<PackedScene>("res://game/Entity/IntentUi.tscn");	
+	EnemyStat enemyStat;
+	private HBoxContainer actionGrid;
+	private PackedScene intentUiScene = GD.Load<PackedScene>("res://game/Entity/intentUI.tscn");
 
-	public override void _Ready()
-	{
-		base._Ready();
-
+	public override void CharacterSetUp(Stats stat)
+	{		
+		actionGrid = GetNode<HBoxContainer>("IntendContainer");
+		base.CharacterSetUp(stat);
+		enemyStat = (EnemyStat)statInstance;
+		
 		enemyStat.SetupActionsForType(enemyStat.enemyType);
+
 		enemyStat.ActionPicked += UpdateIntent;
 		enemyStat.PickAction(GlobalVariables.playerStat);	
 
 		playZoneType = EnumGlobal.enumCardTargetLayer.Enemy; 
-
-		UpdateStatsDisplay();
 	}
 	
     public void UpdateIntent(){		 
-		foreach (Node child in _actionGrid.GetChildren()) child.QueueFree();
+		foreach (Node child in actionGrid.GetChildren()) child.QueueFree();
 
 		foreach (var action in enemyStat.intentedAction){
 			EnemyActionBase enemyAction = action;
 			var intent = intentUiScene.Instantiate<IntentUi>();		
-			_actionGrid.AddChild(intent);
+			actionGrid.AddChild(intent);
 			intent.SetIntent(enemyAction);
+			// set press event and print action name
 			intent.Pressed+= () => EmitSignal(nameof(IntentClicked), intent);
 		}
     }
-
-
 
 	public override void Cycle() {}
 
@@ -44,4 +44,13 @@ public partial class EnemyChar : Character
 		await enemyStat.EnemyTurn();
 		//1 second delay		
 	}
+
+	public override void _ExitTree()
+	{
+		base._ExitTree();
+
+		if (enemyStat != null)
+			enemyStat.ActionPicked -= UpdateIntent;
+	}
+
 }

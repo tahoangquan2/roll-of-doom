@@ -53,7 +53,8 @@ public enum enumCardEffect
         Shuffle,  // Selecting cards to shuffle
         Duplicate, // Selecting a card to duplicate
         Upgrade,    // Selecting a card to upgrade
-        Scry
+        Scry,
+        AddtoDeck
     }
 public enum CardKeywords
 {

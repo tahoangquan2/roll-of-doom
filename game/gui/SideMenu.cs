@@ -43,14 +43,17 @@ public partial class SideMenu : Control
 		
 		CardManager cardManager = GetTree().CurrentScene.GetNodeOrNull<CardManager>("CardManager");
 
-		if (cardManager != null) cardManager.CardSelect += OnCardSelect;
+		if (cardManager != null) cardManager.CardSelect += OnCardSelect;		
 
+		LoadDescriptions();
+	}
+
+	public void GameStart()
+	{
 		foreach (Character character in GlobalVariables.allCharacters){
 			character.BuffUIClicked += OnBuffUIClicked;
 			character.IntentClicked += OnIntentClicked;
 		}
-
-		LoadDescriptions();
 	}
 
 	public bool toggle(bool button_pressed)
@@ -108,12 +111,10 @@ public partial class SideMenu : Control
 	}
 
 	private void OnIntentClicked(IntentUi intentUi)
-	{
+	{	
 		foreach (Control control in controlOfCards) control.Visible = false;
 
 		string intentName = intentUi.enemyAction.Name;
-		GD.Print(intentUi.enemyAction.Name);
-		GD.Print(intentUi.enemyAction.Values.Count);
 		string value = "";
 		for (int i = 0; i < intentUi.enemyAction.Values.Count; i++)
 		{

@@ -37,6 +37,8 @@ public partial class PlayerStat : Stats
 		if (card.Keywords.Contains(EnumGlobal.CardKeywords.Unplayable)) return false;
 		bool result = true;
 		int cost = card.Cost;
+		//print cost and mana
+		GD.Print("Cost: "+cost+" Mana: "+mana+" SpellMana: "+spellMana);
 		if (card.CardType == EnumGlobal.enumCardType.Spell){
 			if (cost > mana+spellMana) 
 				result = false;
@@ -96,7 +98,4 @@ public partial class PlayerStat : Stats
 		spellMana = Mathf.Clamp(mana, 0, capSpellMana);
 		mana = baseMana;
 	}
-
-	//- **Mana:** Refills to base at the start of each turn.
-	//- **Spell Mana:** Stores unused mana from the previous turn (up to 2 max).
 }

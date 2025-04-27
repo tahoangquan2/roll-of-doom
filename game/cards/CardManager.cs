@@ -10,7 +10,6 @@ public partial class CardManager : Node2D
     private PackedScene cardScene = GD.Load<PackedScene>("res://game/cards/card.tscn");
 	private Hand hand=null;
 	private CardArc cardArc=null;
-	private PlayerStat playerStat;
 	private int Locked =0; 
 	[Signal] public delegate void CardPushupEventHandler(Card card,bool isHovered);
 	[Signal] public delegate void CardUnhandEventHandler(Card card);
@@ -51,8 +50,6 @@ public partial class CardManager : Node2D
 		}
 
 		currentCardState = CardState.State.Idle;
-
-		playerStat = GlobalVariables.playerStat;
 	}
 	public void SelectCard(Card card) {
 		if (selected_card == card) {
@@ -89,7 +86,8 @@ public partial class CardManager : Node2D
 		
 		CardPlayZone zone = CardState.playZones.FirstOrDefault(z => z.GetPlayZoneType() == tmpCard.GetCardData().TargetMask);
 		if (zone != null){
-			if (GlobalVariables.playerStat!=null && playerStat.RequestPlayCard(tmpCard.GetCardData())) {
+			GD.Print("PlayerStat "+  GlobalVariables.playerStat);
+			if (GlobalVariables.playerStat!=null && GlobalVariables.playerStat.RequestPlayCard(tmpCard.GetCardData())) {
 				EmitSignal(nameof(CardUnhand), tmpCard);
 				tmpCard.ResetShader();
 				zone.activeCard(tmpCard,GetGlobalMousePosition()-zone.GlobalPosition);

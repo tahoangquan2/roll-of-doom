@@ -1,35 +1,16 @@
 using Godot;
 
 public partial class PlayerChar : Character
-{	PlayerStat playerStat => statInstance as PlayerStat;
+{	PlayerStat playerStat;
 
 	private Label healthLabel,guardLabel,shieldLabel;
-	public override void _Ready()
+	public override void CharacterSetUp(Stats stat)
 	{
-		base._Ready();
-		GlobalVariables.allStats.Clear();
-		GlobalVariables.playerStat = playerStat;
-		GlobalVariables.allStats.Add(playerStat);		
-		
-		UpdateStatsDisplay();
+		base.CharacterSetUp(stat);
+		playerStat = (PlayerStat)statInstance;		
+
+		GlobalVariables.playerStat = playerStat;		
 	}
-
-
-	public void _input(InputEvent @event){//action "Action" from input map, this is for testing
-    if (@event is InputEventMouseMotion) return;
-        if (@event.IsActionPressed("Action"))
-        {
-            // set some value to the player stat
-			playerStat.currentHealth -= 1;	
-			playerStat.TakeDamage(10);
-        }
-
-        if (@event.IsActionPressed("Action2"))
-        {
-			playerStat.heal(10);
-			playerStat.Add_guard(10);
-        }
-    }
 
 
 	public override void Cycle()

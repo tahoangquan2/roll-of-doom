@@ -1,21 +1,31 @@
 using System;
 using Godot;
-using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Runtime.Versioning;
 
 public partial class Player : CanvasLayer
 {
 	// Called when the node enters the scene tree for the first time.
-	private Label manaLabel;
-	private Label goldLabel;
+	private Label manaLabel,goldLabel,gameOverLabel;
 	private Control pauseMenu;
 
-	public override void _Ready()
-	{
+	private TextureButton pauseMenuButton;
+
+	private Node RootNode => GetTree().Root;
+	bool gamewon = false;
+
+	public void GameStart()
+	{	
 		manaLabel = GetNode<Label>("TopGui/Container/BaseMana/TxtBox/PointLabel");
 		goldLabel = GetNode<Label>("TopGui/Container/Gold/TxtBox/GoldLabel");
 
-		pauseMenu = GetNode<Control>("Pause");
+		pauseMenu = GetNode<Control>("Pause");		
+		pauseMenu.Visible = false;
+
+		gameOverLabel = pauseMenu.GetNode<Label>("GameOverLabel");
+		pauseMenuButton = pauseMenu.GetNode<TextureButton>("ContinueButton");
+		// gameOverLabel.Visible = false;
+		// pauseMenuButton.Visible = false;
 
 		update_values();
 	}
@@ -39,11 +49,8 @@ public partial class Player : CanvasLayer
 		CardPileView cardPileView = GlobalAccessPoint.GetCardPileView();
 
 		string prefix;
-		if (minSelection == maxSelection){
-			prefix = "Choose " + minSelection + " card(s)";
-		} else {
-			prefix = "Choose " + minSelection + " to " + maxSelection + " card(s)";
-		}
+		if (minSelection == maxSelection){prefix = "Choose " + minSelection + " card(s)";} else {
+			prefix = "Choose " + minSelection + " to " + maxSelection + " card(s)";}
 
 		//base on purpose cardpileview set title
 		switch (purpose)
@@ -63,6 +70,9 @@ public partial class Player : CanvasLayer
 			case EnumGlobal.PileSelectionPurpose.Scry:
 				cardPileView.Title = "Scry up to " + maxSelection + " card(s)";
 				break;
+			case EnumGlobal.PileSelectionPurpose.AddtoDeck:
+				cardPileView.Title = prefix+" to add to deck";
+				break;
 			default:
 				throw new ArgumentOutOfRangeException(nameof(purpose), purpose, null);
 		}
@@ -78,5 +88,52 @@ public partial class Player : CanvasLayer
 		);		
 
 		return selectionCompletionSource.Task;
+	}
+
+	public void WinGame()
+	{
+		gameOverLabel.Text = "You Win";
+		gamewon = true;
+		endTheGame();
+		
+	}
+	public void LoseGame()
+	{	
+		gameOverLabel.Text = "Game Over";
+		gamewon = false;
+		endTheGame();
+	}
+
+	public void _on_continue_button_pressed()
+	{
+		if (gamewon)
+		{
+			//start selection mode to add cards to deck
+			StartSelectionMode(
+				GlobalVariables.playerStat.startingDeck,
+				EnumGlobal.PileSelectionPurpose.AddtoDeck,
+				1,
+				1
+			).ContinueWith((selectedCards) =>
+			{
+				foreach (var card in selectedCards.Result)
+				{
+					GlobalVariables.playerStat.startingDeck.Add(card);
+				}
+
+				//start new game
+				GetTree().ChangeSceneToPacked(GlobalVariables.mapScene);
+			});
+		}
+		else
+		{
+			GetTree().ChangeSceneToPacked(GlobalVariables.mainMenuScene);
+		}
+		
+	}
+
+	private void endTheGame()
+	{
+		pauseMenu.Visible = true;
 	}
 }

@@ -23,7 +23,7 @@ public partial class ManaUi : HBoxContainer
 	private Texture2D manaIcon => ResourceLoader.Load<Texture2D>("res://assets/cards/mana_slot.png");
 	private Texture2D spellManaIconTexture => ResourceLoader.Load<Texture2D>("res://assets/cards/mana_spell.png");
 
-	public override void _Ready()
+	public void GameStart()
 	{
 		// get group from the of this node
 		cardManager = GetTree().CurrentScene.GetNodeOrNull<CardManager>(GlobalAccessPoint.cardManagerPath);
