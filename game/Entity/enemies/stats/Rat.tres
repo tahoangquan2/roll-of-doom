@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="EnemyStat" load_steps=3 format=3 uid="uid://bx6t8sqeuw32n"]
+
+[ext_resource type="PackedScene" uid="uid://bpsobpib1tjp3" path="res://game/Entity/enemies/visual/ratVisual.tscn" id="1_irqh5"]
+[ext_resource type="Script" path="res://game/Entity/Resource/EnemyStat.cs" id="2_r11jv"]
+
+[resource]
+script = ExtResource("2_r11jv")
+enemyType = 1
+scaleFactor = 1.0
+name = "Rat"
+maxHealth = 25
+CharacterVisualScene = ExtResource("1_irqh5")

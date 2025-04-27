@@ -14,11 +14,11 @@ public partial class Character : CardPlayZone //important that player alway the 
 	public Node2D visual=> GetNode<Node2D>("Visual");
     private AnimationPlayer animationPlayer => GetNode<AnimationPlayer>("AnimationPlayer");
     [Signal] public delegate void BuffUIClickedEventHandler(BuffUI buffUI);
+    [Signal] public delegate void IntentClickedEventHandler(IntentUi intentUi);
 
-    public override void _Ready()
-    {
-        base._Ready();
-        statInstance = baseStats.CreateInstance();       
+
+    public virtual void CharacterSetUp(Stats stat){
+        statInstance = stat.CreateInstance();       
         GlobalVariables.allStats.Add(statInstance); 
 
         statInstance.BuffChanged += AddBuff;
@@ -55,13 +55,14 @@ public partial class Character : CardPlayZone //important that player alway the 
 
         statInstance.AttackAni += AttackAnimation;
 
+        statInstance.SetHealth(statInstance.currentHealth); // set health to max health at start
     }
 
     public void AddBuff(BuffUI buffUI,bool alreadyExists)
     {
-        if (!alreadyExists) {
-            buffUI.Pressed+= () => EmitSignal(nameof(BuffUIClicked), buffUI);
+        if (!alreadyExists) {            
             BuffGrid.AddChild(buffUI);
+            buffUI.Pressed+= () => EmitSignal(nameof(BuffUIClicked), buffUI);
         }
     }
 
@@ -156,4 +157,16 @@ public partial class Character : CardPlayZone //important that player alway the 
             .SetTrans(Tween.TransitionType.Sine)
             .SetEase(Tween.EaseType.Out);
     }
+
+    public override void _ExitTree()
+    {
+        base._ExitTree();
+
+        if (statInstance != null) {
+            statInstance.BuffChanged -= AddBuff;
+            statInstance.StatChanged -= UpdateStatsDisplay;
+            statInstance.AttackAni -= AttackAnimation;
+        }
+    }
+
 }

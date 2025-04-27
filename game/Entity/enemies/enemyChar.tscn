@@ -34,6 +34,7 @@ outline_color = Color(0.0867833, 0.0893178, 0.0880518, 1)
 
 [node name="Enemy" groups=["Enemy Turn"] instance=ExtResource("1_grr03")]
 script = ExtResource("2_meqtj")
+playZoneType = 3
 
 [node name="HitBox" parent="." index="0"]
 shape = SubResource("RectangleShape2D_51g4d")
@@ -47,3 +48,19 @@ label_settings = SubResource("LabelSettings_22q4f")
 
 [node name="GuardLabel" parent="CharacterTab/StatTab/Defends" index="1"]
 label_settings = SubResource("LabelSettings_6lfmt")
+
+[node name="IntendContainer" type="HBoxContainer" parent="." index="4"]
+custom_minimum_size = Vector2(420, 0)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -210.0
+offset_top = -87.0
+offset_right = 210.0
+offset_bottom = -57.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+alignment = 1

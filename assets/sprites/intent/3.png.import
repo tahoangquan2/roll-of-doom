@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://yg8mg64jnarj"
-path="res://.godot/imported/#1 - Transparent Icons-2.png-1a73ddcce6a4e6afef4e84c6f17ce61f.ctex"
+uid="uid://c0xh5sm4x58bv"
+path="res://.godot/imported/3.png-f20d3140b629cca329759fcb4a7cde76.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/#1 - Transparent Icons/#1 - Transparent Icons-2.png"
-dest_files=["res://.godot/imported/#1 - Transparent Icons-2.png-1a73ddcce6a4e6afef4e84c6f17ce61f.ctex"]
+source_file="res://assets/sprites/intent/3.png"
+dest_files=["res://.godot/imported/3.png-f20d3140b629cca329759fcb4a7cde76.ctex"]
 
 [params]
 

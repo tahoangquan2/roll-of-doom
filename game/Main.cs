@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public partial class Main : Node2D
 {
@@ -7,37 +8,54 @@ public partial class Main : Node2D
 	public override void _Ready()
 	{
 		GlobalAccessPoint.Instance.UpdateReferences();
-		GD.Print("Main _Ready");
 		GC.Collect();
-		fpsLabel = GetNode<Label>("FPS");
+
+		StartGame();
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
-		fpsLabel.Text = "FPS: " + Engine.GetFramesPerSecond();
-	}
+	private Node2D entityLayer=> GetNodeOrNull<Node2D>("EntityLayer");
 
-	private void DeferredPrintTree()
-	{
-		//PrintTree(GetTree().Root, 0);
-	}
-
+	float levelScaling = 1.0f;
 	
-
-	private void PrintTree(Node node, int depth)
+	public void StartGame()
 	{
-		string indent = "";
-		for (int i = 0; i < depth; i++)
-		{
-			indent += "-   ";
+		GlobalVariables.allStats.Clear();
+		GlobalVariables.allCharacters.Clear();
+		GlobalVariables.allCharacterStats.Clear();
+
+		if (GlobalVariables.playerStat == null)	{
+			
+			var playerStat = ResourceLoader.Load<PlayerStat>("res://game/Entity/player/Warrior.tres");
+			GlobalVariables.playerStat = playerStat;
+		} 
+		
+
+		var palyer = entityLayer.GetChild(0) as PlayerChar;
+		palyer.CharacterSetUp(GlobalVariables.playerStat);	
+
+		//randomize enemy count from 1 to 4
+		int enemyCount = GlobalVariables.GetRandomNumber(1, 4);
+
+		for (int i=1;i<5;i++){
+			var enemy = entityLayer.GetChild(i) as EnemyChar;
+			if (i>enemyCount){
+				enemy.QueueFree();			
+			}
+			else{
+				int enemyIndex = GlobalVariables.GetRandomNumber(0, GlobalVariables.enemyStatsBase.Count-1);
+				enemy.CharacterSetUp(GlobalVariables.enemyStatsBase[enemyIndex]);
+			}
 		}
-		GD.Print(indent + node.Name);
-		foreach (Node child in node.GetChildren())
+
+		// get every node in GameStart group
+		foreach (Node node in GetTree().GetNodesInGroup("GameStart"))
 		{
-			PrintTree(child, depth + 1);
-		}
+			// call GameStart method
+			var method = node.GetType().GetMethod("GameStart");
+			method.Invoke(node, null);
+		}	
 	}
+
 
 	//input
 	public override void _Input(InputEvent @event)
@@ -49,6 +67,4 @@ public partial class Main : Node2D
 
 		//GD.Print(GetViewport().GuiGetFocusOwner());
 	}
-
-	private Label fpsLabel;
 }

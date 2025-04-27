@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://wth47pxkkh7u"]
+[gd_scene load_steps=13 format=3 uid="uid://wth47pxkkh7u"]
 
 [ext_resource type="Script" path="res://game/Main.cs" id="1_3ktym"]
 [ext_resource type="PackedScene" uid="uid://darh3kkm8ew07" path="res://game/cards/card_manager.tscn" id="2_nqpy4"]
@@ -8,20 +8,12 @@
 [ext_resource type="PackedScene" uid="uid://cc0jubtppjnmh" path="res://game/Entity/enemies/enemyChar.tscn" id="5_rnswb"]
 [ext_resource type="PackedScene" uid="uid://dytog6pc71ik4" path="res://game/cards/hand.tscn" id="6_4w38m"]
 [ext_resource type="PackedScene" uid="uid://ci580fctofejp" path="res://game/gui/player.tscn" id="6_8bqau"]
-[ext_resource type="PackedScene" uid="uid://5o5q162kqrpo" path="res://game/Entity/enemies/visual/krabVisual.tscn" id="6_kgv3j"]
-[ext_resource type="Script" path="res://game/Entity/Resource/EnemyStat.cs" id="7_vkoi3"]
 [ext_resource type="PackedScene" uid="uid://db4hoqfmh4ue4" path="res://game/cards/CardPile/discard_pile.tscn" id="8_jqrpu"]
 [ext_resource type="PackedScene" uid="uid://b6refw0j55huo" path="res://game/Entity/player/playerChar.tscn" id="10_wfn2r"]
-[ext_resource type="Resource" uid="uid://cgwvkxpa73d5n" path="res://game/Entity/Resource/Warrior.tres" id="11_imauu"]
+[ext_resource type="Resource" uid="uid://cgwvkxpa73d5n" path="res://game/Entity/player/Warrior.tres" id="11_imauu"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ce0rk"]
 size = Vector2(1825, 654)
-
-[sub_resource type="Resource" id="Resource_qi3tw"]
-script = ExtResource("7_vkoi3")
-name = "Crab"
-maxHealth = 30
-CharacterVisualScene = ExtResource("6_kgv3j")
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_3ktym")
@@ -46,18 +38,20 @@ debug_color = Color(0, 0.67451, 0.784314, 0.0862745)
 [node name="EntityLayer" type="Node2D" parent="."]
 
 [node name="Player" parent="EntityLayer" instance=ExtResource("10_wfn2r")]
-position = Vector2(601, 461)
+position = Vector2(310, 530)
 baseStats = ExtResource("11_imauu")
 
-[node name="Enemy3" parent="EntityLayer" instance=ExtResource("5_rnswb")]
-position = Vector2(1459, 423)
-baseStats = SubResource("Resource_qi3tw")
-playZoneType = 3
+[node name="Enemy1" parent="EntityLayer" instance=ExtResource("5_rnswb")]
+position = Vector2(867, 452)
 
 [node name="Enemy2" parent="EntityLayer" instance=ExtResource("5_rnswb")]
-position = Vector2(1691, 540)
-baseStats = SubResource("Resource_qi3tw")
-playZoneType = 3
+position = Vector2(1308, 578)
+
+[node name="Enemy3" parent="EntityLayer" instance=ExtResource("5_rnswb")]
+position = Vector2(1193, 356)
+
+[node name="Enemy4" parent="EntityLayer" instance=ExtResource("5_rnswb")]
+position = Vector2(943, 655)
 
 [node name="Player" parent="." instance=ExtResource("6_8bqau")]
 
@@ -73,10 +67,5 @@ position = Vector2(1796, 952)
 [node name="Camera2D" type="Camera2D" parent="."]
 anchor_mode = 0
 
-[node name="Hand" parent="." instance=ExtResource("6_4w38m")]
+[node name="Hand" parent="." groups=["GameStart"] instance=ExtResource("6_4w38m")]
 position = Vector2(960, 1580)
-
-[node name="FPS" type="Label" parent="."]
-offset_top = 26.0
-offset_right = 40.0
-offset_bottom = 49.0

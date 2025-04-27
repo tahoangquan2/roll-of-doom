@@ -13,6 +13,7 @@ public partial class NonTargetedEffect : CardEffect
         PlayerStat playerStat= GlobalVariables.playerStat;
 
         bool result = true;
+        GD.Print("NonTargetedEffect: ", nonTargetedEffectType, " Amount:", Amount);
 
         switch (nonTargetedEffectType)
         {
@@ -78,14 +79,6 @@ public partial class NonTargetedEffect : CardEffect
             case EnumGlobal.enumNonTargetedEffect.Restock:
                 //await discard.Restock();
                 break;
-
-            // case EnumGlobal.enumNonTargetedEffect.ShuffleHandtoDeck:
-            //     hand.ShuffleHandtoDeck();
-            //     break;
-
-            // case EnumGlobal.enumNonTargetedEffect.EndTurn:
-            //     GlobalVariables.TurnManager?.EndTurn(); // defensive
-            //     break;
             default:
                 GD.PrintErr("NonTargetedEffect: Unknown effect type.");
                 return false;
@@ -93,29 +86,4 @@ public partial class NonTargetedEffect : CardEffect
 
         return result;
     }
-
-    //     public enum enumNonTargetedEffect
-    // {
-    //     DealAoE = enumCardEffect.DealAoE,
-    //     DealRandom = enumCardEffect.DealRandom,
-    //     CheckSelfStat = enumCardEffect.CheckSelfStat,
-    //     GainShield = enumCardEffect.GainShield,
-    //     GainGuard = enumCardEffect.GainGuard,
-    //     GainMana = enumCardEffect.GainMana,
-    //     GainSpellMana = enumCardEffect.GainSpellMana,
-    //     ApplyBuff = enumCardEffect.ApplyBuff,     // apply buff to self
-    //     ApplyDebuff = enumCardEffect.ApplyDebuff, // apply debuff to all enemies
-    //     Heal = enumCardEffect.Heal,
-
-
-    //     EndTurn = enumCardEffect.EndTurn,
-    //     Draw=enumCardEffect.Draw,
-    //     Discard=enumCardEffect.Discard,
-    //     Forget=enumCardEffect.Forget,
-    //     ShuffleDeck=enumCardEffect.ShuffleDeck,
-    //     DiscardHand=enumCardEffect.DiscardHand,
-    //     Restock=enumCardEffect.Restock,
-    //     ShuffleHandtoDeck=enumCardEffect.ShuffleHandtoDeck, 
-    // }
-
 }

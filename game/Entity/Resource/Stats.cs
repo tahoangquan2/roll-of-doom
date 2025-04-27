@@ -33,7 +33,7 @@ public partial class Stats : Resource //  base class for character Stat. (Player
 		shield = Mathf.Clamp(shield + value, 0, 999);		
 		EmitSignal(nameof(StatChanged));
 	}
-	public int TakeDamage(int damage,bool IsPrecise=false)	{
+	public virtual int TakeDamage(int damage,bool IsPrecise=false)	{
 		if (damage <= 0) return 0;
 		int tmp = damage;
 		CheckForBuff(ActionType.TakeDamage, ref damage);
@@ -59,18 +59,18 @@ public partial class Stats : Resource //  base class for character Stat. (Player
 
 		return remainingDamage; // Return actual HP loss
 	}
-	public void heal(int value) // negative value to damage by pass defensive buffs
+	public virtual void heal(int value) // negative value to damage by pass defensive buffs
 	{
 		currentHealth = Mathf.Clamp(currentHealth + value, 0, maxHealth);		
 		EmitSignal(nameof(StatChanged));
 		if (currentHealth <= 0) Die();
 	}
-
 	public virtual Stats CreateInstance()
 	{
 		Stats newStat = Duplicate() as Stats;
 		newStat.maxHealth = maxHealth;
 		newStat.name = name;
+		newStat.currentHealth = currentHealth;
 
 		return newStat;
 	}
@@ -93,8 +93,9 @@ public partial class Stats : Resource //  base class for character Stat. (Player
 
 		Attack(target,damage,IsPrecise);
 	}
-	public void AttackAll(int damage,bool IsPrecise=false){
-		foreach (var target in GlobalVariables.allStats) if (target!=this) Attack(target, damage,IsPrecise);
+	public void AttackAll(int damage,bool IsPrecise=false){ 
+		var possibleTargets = GlobalVariables.allStats.FindAll(s => s != this);
+		foreach (Stats target in possibleTargets) Attack(target, damage,IsPrecise);
 	}
 
 	private void CheckForBuff(ActionType actionType, ref int number)
@@ -170,19 +171,17 @@ public partial class Stats : Resource //  base class for character Stat. (Player
 			buffs.Remove(type);
 		}
 	}
-
-
 	public void Die() {
 		CheckForBuff(ActionType.Death, ref NAN);
 		GlobalVariables.allStats.Remove(this);
 		GlobalVariables.allCharacterStats.Remove(this); 
 		if (GlobalVariables.playerStat == this) {
 			GlobalVariables.playerStat = null;
-			GD.Print("Game Over");
+			GlobalAccessPoint.GetPlayer().LoseGame();
 		} else{
 			if (GlobalVariables.playerStat != null) {
 				if (GlobalVariables.allStats.Count == 1) {
-					GD.Print("Won");
+					GlobalAccessPoint.GetPlayer().WinGame();
 				} 
 			}
 		}	

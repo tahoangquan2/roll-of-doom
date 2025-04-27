@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://dco1f52pisian"]
+
+[ext_resource type="Texture2D" uid="uid://cgopx2ponr1qi" path="res://assets/art/tile_0121.png" id="1_fj6h8"]
+
+[node name="KrabVisual" type="Sprite2D"]
+scale = Vector2(6, 6)
+texture = ExtResource("1_fj6h8")
+flip_h = true

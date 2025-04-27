@@ -19,7 +19,7 @@ public partial class BuffDatabase : Node
 				if (buffData != null)
 				{
 					buffMap[buffData.Type] = buffData;
-					GD.Print($"Loaded Buff: {buffData.Type} - {buffData.description}");
+					//GD.Print($"Loaded Buff: {buffData.Type} - {buffData.description}");
 				}
 			}
         }

@@ -1,16 +1,25 @@
-[gd_resource type="Resource" script_class="CardData" load_steps=4 format=3 uid="uid://cl3hr86rfwxnh"]
+[gd_resource type="Resource" script_class="CardData" load_steps=7 format=3 uid="uid://cl3hr86rfwxnh"]
 
 [ext_resource type="Script" path="res://game/cards/CardData/CardData.cs" id="1_57pie"]
 [ext_resource type="Texture2D" uid="uid://ba043na0yb5a" path="res://assets/cards/Details/Backgrounds/Water/BackgroundCard67.png" id="1_xvu2h"]
-[ext_resource type="Script" path="res://game/cards/CardEffects/cardScripts/draw3.gd" id="2_u4rlj"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/NonTargetedEffect.cs" id="2_71w7m"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/EffectLayer.cs" id="3_mveon"]
+
+[sub_resource type="Resource" id="Resource_armj0"]
+script = ExtResource("2_71w7m")
+nonTargetedEffectType = 13
+Amount = 5
+
+[sub_resource type="Resource" id="Resource_2o83u"]
+script = ExtResource("3_mveon")
+LayerEffects = [SubResource("Resource_armj0")]
 
 [resource]
 script = ExtResource("1_57pie")
 CardName = "Open Mind"
 Cost = 2
 CardType = 1
-Effects = []
-card_script = ExtResource("2_u4rlj")
+Effects = [SubResource("Resource_2o83u")]
 Description = "Draw 3 cards"
 CardArt = ExtResource("1_xvu2h")
 ArtOffset = Vector2(0, 0)

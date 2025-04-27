@@ -79,7 +79,7 @@ texture = ExtResource("1_h15bj")
 expand_mode = 3
 stretch_mode = 4
 
-[node name="SideMenu" type="Control" parent="Control/Scooll"]
+[node name="SideMenu" type="Control" parent="Control/Scooll" groups=["GameStart"]]
 clip_contents = true
 custom_minimum_size = Vector2(380, 0)
 layout_mode = 1
