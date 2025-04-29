@@ -1,23 +1,24 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using Godot.Collections;
 
 public partial class LevelMap : Control
 {
 	private NinePatchRect mapBackground;
 	private Camera2D camera;
-	// Map Template: A predetermined set of positions where Rooms can be generated or not. (A Grid)
-	// Rooms: Each individual place you can visit. (Also known as a Nodes).
-	// Paths: Lines connecting Rooms. (A connection between two Nodes).
-	// Floors: Rooms on the same horizontal level. (Nodes on the same X Axis).
-	// Locations: Specifies what can be expected when visited.
+// Map Template: A predetermined set of positions where Rooms can be generated or not. (A Grid)
+// Rooms: Each individual place you can visit. (Also known as a Nodes).
+// Paths: Lines connecting Rooms. (A connection between two Nodes).
+// Floors: Rooms on the same horizontal level. (Nodes on the same X Axis).
+// Locations: Specifies what can be expected when visited.
 
-	//Initially the game generates a 7x15 Irregular Isometric Grid (a Grid formed by triangles). 
-	// Then it randomly chooses one of the Rooms on the 1st Floor (at the bottom of the Grid). 
-	// It then connects it with a Path to one of the 3 closest Rooms on the 2nd Floor. It continues this pattern to the next Floor Floor.
-	// It repeats this procces 6 time obeying the following rules 2:
-	// -The First 2 Rooms randomly chosen at the 1rst Floor cannot be the same. Ensuring that there are always at least 2 different starting locations.
-	// -Paths Cannot cross over each other.
+//Initially the game generates a 7x15 Irregular Isometric Grid (a Grid formed by triangles). 
+// Then it randomly chooses one of the Rooms on the 1st Floor (at the bottom of the Grid). 
+// It then connects it with a Path to one of the 3 closest Rooms on the 2nd Floor. It continues this pattern to the next Floor Floor.
+// It repeats this procces 6 time obeying the following rules 2:
+// -The First 2 Rooms randomly chosen at the 1rst Floor cannot be the same. Ensuring that there are always at least 2 different starting locations.
+// -Paths Cannot cross over each other.
 
 
 	[Export] public int Width { get; set; } = 7;
@@ -27,14 +28,16 @@ public partial class LevelMap : Control
 	private PackedScene packedLine = GD.Load<PackedScene>("res://game/levels/MapLine.tscn");
 	private PackedScene packedRoom = GD.Load<PackedScene>("res://game/levels/MapNode.tscn");
 
-	// path only connect from current floor to the next floor
-	// path can only connect to the 3 closest rooms on the next floor (left, right, center)
-	// path cannot cross over each other ie cannot have [0,0] -> [1,1] and [0,1] -> [1,0]
+// path only connect from current floor to the next floor
+// path can only connect to the 3 closest rooms on the next floor (left, right, center)
+// path cannot cross over each other ie cannot have [0,0] -> [1,1] and [0,1] -> [1,0]
 	private HashSet<int> startingPoint = new HashSet<int>();
 	private MapNode[,] Rooms;
 	private MapNode startNode;
 	private MapNode endNode;
 	private bool mapGenerated = false;
+
+	bool isLoading = false;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -71,6 +74,18 @@ public partial class LevelMap : Control
 
 		setCameraLimit();
 
+		if (FileAccess.FileExists("user://map_data.tres"))		{
+			GD.Print("Loading map data from file " +OS.GetUserDataDir());
+			isLoading = true;
+			var mapData = ResourceLoader.Load<MapData>("user://map_data.tres");
+			if (mapData != null)			{
+				RestoreFromMapData(mapData);
+
+				setStartEnd();
+				return; // skip GenerateMap()
+			}
+		}
+
 		GenerateMap();
 	}
 
@@ -97,8 +112,8 @@ public partial class LevelMap : Control
 
 		// assign Rooms
 		AssignRooms();
-
 		setStartEnd();
+		SaveMapTRES();
 	}
 
 	private void setStartEnd()
@@ -115,7 +130,8 @@ public partial class LevelMap : Control
 			Rooms[Floor-1,i].SetConnection((Width-1)/2,endNode);
 		}
 
-		startNode._on_toggled(true);
+		if (!isLoading)
+			startNode._on_toggled(true);
 	}
 	
 	private void AssignRooms()
@@ -123,12 +139,8 @@ public partial class LevelMap : Control
 		// assign room type
 		for (int i = 0; i < Floor; i++)
 		{
-			for (int j = 0; j < Width; j++)
-			{
-				// Rooms[i,j].nodeType = (EnumGlobal.RoomType)GlobalVariables.GetRandomNumber(0, 3);
-				// // remmove that button that is not connected to any path
-				if (Rooms[i,j].isNone())
-				{
+			for (int j = 0; j < Width; j++)			{
+				if (Rooms[i,j].isNone())				{
 					mapBackground.RemoveChild(Rooms[i,j]);
 					Rooms[i,j].QueueFree();
 					Rooms[i,j]=null;
@@ -190,5 +202,108 @@ public partial class LevelMap : Control
 			GetTree().ReloadCurrentScene();			
 		}
 	}
+
+	public void SaveMapTRES()
+    {
+        var mapData = new MapData {
+            Width      = Width,        
+            FloorCount = Floor,        
+            Start      = new Vector2(startNode.Floor, startNode.Pos), 
+            End        = new Vector2(endNode.Floor,   endNode.Pos),
+        };
+
+        // collect each room’s data
+        for (int x = 0; x < Floor; x++)
+        for (int y = 0; y < Width; y++)
+        {
+            var node = Rooms[x,y];
+            if (node == null) continue;
+
+            var rd = new RoomDataResource {
+                Floor       = node.Floor,          
+                Pos         = node.Pos,            
+                Type        = node.nodeType,       
+
+               	Connections = new Array<bool> {
+                	node.Connections[0],
+                	node.Connections[1],
+                	node.Connections[2]
+            	},
+            };
+            mapData.Rooms.Add(rd);
+        }
+
+		mapData.nodePath = getPath();
+
+        // actually write the .tres
+        ResourceSaver.Save(mapData,"user://map_data.tres");
+    }
+
+	private void RestoreFromMapData(MapData data)
+	{
+		GD.Print("Restoring map data from file "+data.ToString());
+		 // 1) Quickly build a HashSet of the saved positions
+		var saved = new HashSet<(int floor, int pos)>();
+		foreach (var rd in data.Rooms)
+        	saved.Add((rd.Floor, rd.Pos));
+
+		// 2) First, remove any node *not* in that set
+		for (int x = 0; x < Floor; x++)
+		for (int y = 0; y < Width; y++)
+		{
+			if (!saved.Contains((x, y)) && Rooms[x,y] != null)
+			{
+				mapBackground.RemoveChild(Rooms[x,y]);
+				Rooms[x,y].QueueFree();
+				Rooms[x,y] = null;
+			}
+		}
 		
+		// 3) Now, for every saved position, restore type + connections
+		foreach (var rd in data.Rooms)
+		{
+			var node = Rooms[rd.Floor, rd.Pos];
+			node.nodeType = rd.Type;
+			node.assignType(rd.Type);}
+		foreach (var rd in data.Rooms)
+		{
+			var node = Rooms[rd.Floor, rd.Pos];
+			if (node == null) continue;
+
+			for (int i = 0; i < 3; i++)
+			{
+				if (!rd.Connections[i]) continue;
+				int nf = rd.Floor + 1;
+				int np = Mathf.Clamp(rd.Pos + (i-1), 0, Width-1);
+				var nn = (nf < Floor) ? Rooms[nf,np] : endNode;
+				if (nn != null)
+					node.SetConnection(i, nn);
+			}
+		}
+
+		// (C) highlight the player’s branch
+		foreach (var v in data.nodePath)
+		{
+			var n = Rooms[(int)v.X, (int)v.Y];
+			if (n != null)
+			{
+				n.pathed = true;
+				n.toggleNoEffect();
+			}
+		}
+
+		// (D) re‐attach start/end links & show first floor
+		setStartEnd();
+	}
+
+	private Array<Vector2> getPath()
+	{
+		var path = new Array<Vector2>();
+		foreach (var node in Rooms) if (node != null && node.pathed)
+		{
+			path.Add(new Vector2(node.Floor, node.Pos));
+		}
+		return path;
+	}
+
 }

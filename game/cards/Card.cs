@@ -118,9 +118,11 @@ public partial class Card : Node2D
         switch (cardData.CardType)
         {
             case EnumGlobal.enumCardType.Attack:
+                CardManaIcon.Frame = 0; 
                 CardTypeIcon.Frame = 2;                
                 break;
             case EnumGlobal.enumCardType.Defense:
+                CardManaIcon.Frame = 0;
                 CardTypeIcon.Frame = 1;
                 break;
             case EnumGlobal.enumCardType.Spell:

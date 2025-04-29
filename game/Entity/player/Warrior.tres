@@ -1,25 +1,53 @@
-[gd_resource type="Resource" script_class="PlayerStat" load_steps=15 format=3 uid="uid://cgwvkxpa73d5n"]
+[gd_resource type="Resource" script_class="PlayerStat" load_steps=21 format=3 uid="uid://cgwvkxpa73d5n"]
 
 [ext_resource type="Script" path="res://game/Entity/Resource/PlayerStat.cs" id="1_bvnqj"]
-[ext_resource type="Resource" uid="uid://b3j86o0lhj5qh" path="res://game/cards/CardData/Spell/DiscardToDraw.tres" id="2_x10bk"]
-[ext_resource type="Resource" uid="uid://cl3hr86rfwxnh" path="res://game/cards/CardData/Spell/Draw3.tres" id="3_ft68j"]
-[ext_resource type="Resource" uid="uid://irkv4jc82imh" path="res://game/cards/CardData/KeywordTest/auto.tres" id="4_7opok"]
-[ext_resource type="Resource" uid="uid://culc0guke43l7" path="res://game/cards/CardData/KeywordTest/needy.tres" id="6_n1oa2"]
-[ext_resource type="Resource" uid="uid://dgf334fyc5c7d" path="res://game/cards/CardData/KeywordTest/Enternaltres.tres" id="7_2f81v"]
-[ext_resource type="Resource" uid="uid://1oftqn2h3y7q" path="res://game/cards/CardData/KeywordTest/Magnetic.tres" id="8_jcu3u"]
-[ext_resource type="Resource" uid="uid://7xy2y4nw1yvl" path="res://game/cards/CardData/KeywordTest/overwork.tres" id="9_sm5jp"]
-[ext_resource type="Resource" uid="uid://cx1nuhwbsr5wy" path="res://game/cards/CardData/KeywordTest/ephemeral.tres" id="10_eirkn"]
-[ext_resource type="Resource" uid="uid://b1sje4sr284xk" path="res://game/cards/CardData/KeywordTest/unplayable.tres" id="11_05fiw"]
-[ext_resource type="Resource" uid="uid://da7p1qmgasjy5" path="res://game/cards/CardData/Warrior/Deal5.tres" id="12_ie012"]
-[ext_resource type="Resource" uid="uid://dg5uiwq3uc8bs" path="res://game/cards/CardData/Spell/PredictToDraw.tres" id="13_flwjq"]
-[ext_resource type="Resource" uid="uid://bs54jxoqbiqke" path="res://game/cards/CardData/Warrior/Deal10.tres" id="13_jp3nd"]
-[ext_resource type="Resource" uid="uid://mmcauup27px2" path="res://game/cards/CardData/Spell/HeavenBurn.tres" id="14_t4c4c"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/EffectLayer.cs" id="3_lwb12"]
+[ext_resource type="Script" path="res://game/cards/CardData/CardData.cs" id="4_e2jqx"]
+[ext_resource type="Resource" uid="uid://dso6xp37yfl5m" path="res://game/cards/CardData/Warrior/Deal3x3.tres" id="4_ucoqx"]
+[ext_resource type="Resource" uid="uid://3j4pbv1osnu2" path="res://game/cards/CardData/Warrior/Crippling.tres" id="5_c35lp"]
+[ext_resource type="Resource" uid="uid://cl47tyue6r5gw" path="res://game/cards/CardData/Warrior/Deal6All.tres" id="6_4tsuf"]
+[ext_resource type="Resource" uid="uid://o2og7lngn8xe" path="res://game/cards/CardData/Warrior/Deal9Precise.tres" id="7_abhtn"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/NonTargetedEffect.cs" id="7_r6ylu"]
+[ext_resource type="Resource" uid="uid://b01v7ws66yojw" path="res://game/cards/CardData/Warrior/Execution.tres" id="8_mcb4q"]
+[ext_resource type="Resource" uid="uid://dbq3m5y5psd12" path="res://game/cards/CardData/Warrior/ReBounding.tres" id="9_onrg7"]
+[ext_resource type="Resource" uid="uid://b8xost4p3yk4x" path="res://game/cards/CardData/Warrior/block.tres" id="10_31q03"]
+[ext_resource type="Resource" uid="uid://ckvt16j24os6m" path="res://game/cards/CardData/Warrior/block6.tres" id="11_ugw6o"]
+[ext_resource type="Resource" uid="uid://srteridx7ggi" path="res://game/cards/CardData/Warrior/Deal5.tres" id="12_ie012"]
+[ext_resource type="Texture2D" uid="uid://ct3qgi481iitj" path="res://assets/cards/Details/Backgrounds/Ice/SpellCardBackground32.png" id="12_nyw3m"]
+[ext_resource type="Resource" uid="uid://cfr0dr843pqbc" path="res://game/cards/CardData/Warrior/Deal10.tres" id="13_jp3nd"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/ApplyBuffEffect.cs" id="14_dgoij"]
+
+[sub_resource type="Resource" id="Resource_a1x4w"]
+script = ExtResource("7_r6ylu")
+nonTargetedEffectType = 7
+Amount = 7
+
+[sub_resource type="Resource" id="Resource_ggpda"]
+script = ExtResource("14_dgoij")
+buffType = 2
+Amount = 1
+
+[sub_resource type="Resource" id="Resource_r355s"]
+script = ExtResource("3_lwb12")
+LayerEffects = [SubResource("Resource_a1x4w"), SubResource("Resource_ggpda")]
+
+[sub_resource type="Resource" id="Resource_ucio0"]
+script = ExtResource("4_e2jqx")
+CardName = "Reinforce"
+Cost = 3
+CardType = 1
+Effects = [SubResource("Resource_r355s")]
+Description = "Gain 7 Shield and apply Fortify (1)"
+CardArt = ExtResource("12_nyw3m")
+ArtOffset = Vector2(0, 0)
+Keywords = []
+TargetMask = 2
 
 [resource]
 script = ExtResource("1_bvnqj")
 capSpellMana = 2
 baseMana = 4
-startingDeck = [ExtResource("2_x10bk"), ExtResource("3_ft68j"), ExtResource("4_7opok"), ExtResource("6_n1oa2"), ExtResource("7_2f81v"), ExtResource("8_jcu3u"), ExtResource("9_sm5jp"), ExtResource("10_eirkn"), ExtResource("11_05fiw"), ExtResource("12_ie012"), ExtResource("13_jp3nd"), ExtResource("13_flwjq"), ExtResource("14_t4c4c")]
+startingDeck = [ExtResource("12_ie012"), ExtResource("13_jp3nd"), ExtResource("4_ucoqx"), ExtResource("5_c35lp"), ExtResource("6_4tsuf"), ExtResource("7_abhtn"), ExtResource("8_mcb4q"), ExtResource("9_onrg7"), ExtResource("10_31q03"), ExtResource("11_ugw6o"), SubResource("Resource_ucio0")]
 cardDrawPerTurn = 5
 gold = 10
 name = "Warrior"

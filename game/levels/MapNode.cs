@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -23,11 +24,17 @@ public partial class MapNode : TextureButton
     private static Texture2D[] TextureforNodeHover = new Texture2D[7]; 
 
     private static PackedScene packedLine = GD.Load<PackedScene>("res://game/levels/MapLine.tscn");
+    private static PackedScene battlePacked = GD.Load<PackedScene>("res://game/Main.tscn");
 
     private Control linesParent;
-
+    private AnimationPlayer anim;
+    public bool pathed = false; // if the path is through this node
     private static float lineOffset = 30; // offset for the line to be drawn from the center of the button
 
+    public override void _Ready()
+    {
+        anim = GetNode<AnimationPlayer>("AnimationPlayer");        
+    }
     public void setUp(int x,int y){
         Floor = x;
         Pos = y;
@@ -56,6 +63,7 @@ public partial class MapNode : TextureButton
 		else Connections[1] = true;
 
         Nexts.Add(nextNode);
+        nextNode.parentRoom = this;
 
         var line = (Line2D) packedLine.Instantiate();
 
@@ -74,13 +82,18 @@ public partial class MapNode : TextureButton
 		linesParent.AddChild(line);	
 	}
 
-    public bool isNone()
-    {
+    public bool isNone()    {
         return !Connections[0] && !Connections[1] && !Connections[2];
     }
 
-    public override string ToString()
-    {
+    public void gotoBattleScene(){
+        if (Floor == -1) return;   
+        var map = GetParent().GetParent() as LevelMap     ;
+        map.SaveMapTRES();
+        GetTree().ChangeSceneToPacked(battlePacked);        
+    }
+
+    public override string ToString(){
         return $"({Floor}, {Pos})";
     }
 
@@ -103,8 +116,7 @@ public partial class MapNode : TextureButton
         TextureforNodeHover[(int)EnumGlobal.RoomType.Treasure] = GD.Load<Texture2D>("res://assets/maps/ResizedMap/locked-chest.png") ;
     }
 
-    public void assignType()
-    {
+    public void assignType()    {
         if (Floor == -1)
             nodeType = EnumGlobal.RoomType.Start;
         else if (Floor == FloorCount)
@@ -116,40 +128,51 @@ public partial class MapNode : TextureButton
         TextureDisabled = TextureforNode[(int)nodeType];     
         TextureHover = TextureforNodeHover[(int)nodeType];       
     }
+
+    public void assignType(EnumGlobal.RoomType type)    {
+        if (Floor == -1)
+            nodeType = EnumGlobal.RoomType.Start;
+        else if (Floor == FloorCount)
+            nodeType = EnumGlobal.RoomType.Boss;
+        else {
+            nodeType = type;
+        }
+        TextureNormal = TextureforNode[(int)nodeType];
+        TextureDisabled = TextureforNode[(int)nodeType];     
+        TextureHover = TextureforNodeHover[(int)nodeType];       
+    }
     
     //_on_toggled
-    public async Task _on_toggled(bool toggled_on)
-    {
-        //animation player
+    public void _on_toggled(bool toggled_on)    {
+        anim.AnimationFinished += (animName) => {
+                if (animName == "Chosen")
+                    gotoBattleScene();
+            };
+
         if (toggled_on){
-            GetChild<AnimationPlayer>(1).Play("Chosen");
-
-            foreach (var next in Nexts)
-            {
-                next.Disabled = false;
-                next.parentRoom = this;
-            }
-
-            toggleLines(true);
-
-            if (parentRoom != null)
-            {
-                foreach (var next in parentRoom.Nexts)
-                {
-                    next.Disabled = true;
-                }
-                parentRoom.toggleLines(false);
-            }
-
-            //wait for 0.5 seconds
-            await ToSignal(GetTree().CreateTimer(2.5f), "timeout");
-
-            var battlePacked = GD.Load<PackedScene>("res://game/Main.tscn");
-            var battle = battlePacked.Instantiate();
-            Visible = false;
-            GetTree().ChangeSceneToPacked(battlePacked);
-            
+            toggleNoEffect();              
         }
+    }
+    public void toggleNoEffect(){
+        pathed = true;
+        anim.Play("Chosen");
+
+        foreach (var next in Nexts)
+        {
+            next.Disabled = false;
+            next.parentRoom = this;
+        }
+
+        toggleLines(true);
+
+        if (parentRoom != null)
+        {
+            foreach (var next in parentRoom.Nexts)
+            {
+                next.Disabled = true;
+            }
+            parentRoom.toggleLines(false);
+        }   
     }
 
     private void toggleLines(bool toggle)

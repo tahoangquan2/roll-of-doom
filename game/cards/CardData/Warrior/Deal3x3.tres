@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=9 format=3 uid="uid://dso6xp37yfl5m"]
+
+[ext_resource type="Texture2D" uid="uid://b8one2h8rcphf" path="res://assets/cards/Details/Backgrounds/Creature/BackgroundCard3.png" id="1_3pkvn"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/AttackSingleEffect.cs" id="2_dmxaa"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/EffectLayer.cs" id="3_h1nd1"]
+[ext_resource type="Script" path="res://game/cards/CardData/CardData.cs" id="4_dw1mo"]
+
+[sub_resource type="Resource" id="Resource_gd2cn"]
+script = ExtResource("2_dmxaa")
+Amount = 2
+IsPrecise = false
+
+[sub_resource type="Resource" id="Resource_hylbi"]
+script = ExtResource("2_dmxaa")
+Amount = 2
+IsPrecise = false
+
+[sub_resource type="Resource" id="Resource_i66bk"]
+script = ExtResource("2_dmxaa")
+Amount = 2
+IsPrecise = false
+
+[sub_resource type="Resource" id="Resource_xuaxi"]
+script = ExtResource("3_h1nd1")
+LayerEffects = [SubResource("Resource_gd2cn"), SubResource("Resource_hylbi"), SubResource("Resource_i66bk")]
+
+[resource]
+script = ExtResource("4_dw1mo")
+CardName = "Flurry"
+Cost = 2
+CardType = 0
+Effects = [SubResource("Resource_xuaxi")]
+Description = "Deal 2 damage three times."
+CardArt = ExtResource("1_3pkvn")
+ArtOffset = Vector2(0, 0)
+Keywords = []
+TargetMask = 3

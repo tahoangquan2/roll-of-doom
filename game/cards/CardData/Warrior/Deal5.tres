@@ -1,27 +1,27 @@
-[gd_resource type="Resource" script_class="CardData" load_steps=7 format=3 uid="uid://da7p1qmgasjy5"]
+[gd_resource type="Resource" script_class="CardData" load_steps=7 format=3 uid="uid://srteridx7ggi"]
 
-[ext_resource type="Texture2D" uid="uid://cii4bt7gje7ui" path="res://assets/cards/Details/Backgrounds/Creature/BackgroundCard2.png" id="1_2ptgf"]
 [ext_resource type="Script" path="res://game/cards/CardData/CardData.cs" id="1_amkke"]
+[ext_resource type="Texture2D" uid="uid://dxqn4uv2sca4r" path="res://assets/cards/Details/Backgrounds/Creature/BackgroundCard4.png" id="1_d338w"]
 [ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/EffectLayer.cs" id="2_aoyxg"]
 [ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/AttackSingleEffect.cs" id="4_2k8w0"]
 
-[sub_resource type="Resource" id="Resource_lor36"]
+[sub_resource type="Resource" id="Resource_xbjwo"]
 script = ExtResource("4_2k8w0")
-Amount = 16
-IsPrecise = true
+Amount = 3
+IsPrecise = false
 
-[sub_resource type="Resource" id="Resource_o0mn4"]
+[sub_resource type="Resource" id="Resource_be0ys"]
 script = ExtResource("2_aoyxg")
-LayerEffects = [SubResource("Resource_lor36")]
+LayerEffects = [SubResource("Resource_xbjwo")]
 
 [resource]
 script = ExtResource("1_amkke")
 CardName = "Strike"
 Cost = 1
 CardType = 0
-Effects = [SubResource("Resource_o0mn4")]
-Description = "This card has no description."
-CardArt = ExtResource("1_2ptgf")
+Effects = [SubResource("Resource_be0ys")]
+Description = "Deal 3 damage"
+CardArt = ExtResource("1_d338w")
 ArtOffset = Vector2(0, 0)
-Keywords = [8]
+Keywords = []
 TargetMask = 3

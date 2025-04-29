@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=7 format=3 uid="uid://o2og7lngn8xe"]
+
+[ext_resource type="Texture2D" uid="uid://b8d3wdea16040" path="res://assets/cards/Details/Backgrounds/Creature/BackgroundCard40.png" id="1_d3lky"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/AttackSingleEffect.cs" id="2_xiyug"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/EffectLayer.cs" id="3_uxesi"]
+[ext_resource type="Script" path="res://game/cards/CardData/CardData.cs" id="4_il5ch"]
+
+[sub_resource type="Resource" id="Resource_3nj5b"]
+script = ExtResource("2_xiyug")
+Amount = 5
+IsPrecise = true
+
+[sub_resource type="Resource" id="Resource_a3exv"]
+script = ExtResource("3_uxesi")
+LayerEffects = [SubResource("Resource_3nj5b")]
+
+[resource]
+script = ExtResource("4_il5ch")
+CardName = "Head Shot"
+Cost = 2
+CardType = 0
+Effects = [SubResource("Resource_a3exv")]
+Description = "Deal 5 damage; Precise."
+CardArt = ExtResource("1_d3lky")
+ArtOffset = Vector2(0, 0)
+Keywords = [11]
+TargetMask = 3

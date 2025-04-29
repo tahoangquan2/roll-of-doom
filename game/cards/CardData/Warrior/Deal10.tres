@@ -1,25 +1,27 @@
-[gd_resource type="Resource" script_class="CardData" load_steps=6 format=3 uid="uid://bs54jxoqbiqke"]
+[gd_resource type="Resource" script_class="CardData" load_steps=7 format=3 uid="uid://cfr0dr843pqbc"]
 
+[ext_resource type="Texture2D" uid="uid://cii4bt7gje7ui" path="res://assets/cards/Details/Backgrounds/Creature/BackgroundCard2.png" id="1_2c4in"]
 [ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/AttackSingleEffect.cs" id="1_ylnjg"]
 [ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/EffectLayer.cs" id="2_uo1vd"]
 [ext_resource type="Script" path="res://game/cards/CardData/CardData.cs" id="3_vhj8e"]
 
-[sub_resource type="Resource" id="Resource_u1ejk"]
+[sub_resource type="Resource" id="Resource_ubfkb"]
 script = ExtResource("1_ylnjg")
-Amount = 10
+Amount = 6
 IsPrecise = false
 
-[sub_resource type="Resource" id="Resource_6488g"]
+[sub_resource type="Resource" id="Resource_a5v6k"]
 script = ExtResource("2_uo1vd")
-LayerEffects = [SubResource("Resource_u1ejk")]
+LayerEffects = [SubResource("Resource_ubfkb")]
 
 [resource]
 script = ExtResource("3_vhj8e")
-CardName = "unaim"
-Cost = 0
+CardName = "Heavy Blow"
+Cost = 2
 CardType = 0
-Effects = [SubResource("Resource_6488g")]
-Description = "This card has no description."
+Effects = [SubResource("Resource_a5v6k")]
+Description = "Deal 6 damage."
+CardArt = ExtResource("1_2c4in")
 ArtOffset = Vector2(0, 0)
 Keywords = []
 TargetMask = 3

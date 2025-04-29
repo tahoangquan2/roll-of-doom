@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=7 format=3 uid="uid://b8xost4p3yk4x"]
+
+[ext_resource type="Texture2D" uid="uid://baaq4s7td0mj2" path="res://assets/cards/Details/Backgrounds/Creature/BackgroundCard48.png" id="1_lljjf"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/NonTargetedEffect.cs" id="2_dgta3"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/EffectLayer.cs" id="3_340rg"]
+[ext_resource type="Script" path="res://game/cards/CardData/CardData.cs" id="4_y428k"]
+
+[sub_resource type="Resource" id="Resource_17pyq"]
+script = ExtResource("2_dgta3")
+nonTargetedEffectType = 7
+Amount = 3
+
+[sub_resource type="Resource" id="Resource_7xpjb"]
+script = ExtResource("3_340rg")
+LayerEffects = [SubResource("Resource_17pyq")]
+
+[resource]
+script = ExtResource("4_y428k")
+CardName = "Block"
+Cost = 1
+CardType = 1
+Effects = [SubResource("Resource_7xpjb")]
+Description = "Gain 3 block."
+CardArt = ExtResource("1_lljjf")
+ArtOffset = Vector2(0, 0)
+Keywords = []
+TargetMask = 2
