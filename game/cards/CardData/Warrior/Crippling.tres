@@ -8,12 +8,12 @@
 
 [sub_resource type="Resource" id="Resource_donjv"]
 script = ExtResource("2_dadcv")
-Amount = 5
+Amount = 8
 IsPrecise = false
 
 [sub_resource type="Resource" id="Resource_hpho7"]
 script = ExtResource("3_be7f5")
-BuffType = 7
+BuffType = 6
 Amount = 1
 IsPrecise = false
 
@@ -27,8 +27,9 @@ CardName = "Crippling Strike"
 Cost = 2
 CardType = 0
 Effects = [SubResource("Resource_micqd")]
-Description = "Deal 5 damage and apply Fragile (1)."
+Description = "Deal 8 damage and apply Exhaust (1)."
 CardArt = ExtResource("1_qro7f")
 ArtOffset = Vector2(0, 0)
 Keywords = []
 TargetMask = 3
+AdditionalExplanations = [16]

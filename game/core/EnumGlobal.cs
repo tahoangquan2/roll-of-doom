@@ -96,7 +96,7 @@ public partial class EnumGlobal : Node
     }
 
 	public enum BuffType {
-		Dodge,Bounce,Fortify, Armed, Vigilant, Pump, Exhaust, Fragile, Poisoned
+		Dodge,Bounce,Fortify, Armed, Vigilant, Pump, Exhaust, Fragile, Poisoned,None
 	}
 
 	public enum BuffDuration { 

@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=7 format=3 uid="uid://cvyi2elgbgyrq"]
+
+[ext_resource type="Texture2D" uid="uid://by2d7r35tavv6" path="res://assets/cards/Details/Backgrounds/Creature/BackgroundCard10.png" id="1_7o1je"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/ApplyBuffEffect.cs" id="2_0wr6i"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/EffectLayer.cs" id="3_mbgn1"]
+[ext_resource type="Script" path="res://game/cards/CardData/CardData.cs" id="4_qdj0l"]
+
+[sub_resource type="Resource" id="Resource_b0445"]
+script = ExtResource("2_0wr6i")
+buffType = 0
+Amount = 1
+
+[sub_resource type="Resource" id="Resource_ynngy"]
+script = ExtResource("3_mbgn1")
+LayerEffects = [SubResource("Resource_b0445")]
+
+[resource]
+script = ExtResource("4_qdj0l")
+CardName = "Dodge"
+Cost = 1
+CardType = 1
+Effects = [SubResource("Resource_ynngy")]
+Description = "Gain 1 Dodge."
+CardArt = ExtResource("1_7o1je")
+ArtOffset = Vector2(0, 0)
+Keywords = []
+TargetMask = 2
+AdditionalExplanations = [9]

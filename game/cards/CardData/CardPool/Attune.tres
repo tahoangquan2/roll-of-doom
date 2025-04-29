@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=7 format=3 uid="uid://cygch7snidtnh"]
+
+[ext_resource type="Texture2D" uid="uid://cq8fhsd4bbg5n" path="res://assets/cards/Details/Backgrounds/Water/SpellCardBackground76.png" id="1_xgan6"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/NonTargetedEffect.cs" id="2_i52yj"]
+[ext_resource type="Script" path="res://game/cards/CardData/CardData.cs" id="2_ryoyr"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/EffectLayer.cs" id="3_bxwu8"]
+
+[sub_resource type="Resource" id="Resource_uf856"]
+script = ExtResource("2_i52yj")
+nonTargetedEffectType = 9
+Amount = 3
+
+[sub_resource type="Resource" id="Resource_4bhxi"]
+script = ExtResource("3_bxwu8")
+LayerEffects = [SubResource("Resource_uf856")]
+
+[resource]
+script = ExtResource("2_ryoyr")
+CardName = "Attune"
+Cost = 1
+CardType = 2
+Effects = [SubResource("Resource_4bhxi")]
+Description = "Gain 3 spell mana"
+CardArt = ExtResource("1_xgan6")
+ArtOffset = Vector2(0, 0)
+Keywords = [2]
+TargetMask = 2
+AdditionalExplanations = []

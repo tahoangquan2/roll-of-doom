@@ -96,7 +96,7 @@ public partial class Card : Node2D
 
                 if (results.Any(success => !success))
                 {
-                    GD.PrintErr("Effect Layer failed — interrupting.");
+                    GD.Print("Effect Layer failed — interrupting.");
                     break;
                 }
             }

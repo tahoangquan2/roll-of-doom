@@ -7,12 +7,13 @@
 [resource]
 script = ExtResource("3_t21th")
 CardName = "Mercy"
-Cost = 4
-CardType = 1
+Cost = 2
+CardType = 2
 Effects = []
 card_script = ExtResource("2_g1fw6")
 Description = "Balance the Universe - Obliterate half your hand to kill half of enemies randomly."
 CardArt = ExtResource("1_2guo8")
 ArtOffset = Vector2(0, 0)
-Keywords = []
+Keywords = [3]
 TargetMask = 2
+AdditionalExplanations = []

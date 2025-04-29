@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=9 format=3 uid="uid://dpap2m4iucg5p"]
+
+[ext_resource type="Texture2D" uid="uid://ct3qgi481iitj" path="res://assets/cards/Details/Backgrounds/Ice/SpellCardBackground32.png" id="1_xly3h"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/NonTargetedEffect.cs" id="2_jnfei"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/ApplyBuffEffect.cs" id="3_twin7"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/EffectLayer.cs" id="4_403q1"]
+[ext_resource type="Script" path="res://game/cards/CardData/CardData.cs" id="5_6q25d"]
+
+[sub_resource type="Resource" id="Resource_a1x4w"]
+script = ExtResource("2_jnfei")
+nonTargetedEffectType = 6
+Amount = 10
+
+[sub_resource type="Resource" id="Resource_ggpda"]
+script = ExtResource("3_twin7")
+buffType = 2
+Amount = 1
+
+[sub_resource type="Resource" id="Resource_r355s"]
+script = ExtResource("4_403q1")
+LayerEffects = [SubResource("Resource_a1x4w"), SubResource("Resource_ggpda")]
+
+[resource]
+script = ExtResource("5_6q25d")
+CardName = "Reinforce"
+Cost = 3
+CardType = 1
+Effects = [SubResource("Resource_r355s")]
+Description = "Gain 12 Shield and apply Fortify (1)"
+CardArt = ExtResource("1_xly3h")
+ArtOffset = Vector2(0, 0)
+Keywords = []
+TargetMask = 2
+AdditionalExplanations = [2, 11]

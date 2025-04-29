@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=9 format=3 uid="uid://b62o16tmrbnom"]
+
+[ext_resource type="Texture2D" uid="uid://b3jbetjpjnw3o" path="res://assets/cards/Details/Backgrounds/Water/SpellCardBackground67.png" id="1_he5gc"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/NonTargetedEffect.cs" id="2_llvjt"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/ApplyBuffEffect.cs" id="3_risxp"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/EffectLayer.cs" id="4_tfrhr"]
+[ext_resource type="Script" path="res://game/cards/CardData/CardData.cs" id="5_bv78h"]
+
+[sub_resource type="Resource" id="Resource_ofo3p"]
+script = ExtResource("2_llvjt")
+nonTargetedEffectType = 6
+Amount = 3
+
+[sub_resource type="Resource" id="Resource_xawca"]
+script = ExtResource("3_risxp")
+buffType = 1
+Amount = 1
+
+[sub_resource type="Resource" id="Resource_n2q4p"]
+script = ExtResource("4_tfrhr")
+LayerEffects = [SubResource("Resource_ofo3p"), SubResource("Resource_xawca")]
+
+[resource]
+script = ExtResource("5_bv78h")
+CardName = "Parry"
+Cost = 2
+CardType = 1
+Effects = [SubResource("Resource_n2q4p")]
+Description = "Gain 3 Shield and reflect blocked damage back to attacker"
+CardArt = ExtResource("1_he5gc")
+ArtOffset = Vector2(0, 0)
+Keywords = [0]
+TargetMask = 2
+AdditionalExplanations = [2]

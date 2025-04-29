@@ -7,17 +7,17 @@
 
 [sub_resource type="Resource" id="Resource_gd2cn"]
 script = ExtResource("2_dmxaa")
-Amount = 2
+Amount = 3
 IsPrecise = false
 
 [sub_resource type="Resource" id="Resource_hylbi"]
 script = ExtResource("2_dmxaa")
-Amount = 2
+Amount = 3
 IsPrecise = false
 
 [sub_resource type="Resource" id="Resource_i66bk"]
 script = ExtResource("2_dmxaa")
-Amount = 2
+Amount = 3
 IsPrecise = false
 
 [sub_resource type="Resource" id="Resource_xuaxi"]
@@ -30,8 +30,9 @@ CardName = "Flurry"
 Cost = 2
 CardType = 0
 Effects = [SubResource("Resource_xuaxi")]
-Description = "Deal 2 damage three times."
+Description = "Deal 3 damage three times."
 CardArt = ExtResource("1_3pkvn")
 ArtOffset = Vector2(0, 0)
 Keywords = []
 TargetMask = 3
+AdditionalExplanations = []

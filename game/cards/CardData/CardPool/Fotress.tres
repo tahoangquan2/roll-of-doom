@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=9 format=3 uid="uid://d1otagoxmajft"]
+
+[ext_resource type="Texture2D" uid="uid://2lap1wvrc2jk" path="res://assets/cards/Details/Backgrounds/Earth/BackgroundCard49.png" id="1_8sn58"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/SetPassValue.cs" id="2_psq6m"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/EffectFromPassed.cs" id="3_escq7"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/EffectLayer.cs" id="4_c4xsu"]
+[ext_resource type="Script" path="res://game/cards/CardData/CardData.cs" id="5_tcrqr"]
+
+[sub_resource type="Resource" id="Resource_8ei08"]
+script = ExtResource("2_psq6m")
+valueType = 5
+
+[sub_resource type="Resource" id="Resource_qcw8s"]
+script = ExtResource("3_escq7")
+effectType = 3
+
+[sub_resource type="Resource" id="Resource_pksa2"]
+script = ExtResource("4_c4xsu")
+LayerEffects = [SubResource("Resource_8ei08"), SubResource("Resource_qcw8s")]
+
+[resource]
+script = ExtResource("5_tcrqr")
+CardName = "Fortress"
+Cost = 3
+CardType = 1
+Effects = [SubResource("Resource_pksa2"), SubResource("Resource_pksa2"), SubResource("Resource_pksa2")]
+Description = "Gain (3 × your hand size) Shield."
+CardArt = ExtResource("1_8sn58")
+ArtOffset = Vector2(0, 0)
+Keywords = [8]
+TargetMask = 2
+AdditionalExplanations = [2]

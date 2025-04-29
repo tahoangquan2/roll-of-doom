@@ -66,8 +66,15 @@ public partial class Deck : CardPile
     public async Task<bool> Scry(int amount)
     {
         if (deck.Count == 0) return false;
+        // pass top amount card in deck to selection mode
+        if (amount > deck.Count) amount = deck.Count;
+        Godot.Collections.Array<CardData> passed = new Godot.Collections.Array<CardData>();
+        
+        for (int i = 0; i < amount; i++)      
+            passed.Add(deck[i]);
+
         var selected = await GlobalAccessPoint.GetPlayer().StartSelectionMode(
-            deck, EnumGlobal.PileSelectionPurpose.Scry, 0, amount
+            passed, EnumGlobal.PileSelectionPurpose.Scry, 0, amount
         );
         
         Godot.Collections.Array<Card> selectedCards = new Godot.Collections.Array<Card>();

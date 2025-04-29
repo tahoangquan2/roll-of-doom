@@ -1,0 +1,46 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=13 format=3 uid="uid://b8daa0a2r5r4o"]
+
+[ext_resource type="Texture2D" uid="uid://dbg15b1aa3a4y" path="res://assets/cards/Details/Backgrounds/Ice/SpellCardBackground28.png" id="1_srw3h"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/NonTargetedEffect.cs" id="2_qr2oi"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/EffectLayer.cs" id="3_8bkcq"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/SetPassValue.cs" id="4_hq2ug"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/EffectFromPassed.cs" id="5_a3f87"]
+[ext_resource type="Script" path="res://game/cards/CardData/CardData.cs" id="6_ef6k3"]
+
+[sub_resource type="Resource" id="Resource_xfp8y"]
+script = ExtResource("2_qr2oi")
+nonTargetedEffectType = 6
+Amount = 2
+
+[sub_resource type="Resource" id="Resource_a1rrm"]
+script = ExtResource("3_8bkcq")
+LayerEffects = [SubResource("Resource_xfp8y")]
+
+[sub_resource type="Resource" id="Resource_0h0hu"]
+script = ExtResource("4_hq2ug")
+valueType = 2
+
+[sub_resource type="Resource" id="Resource_k8xt6"]
+script = ExtResource("3_8bkcq")
+LayerEffects = [SubResource("Resource_0h0hu")]
+
+[sub_resource type="Resource" id="Resource_xwjbs"]
+script = ExtResource("5_a3f87")
+effectType = 0
+
+[sub_resource type="Resource" id="Resource_smnmi"]
+script = ExtResource("3_8bkcq")
+LayerEffects = [SubResource("Resource_xwjbs")]
+
+[resource]
+script = ExtResource("6_ef6k3")
+CardName = "Shield Bash"
+Cost = 2
+CardType = 0
+Effects = [SubResource("Resource_a1rrm"), SubResource("Resource_k8xt6"), SubResource("Resource_smnmi")]
+Description = "Gain 2 Shield, then do damage equal to total your Guard and Shield"
+CardArt = ExtResource("1_srw3h")
+ArtOffset = Vector2(0, 0)
+Keywords = []
+TargetMask = 3
+AdditionalExplanations = [1, 2]

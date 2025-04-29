@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="CardData" load_steps=7 format=3 uid="uid://dg5uiwq3uc8bs"]
+[gd_resource type="Resource" script_class="CardData" load_steps=9 format=3 uid="uid://dg5uiwq3uc8bs"]
 
 [ext_resource type="Texture2D" uid="uid://dggeruqaij3qe" path="res://assets/cards/Details/Backgrounds/Creature/BackgroundCard13.png" id="1_rqi6n"]
 [ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/NonTargetedEffect.cs" id="2_qw8fa"]
@@ -14,14 +14,24 @@ Amount = 3
 script = ExtResource("3_r14p0")
 LayerEffects = [SubResource("Resource_bl7q3")]
 
+[sub_resource type="Resource" id="Resource_io7co"]
+script = ExtResource("2_qw8fa")
+nonTargetedEffectType = 13
+Amount = 1
+
+[sub_resource type="Resource" id="Resource_g1uqr"]
+script = ExtResource("3_r14p0")
+LayerEffects = [SubResource("Resource_io7co")]
+
 [resource]
 script = ExtResource("3_rjed6")
 CardName = "Scrying Destiny"
 Cost = 2
 CardType = 2
-Effects = [SubResource("Resource_1newb")]
-Description = "Look though 3 random cards in deck to draw 1."
+Effects = [SubResource("Resource_1newb"), SubResource("Resource_g1uqr")]
+Description = "Scry 3, then draw 1."
 CardArt = ExtResource("1_rqi6n")
 ArtOffset = Vector2(0, 0)
-Keywords = [8]
+Keywords = [0]
 TargetMask = 2
+AdditionalExplanations = [8, 4]

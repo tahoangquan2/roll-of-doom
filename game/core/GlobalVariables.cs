@@ -11,8 +11,9 @@ public partial class GlobalVariables : Node
     public static Dictionary<Stats,Character> allCharacterStats = new Dictionary<Stats,Character>();
     public static BuffDatabase buffDatabase;    
     public static List<Texture2D> intentTextures = new List<Texture2D>();
-
     public static List<EnemyStat> enemyStatsBase = new List<EnemyStat>();
+
+    public static Godot.Collections.Array<CardData> cardPool = new Godot.Collections.Array<CardData>();
 
     // get random number with range
     public static int GetRandomNumber(int min, int max)
@@ -39,6 +40,14 @@ public partial class GlobalVariables : Node
                 enemyStatsBase.Add(enemy);
             }
         }
+
+        // load all cards
+        foreach (var file in DirAccess.GetFilesAt("res://game/cards/CardData/CardPool/")) {
+            if (file.EndsWith(".tres")) {
+                var card = ResourceLoader.Load<CardData>("res://game/cards/CardData/CardPool/"+file);
+                cardPool.Add(card);
+            }
+        }
     }
 
     public static PackedScene mapScene = ResourceLoader.Load<PackedScene>("res://game/levels/LevelMap.tscn");
@@ -53,5 +62,12 @@ public partial class GlobalVariables : Node
         int temp = passedValue;
         passedValue = 0;
         return temp;
+    }
+
+    public static Godot.Collections.Array<Stats> GetAllCharaterStat()
+    {
+        Godot.Collections.Array<Stats> alltheStat = new Godot.Collections.Array<Stats>(allStats);
+        
+        return alltheStat;
     }
 }

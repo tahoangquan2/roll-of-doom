@@ -1,5 +1,6 @@
 using Godot;
 using System.Collections.Generic;
+using System;
 
 [GlobalClass]
 
@@ -51,5 +52,16 @@ public partial class BuffDatabase : Node
             // Add other buffs here
             _ => null,
         };
+    }
+
+    public static EnumGlobal.BuffDuration GetBuffDuration(EnumGlobal.BuffType type)
+    {        
+        return buffMap[type].Duration ;
+    }
+
+    public static bool TryGetBuffType(string name, out EnumGlobal.BuffType type)
+    {
+        return Enum.TryParse(name, out type)
+            && buffMap.ContainsKey(type);
     }
 }

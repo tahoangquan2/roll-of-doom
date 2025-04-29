@@ -108,9 +108,21 @@ public partial class Player : CanvasLayer
 	{
 		if (gamewon)
 		{
+			// creat 3 random cards from card pool
+			Godot.Collections.Array<CardData> randomCards = new Godot.Collections.Array<CardData>();
+			for (int i = 0; i < 3; i++)
+			{
+				int randomIndex = GlobalVariables.GetRandomNumber(0, GlobalVariables.cardPool.Count - 1);
+				// check if card already in randomCards
+				while (randomCards.Contains(GlobalVariables.cardPool[randomIndex]))
+				{
+					randomIndex = GlobalVariables.GetRandomNumber(0, GlobalVariables.cardPool.Count - 1);
+				}
+				randomCards.Add(GlobalVariables.cardPool[randomIndex]);
+			}
 			//start selection mode to add cards to deck
 			await StartSelectionMode(
-				GlobalVariables.playerStat.startingDeck,
+				randomCards,
 				EnumGlobal.PileSelectionPurpose.AddtoDeck,
 				1,
 				1
@@ -122,7 +134,7 @@ public partial class Player : CanvasLayer
 				}
 
 				//start new game
-				GetTree().ChangeSceneToPacked(GlobalVariables.mapScene);
+				GetTree().ChangeSceneToPacked(GlobalVariables.battleScene);
 			});
 		}
 		else

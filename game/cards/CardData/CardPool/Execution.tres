@@ -8,7 +8,7 @@
 
 [sub_resource type="Resource" id="Resource_d3yks"]
 script = ExtResource("2_vw4f3")
-Amount = 7
+Amount = 12
 IsPrecise = false
 
 [sub_resource type="Resource" id="Resource_h8gis"]
@@ -16,7 +16,7 @@ script = ExtResource("3_pd0e7")
 statCheckType = 3
 Buff = 0
 isLowerThan = true
-Amount = 16
+Amount = 15
 IsPrecise = false
 
 [sub_resource type="Resource" id="Resource_x7lbp"]
@@ -25,7 +25,7 @@ LayerEffects = [SubResource("Resource_d3yks"), SubResource("Resource_h8gis")]
 
 [sub_resource type="Resource" id="Resource_3hdoi"]
 script = ExtResource("2_vw4f3")
-Amount = 8
+Amount = 10
 IsPrecise = true
 
 [sub_resource type="Resource" id="Resource_077rb"]
@@ -35,11 +35,12 @@ LayerEffects = [SubResource("Resource_3hdoi")]
 [resource]
 script = ExtResource("5_kdsvo")
 CardName = "Execution"
-Cost = 2
+Cost = 3
 CardType = 0
 Effects = [SubResource("Resource_x7lbp"), SubResource("Resource_077rb")]
-Description = "Deal 7 damage; then if target has less than 15 HP, deal 8 damage precise."
+Description = "Deal 13 damage; then if target has less than 15 HP, deal 10 damage precise."
 CardArt = ExtResource("1_hmlo6")
 ArtOffset = Vector2(0, 0)
 Keywords = [11]
 TargetMask = 3
+AdditionalExplanations = []

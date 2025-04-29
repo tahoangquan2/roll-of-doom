@@ -35,8 +35,8 @@ public partial class Stats : Resource //  base class for character Stat. (Player
 	}
 	public virtual int TakeDamage(int damage,bool IsPrecise=false)	{
 		if (damage <= 0) return 0;
-		int tmp = damage;
 		CheckForBuff(ActionType.TakeDamage, ref damage);
+		int tmp = damage;		
 
 		int remainingDamage = IsPrecise ? tmp : damage;
 
@@ -78,6 +78,7 @@ public partial class Stats : Resource //  base class for character Stat. (Player
 	public virtual void Attack(Stats target, int damage,bool IsPrecise=false)
 	{
 		if (target == null) return;
+		GD.Print($"{name} attacks {target.name} for {damage} damage");
 		EmitSignal(nameof(AttackAni), target);
 
 		CheckForBuff(ActionType.Attack, ref damage);
@@ -208,4 +209,5 @@ public partial class Stats : Resource //  base class for character Stat. (Player
 		if (buffs.ContainsKey(type)) return buffs[type].GetValue();
 		return 0;
 	}
+	public int GetHealth() { return currentHealth; }
 }

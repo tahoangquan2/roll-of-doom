@@ -17,8 +17,17 @@ public partial class CardMenuUi : CenterContainer
 		public bool IsSelected => isSelected;
 
 	public void ToggleSelection()
-	{
+	{	
 		isSelected = !isSelected;
+		if (isSelected)
+		{
+			cardArt.Modulate = new Color(.7f, 1, .7f, 0.5f);
+		}
+		else
+		{
+			cardArt.Modulate = new Color(1, 1, 1, 1);
+			cardRarity.Modulate = new Color(1, 1, 1, 1);
+		}
 	}
 
 	public Button button => GetNode<Button>("CardVisual/Button");

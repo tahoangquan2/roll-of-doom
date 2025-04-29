@@ -19,14 +19,10 @@ public partial class CardData : Resource
 
     [Export] public Array<AdditionalExplanation> AdditionalExplanations { get; set; } = new Array<AdditionalExplanation>();
     public enum AdditionalExplanation    {
-        None,
-        Guard,
-        Shield,
-        Draw,
-        Discard,
-        Forget,
+        // all the mechanics of the combat
+        None,Guard,Shield,Cycle,Draw,Discard,Restock,EndTurn,Scry,
         // all the buff 
-        Dodge, Bounce,Fortify,Armed,Vigilant,Pump,Exhaust,Fragile,Poisoned,
+        Dodge,Bounce,Fortify,Armed,Vigilant,Pump,Exhaust,Fragile,Poisoned,
     } 
 
     public CardData()
