@@ -2,6 +2,7 @@ extends Node
 
 var hand
 var deck
+var stats
 
 func ApplyEffect(_target): # Forget(burn) half of the hand and the deck
 	hand = GlobalAccessPoint.GetHand()
@@ -35,6 +36,11 @@ func ApplyEffect(_target): # Forget(burn) half of the hand and the deck
 
 	for i in cards_to_discard:
 		deck.RemoveCard(i)
-	
+
+	# get the stats of the player
+	stats = GlobalVariables.GetAllCharaterStat()
+	for i in stats:
+		var health = i.GetHealth()
+		i.SetHealth(health / 2)
 
 	get_parent().EffectFinished()

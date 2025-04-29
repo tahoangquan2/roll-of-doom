@@ -15,13 +15,9 @@ public partial class SideMenu : Control
 	private List<Control> controlOfCards = new();
 
 	private Dictionary<string, string> keywordDescriptions = new();
-	private Dictionary<string, string> buffDescriptions = new();
+	private Dictionary<string, string> additionalDescriptions = new();
 
 	private VBoxContainer CardKeywordsContainer;
-	enum infoType	{
-		CardInfo,BuffInfo,ItemInfo
-	}
-
 	PackedScene basicLabelScene = GD.Load<PackedScene>("res://game/gui/side_menu_label.tscn");
 
 	public override void _Ready()
@@ -84,11 +80,20 @@ public partial class SideMenu : Control
 
 		cleanKeywords();
 
-		foreach (var keyword in cardData.Keywords)
-		{
+		foreach (var keyword in cardData.Keywords)		{
 			string name = keyword.ToString();
 			if (keywordDescriptions.TryGetValue(name, out var desc))
 			AddDescriptionLabel(name, desc);
+		}	
+
+		foreach (var buff in cardData.AdditionalExplanations)		{
+			string name = buff.ToString();
+			if (additionalDescriptions.TryGetValue(name, out var desc))
+				AddDescriptionLabel(name, desc);
+
+			if (BuffDatabase.TryGetBuffType(name, out var bt)){
+				AddBuffDuration(bt);
+			}
 		}
 	}
 
@@ -102,12 +107,10 @@ public partial class SideMenu : Control
 		CardTypeLabel.Text = $"{buffName} x {value}";
 		cleanKeywords();
 
-		if (buffDescriptions.TryGetValue(buffName, out var desc))
+		if (additionalDescriptions.TryGetValue(buffName, out var desc))
 			AddDescriptionLabel(buffName, desc.Replace("X", value));
 
-		string durationKey = buffUI.Duration.ToString();
-		if (buffDescriptions.TryGetValue(durationKey, out var durationDesc))
-			AddDescriptionLabel(durationKey, durationDesc);
+		AddBuffDuration(buffUI.Type);
 	}
 
 	private void OnIntentClicked(IntentUi intentUi)
@@ -139,6 +142,15 @@ public partial class SideMenu : Control
 		CardKeywordsContainer.AddChild(label);
 	}
 
+	private void AddBuffDuration(EnumGlobal.BuffType buffType) // find the buff from name
+	{	if (BuffDatabase.GetBuffData(buffType) == null) return;
+		EnumGlobal.BuffDuration duration = BuffDatabase.GetBuffDuration(buffType);
+		
+		string durationText = duration.ToString();
+		if (additionalDescriptions.TryGetValue(durationText, out var desc))
+			AddDescriptionLabel(durationText, desc);
+	}
+
 
 	private void cleanKeywords() 	{
 		foreach (Node child in CardKeywordsContainer.GetChildren())
@@ -167,10 +179,10 @@ public partial class SideMenu : Control
 				keywordDescriptions[entry.Key.ToString()] = entry.Value.ToString();
 		}
 
-		if (root.ContainsKey("Buffs") && root["Buffs"].VariantType == Variant.Type.Dictionary)
-		{	var buffDict = root["Buffs"].As<Godot.Collections.Dictionary>();
+		if (root.ContainsKey("AdditionalExplanations") && root["AdditionalExplanations"].VariantType == Variant.Type.Dictionary)
+		{	var buffDict = root["AdditionalExplanations"].As<Godot.Collections.Dictionary>();
 			foreach (var entry in buffDict)
-				buffDescriptions[entry.Key.ToString()] = entry.Value.ToString();
+				additionalDescriptions[entry.Key.ToString()] = entry.Value.ToString();
 		}
 	}
 }

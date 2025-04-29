@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=7 format=3 uid="uid://j7ey36iev6gt"]
+
+[ext_resource type="Texture2D" uid="uid://cq8fhsd4bbg5n" path="res://assets/cards/Details/Backgrounds/Water/SpellCardBackground76.png" id="1_cw6bc"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/ApplyBuffEffect.cs" id="1_uw85e"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/EffectLayer.cs" id="2_lcr40"]
+[ext_resource type="Script" path="res://game/cards/CardData/CardData.cs" id="3_0c3ep"]
+
+[sub_resource type="Resource" id="Resource_4tytl"]
+script = ExtResource("1_uw85e")
+buffType = 1
+Amount = 2
+
+[sub_resource type="Resource" id="Resource_u4u8w"]
+script = ExtResource("2_lcr40")
+LayerEffects = [SubResource("Resource_4tytl")]
+
+[resource]
+script = ExtResource("3_0c3ep")
+CardName = "Counter Strike"
+Cost = 3
+CardType = 1
+Effects = [SubResource("Resource_u4u8w")]
+Description = "Gain 2 Bounces."
+CardArt = ExtResource("1_cw6bc")
+ArtOffset = Vector2(0, 0)
+Keywords = []
+TargetMask = 2
+AdditionalExplanations = [10]

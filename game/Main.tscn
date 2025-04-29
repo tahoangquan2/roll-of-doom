@@ -45,13 +45,13 @@ baseStats = ExtResource("11_imauu")
 position = Vector2(867, 452)
 
 [node name="Enemy2" parent="EntityLayer" instance=ExtResource("5_rnswb")]
-position = Vector2(1308, 578)
+position = Vector2(937, 651)
 
 [node name="Enemy3" parent="EntityLayer" instance=ExtResource("5_rnswb")]
 position = Vector2(1193, 356)
 
 [node name="Enemy4" parent="EntityLayer" instance=ExtResource("5_rnswb")]
-position = Vector2(943, 655)
+position = Vector2(1294, 581)
 
 [node name="Player" parent="." instance=ExtResource("6_8bqau")]
 

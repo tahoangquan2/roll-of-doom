@@ -53,7 +53,7 @@ public partial class CardPileView : Control
 	}
 
 	private void HandleCardToggle(CardMenuUi cardUI)
-	{
+	{		
 		if (selectedCards.Contains(cardUI))
 		{
 			cardUI.ToggleSelection();
@@ -78,6 +78,7 @@ public partial class CardPileView : Control
 
 	private void resetView()
 	{
+		selectedCards.Clear();
 		foreach (Node child in gridContainer.GetChildren())
 		{
 			child.QueueFree();

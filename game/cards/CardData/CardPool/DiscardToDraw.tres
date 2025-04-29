@@ -32,5 +32,6 @@ Effects = [SubResource("Resource_jdqhb"), SubResource("Resource_2peg7")]
 Description = "Discard 1 to draw 2."
 CardArt = ExtResource("1_7wmnb")
 ArtOffset = Vector2(0, 0)
-Keywords = [8]
+Keywords = []
 TargetMask = 2
+AdditionalExplanations = [5, 4]

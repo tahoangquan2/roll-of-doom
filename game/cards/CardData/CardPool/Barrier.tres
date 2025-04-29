@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=7 format=3 uid="uid://le5ejtllprn2"]
+
+[ext_resource type="Texture2D" uid="uid://biicqnl2uxehp" path="res://assets/cards/Details/Backgrounds/Earth/SpellCardBackground44.png" id="1_k4fv7"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/NonTargetedEffect.cs" id="2_phvh1"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/EffectLayer.cs" id="3_qc36e"]
+[ext_resource type="Script" path="res://game/cards/CardData/CardData.cs" id="4_mrdxg"]
+
+[sub_resource type="Resource" id="Resource_mgany"]
+script = ExtResource("2_phvh1")
+nonTargetedEffectType = 6
+Amount = 8
+
+[sub_resource type="Resource" id="Resource_aplun"]
+script = ExtResource("3_qc36e")
+LayerEffects = [SubResource("Resource_mgany")]
+
+[resource]
+script = ExtResource("4_mrdxg")
+CardName = "Barrier"
+Cost = 2
+CardType = 1
+Effects = [SubResource("Resource_aplun")]
+Description = "Gain 8 Shield."
+CardArt = ExtResource("1_k4fv7")
+ArtOffset = Vector2(0, 0)
+Keywords = []
+TargetMask = 2
+AdditionalExplanations = [2]

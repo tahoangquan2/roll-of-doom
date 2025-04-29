@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=10 format=3 uid="uid://b0fd02lagxnye"]
+
+[ext_resource type="Texture2D" uid="uid://deev8k3md3227" path="res://assets/cards/Details/Backgrounds/Creature/BackgroundCard51.png" id="1_3oeei"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/NonTargetedEffect.cs" id="2_jn8me"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/ApplyBuffEffect.cs" id="3_rdnxr"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/EffectLayer.cs" id="4_w7ghj"]
+[ext_resource type="Script" path="res://game/cards/CardData/CardData.cs" id="5_4m31r"]
+
+[sub_resource type="Resource" id="Resource_fkpe5"]
+script = ExtResource("2_jn8me")
+nonTargetedEffectType = 5
+Amount = -5
+
+[sub_resource type="Resource" id="Resource_sjt0p"]
+script = ExtResource("3_rdnxr")
+buffType = 3
+Amount = 5
+
+[sub_resource type="Resource" id="Resource_3xtjk"]
+script = ExtResource("3_rdnxr")
+buffType = 4
+Amount = 7
+
+[sub_resource type="Resource" id="Resource_taupp"]
+script = ExtResource("4_w7ghj")
+LayerEffects = [SubResource("Resource_fkpe5"), SubResource("Resource_sjt0p"), SubResource("Resource_3xtjk")]
+
+[resource]
+script = ExtResource("5_4m31r")
+CardName = "Berserker"
+Cost = 3
+CardType = 2
+Effects = [SubResource("Resource_taupp")]
+Description = "Lose 5 Health, gain 5 Armed and 7 Vigilant"
+CardArt = ExtResource("1_3oeei")
+ArtOffset = Vector2(0, 0)
+Keywords = [3]
+TargetMask = 2
+AdditionalExplanations = [12, 13]

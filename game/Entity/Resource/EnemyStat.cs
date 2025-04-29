@@ -32,7 +32,7 @@ public partial class EnemyStat : Stats // additional enemy Actions
     }
 
     private void TakeTurn(Stats target)
-    {
+    {if (currentHealth <= 0) return; // If dead, do nothing
         foreach (var action in intentedAction)        {
             action.Execute(this, target);
         }        

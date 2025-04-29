@@ -14,7 +14,7 @@
 	  "Unplayable": "The card cannot be played.",
 	  "Needy": "When Cycled while in hand, the card is Forgotten."
 	},
-	"Buffs": {
+	"AdditionalExplanations": {
 	  "Armed": "Increases attack damage by X.",
 	  "Fortify": "Increases Guard or Shield gain by X.",
 	  "Vigilant": "Increases Guard or Shield gain by X., Volatile.",
@@ -24,18 +24,17 @@
 	  "Fragile": "Increases damage taken 30%, Diminishing.",
 	  "Poisoned": "Deals X damage at the start of each turn, Diminishing.",
 	  "Diminishing": "Drops 1 value at the start of their turn.",
-	  "Volatile": "Disappears at the start of their turn."
-	},
-	"Mechanics": {
-		"Attack": "Deals damage to a target.",
+	  "Volatile": "Disappears at the start of their turn.",
 		"Guard": "Absorbs incoming damage; removed at the start of your next turn.",
 		"Shield": "Absorbs incoming damage; does not expire (taken after Guard).",
 		"Cycle": "At the start of your turn, move all cards in hand to the discard pile (triggering Cycle effects), then draw a new hand from the draw pile.",
 		"Draw": "Draw one or more cards from the draw pile into your hand.",
 		"Discard": "Move cards from your hand to the discard pile when played or discarded.",
 		"Restock": "When the draw pile is empty when trying to draw, shuffle the discard pile back into the draw pile.",
+		"Forget": "Obiliterate the card from your hand, discard pile, or draw pile.",
 		"End Turn": "Ends the players turn, triggers enemy turns, then begins the cycle phase.",
-		"Scry": "Look at the top X cards of your draw pile, choose one to draw, and discard the rest.",
+		"Scry": "Look at the top X cards of your draw pile, choose cards to put to the discard pile",
+		"Precise":"Cannot be Dodged."
 	}
   }
   

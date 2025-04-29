@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=7 format=3 uid="uid://hnawe4bcar7"]
+
+[ext_resource type="Texture2D" uid="uid://cqfhk5c7r4alf" path="res://assets/cards/Details/Backgrounds/Water/SpellCardBackground66.png" id="1_ikwkq"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/NonTargetedEffect.cs" id="2_va8we"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/EffectLayer.cs" id="3_b48q7"]
+[ext_resource type="Script" path="res://game/cards/CardData/CardData.cs" id="5_35ekw"]
+
+[sub_resource type="Resource" id="Resource_p8fwe"]
+script = ExtResource("2_va8we")
+nonTargetedEffectType = 8
+Amount = 4
+
+[sub_resource type="Resource" id="Resource_oapar"]
+script = ExtResource("3_b48q7")
+LayerEffects = [SubResource("Resource_p8fwe")]
+
+[resource]
+script = ExtResource("5_35ekw")
+CardName = "Transmute"
+Cost = 4
+CardType = 2
+Effects = [SubResource("Resource_oapar")]
+Description = "Gain 4 Mana."
+CardArt = ExtResource("1_ikwkq")
+ArtOffset = Vector2(0, 0)
+Keywords = [9, 4, 2]
+TargetMask = 2
+AdditionalExplanations = []

@@ -7,7 +7,7 @@
 
 [sub_resource type="Resource" id="Resource_ubfkb"]
 script = ExtResource("1_ylnjg")
-Amount = 6
+Amount = 10
 IsPrecise = false
 
 [sub_resource type="Resource" id="Resource_a5v6k"]
@@ -20,8 +20,9 @@ CardName = "Heavy Blow"
 Cost = 2
 CardType = 0
 Effects = [SubResource("Resource_a5v6k")]
-Description = "Deal 6 damage."
+Description = "Deal 10 damage."
 CardArt = ExtResource("1_2c4in")
 ArtOffset = Vector2(0, 0)
 Keywords = []
 TargetMask = 3
+AdditionalExplanations = []

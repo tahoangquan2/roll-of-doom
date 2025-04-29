@@ -34,6 +34,13 @@ public partial class SetPassValue : CardEffect
             case PassedValueType.cardInDiscard:
                 value = GlobalAccessPoint.GetDiscardPile().GetDeckSize();
                 break;
+
+            case PassedValueType.mana:
+                value = playerStat.mana;
+                break;
+            case PassedValueType.spellMana:
+                value = playerStat.spellMana;
+                break;
             default:
                 GD.PrintErr("SetPassValue: Unknown effect type");
                 return Task.FromResult(false);
@@ -53,5 +60,7 @@ public partial class SetPassValue : CardEffect
         cardInDeck,
         cardInHand,
         cardInDiscard,
+        mana,
+        spellMana
     }
 }

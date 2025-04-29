@@ -25,3 +25,4 @@ CardArt = ExtResource("1_xvu2h")
 ArtOffset = Vector2(0, 0)
 Keywords = []
 TargetMask = 2
+AdditionalExplanations = [4]

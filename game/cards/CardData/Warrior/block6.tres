@@ -8,7 +8,7 @@
 [sub_resource type="Resource" id="Resource_kc0ls"]
 script = ExtResource("2_r0a4w")
 nonTargetedEffectType = 7
-Amount = 6
+Amount = 10
 
 [sub_resource type="Resource" id="Resource_0gnld"]
 script = ExtResource("3_4qfo6")
@@ -20,8 +20,9 @@ CardName = "Guard"
 Cost = 2
 CardType = 1
 Effects = [SubResource("Resource_0gnld")]
-Description = "Gain 6 Guard."
+Description = "Gain 10 Guard."
 CardArt = ExtResource("1_562rh")
 ArtOffset = Vector2(0, 0)
 Keywords = []
 TargetMask = 2
+AdditionalExplanations = [1]

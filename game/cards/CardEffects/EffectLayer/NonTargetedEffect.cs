@@ -8,12 +8,12 @@ public partial class NonTargetedEffect : CardEffect
 
     public override async Task<bool> ApplyEffect(Node2D target)
     {
-        Hand hand = target.GetTree().CurrentScene.GetNode<Hand>(GlobalAccessPoint.handPath);
-        Deck deck = target.GetTree().CurrentScene.GetNode<Deck>(GlobalAccessPoint.deckPath);
+        Hand hand = GlobalAccessPoint.GetHand();
+        Deck deck = GlobalAccessPoint.GetDeck();
+        DiscardPile discard = GlobalAccessPoint.GetDiscardPile();
         PlayerStat playerStat= GlobalVariables.playerStat;
 
         bool result = true;
-        GD.Print("NonTargetedEffect: ", nonTargetedEffectType, " Amount:", Amount);
 
         switch (nonTargetedEffectType)
         {
@@ -77,7 +77,7 @@ public partial class NonTargetedEffect : CardEffect
                 break;
 
             case EnumGlobal.enumNonTargetedEffect.Restock:
-                //await discard.Restock();
+                await discard.Restock();
                 break;
             default:
                 GD.PrintErr("NonTargetedEffect: Unknown effect type.");
