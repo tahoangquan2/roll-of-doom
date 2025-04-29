@@ -104,12 +104,12 @@ public partial class Player : CanvasLayer
 		endTheGame();
 	}
 
-	public void _on_continue_button_pressed()
+	public async void _on_continue_button_pressed()
 	{
 		if (gamewon)
 		{
 			//start selection mode to add cards to deck
-			StartSelectionMode(
+			await StartSelectionMode(
 				GlobalVariables.playerStat.startingDeck,
 				EnumGlobal.PileSelectionPurpose.AddtoDeck,
 				1,

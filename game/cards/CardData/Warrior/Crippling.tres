@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=9 format=3 uid="uid://3j4pbv1osnu2"]
+
+[ext_resource type="Texture2D" uid="uid://ba1tfp4j0y8ro" path="res://assets/cards/Details/Backgrounds/Ice/SpellCardBackground34.png" id="1_qro7f"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/AttackSingleEffect.cs" id="2_dadcv"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/ApplyDebuffEffect.cs" id="3_be7f5"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/EffectLayer.cs" id="4_yuhin"]
+[ext_resource type="Script" path="res://game/cards/CardData/CardData.cs" id="5_ckxop"]
+
+[sub_resource type="Resource" id="Resource_donjv"]
+script = ExtResource("2_dadcv")
+Amount = 5
+IsPrecise = false
+
+[sub_resource type="Resource" id="Resource_hpho7"]
+script = ExtResource("3_be7f5")
+BuffType = 7
+Amount = 1
+IsPrecise = false
+
+[sub_resource type="Resource" id="Resource_micqd"]
+script = ExtResource("4_yuhin")
+LayerEffects = [SubResource("Resource_donjv"), SubResource("Resource_hpho7")]
+
+[resource]
+script = ExtResource("5_ckxop")
+CardName = "Crippling Strike"
+Cost = 2
+CardType = 0
+Effects = [SubResource("Resource_micqd")]
+Description = "Deal 5 damage and apply Fragile (1)."
+CardArt = ExtResource("1_qro7f")
+ArtOffset = Vector2(0, 0)
+Keywords = []
+TargetMask = 3

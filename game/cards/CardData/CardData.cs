@@ -15,7 +15,19 @@ public partial class CardData : Resource
     [Export] public Texture2D CardArt { get; set; } = null;
     [Export] public Vector2 ArtOffset { get; set; }
     [Export] public Array<EnumGlobal.CardKeywords> Keywords { get; set; } = new Array<EnumGlobal.CardKeywords>();
-    [Export] public EnumGlobal.enumCardTargetLayer TargetMask { get; set; } = EnumGlobal.enumCardTargetLayer.None;    
+    [Export] public EnumGlobal.enumCardTargetLayer TargetMask { get; set; } = EnumGlobal.enumCardTargetLayer.None;   
+
+    [Export] public Array<AdditionalExplanation> AdditionalExplanations { get; set; } = new Array<AdditionalExplanation>();
+    public enum AdditionalExplanation    {
+        None,
+        Guard,
+        Shield,
+        Draw,
+        Discard,
+        Forget,
+        // all the buff 
+        Dodge, Bounce,Fortify,Armed,Vigilant,Pump,Exhaust,Fragile,Poisoned,
+    } 
 
     public CardData()
     {

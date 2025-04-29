@@ -1,0 +1,45 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=11 format=3 uid="uid://b01v7ws66yojw"]
+
+[ext_resource type="Texture2D" uid="uid://d0h8puw2p7mfy" path="res://assets/cards/Details/Backgrounds/Creature/BackgroundCard17.png" id="1_hmlo6"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/AttackSingleEffect.cs" id="2_vw4f3"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/StatCheckEffect.cs" id="3_pd0e7"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/EffectLayer.cs" id="4_2021p"]
+[ext_resource type="Script" path="res://game/cards/CardData/CardData.cs" id="5_kdsvo"]
+
+[sub_resource type="Resource" id="Resource_d3yks"]
+script = ExtResource("2_vw4f3")
+Amount = 7
+IsPrecise = false
+
+[sub_resource type="Resource" id="Resource_h8gis"]
+script = ExtResource("3_pd0e7")
+statCheckType = 3
+Buff = 0
+isLowerThan = true
+Amount = 16
+IsPrecise = false
+
+[sub_resource type="Resource" id="Resource_x7lbp"]
+script = ExtResource("4_2021p")
+LayerEffects = [SubResource("Resource_d3yks"), SubResource("Resource_h8gis")]
+
+[sub_resource type="Resource" id="Resource_3hdoi"]
+script = ExtResource("2_vw4f3")
+Amount = 8
+IsPrecise = true
+
+[sub_resource type="Resource" id="Resource_077rb"]
+script = ExtResource("4_2021p")
+LayerEffects = [SubResource("Resource_3hdoi")]
+
+[resource]
+script = ExtResource("5_kdsvo")
+CardName = "Execution"
+Cost = 2
+CardType = 0
+Effects = [SubResource("Resource_x7lbp"), SubResource("Resource_077rb")]
+Description = "Deal 7 damage; then if target has less than 15 HP, deal 8 damage precise."
+CardArt = ExtResource("1_hmlo6")
+ArtOffset = Vector2(0, 0)
+Keywords = [11]
+TargetMask = 3

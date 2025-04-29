@@ -44,4 +44,14 @@ public partial class GlobalVariables : Node
     public static PackedScene mapScene = ResourceLoader.Load<PackedScene>("res://game/levels/LevelMap.tscn");
     public static PackedScene battleScene = ResourceLoader.Load<PackedScene>("res://game/Main.tscn");
     public static PackedScene mainMenuScene = ResourceLoader.Load<PackedScene>("res://game/gui/main_menu.tscn");
+
+    public static MapData SavedMapData = null;
+
+    public static int passedValue = 0;
+    public static int getPassedValue() // get then reset passedValue
+    {
+        int temp = passedValue;
+        passedValue = 0;
+        return temp;
+    }
 }
