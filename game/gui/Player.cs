@@ -120,23 +120,18 @@ public partial class Player : CanvasLayer
 				}
 				randomCards.Add(GlobalVariables.cardPool[randomIndex]);
 			}
-			//start selection mode to add cards to deck
-			await StartSelectionMode(
+		
+			var selected = await StartSelectionMode(
 				randomCards,
 				EnumGlobal.PileSelectionPurpose.AddtoDeck,
-				1,
-				1
-			).ContinueWith((selectedCards) =>
-			{
-				foreach (var card in selectedCards.Result)
-				{
-					GlobalVariables.playerStat.startingDeck.Add(card);
-				}
+				1, 1
+			);
 
-				//start new game
-				GetTree().ChangeSceneToPacked(GlobalVariables.battleScene);
-			});
-		}
+			foreach (var card in selected)
+				GlobalVariables.playerStat.startingDeck.Add(card);
+
+			GetTree().ChangeSceneToPacked(GlobalVariables.battleScene);
+			}
 		else
 		{
 			GetTree().ChangeSceneToPacked(GlobalVariables.mainMenuScene);

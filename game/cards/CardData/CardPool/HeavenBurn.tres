@@ -8,7 +8,7 @@
 [sub_resource type="Resource" id="Resource_m5ja0"]
 script = ExtResource("2_2a2vs")
 nonTargetedEffectType = 18
-Amount = 5
+Amount = 7
 
 [sub_resource type="Resource" id="Resource_los0s"]
 script = ExtResource("3_6wi4k")
@@ -17,7 +17,7 @@ LayerEffects = [SubResource("Resource_m5ja0")]
 [sub_resource type="Resource" id="Resource_x42mn"]
 script = ExtResource("2_2a2vs")
 nonTargetedEffectType = 1
-Amount = 50
+Amount = 7
 
 [sub_resource type="Resource" id="Resource_gr3a4"]
 script = ExtResource("3_6wi4k")
@@ -29,8 +29,9 @@ CardName = "scy To aoe"
 Cost = 2
 CardType = 2
 Effects = [SubResource("Resource_los0s"), SubResource("Resource_gr3a4")]
-Description = "This card has no description."
+Description = "Scry 7 then deal 7 damage to every enemies."
 CardArt = ExtResource("1_o0acv")
 ArtOffset = Vector2(0, 0)
 Keywords = [8]
 TargetMask = 2
+AdditionalExplanations = [8]

@@ -36,6 +36,8 @@ public partial class CardPileView : Control
 
 		this.cardPile = tmpCardPile;
 
+		SortTypeLabel.Text = "Sort Type: "+sortType.ToString();
+
 		resetView();
 	}
 
@@ -49,6 +51,7 @@ public partial class CardPileView : Control
 		minSelection = minSelect;
 		maxSelection = Math.Min(maxSelect, cardPile.Count);
 		confirmButton.Disabled = true;
+		if (minSelection==0) confirmButton.Disabled = false;	
 		confirmButton.Visible = true;
 	}
 
