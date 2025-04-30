@@ -55,7 +55,8 @@ public partial class Character : CardPlayZone //important that player alway the 
 
         statInstance.AttackAni += AttackAnimation;
 
-        statInstance.SetHealth(statInstance.currentHealth); // set health to max health at start
+        //print current health and max health
+        statInstance.SetHealth(statInstance.currentHealth); 
     }
 
     public void AddBuff(BuffUI buffUI,bool alreadyExists)

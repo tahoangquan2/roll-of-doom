@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="EnemyStat" load_steps=3 format=3 uid="uid://d4ixsdloerbw3"]
+
+[ext_resource type="PackedScene" uid="uid://b0s8po00df48m" path="res://game/Entity/enemies/visual/necromancerVisual.tscn" id="1_8txfm"]
+[ext_resource type="Script" path="res://game/Entity/Resource/EnemyStat.cs" id="2_e4ad3"]
+
+[resource]
+script = ExtResource("2_e4ad3")
+enemyType = 7
+scaleFactor = 1.0
+name = "Necromancer"
+maxHealth = 50
+CharacterVisualScene = ExtResource("1_8txfm")

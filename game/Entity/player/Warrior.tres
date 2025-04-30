@@ -15,4 +15,4 @@ startingDeck = [ExtResource("12_ie012"), ExtResource("12_ie012"), ExtResource("1
 cardDrawPerTurn = 5
 gold = 10
 name = "Warrior"
-maxHealth = 30
+maxHealth = 60

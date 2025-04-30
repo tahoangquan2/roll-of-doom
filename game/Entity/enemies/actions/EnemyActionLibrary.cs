@@ -22,6 +22,18 @@ public static class EnemyActionLibrary
     public static Action<EnemyStat, Stats> ApplyDebuff(EnumGlobal.BuffType type, int value) =>
         (enemy, target) => target.ApplyBuff(type, value);
 
+    public static Action<EnemyStat, Stats> FilltrashToDiscard(int count,int type) =>
+        (enemy, target) =>
+        {
+            GD.Print("Filling trash to discard pile");
+            for (int i = 0; i < count; i++)
+            {
+                GlobalAccessPoint.GetDiscardPile().AddCard(GlobalVariables.curseCard);
+            }
+            
+        };
+
+    // Conditionals
     public static Func<Stats, Stats, bool> TargetBelowHpPercent(float thresholdPercent) =>
         (enemy, target) => target.currentHealth < target.maxHealth * thresholdPercent;
 
@@ -56,11 +68,11 @@ public static class EnemyActionLibrary
                     "Night Terror",
                     SelfBelowHpPercent(0.3f),
                     new List<Action<EnemyStat, Stats>> {
-                        (e, t) => e.Attack(t, 7, true),
-                        (e, t) => t.ApplyBuff(EnumGlobal.BuffType.Poisoned, 4)
+                        (e, t) => Attack(10, true)(e,t),
+                        (e, t) => ApplyDebuff(EnumGlobal.BuffType.Poisoned, 2)(e,t)
                     },
                     EnumGlobal.IntentType.AttackPrecise,
-                    new List<int> { 8 },
+                    new List<int> { 10 },
                     coolDown: 4,
                     description: "Strikes with frenzied ferocity at low health"
                 ));
@@ -83,16 +95,17 @@ public static class EnemyActionLibrary
                     "A weak but annoying debuff"
                 ));
                 conditionalActions.Add(new ConditionalAction(
-                    "Rabid Frenzy",
+                    "Skitter",
                     SelfBelowHpPercent(0.5f),
                     new List<Action<EnemyStat, Stats>> {
-                        (e, t) => e.Attack(t, 7, true),
-                        (e, t) => e.Attack(t, 7, true)
+                        (e, t) => ApplyDebuff(EnumGlobal.BuffType.Fragile, 2)(e,t),
+                        (e, t) => ApplyBuff(EnumGlobal.BuffType.Armed, 3)(e,t),
+                        (e, t) => ApplyBuff(EnumGlobal.BuffType.Dodge, 2)(e,t)
                     },
-                    EnumGlobal.IntentType.AttackPrecise,
-                    new List<int> { 7, 7 },
+                    EnumGlobal.IntentType.Buff,
+                    new List<int> { },
                     coolDown: 3,
-                    description: "Becomes frenzied when hurt"
+                    description: "Skitters away to buff"
                 ));
                 break;
 
@@ -111,9 +124,9 @@ public static class EnemyActionLibrary
                     "Bloodlust",
                     TargetBelowHpPercent(0.4f),
                     new List<Action<EnemyStat, Stats>> {
-                        (e, t) => e.Attack(t, 5),
-                        (e, t) => e.Attack(t, 5),
-                        (e, t) => e.ApplyBuff(EnumGlobal.BuffType.Armed, 10)
+                        (e, t) => Attack(5)(e,t),
+                        (e, t) => Attack(5)(e,t),
+                        (e, t) => ApplyBuff(EnumGlobal.BuffType.Armed, 10)(e,t)
                     },
                     EnumGlobal.IntentType.Special,
                     new List<int> { 5, 5 },
@@ -124,7 +137,7 @@ public static class EnemyActionLibrary
 
             case EnumGlobal.EnemyType.Spider:
                 weightedActions.Add(new WeightedAction(
-                    "Spider sense", 2, ApplyBuff(EnumGlobal.BuffType.Dodge,2), EnumGlobal.IntentType.Debuff,
+                    "Spider sense", 2, ApplyBuff(EnumGlobal.BuffType.Dodge,2), EnumGlobal.IntentType.Defend,
                     new List<int> { },
                     "Sensing attack "
                 ));
@@ -142,11 +155,11 @@ public static class EnemyActionLibrary
                     "Venom Burst",
                     TargetHasBuff(EnumGlobal.BuffType.Poisoned),
                     new List<Action<EnemyStat, Stats>> {
-                        (e, t) => e.Attack(t, 12, true),
-                        (e, t) => t.ApplyBuff(EnumGlobal.BuffType.Poisoned, 5)
+                        (e, t) => e.Attack(t, 5, true),
+                        (e, t) => ApplyDebuff(EnumGlobal.BuffType.Poisoned, 4)(e,t)
                     },
                     EnumGlobal.IntentType.Special,
-                    new List<int> { 12 },
+                    new List<int> { 4 },
                     coolDown: 5,
                     description: "Triggers a burst of toxic venom"
                 ));
@@ -169,16 +182,16 @@ public static class EnemyActionLibrary
                     "Phases to dodge attacks"
                 ));
                 conditionalActions.Add(new ConditionalAction(
-                    "Phantom Strike",
+                    "Curse",
                     SelfBelowHpPercent(0.5f),
                     new List<Action<EnemyStat, Stats>> {
-                        (e, t) => e.Attack(t, 10, true),
+                        (e, t) => FilltrashToDiscard(3,0)(e,t),
                         (e, t) => e.ApplyBuff(EnumGlobal.BuffType.Dodge, 4)
                     },
                     EnumGlobal.IntentType.Special,
-                    new List<int> { 10 },
-                    coolDown: 4,
-                    description: "Phasing attacks strike"
+                    new List<int> { },
+                    coolDown: 5,
+                    description: "Phasing away to curse player discard pile"
                 ));
                 break;
 
@@ -202,7 +215,7 @@ public static class EnemyActionLibrary
                     "Haunt",
                     SelfHasBuff(EnumGlobal.BuffType.Dodge),
                     new List<Action<EnemyStat, Stats>> {
-                        (e, t) => e.Attack(t, 13, true),
+                        (e, t) => Attack(13, true)(e,t),
                         (e, t) => t.ApplyBuff(EnumGlobal.BuffType.Exhaust, 2)
                     },
                     EnumGlobal.IntentType.AttackPrecise,
@@ -217,8 +230,8 @@ public static class EnemyActionLibrary
                         (e,t) => t.ApplyBuff(EnumGlobal.BuffType.Exhaust,10),
                         (e,t) => t.ApplyBuff(EnumGlobal.BuffType.Fragile,10)
                     },
-                    EnumGlobal.IntentType.AttackPrecise,
-                    new List<int> { 7, 7 },
+                    EnumGlobal.IntentType.Debuff,
+                    new List<int> {},
                     coolDown: 10,
                     description: "Heavy debuffing"
                 ));
@@ -274,7 +287,7 @@ public static class EnemyActionLibrary
                     "Iron Shell",
                     SelfBelowHpPercent(0.5f),
                     new List<Action<EnemyStat, Stats>> {
-                        (e, t) => e.Add_shield(25),
+                        (e, t) => AddShield(25)(e,t),
                         (e, t) => t.ApplyBuff(EnumGlobal.BuffType.Fragile, 3)
                     },
                     EnumGlobal.IntentType.Special,
@@ -286,8 +299,8 @@ public static class EnemyActionLibrary
                     "Shell Slam",
                     TargetHasBuff(EnumGlobal.BuffType.Fragile),
                     new List<Action<EnemyStat, Stats>> {
-                        (e, t) => e.Add_guard(8),
-                        (e, t) => e.Attack(t, 5 + e.shield + e.guard)
+                        (e, t) => AddGuard(8)(e,t),
+                        (e, t) => Attack(5 + e.shield + e.guard,false)(e,t)
                     },
                     EnumGlobal.IntentType.AttackPrecise,
                     new List<int> { 5 },
@@ -314,29 +327,42 @@ public static class EnemyActionLibrary
                     "Raises a shield of bones"
                 ));
                 conditionalActions.Add(new ConditionalAction(
-                    "Raise Undead",
-                    SelfBelowHpPercent(0.7f),
-                    new List<Action<EnemyStat, Stats>> {
-                        (e, t) => e.heal(13),
-                        (e, t) => e.ApplyBuff(EnumGlobal.BuffType.Fortify, 2)
-                    },
-                    EnumGlobal.IntentType.Buff,
-                    new List<int> { 13, 2 },
-                    coolDown: 6,
-                    description: "Summons undead to bolster defenses"
-                ));
-                conditionalActions.Add(new ConditionalAction(
                     "Necrotic Surge",
                     SelfBelowHpPercent(0.3f),
                     new List<Action<EnemyStat, Stats>> {
-                        (e, t) => e.Attack(t, 15),
-                        (e, t) => e.Add_shield(15)
+                        (e, t) => Attack(15)(e,t),
+                        (e, t) => AddShield(15)(e,t),
                     },
                     EnumGlobal.IntentType.Special,
                     new List<int> { 15 },
-                    coolDown: 4,
-                    description: "Surges with necrotic energy"
+                    coolDown: 2,
+                    description: "Mastery of dark energy"
                 ));
+                conditionalActions.Add(new ConditionalAction(
+                    "Curse of the Undead",
+                    SelfBelowHpPercent(0.5f),
+                    new List<Action<EnemyStat, Stats>> {
+                        (e, t) => FilltrashToDiscard(5,0)(e,t),
+                        (e, t) => ApplyDebuff(EnumGlobal.BuffType.Fragile, 3)(e,t)
+                    },
+                    EnumGlobal.IntentType.Debuff,
+                    new List<int> { },
+                    coolDown: 6,
+                    description: "Curses the enemy with mind shackles"
+                ));
+                conditionalActions.Add(new ConditionalAction(
+                    "Rebirth",
+                    SelfBelowHpPercent(0.7f),
+                    new List<Action<EnemyStat, Stats>> {
+                        (e, t) => e.heal(13),
+                        (e, t) => ApplyBuff(EnumGlobal.BuffType.Fortify, 2)(e,t)
+                    },
+                    EnumGlobal.IntentType.Buff,
+                    new List<int> { },
+                    coolDown: 6,
+                    description: "Absorbs life force to heal and fortify"
+                ));
+                
 
                 break;
 

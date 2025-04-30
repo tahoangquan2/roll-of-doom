@@ -13,7 +13,7 @@ public partial class Stats : Resource //  base class for character Stat. (Player
 	[Signal] public delegate void StatChangedEventHandler(); // for health, guard, shield change specifically
 	[Signal] public delegate void BuffChangedEventHandler(BuffUI buffUI,bool alreadyExists); // for buff change specifically
 	[Signal] public delegate void AttackAniEventHandler(Stats target); // for attack specifically
-	public int currentHealth = 30, guard=0, shield = 0;
+	public int currentHealth = -1, guard=0, shield = 0;
 	enum ActionType	{
 		Attack, Defend, TakeDamage, // pass number
 		Apply, Remove, Cycle, Death // pass nothing
@@ -70,7 +70,7 @@ public partial class Stats : Resource //  base class for character Stat. (Player
 		Stats newStat = Duplicate() as Stats;
 		newStat.maxHealth = maxHealth;
 		newStat.name = name;
-		newStat.currentHealth = currentHealth;
+		newStat.currentHealth = currentHealth != -1 ? currentHealth : maxHealth;
 
 		return newStat;
 	}
@@ -78,7 +78,6 @@ public partial class Stats : Resource //  base class for character Stat. (Player
 	public virtual void Attack(Stats target, int damage,bool IsPrecise=false)
 	{
 		if (target == null) return;
-		GD.Print($"{name} attacks {target.name} for {damage} damage");
 		EmitSignal(nameof(AttackAni), target);
 
 		CheckForBuff(ActionType.Attack, ref damage);

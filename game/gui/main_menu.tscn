@@ -1,16 +1,29 @@
-[gd_scene load_steps=12 format=3 uid="uid://dadd8yochwt2d"]
+[gd_scene load_steps=25 format=3 uid="uid://dadd8yochwt2d"]
 
 [ext_resource type="Texture2D" uid="uid://ca42u7yrlpaxx" path="res://assets/sprites/UI/Button/Rect/ContinueBTN.png" id="1_lhpe2"]
 [ext_resource type="Script" path="res://game/systems/main_menu.gd" id="1_q8p7e"]
 [ext_resource type="Texture2D" uid="uid://bcttpdks3uwx1" path="res://assets/sprites/UI/Button/Rect/Default.png" id="1_ygxsg"]
+[ext_resource type="Script" path="res://game/gui/parallax_background.gd" id="2_4maek"]
+[ext_resource type="Texture2D" uid="uid://d1w8to0318bna" path="res://assets/Background layers/Layer_0011_0.png" id="2_fyshu"]
+[ext_resource type="Texture2D" uid="uid://vxrs33x27xe3" path="res://assets/Background layers/Layer_0010_1.png" id="3_r0kbx"]
 [ext_resource type="Texture2D" uid="uid://dllpgpeqewr5o" path="res://assets/sprites/UI/Button/Rect/ContinueBTN_Hover.png" id="3_s3u82"]
+[ext_resource type="Texture2D" uid="uid://d0jrc1k76txog" path="res://assets/Background layers/Layer_0009_2.png" id="4_e6oc2"]
 [ext_resource type="Texture2D" uid="uid://bk3oegk53378m" path="res://assets/sprites/UI/Button/Rect/NewgameBTN.png" id="4_kmdho"]
+[ext_resource type="Texture2D" uid="uid://c6ppipg4krv5s" path="res://assets/Background layers/Layer_0008_3.png" id="5_iuhi7"]
 [ext_resource type="Texture2D" uid="uid://dj3vq4e4hmg2x" path="res://assets/sprites/UI/Button/Rect/NewgameBTN_Hover.png" id="5_uwill"]
+[ext_resource type="Texture2D" uid="uid://b320fba7v4ypt" path="res://assets/Background layers/Layer_0007_Lights.png" id="6_k4ws1"]
 [ext_resource type="Texture2D" uid="uid://c6omojbdrtyf1" path="res://assets/sprites/UI/Button/Rect/SettingsBTN.png" id="6_q782g"]
+[ext_resource type="Texture2D" uid="uid://j2epbbcl3fg5" path="res://assets/Background layers/Layer_0006_4.png" id="7_at72j"]
 [ext_resource type="Texture2D" uid="uid://dxegsm2sfg6r" path="res://assets/sprites/UI/Button/Rect/SettingsBTN_Hover.png" id="7_uqp3v"]
+[ext_resource type="Texture2D" uid="uid://n4ecwqd0gukm" path="res://assets/Background layers/Layer_0005_5.png" id="8_jywys"]
 [ext_resource type="Texture2D" uid="uid://s6ebw5bobvgi" path="res://assets/sprites/UI/Button/Rect/QuitBTN.png" id="8_n4k1j"]
+[ext_resource type="Texture2D" uid="uid://cn4fe8ivhr211" path="res://assets/Background layers/Layer_0004_Lights.png" id="9_0l7fk"]
 [ext_resource type="Texture2D" uid="uid://pl847blfilpb" path="res://assets/sprites/UI/Button/Rect/QuitBTN_Hover.png" id="9_qw4a7"]
 [ext_resource type="PackedScene" uid="uid://dt867ndl8axqy" path="res://game/gui/setting.tscn" id="10_nhxpi"]
+[ext_resource type="Texture2D" uid="uid://0xm4w1lptb7l" path="res://assets/Background layers/Layer_0003_6.png" id="10_osufs"]
+[ext_resource type="Texture2D" uid="uid://cgjctqkbm5ave" path="res://assets/Background layers/Layer_0002_7.png" id="11_1s5um"]
+[ext_resource type="Texture2D" uid="uid://dgrkf7icljfj1" path="res://assets/Background layers/Layer_0001_8.png" id="12_u7pfw"]
+[ext_resource type="Texture2D" uid="uid://03qtgfbkayns" path="res://assets/Background layers/Layer_0000_9.png" id="13_dew4j"]
 
 [node name="CanvasLayer" type="CanvasLayer"]
 script = ExtResource("1_q8p7e")
@@ -22,6 +35,93 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="ParallaxBackground" type="Node2D" parent="Control"]
+position = Vector2(0, 10)
+scale = Vector2(2.06, 2.06)
+script = ExtResource("2_4maek")
+
+[node name="Layer00110" type="Sprite2D" parent="Control/ParallaxBackground"]
+position = Vector2(468.369, 123.199)
+texture = ExtResource("2_fyshu")
+
+[node name="Layer00101" type="Sprite2D" parent="Control/ParallaxBackground"]
+position = Vector2(468.369, 123.199)
+texture = ExtResource("3_r0kbx")
+
+[node name="Parallax2D3" type="Parallax2D" parent="Control/ParallaxBackground"]
+repeat_size = Vector2(928, 0)
+autoscroll = Vector2(10, 0)
+repeat_times = 2
+
+[node name="Layer00092" type="Sprite2D" parent="Control/ParallaxBackground/Parallax2D3"]
+position = Vector2(468.369, 123.199)
+texture = ExtResource("4_e6oc2")
+
+[node name="Parallax2D6" type="Parallax2D" parent="Control/ParallaxBackground"]
+repeat_size = Vector2(928, 0)
+autoscroll = Vector2(12, 0)
+repeat_times = 2
+
+[node name="Layer00083" type="Sprite2D" parent="Control/ParallaxBackground/Parallax2D6"]
+position = Vector2(468.369, 123.199)
+texture = ExtResource("5_iuhi7")
+
+[node name="Parallax2D8" type="Parallax2D" parent="Control/ParallaxBackground"]
+scroll_scale = Vector2(0.6, 1)
+repeat_size = Vector2(928, 0)
+autoscroll = Vector2(15, 0)
+repeat_times = 2
+
+[node name="Layer0007Lights" type="Sprite2D" parent="Control/ParallaxBackground/Parallax2D8"]
+position = Vector2(468.369, 123.199)
+texture = ExtResource("6_k4ws1")
+
+[node name="Layer00064" type="Sprite2D" parent="Control/ParallaxBackground/Parallax2D8"]
+position = Vector2(468.369, 123.199)
+texture = ExtResource("7_at72j")
+
+[node name="Layer00055" type="Sprite2D" parent="Control/ParallaxBackground/Parallax2D8"]
+position = Vector2(468.369, 123.199)
+texture = ExtResource("8_jywys")
+
+[node name="Parallax2D2" type="Parallax2D" parent="Control/ParallaxBackground"]
+scroll_scale = Vector2(0.9, 1)
+repeat_size = Vector2(928, 0)
+autoscroll = Vector2(18, 0)
+repeat_times = 2
+
+[node name="Layer0004Lights" type="Sprite2D" parent="Control/ParallaxBackground/Parallax2D2"]
+position = Vector2(468.369, 123.199)
+texture = ExtResource("9_0l7fk")
+
+[node name="Parallax2D4" type="Parallax2D" parent="Control/ParallaxBackground"]
+texture_repeat = 2
+repeat_size = Vector2(928, 0)
+autoscroll = Vector2(20, 0)
+repeat_times = 2
+
+[node name="Layer00036" type="Sprite2D" parent="Control/ParallaxBackground/Parallax2D4"]
+position = Vector2(468.369, 123.199)
+texture = ExtResource("10_osufs")
+
+[node name="Layer00027" type="Sprite2D" parent="Control/ParallaxBackground/Parallax2D4"]
+position = Vector2(468.369, 123.199)
+texture = ExtResource("11_1s5um")
+
+[node name="Layer00018" type="Sprite2D" parent="Control/ParallaxBackground/Parallax2D4"]
+position = Vector2(468.369, 123.199)
+texture = ExtResource("12_u7pfw")
+
+[node name="Parallax2D5" type="Parallax2D" parent="Control/ParallaxBackground"]
+repeat_size = Vector2(928, 0)
+autoscroll = Vector2(-1, 0)
+repeat_times = 2
+
+[node name="Layer00009" type="Sprite2D" parent="Control/ParallaxBackground/Parallax2D5"]
+position = Vector2(468.369, 123.199)
+scale = Vector2(1.05, 1)
+texture = ExtResource("13_dew4j")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control"]
 layout_mode = 1

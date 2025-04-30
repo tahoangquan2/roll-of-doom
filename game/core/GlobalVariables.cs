@@ -14,6 +14,7 @@ public partial class GlobalVariables : Node
     public static List<EnemyStat> enemyStatsBase = new List<EnemyStat>();
 
     public static Godot.Collections.Array<CardData> cardPool = new Godot.Collections.Array<CardData>();
+    public static CardData curseCard = null;
 
     // get random number with range
     public static int GetRandomNumber(int min, int max)
@@ -48,6 +49,8 @@ public partial class GlobalVariables : Node
                 cardPool.Add(card);
             }
         }
+        // load curse card
+        curseCard = ResourceLoader.Load<CardData>("res://game/cards/CardData/Curse/Curse.tres");
     }
 
     public static PackedScene mapScene = ResourceLoader.Load<PackedScene>("res://game/levels/LevelMap.tscn");

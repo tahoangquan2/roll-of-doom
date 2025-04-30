@@ -98,7 +98,7 @@ public partial class EnemyStat : Stats // additional enemy Actions
 		EnemyStat newStat = Duplicate() as EnemyStat;
 		newStat.maxHealth = maxHealth;
 		newStat.name = name;
-		newStat.currentHealth = currentHealth;
+		newStat.currentHealth = currentHealth != -1 ? currentHealth : maxHealth;
 		
 		newStat.random = new Random();
 		newStat.conditionalActions = new List<ConditionalAction>(conditionalActions);

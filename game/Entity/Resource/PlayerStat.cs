@@ -74,7 +74,7 @@ public partial class PlayerStat : Stats
 		PlayerStat newStat = Duplicate() as PlayerStat;
 		newStat.maxHealth = maxHealth;
 		newStat.name = name;
-		newStat.currentHealth = currentHealth;
+		newStat.currentHealth = currentHealth != -1 ? currentHealth : maxHealth;
 		newStat.cardDrawPerTurn = cardDrawPerTurn;
 		newStat.baseMana = baseMana;
 		newStat.capSpellMana = capSpellMana;

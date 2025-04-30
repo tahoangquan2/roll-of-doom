@@ -22,7 +22,7 @@ public partial class CardData : Resource
         // all the mechanics of the combat
         None,Guard,Shield,Cycle,Draw,Discard,Restock,EndTurn,Scry,
         // all the buff 
-        Dodge,Bounce,Fortify,Armed,Vigilant,Pump,Exhaust,Fragile,Poisoned,
+        Dodge,Bounce,Fortify,Armed,Vigilant,Pump,Exhaust,Fragile,Poisoned, Forget
     } 
 
     public CardData()
