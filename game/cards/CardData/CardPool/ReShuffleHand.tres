@@ -17,3 +17,5 @@ CardArt = ExtResource("1_onrpw")
 ArtOffset = Vector2(0, 0)
 Keywords = []
 TargetMask = 2
+AdditionalExplanations = []
+CardID = 24

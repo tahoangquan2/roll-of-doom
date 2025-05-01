@@ -10,11 +10,13 @@ public partial class GlobalVariables : Node
     public static List<Character> allCharacters= new List<Character>();
     public static Dictionary<Stats,Character> allCharacterStats = new Dictionary<Stats,Character>();
     public static BuffDatabase buffDatabase;    
-    public static List<Texture2D> intentTextures = new List<Texture2D>();
-    public static List<EnemyStat> enemyStatsBase = new List<EnemyStat>();
+    public static List<Texture2D> intentTextures = new List<Texture2D>();    // map
+    public static Dictionary<EnumGlobal.EnemyType, EnemyStat> enemyStatsBase = new Dictionary<EnumGlobal.EnemyType, EnemyStat>();
 
     public static Godot.Collections.Array<CardData> cardPool = new Godot.Collections.Array<CardData>();
+    public static Dictionary<int, CardData> cardPoolDict = new Dictionary<int, CardData>();
     public static CardData curseCard = null;
+    public static float globalScale = 1.0f;
 
     // get random number with range
     public static int GetRandomNumber(int min, int max)
@@ -38,7 +40,7 @@ public partial class GlobalVariables : Node
         foreach (var file in DirAccess.GetFilesAt("res://game/Entity/enemies/stats/")) {
             if (file.EndsWith(".tres")) {
                 var enemy = ResourceLoader.Load<EnemyStat>("res://game/Entity/enemies/stats/"+file);
-                enemyStatsBase.Add(enemy);
+                enemyStatsBase.Add(enemy.enemyType, enemy);
             }
         }
 
@@ -47,6 +49,7 @@ public partial class GlobalVariables : Node
             if (file.EndsWith(".tres")) {
                 var card = ResourceLoader.Load<CardData>("res://game/cards/CardData/CardPool/"+file);
                 cardPool.Add(card);
+                cardPoolDict.Add(card.CardID, card);
             }
         }
         // load curse card

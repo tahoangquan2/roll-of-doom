@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=7 format=3 uid="uid://ckvt16j24os6m"]
+
+[ext_resource type="Texture2D" uid="uid://beqco1r6ilt5k" path="res://assets/cards/Details/Backgrounds/Creature/BackgroundCard47.png" id="1_5shpe"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/NonTargetedEffect.cs" id="2_7pd6i"]
+[ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/EffectLayer.cs" id="3_8lsdr"]
+[ext_resource type="Script" path="res://game/cards/CardData/CardData.cs" id="4_06evi"]
+
+[sub_resource type="Resource" id="Resource_kc0ls"]
+script = ExtResource("2_7pd6i")
+nonTargetedEffectType = 7
+Amount = 10
+
+[sub_resource type="Resource" id="Resource_0gnld"]
+script = ExtResource("3_8lsdr")
+LayerEffects = [SubResource("Resource_kc0ls")]
+
+[resource]
+script = ExtResource("4_06evi")
+CardName = "Guard"
+Cost = 2
+CardType = 1
+Effects = [SubResource("Resource_0gnld")]
+Description = "Gain 10 Guard."
+CardArt = ExtResource("1_5shpe")
+ArtOffset = Vector2(0, 0)
+Keywords = []
+TargetMask = 2
+AdditionalExplanations = [1]
+CardID = 29

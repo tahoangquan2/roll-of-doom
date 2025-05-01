@@ -16,7 +16,6 @@ public partial class Character : CardPlayZone //important that player alway the 
     [Signal] public delegate void BuffUIClickedEventHandler(BuffUI buffUI);
     [Signal] public delegate void IntentClickedEventHandler(IntentUi intentUi);
 
-
     public virtual void CharacterSetUp(Stats stat){
         statInstance = stat.CreateInstance();       
         GlobalVariables.allStats.Add(statInstance); 

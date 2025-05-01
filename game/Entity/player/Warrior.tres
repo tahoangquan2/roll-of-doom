@@ -1,11 +1,11 @@
 [gd_resource type="Resource" script_class="PlayerStat" load_steps=7 format=3 uid="uid://cgwvkxpa73d5n"]
 
 [ext_resource type="Script" path="res://game/Entity/Resource/PlayerStat.cs" id="1_bvnqj"]
-[ext_resource type="Resource" uid="uid://3j4pbv1osnu2" path="res://game/cards/CardData/Warrior/Crippling.tres" id="5_c35lp"]
-[ext_resource type="Resource" uid="uid://b8xost4p3yk4x" path="res://game/cards/CardData/Warrior/block.tres" id="10_31q03"]
-[ext_resource type="Resource" uid="uid://ckvt16j24os6m" path="res://game/cards/CardData/Warrior/block6.tres" id="11_ugw6o"]
-[ext_resource type="Resource" uid="uid://srteridx7ggi" path="res://game/cards/CardData/Warrior/Deal5.tres" id="12_ie012"]
-[ext_resource type="Resource" uid="uid://cfr0dr843pqbc" path="res://game/cards/CardData/Warrior/Deal10.tres" id="13_jp3nd"]
+[ext_resource type="Resource" uid="uid://3j4pbv1osnu2" path="res://game/cards/CardData/CardPool/Crippling.tres" id="5_c35lp"]
+[ext_resource type="Resource" uid="uid://b8xost4p3yk4x" path="res://game/cards/CardData/CardPool/block.tres" id="10_31q03"]
+[ext_resource type="Resource" uid="uid://ckvt16j24os6m" path="res://game/cards/CardData/CardPool/block6.tres" id="11_ugw6o"]
+[ext_resource type="Resource" uid="uid://srteridx7ggi" path="res://game/cards/CardData/CardPool/Deal5.tres" id="12_ie012"]
+[ext_resource type="Resource" uid="uid://cfr0dr843pqbc" path="res://game/cards/CardData/CardPool/Deal10.tres" id="13_jp3nd"]
 
 [resource]
 script = ExtResource("1_bvnqj")

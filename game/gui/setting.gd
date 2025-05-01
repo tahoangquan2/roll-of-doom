@@ -124,15 +124,10 @@ func _on_tree_exited():
 	#Data.save_Data()
 
 func _on_info_btn_toggled(toggled_on):
-	#quit
+	# go back to main menu
 	if (toggled_on):
-		get_tree().quit()
-	pass
-	# if toggled_on:
-	# 	$Poppin/Credit.global_position=Global.ScreenSize/2.0-$Poppin/Credit.size/(2.0*$Poppin/Credit.scale)+Vector2(100.0,0)
-	# else:
-	# 	$Poppin/Credit.global_position=Vector2(-2000.0,-2000.0)
-
+		get_tree().change_scene_to_file("res://game/gui/main_menu.tscn")
+		
 
 func _on_pause_btn_toggled(toggled_on:bool) -> void:
 	get_tree().paused=toggled_on

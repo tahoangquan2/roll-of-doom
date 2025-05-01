@@ -25,6 +25,7 @@ GlobalAccessPoint="*res://game/core/GlobalAccessPoint.cs"
 EnumGlobal="*res://game/core/EnumGlobal.cs"
 GlobalVariables="*res://game/core/GlobalVariables.cs"
 CardGlobal="*res://game/core/CardGlobal.cs"
+SaveManager="*res://gameSave/SaveManager.cs"
 
 [display]
 

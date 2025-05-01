@@ -5,22 +5,22 @@ using Godot;
 public static class EnemyActionLibrary
 {
     public static Action<EnemyStat, Stats> Attack(int amount, bool isPrecise = false) =>
-        (enemy, target) => enemy.Attack(target, amount * (int)enemy.scaleFactor, isPrecise);
+        (enemy, target) => enemy.Attack(target, (int)(amount *enemy.scaleFactor), isPrecise);
 
     public static Action<EnemyStat, Stats> HealSelf(int amount) =>
-        (enemy, target) => enemy.heal(amount);
+        (enemy, target) => enemy.heal((int)(amount*enemy.scaleFactor));
 
     public static Action<EnemyStat, Stats> AddShield(int amount) =>
-        (enemy, target) => enemy.Add_shield(amount);
+        (enemy, target) => enemy.Add_shield((int)(amount*enemy.scaleFactor));
 
     public static Action<EnemyStat, Stats> AddGuard(int amount) =>
-        (enemy, target) => enemy.Add_guard(amount);
+        (enemy, target) => enemy.Add_guard((int)(amount * enemy.scaleFactor));
 
     public static Action<EnemyStat, Stats> ApplyBuff(EnumGlobal.BuffType type, int value) =>
-        (enemy, target) => enemy.ApplyBuff(type, value);
+        (enemy, target) => enemy.ApplyBuff(type, (int)(value*enemy.scaleFactor));
 
     public static Action<EnemyStat, Stats> ApplyDebuff(EnumGlobal.BuffType type, int value) =>
-        (enemy, target) => target.ApplyBuff(type, value);
+        (enemy, target) => target.ApplyBuff(type, (int)(value*enemy.scaleFactor));
 
     public static Action<EnemyStat, Stats> FilltrashToDiscard(int count,int type) =>
         (enemy, target) =>
@@ -49,14 +49,16 @@ public static class EnemyActionLibrary
     public static void SetupActionsForType(
         EnumGlobal.EnemyType type,
         ref List<WeightedAction> weightedActions,
-        ref List<ConditionalAction> conditionalActions)
+        ref List<ConditionalAction> conditionalActions,
+        float scaleFactor = 1.0f
+        )
     {
         switch (type)
         {
             case EnumGlobal.EnemyType.Bat:
                 weightedActions.Add(new WeightedAction(
                     "Swoop", 4, Attack(5), EnumGlobal.IntentType.Attack,
-                    new List<int> { 5 },
+                    new List<int> { (int)(5*scaleFactor) },
                     "Dives swiftly at the enemy"
                 ));
                 weightedActions.Add(new WeightedAction(
@@ -72,7 +74,7 @@ public static class EnemyActionLibrary
                         (e, t) => ApplyDebuff(EnumGlobal.BuffType.Poisoned, 2)(e,t)
                     },
                     EnumGlobal.IntentType.AttackPrecise,
-                    new List<int> { 10 },
+                    new List<int> { (int)(10*scaleFactor) },
                     coolDown: 4,
                     description: "Strikes with frenzied ferocity at low health"
                 ));
@@ -81,12 +83,12 @@ public static class EnemyActionLibrary
             case EnumGlobal.EnemyType.Rat:
                 weightedActions.Add(new WeightedAction(
                     "Bite", 5, Attack(5), EnumGlobal.IntentType.Attack,
-                    new List<int> { 5 },
+                    new List<int> { (int) (5*scaleFactor) },
                     "A quick but weak bite"
                 ));
                 weightedActions.Add(new WeightedAction(
                     "Scratch", 3, Attack(4), EnumGlobal.IntentType.Attack,
-                    new List<int> { 4 },
+                    new List<int> { (int) (4*scaleFactor) },
                     "A sharp claw scratch"
                 ));
                 weightedActions.Add(new WeightedAction(
@@ -112,12 +114,12 @@ public static class EnemyActionLibrary
             case EnumGlobal.EnemyType.Rat2:
                 weightedActions.Add(new WeightedAction(
                     "Fierce Bite", 4, Attack(3), EnumGlobal.IntentType.Attack,
-                    new List<int> { 3 },
+                    new List<int> { (int) (3*scaleFactor) },
                     "A stronger bite"
                 ));
                 weightedActions.Add(new WeightedAction(
                     "Savage Tear", 2, Attack(4), EnumGlobal.IntentType.Attack,
-                    new List<int> { 4 },
+                    new List<int> { (int) (4*scaleFactor) },
                     "Rips at the enemy fiercely"
                 ));
                 conditionalActions.Add(new ConditionalAction(
@@ -129,7 +131,7 @@ public static class EnemyActionLibrary
                         (e, t) => ApplyBuff(EnumGlobal.BuffType.Armed, 10)(e,t)
                     },
                     EnumGlobal.IntentType.Special,
-                    new List<int> { 5, 5 },
+                    new List<int> { (int) (5*scaleFactor), (int) (5*scaleFactor) },
                     coolDown: 4,
                     description: "Lands a devastating blow on weakened foes"
                 ));
@@ -148,7 +150,7 @@ public static class EnemyActionLibrary
                 ));
                 weightedActions.Add(new WeightedAction(
                     "Bite", 3, Attack(6), EnumGlobal.IntentType.Attack,
-                    new List<int> { 6 },
+                    new List<int> { (int) (6*scaleFactor) },
                     "Delivers a venomous bite"
                 ));
                 conditionalActions.Add(new ConditionalAction(
@@ -158,10 +160,10 @@ public static class EnemyActionLibrary
                         (e, t) => e.Attack(t, 5, true),
                         (e, t) => ApplyDebuff(EnumGlobal.BuffType.Poisoned, 4)(e,t)
                     },
-                    EnumGlobal.IntentType.Special,
-                    new List<int> { 4 },
+                    EnumGlobal.IntentType.Debuff,
+                    new List<int> { (int) (5*scaleFactor) },
                     coolDown: 5,
-                    description: "Triggers a burst of toxic venom"
+                    description: "Triggers a burst of toxic venom and poisons the target"
                 ));
                 break;
 
@@ -173,7 +175,7 @@ public static class EnemyActionLibrary
                 ));
                 weightedActions.Add(new WeightedAction(
                     "Chill Touch", 4, Attack(5, true), EnumGlobal.IntentType.AttackPrecise,
-                    new List<int> { 5 },
+                    new List<int> { (int) (5*scaleFactor) },
                     "A precise chilling strike"
                 ));
                 weightedActions.Add(new WeightedAction(
@@ -203,7 +205,7 @@ public static class EnemyActionLibrary
                 ));
                 weightedActions.Add(new WeightedAction(
                     "Chill Touch", 3, Attack(8, true), EnumGlobal.IntentType.AttackPrecise,
-                    new List<int> { 8 },
+                    new List<int> { (int) (8*scaleFactor) },
                     "A precise icy strike"
                 ));
                 weightedActions.Add(new WeightedAction(
@@ -219,7 +221,7 @@ public static class EnemyActionLibrary
                         (e, t) => t.ApplyBuff(EnumGlobal.BuffType.Exhaust, 2)
                     },
                     EnumGlobal.IntentType.AttackPrecise,
-                    new List<int> { 13 },
+                    new List<int> { (int)(13*scaleFactor) },
                     coolDown: 3,
                     description: "Sneak strikes precisely weakened foes"
                 ));
@@ -240,12 +242,12 @@ public static class EnemyActionLibrary
             case EnumGlobal.EnemyType.Orc:
                 weightedActions.Add(new WeightedAction(
                     "Club Smash", 6, Attack(8), EnumGlobal.IntentType.Attack,
-                    new List<int> { 8 },
+                    new List<int> { (int) (8*scaleFactor) },
                     "A heavy club smash"
                 ));
                 weightedActions.Add(new WeightedAction(
                     "Berserk", 4, ApplyBuff(EnumGlobal.BuffType.Armed, 3), EnumGlobal.IntentType.Buff,
-                    new List<int> { 3 },
+                    new List<int> { },
                     "A surge of strength"
                 ));
                 weightedActions.Add(new WeightedAction(
@@ -261,7 +263,7 @@ public static class EnemyActionLibrary
                         (e, t) => e.ApplyBuff(EnumGlobal.BuffType.Armed, 5)
                     },
                     EnumGlobal.IntentType.Heal,
-                    new List<int> { 17 },
+                    new List<int> { },
                     coolDown: 5,
                     description: "Recovers health and strength in rage"
                 ));
@@ -270,12 +272,12 @@ public static class EnemyActionLibrary
             case EnumGlobal.EnemyType.Krab:
                 weightedActions.Add(new WeightedAction(
                     "Claw Pinch", 5, Attack(7), EnumGlobal.IntentType.Attack,
-                    new List<int> { 7 },
+                    new List<int> { (int) (7*scaleFactor) },
                     "A quick pinch"
                 ));
                 weightedActions.Add(new WeightedAction(
                     "Turtle Up", 4, AddGuard(10), EnumGlobal.IntentType.Defend,
-                    new List<int> { 12 },
+                    new List<int> {  },
                     "A defensive stance"
                 ));
                 weightedActions.Add(new WeightedAction(
@@ -288,10 +290,10 @@ public static class EnemyActionLibrary
                     SelfBelowHpPercent(0.5f),
                     new List<Action<EnemyStat, Stats>> {
                         (e, t) => AddShield(25)(e,t),
-                        (e, t) => t.ApplyBuff(EnumGlobal.BuffType.Fragile, 3)
+                        (e, t) => ApplyDebuff(EnumGlobal.BuffType.Fragile, 3)
                     },
-                    EnumGlobal.IntentType.Special,
-                    new List<int> { 25 },
+                    EnumGlobal.IntentType.Defend,
+                    new List<int> {  },
                     coolDown: 5,
                     description: "Solid shell retaliation"
                 ));
@@ -300,12 +302,12 @@ public static class EnemyActionLibrary
                     TargetHasBuff(EnumGlobal.BuffType.Fragile),
                     new List<Action<EnemyStat, Stats>> {
                         (e, t) => AddGuard(8)(e,t),
-                        (e, t) => Attack(5 + e.shield + e.guard,false)(e,t)
+                        (e, t) => Attack((int)((e.shield + e.guard)/e.scaleFactor),false)(e,t)
                     },
-                    EnumGlobal.IntentType.AttackPrecise,
-                    new List<int> { 5 },
+                    EnumGlobal.IntentType.Special,
+                    new List<int> {  },
                     coolDown: 0,
-                    description: "Smashes fragile foes with shield and guard"
+                    description: "Smashes fragile foes with total of shield and guard"
                 ));
                 break;
 
@@ -318,7 +320,7 @@ public static class EnemyActionLibrary
                 ));
                 weightedActions.Add(new WeightedAction(
                     "Dark Bolt", 4, Attack(10), EnumGlobal.IntentType.Attack,
-                    new List<int> { 10 },
+                    new List<int> { (int)(10*scaleFactor) },
                     "A bolt of dark energy"
                 ));
                 weightedActions.Add(new WeightedAction(
@@ -334,7 +336,7 @@ public static class EnemyActionLibrary
                         (e, t) => AddShield(15)(e,t),
                     },
                     EnumGlobal.IntentType.Special,
-                    new List<int> { 15 },
+                    new List<int> { (int)(15*scaleFactor) },
                     coolDown: 2,
                     description: "Mastery of dark energy"
                 ));
@@ -354,7 +356,7 @@ public static class EnemyActionLibrary
                     "Rebirth",
                     SelfBelowHpPercent(0.7f),
                     new List<Action<EnemyStat, Stats>> {
-                        (e, t) => e.heal(13),
+                        (e, t) => HealSelf(15)(e,t),
                         (e, t) => ApplyBuff(EnumGlobal.BuffType.Fortify, 2)(e,t)
                     },
                     EnumGlobal.IntentType.Buff,

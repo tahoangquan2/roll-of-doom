@@ -16,3 +16,5 @@ CardArt = ExtResource("1_ka48v")
 ArtOffset = Vector2(0, 0)
 Keywords = []
 TargetMask = 2
+AdditionalExplanations = []
+CardID = 13

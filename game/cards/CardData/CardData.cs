@@ -18,6 +18,7 @@ public partial class CardData : Resource
     [Export] public EnumGlobal.enumCardTargetLayer TargetMask { get; set; } = EnumGlobal.enumCardTargetLayer.None;   
 
     [Export] public Array<AdditionalExplanation> AdditionalExplanations { get; set; } = new Array<AdditionalExplanation>();
+    [Export] public int CardID { get; set; } = -1; // index of the card in the card pool
     public enum AdditionalExplanation    {
         // all the mechanics of the combat
         None,Guard,Shield,Cycle,Draw,Discard,Restock,EndTurn,Scry,

@@ -30,3 +30,4 @@ ArtOffset = Vector2(0, 0)
 Keywords = [8]
 TargetMask = 2
 AdditionalExplanations = [2]
+CardID = 16
