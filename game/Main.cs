@@ -54,7 +54,7 @@ public partial class Main : Node2D
 		}	else	{			
 			GlobalVariables.playerStat = playerStat;	
 			enemyCount = GlobalVariables.GetRandomNumber(1,2);	
-			GlobalVariables.globalScale = 1.0f;
+			GlobalVariables.globalScale = 1.0f;			
 		}		
 
 		var palyer = entityLayer.GetChild(0) as PlayerChar;

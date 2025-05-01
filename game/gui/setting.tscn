@@ -1,17 +1,20 @@
-[gd_scene load_steps=15 format=3 uid="uid://dt867ndl8axqy"]
+[gd_scene load_steps=18 format=3 uid="uid://dt867ndl8axqy"]
 
 [ext_resource type="Script" path="res://game/gui/setting.gd" id="1_2onwm"]
-[ext_resource type="LabelSettings" path="res://assets/fonts/gui_basic_font.tres" id="1_tt5mu"]
+[ext_resource type="LabelSettings" uid="uid://cedvr6qkeke38" path="res://assets/fonts/gui_basic_font.tres" id="1_tt5mu"]
 [ext_resource type="Texture2D" uid="uid://cq4iyyu53yohu" path="res://assets/sprites/UI/Square/SoundOn/Default.png" id="2_oakne"]
 [ext_resource type="FontFile" uid="uid://c1j227ygpp51v" path="res://assets/fonts/DragonHunter-9Ynxj.otf" id="2_tntnh"]
 [ext_resource type="Texture2D" uid="uid://s1ub21o65aif" path="res://assets/sprites/UI/Square/Default.png" id="3_g6nvb"]
 [ext_resource type="Texture2D" uid="uid://b46qpdaif7axk" path="res://assets/sprites/UI/Square/SoundOn/Hover.png" id="3_lrjit"]
 [ext_resource type="Texture2D" uid="uid://bakctsfdsoa25" path="res://assets/sprites/UI/Square/Home/Default.png" id="4_me0tj"]
 [ext_resource type="Texture2D" uid="uid://byjbrfxl3puhe" path="res://assets/sprites/UI/Square/Levels/Default.png" id="5_hafey"]
+[ext_resource type="Texture2D" uid="uid://dhpnss0b8obqc" path="res://assets/sprites/UI/Square/Star/Default.png" id="6_dcgnt"]
 [ext_resource type="Texture2D" uid="uid://bf0mmdpfvrv2d" path="res://assets/sprites/UI/Square/Play/Default.png" id="6_m4dp8"]
 [ext_resource type="Texture2D" uid="uid://diassfrgn2j6n" path="res://assets/sprites/UI/Square/Levels/Hover.png" id="6_vhg4b"]
 [ext_resource type="Texture2D" uid="uid://b2cibchccychn" path="res://assets/sprites/UI/Square/Pause/Default.png" id="7_cy3c7"]
+[ext_resource type="Texture2D" uid="uid://c5t1tdx44oxh1" path="res://assets/sprites/UI/Square/Star/Hover.png" id="7_wcxib"]
 [ext_resource type="Texture2D" uid="uid://sunbf7g8am86" path="res://assets/sprites/UI/Square/Play/Hover.png" id="8_hggks"]
+[ext_resource type="Texture2D" uid="uid://6lvqrsib8sq4" path="res://assets/sprites/UI/Square/Home/Hover.png" id="9_a3tok"]
 [ext_resource type="Texture2D" uid="uid://cckvfys757bx8" path="res://assets/sprites/UI/RectangleBox_624x288.png" id="13_rsitf"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_5sttw"]
@@ -113,8 +116,9 @@ size_flags_vertical = 4
 mouse_default_cursor_shape = 2
 toggle_mode = true
 button_pressed = true
-texture_normal = ExtResource("4_me0tj")
-texture_pressed = ExtResource("3_g6nvb")
+texture_normal = ExtResource("3_g6nvb")
+texture_pressed = ExtResource("6_dcgnt")
+texture_hover = ExtResource("7_wcxib")
 ignore_texture_size = true
 stretch_mode = 5
 
@@ -131,6 +135,7 @@ mouse_default_cursor_shape = 2
 toggle_mode = true
 texture_normal = ExtResource("4_me0tj")
 texture_pressed = ExtResource("3_g6nvb")
+texture_hover = ExtResource("9_a3tok")
 ignore_texture_size = true
 stretch_mode = 5
 
