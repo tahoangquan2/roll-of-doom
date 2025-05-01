@@ -22,10 +22,10 @@ public partial class EnemyStat : Stats // additional enemy Actions
     public float scaleFactorAttack = 1.0f;
 	public float scaleFactorDefend = 1.0f;
 
-    public void SetupActionsForType(EnumGlobal.EnemyType type)
+    public void SetupActionsForType(EnumGlobal.EnemyType type,float scaleFactor)    
     {
         enemyType = type;
-        EnemyActionLibrary.SetupActionsForType(type, ref WeightedActions, ref conditionalActions);
+        EnemyActionLibrary.SetupActionsForType(type, ref WeightedActions, ref conditionalActions, scaleFactor);
 
         //sort the actions by weight
         WeightedActions.Sort((a, b) => b.Weight.CompareTo(a.Weight));
@@ -98,7 +98,7 @@ public partial class EnemyStat : Stats // additional enemy Actions
 		EnemyStat newStat = Duplicate() as EnemyStat;
 		newStat.maxHealth = maxHealth;
 		newStat.name = name;
-		newStat.currentHealth = currentHealth;
+		newStat.currentHealth = currentHealth != -1 ? currentHealth : maxHealth;
 		
 		newStat.random = new Random();
 		newStat.conditionalActions = new List<ConditionalAction>(conditionalActions);

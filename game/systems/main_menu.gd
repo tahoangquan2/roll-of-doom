@@ -17,11 +17,13 @@ func _on_quit_button_pressed() -> void: # quit button
 func _on_continue_button_pressed() -> void:
 	#pause for .5 seconds
 	await get_tree().create_timer(0.25).timeout
-	get_tree().change_scene_to_file("res://game/Main.tscn")
+	get_tree().change_scene_to_packed(mainGame)
 
 func _on_settings_button_pressed() -> void:
 	pass # Replace with function body.
 
 func _on_new_game_button_pressed() -> void:
 	await get_tree().create_timer(0.25).timeout
-	get_tree().change_scene_to_file("res://game/levels/LevelMap.tscn")
+	SaveManager.DeleteSaveGame() # delete save data
+	#pause for .5 seconds
+	get_tree().change_scene_to_packed(mainGame)

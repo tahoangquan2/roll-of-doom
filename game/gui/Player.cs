@@ -92,14 +92,14 @@ public partial class Player : CanvasLayer
 
 	public void WinGame()
 	{
-		gameOverLabel.Text = "You Win";
+		gameOverLabel.Text = "You Win";		
 		gamewon = true;
-		endTheGame();
-		
+		endTheGame();		
 	}
 	public void LoseGame()
 	{	
 		gameOverLabel.Text = "Game Over";
+		SaveManager.DeleteSaveGame();
 		gamewon = false;
 		endTheGame();
 	}
@@ -129,6 +129,8 @@ public partial class Player : CanvasLayer
 
 			foreach (var card in selected)
 				GlobalVariables.playerStat.startingDeck.Add(card);
+
+			SaveManager.newLevel();
 
 			GetTree().ChangeSceneToPacked(GlobalVariables.battleScene);
 			}

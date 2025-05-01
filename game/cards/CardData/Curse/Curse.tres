@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=3 format=3 uid="uid://bckhyf7ilnvqn"]
+
+[ext_resource type="Texture2D" uid="uid://hsnrj0rbi21p" path="res://assets/cards/Details/Backgrounds/Creature/BackgroundCard5.png" id="1_ujpp6"]
+[ext_resource type="Script" path="res://game/cards/CardData/CardData.cs" id="2_23bnt"]
+
+[resource]
+script = ExtResource("2_23bnt")
+CardName = "Curse"
+Cost = 0
+CardType = 2
+Effects = []
+Description = "Curse Upon YE."
+CardArt = ExtResource("1_ujpp6")
+ArtOffset = Vector2(0, 0)
+Keywords = [1, 2]
+TargetMask = 2
+AdditionalExplanations = [18]
+CardID = 31

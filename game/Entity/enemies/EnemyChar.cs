@@ -14,13 +14,20 @@ public partial class EnemyChar : Character
 		actionGrid = GetNode<HBoxContainer>("IntendContainer");
 		base.CharacterSetUp(stat);
 		enemyStat = (EnemyStat)statInstance;
+		setScale(enemyStat.scaleFactor);
 		
-		enemyStat.SetupActionsForType(enemyStat.enemyType);
+		enemyStat.SetupActionsForType(enemyStat.enemyType,enemyStat.scaleFactor);
 
 		enemyStat.ActionPicked += UpdateIntent;
 		enemyStat.PickAction(GlobalVariables.playerStat);	
 
 		playZoneType = EnumGlobal.enumCardTargetLayer.Enemy; 
+	}
+
+	private void setScale(float scaleFactor){
+		statInstance.maxHealth = (int)(statInstance.maxHealth * scaleFactor);
+		statInstance.currentHealth = (int)(statInstance.currentHealth * scaleFactor);
+		UpdateStatsDisplay();
 	}
 	
     public void UpdateIntent(){		 

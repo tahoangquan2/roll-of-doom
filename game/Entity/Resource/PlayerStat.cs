@@ -37,8 +37,6 @@ public partial class PlayerStat : Stats
 		if (card.Keywords.Contains(EnumGlobal.CardKeywords.Unplayable)) return false;
 		bool result = true;
 		int cost = card.Cost;
-		//print cost and mana
-		GD.Print("Cost: "+cost+" Mana: "+mana+" SpellMana: "+spellMana);
 		if (card.CardType == EnumGlobal.enumCardType.Spell){
 			if (cost > mana+spellMana) 
 				result = false;
@@ -74,7 +72,7 @@ public partial class PlayerStat : Stats
 		PlayerStat newStat = Duplicate() as PlayerStat;
 		newStat.maxHealth = maxHealth;
 		newStat.name = name;
-		newStat.currentHealth = currentHealth;
+		newStat.currentHealth = currentHealth != -1 ? currentHealth : maxHealth;
 		newStat.cardDrawPerTurn = cardDrawPerTurn;
 		newStat.baseMana = baseMana;
 		newStat.capSpellMana = capSpellMana;

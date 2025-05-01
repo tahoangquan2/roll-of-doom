@@ -74,11 +74,9 @@ public partial class CardMenuUi : CenterContainer
 
 	public void _on_button_pressed()
 	{
-		GD.Print("Card pressed button 1");
 	}
 
 	public void _on_button_2_pressed(){
-		GD.Print("Card pressed button 2");
 		cardManager.EmitSignal(nameof(CardManager.CardSelect), cardData);
 	}
 

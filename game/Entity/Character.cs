@@ -16,7 +16,6 @@ public partial class Character : CardPlayZone //important that player alway the 
     [Signal] public delegate void BuffUIClickedEventHandler(BuffUI buffUI);
     [Signal] public delegate void IntentClickedEventHandler(IntentUi intentUi);
 
-
     public virtual void CharacterSetUp(Stats stat){
         statInstance = stat.CreateInstance();       
         GlobalVariables.allStats.Add(statInstance); 
@@ -55,7 +54,8 @@ public partial class Character : CardPlayZone //important that player alway the 
 
         statInstance.AttackAni += AttackAnimation;
 
-        statInstance.SetHealth(statInstance.currentHealth); // set health to max health at start
+        //print current health and max health
+        statInstance.SetHealth(statInstance.currentHealth); 
     }
 
     public void AddBuff(BuffUI buffUI,bool alreadyExists)

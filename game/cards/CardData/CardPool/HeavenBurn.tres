@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="CardData" load_steps=9 format=3 uid="uid://mmcauup27px2"]
+[gd_resource type="Resource" script_class="CardData" load_steps=9 format=3]
 
-[ext_resource type="Texture2D" uid="uid://dhir2ifl2ga6f" path="res://assets/cards/Details/Backgrounds/Fire/SpellCardBackground8.png" id="1_o0acv"]
+[ext_resource type="Texture2D" path="res://assets/cards/Details/Backgrounds/Fire/SpellCardBackground8.png" id="1_o0acv"]
 [ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/NonTargetedEffect.cs" id="2_2a2vs"]
 [ext_resource type="Script" path="res://game/cards/CardEffects/EffectLayer/EffectLayer.cs" id="3_6wi4k"]
 [ext_resource type="Script" path="res://game/cards/CardData/CardData.cs" id="4_lt1oj"]
@@ -35,3 +35,4 @@ ArtOffset = Vector2(0, 0)
 Keywords = [8]
 TargetMask = 2
 AdditionalExplanations = [8]
+CardID = 17

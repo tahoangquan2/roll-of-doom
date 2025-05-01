@@ -33,6 +33,7 @@ mouse_default_cursor_shape = 2
 texture_normal = ExtResource("4_61h2b")
 texture_pressed = ExtResource("5_s4k1u")
 texture_hover = ExtResource("6_khp78")
+texture_disabled = ExtResource("5_s4k1u")
 script = ExtResource("5_7pgvh")
 
 [node name="Pause" type="Control" parent="."]

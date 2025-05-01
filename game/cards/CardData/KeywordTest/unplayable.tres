@@ -14,3 +14,5 @@ Description = "This card has no description."
 ArtOffset = Vector2(0, 0)
 Keywords = [1]
 TargetMask = 2
+AdditionalExplanations = []
+CardID = -1
